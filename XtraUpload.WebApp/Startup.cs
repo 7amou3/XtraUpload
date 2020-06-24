@@ -77,11 +77,9 @@ namespace XtraUpload.ServerApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IMapper mapper)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddLog4Net();
-
-            //mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             app.Use((context, next) =>
             {
@@ -104,7 +102,8 @@ namespace XtraUpload.ServerApp
 
             app.UseAuthentication();
 
-            app.UseHttpsRedirection();
+            // Uncomment if you would like to use https
+            //app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
                                     .AllowAnyHeader()
