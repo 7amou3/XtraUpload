@@ -15,11 +15,11 @@ namespace XtraUpload.Database.Data
 {
     public class UserRepository: Repository<User>, IUserRepository
     {
-        readonly ApplicationDbContext _dbContext;
+        readonly ApplicationDbContext _context;
         
         public UserRepository(ApplicationDbContext dbContext): base(dbContext)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
         }
 
         #region IUserRepository members
@@ -29,7 +29,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<ConfirmationKeyResult> GetConfirmationKeyInfo(string confirmationId)
         {
-            return await _dbContext.ConfirmationKeys
+            return await _context.ConfirmationKeys
                     .Include(s => s.User)
                     .Select(s => new ConfirmationKeyResult() { Key = s, User = s.User  })
                     .SingleOrDefaultAsync(s => s.Key.Id == confirmationId);
@@ -40,7 +40,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<RoleClaimsResult> GetUserRoleClaims(User user)
         {
-            var query =  _dbContext.Users
+            var query =  _context.Users
                                 .Include(s => s.Role)
                                 .ThenInclude(s => s.RoleClaims)
                                 .Where(s => s.Id == user.Id)
@@ -54,7 +54,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<IEnumerable<RoleClaimsResult>> GetUsersRoleClaims()
         {
-            var query = _dbContext.Roles
+            var query = _context.Roles
                             .Include(s => s.RoleClaims)
                             .Select(s => new RoleClaimsResult { Role = s, Claims = s.RoleClaims });
 
@@ -66,7 +66,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<IEnumerable<ItemCountResult>> UsersCountByDateRange(DateTime start, DateTime end)
         {
-            var query = _dbContext.Users
+            var query = _context.Users
                         .Where(s => s.CreatedAt >= start && s.CreatedAt <= end)
                         .GroupBy(f => f.CreatedAt.Date)
                         .OrderBy(s => s.Key)
@@ -84,7 +84,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<IEnumerable<User>> SearchUsersByName(string name)
         {
-           var query = _dbContext.Users
+           var query = _context.Users
                         .Where(s => s.UserName.Contains(name, StringComparison.OrdinalIgnoreCase))
                         .Take(10);
             return await query.ToListAsync();
@@ -95,7 +95,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<IEnumerable<UserExtended>> GetUsers(PageSearchViewModel model, Expression<Func<User, bool>> searchCriteria)
         {
-            var query = _dbContext.Users
+            var query = _context.Users
                                .Include(s => s.Role)
                                .Where(searchCriteria)
                                .OrderBy(s => s.CreatedAt)

@@ -9,11 +9,11 @@ namespace XtraUpload.Database.Data
 {
     public class DownloadRepository : Repository<Download>, IDownloadRepository
     {
-        readonly ApplicationDbContext _DbContext;
+        readonly ApplicationDbContext _context;
 
         public DownloadRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _DbContext = dbContext;
+            _context = dbContext;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace XtraUpload.Database.Data
         /// </summary>
         public async Task<DownloadedFileResult> GetDownloadedFile(string downloadId)
         {
-            return await _DbContext.Downloads
+            return await _context.Downloads
                         .Include(s => s.File)
                         .Select(s => new DownloadedFileResult() { File = s.File, Download = s })
                         .SingleOrDefaultAsync(s => s.Download.Id == downloadId);

@@ -13,16 +13,16 @@ namespace XtraUpload.Database.Data
 {
     public class FileRepository : Repository<FileItem>, IFileRepository
     {
-        readonly ApplicationDbContext _DbContext;
+        readonly ApplicationDbContext _context;
   
         public FileRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _DbContext = dbContext;
+            _context = dbContext;
         }
 
         public async Task<IEnumerable<ItemCountResult>> FilesCountByDateRange(DateTime start, DateTime end)
         {
-            var query = _DbContext.Files
+            var query = _context.Files
                         .Where(s => s.CreatedAt >= start && s.CreatedAt <= end)
                         .GroupBy(f => f.CreatedAt.Date)
                         .OrderBy(s => s.Key)
@@ -37,7 +37,7 @@ namespace XtraUpload.Database.Data
         
         public async Task<IEnumerable<FileTypesCountResult>> FileTypesByDateRange(DateTime start, DateTime end)
         {
-            var query = _DbContext.Files
+            var query = _context.Files
                         .Where(s => s.CreatedAt >= start && s.CreatedAt <= end)
                         .GroupBy(f => f.Extension)
                         .OrderBy(s => s.Key)
@@ -52,7 +52,7 @@ namespace XtraUpload.Database.Data
         
         public async Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchViewModel model, Expression<Func<FileItem, bool>> searchCriteria)
         {
-            var query = _DbContext.Files
+            var query = _context.Files
                             .Include(s => s.User)
                             .Where(searchCriteria)
                             .OrderBy(s => s.CreatedAt)
@@ -74,7 +74,7 @@ namespace XtraUpload.Database.Data
 
         public async Task<IEnumerable<FileItem>> GetExpiredFiles()
         {
-            List<RoleClaim> rcList = await _DbContext.RoleClaims
+            List<RoleClaim> rcList = await _context.RoleClaims
                                     .Where(s => s.ClaimType == XtraUploadClaims.FileExpiration.ToString())
                                     .Where(s => s.ClaimValue != "0")
                                     .ToListAsync();
@@ -82,7 +82,7 @@ namespace XtraUpload.Database.Data
             List<FileItem> expiredFiles = new List<FileItem>();
             rcList.ForEach(userGroup =>
             {
-                var res = _DbContext.Files
+                var res = _context.Files
                             .Include(u => u.User)
                             .Where(s => userGroup.RoleId == s.User.RoleId)
                             .Where(s => s.LastModified < DateTime.Now.AddDays(- int.Parse(userGroup.ClaimValue)))

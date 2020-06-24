@@ -8,11 +8,11 @@ namespace XtraUpload.Database.Data
 {
     public class FileExtensionRepository : Repository<FileExtension>, IFileExtensionRepository
     {
-        readonly ApplicationDbContext _DbContext;
+        readonly ApplicationDbContext _context;
 
         public FileExtensionRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _DbContext = dbContext;
+            _context = dbContext;
         }
     }
 }
