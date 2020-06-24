@@ -27,4 +27,4 @@ bld/
 [Oo]bj/
 msbuild.err
 msbuild.wrn
-XtraUpload.Database.Migrations/
+Migrations
