@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Delete</h2>
+<div *ngIf="!item.selectedGroup.role.isDefault; else elseBlock">
+    <mat-dialog-content class="mat-typography">
+        <p>
+            Are you sure you want to delete <b>{{item.selectedGroup.role.name}}</b> ?
+        </p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button (click)="onDelete()" color="warn" [disabled]="isBusy">Delete</button>
+    </mat-dialog-actions>
+</div>
+<ng-template #elseBlock>Default group cannot be deleted.</ng-template>

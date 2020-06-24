@@ -1,0 +1,27 @@
+
+table {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .selecetAll {
+    width: 8%;
+  }
+  .selectedRowOnClick {
+    background: rgba(255, 255, 99, 0.6) !important;
+  }
+  .mat-row:hover {
+    background: rgba(180,180,180,0.3);
+  }
+  td.mat-cell {
+    border-bottom: none;
+  }
+  td.mat-cell:last-of-type {
+    width: 30px;
+    padding: 0px;
+  }
+  

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
+    <ProjectReference Include="..\..\Services\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj" />
+    <ProjectReference Include="..\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
+  </ItemGroup>
+
+</Project>

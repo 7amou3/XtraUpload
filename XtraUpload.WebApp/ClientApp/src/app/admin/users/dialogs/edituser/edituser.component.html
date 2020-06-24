@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Edit {{item.user.userName}}</h2>
+<form [formGroup]="editFormGroup" (ngSubmit)="onSubmit(editFormGroup.value)" class="font-14">
+    <mat-dialog-content>
+        <mat-form-field>
+            <mat-label>User Name</mat-label>
+            <input type="text" matInput formControlName="userName" required>
+            <mat-error *ngIf="userName.invalid"></mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input type="text" matInput formControlName="email" required>
+            <mat-error *ngIf="email.invalid"></mat-error>
+            <mat-error *ngIf="email.hasError('isDuplicated')">A user with the same email already exists.</mat-error>
+        </mat-form-field>
+        <!--Confirmed Email-->
+        <mat-slide-toggle formControlName="emailConfirmed" class="m-b-5">
+            Confirm Email
+        </mat-slide-toggle>
+        <!--Group list-->
+        <mat-form-field>
+            <mat-label>Group</mat-label>
+            <mat-select formControlName="selectedGroup">
+                <mat-option *ngFor="let group of item.groups" [value]="group">
+                    {{group.role.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!--Password-->
+        <mat-form-field>
+            <input matInput placeholder="Create New Password" [type]="hidePassword ? 'password' : 'text'"
+                formControlName="newPassword">
+            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="newPassword.invalid">{{getErrorMessage(newPassword)}}</mat-error>
+        </mat-form-field>
+        <!-- Suspend account -->
+        
+            <mat-slide-toggle formControlName="suspendAccount" class="m-b-10">
+                Suspend Account
+            </mat-slide-toggle>
+        
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button color="accent" [disabled]="!editFormGroup.valid || isBusy" type="submit">Save Changes
+        </button>
+    </mat-dialog-actions>
+</form>

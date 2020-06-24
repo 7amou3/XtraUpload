@@ -1,0 +1,5 @@
+<mat-progress-bar mode="determinate"
+            *ngIf="(httpProgress$ | async)?.status != 'Completed' && (httpProgress$ | async)?.status != 'Error'"
+            value="{{(httpProgress$ | async)?.currentProgress}}"
+            style="position: fixed; z-index: 2">
+</mat-progress-bar>

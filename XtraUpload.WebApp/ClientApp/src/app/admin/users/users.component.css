@@ -1,0 +1,19 @@
+table {
+    width: 100%;
+    overflow: hidden;
+    margin-top:1px;
+}
+.mat-row:hover {
+   background: rgba(180,180,180,0.3);
+}
+.delete-icon {
+    position: absolute;
+    right: 17px;
+    top: 48px;
+}
+.profile-pic{
+    width: 40px;
+    height: 40px;
+    margin-top: 3px;
+    border-radius: 100%;
+}

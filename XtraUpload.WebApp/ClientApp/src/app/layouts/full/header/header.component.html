@@ -1,0 +1,40 @@
+
+<div appIsLoggedIn (LoggedIn)="onLoggedIn($event)"></div>
+
+<span *ngIf="loggedIn.isLoggedIn, else elseBlock">
+    <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5"> <img src="{{avatar}}" alt="user" class="profile-pic"> </button>    
+</span>
+<ng-template #elseBlock>
+    <button mat-button [routerLink]="['/signup']">SIGN UP</button>
+    <button mat-button [routerLink]="['/login']">LOG IN</button>
+    <button mat-button 
+            mat-icon-button
+            matTooltip="Select a theme"
+            [matMenuTriggerFor]="themeMenu"
+            aria-label="theme picker"
+    >
+        <mat-icon style="font-size: 18px;">brush</mat-icon>
+    </button>
+</ng-template>
+
+<mat-menu #profile="matMenu" class="mymegamenu">
+    <button *ngIf="loggedIn.role === 'Admin'" mat-menu-item [routerLink]="['/administration']">
+        <mat-icon>view_quilt</mat-icon>Admin Area</button>
+    <button mat-menu-item [routerLink]="['/filemanager']">
+        <mat-icon>folder_shared</mat-icon> My Files </button>
+    <button mat-menu-item [routerLink]="['/settings']">
+        <mat-icon>settings</mat-icon> Settings </button>
+    <button mat-menu-item (click)="onSignOut()">
+        <mat-icon>exit_to_app</mat-icon> Sign Out </button>
+    <mat-divider></mat-divider>
+    <button [disabled]="currentTheme === 'light'" mat-menu-item (click)="onChangeThemeClick('light')">
+        <mat-icon>brightness_5</mat-icon> Light Theme </button>
+    <button [disabled]="currentTheme === 'dark'" mat-menu-item (click)="onChangeThemeClick('dark')">
+        <mat-icon>brightness_3</mat-icon> Dark Theme </button>
+</mat-menu>
+<mat-menu #themeMenu="matMenu">
+    <button [disabled]="currentTheme === 'light'" mat-menu-item (click)="onChangeThemeClick('light')">
+      <mat-icon>brightness_5</mat-icon> Light Theme </button>
+    <button [disabled]="currentTheme === 'dark'" mat-menu-item (click)="onChangeThemeClick('dark')">
+      <mat-icon>brightness_3</mat-icon> Dark Theme </button>
+</mat-menu>

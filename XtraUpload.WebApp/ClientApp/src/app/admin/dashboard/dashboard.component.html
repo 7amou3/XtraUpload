@@ -1,0 +1,22 @@
+<mat-sidenav-container class="page-wrapper">
+    <!-- Side bar -->
+    <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
+        <app-sidebar></app-sidebar> 
+    </mat-sidenav>
+    <!-- Page container -->
+    <mat-sidenav-content>
+        <mat-card>
+            <div fxLayout="row wrap">
+                <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
+                <h4 class="card-title m-l-15">Admin</h4>
+                <mat-icon class="card-subtitle op-5 m-t-23">keyboard_arrow_right</mat-icon>
+                <p class="card-subtitle op-5 m-t-23">{{subTitle}}</p>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-card-content style="min-height: 530px;">
+                <!--Child components routes-->
+                <router-outlet (activate)='onActivate($event)'></router-outlet>
+            </mat-card-content>
+        </mat-card>
+    </mat-sidenav-content>
+</mat-sidenav-container>

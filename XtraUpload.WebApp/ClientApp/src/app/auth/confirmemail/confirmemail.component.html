@@ -1,0 +1,21 @@
+<div class="page-wrapper mat-app-background">
+    <div fxLayout="row wrap" fxLayoutAlign="center" class="page-content">
+        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Email Confirmation</mat-card-title>
+                </mat-card-header>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                    <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
+                    <app-message [message$]="message$"></app-message>
+                    <mat-card-actions>
+                        <button mat-flat-button class="btn-block btn-lg mat-primary" [routerLink]="['/filemanager']">
+                            GO TO MY FILES
+                        </button>
+                    </mat-card-actions>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

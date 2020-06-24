@@ -1,0 +1,133 @@
+<div *ngIf="!isBusy; else elseBlock">
+    <section fxLayout="row wrap" fxLayoutAlign="center">
+        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+            <mat-card class="bg-info">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-icon mat-list-icon class="text-white">storage</mat-icon>
+                        <div mat-line class="text-white">{{accountOverview?.uploadSetting.storageSpace *1024 *1024 | bytes:2}}</div>
+                        <div mat-line class="text-white"> Available Storage </div>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+            <mat-card class="bg-warning">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-icon mat-list-icon class="text-white">publish</mat-icon>
+                        <div mat-line class="text-white">{{accountOverview?.uploadSetting.usedSpace | bytes:2}}</div>
+                        <div mat-line class="text-white">Used Storage</div>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+            <mat-card class="bg-success">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-icon mat-list-icon class="text-white">filter</mat-icon>
+                        <div mat-line class="text-white">{{accountOverview?.filesStats.totalFiles}}</div>
+                        <div mat-line class="text-white">Active Files</div>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+            <mat-card class="bg-danger">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-icon mat-list-icon class="text-white">arrow_downward</mat-icon>
+                        <div mat-line class="text-white">{{accountOverview?.filesStats.totalDownloads}}</div>
+                        <div mat-line class="text-white">Total Downloads</div>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card>
+        </div>
+    </section>
+    <div fxLayout="row wrap" fxLayoutAlign="center">
+        <app-message [message$]="message$"></app-message>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="center">
+        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+            <mat-card>
+                <mat-list role="list">
+                    <div mat-subheader class="bg-purple text-white">Profile</div>
+                    <mat-divider></mat-divider>
+                    <mat-list-item role="listitem">
+                        <p matLine>{{accountOverview?.user.createdAt | date}}</p>
+                        <p matLine>Account creation date</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p matLine>{{accountOverview?.user.lastModified | date}}</p>
+                        <p matLine>Last modification date</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p matLine>{{accountOverview?.user.email}}</p>
+                        <p matLine>Email address</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p matLine *ngIf="accountOverview?.user.emailConfirmed">Verified</p>
+                        <p matLine *ngIf="!accountOverview?.user.emailConfirmed">
+                            Unverified
+                            <a class="font-14 text-info" style="cursor: pointer;" (click)="verifyEmail()">
+                                (verify now)
+                            </a>
+                        </p>
+                        <mat-progress-bar mode="indeterminate" *ngIf="sendingEmail"></mat-progress-bar>
+                        <p matLine>Email status</p>
+                    </mat-list-item>
+
+                </mat-list>
+            </mat-card>
+        </div>
+        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+            <mat-card>
+                <mat-list role="list">
+                    <div mat-subheader class="bg-success text-white">Download</div>
+                    <mat-divider></mat-divider>
+                    <mat-list-item role="listitem">
+                        <p mat-line>{{accountOverview?.downloadSetting.downloadSpeed | bytes:2}}/s</p>
+                        <p mat-line>Download speed</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p mat-line>{{accountOverview?.downloadSetting.timeToWait | counter}}</p>
+                        <p mat-line>Time to wait before download starts</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p mat-line>{{accountOverview?.downloadSetting.downloadTTW | counter}}</p>
+                        <p mat-line>Time to wait before requesting a new download</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p mat-line>{{accountOverview?.downloadSetting.fileExpiration}} day</p>
+                        <p mat-line>File expiration date</p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card>
+        </div>
+    </div>
+
+    <div fxLayout="row wrap">
+        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+            <mat-card>
+                <mat-list role="list">
+                    <div mat-subheader class="bg-info text-white">Upload</div>
+                    <mat-divider></mat-divider>
+                    <mat-list-item role="listitem">
+                        <p mat-line>{{accountOverview?.uploadSetting.concurrentUpload}}</p>
+                        <p mat-line>Concurent uploads</p>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                        <p mat-line>{{accountOverview?.uploadSetting.maxFileSize | bytes}}</p>
+                        <p mat-line>Maximum file size</p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<ng-template #elseBlock>
+    <div fxLayout="row wrap" fxLayoutAlign="center" style="margin-top: 50px;">
+        <mat-spinner></mat-spinner>
+    </div>
+</ng-template>

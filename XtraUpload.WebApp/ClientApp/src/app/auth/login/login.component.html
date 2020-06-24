@@ -1,0 +1,69 @@
+<div class="page-wrapper mat-app-background">
+  <div fxLayout="row wrap" fxLayoutAlign="center center" class="page-content">
+    <!-- column -->
+    <div fxFlex.gt-lg="40" fxFlex.gt-md="40" fxFlex.gt-xs="100" fxFlex="100">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>LOGIN</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-message [message$]="message$"></app-message>
+          <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit(loginFormGroup.value)">
+            <!--Email field-->
+            <mat-form-field>
+              <input matInput placeholder="Email" formControlName="email" required>
+              <mat-error *ngIf="email.invalid">{{getErrorMessage(email)}}</mat-error>
+            </mat-form-field>
+            <!--Password field-->
+            <mat-form-field>
+              <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'"
+                formControlName="password" required>
+              <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="password.invalid">{{getErrorMessage(password)}}</mat-error>
+            </mat-form-field>
+            <!-- Remember me section-->
+            <div fxLayout="row wrap" class="p-t-10 p-b-10">
+              <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="50" fxFlex="50">
+                <mat-checkbox color="primary" checked="true" id="remember-me-checkbox"
+                  formControlName="rememberMe">
+                  <label class="mat-checkbox-layout" for="remember-me-checkbox-input">Remember me</label>
+                </mat-checkbox>
+              </div>
+              <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="50" class="text-right" fxFlex="50">
+                <a [routerLink]="['/forgotpassword']" class="text-muted">Forgot pwd?</a>
+              </div>
+            </div>
+            <!-- Login button -->
+            <div fxLayout="row wrap">
+              <div fxFlex.gt-lg="100" fxFlex.gt-md="100" fxFlex.gt-xs="100" fxFlex="100">
+                <mat-card-actions>
+                  <button mat-raised-button color="primary"
+                    class="btn-block btn-lg m-t-20 m-b-20 mat-raised-button mat-primary"
+                    [disabled]="!loginFormGroup.valid || isBusy" type="submit">
+                    <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
+                    <span>LOGIN</span>
+                  </button>
+                </mat-card-actions>
+              </div>
+            </div>
+          </form>
+          <mat-divider class="m-t-10"></mat-divider>
+          <!--Login with social media-->
+          <div fxLayout="row wrap" fxLayoutAlign="center">
+            <h6 class="text-muted">Or login with</h6>
+           </div>
+          <app-socialmedia (loginMessage)="onSMMessage($event)"></app-socialmedia>
+          <!--Don't have account-->
+          <div class="text-center p-10 m-t-10">
+            <span>
+              Don't have an account? <a [routerLink]="['/signup']" class="text-info link">Create an account</a>
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

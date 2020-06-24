@@ -1,0 +1,13 @@
+<div [@msgAnimation]="" *ngIf="(message$ | async)?.errorMessage as errorMsg" fxLayout="row" class="bg-warning m-b-5">
+    <p class="text-white m-l-5" fxFlex="95">{{errorMsg}}</p>
+    <a mat-icon-button fxFlex="5" (click)="hideAlert()">
+        <mat-icon class="font-16 m-t-10 text-white">close</mat-icon>
+    </a>
+</div>
+<div [@msgAnimation]="" *ngIf="(message$ | async)?.successMessage as successMsg" fxLayout="row"
+    class="bg-success m-b-5">
+    <p class="text-white m-l-5" fxFlex="95">{{successMsg}}</p>
+    <a mat-icon-button fxFlex="5" (click)="hideAlert()">
+        <mat-icon class="font-16 m-t-10 text-white">close</mat-icon>
+    </a>
+</div>

@@ -1,0 +1,20 @@
+ <div class="user-profile" style="background: url(assets/images/background/user-info.png) no-repeat;">
+    <!-- User profile image -->
+    <div class="profile-img"> <img src="{{avatar}}" alt="user"> </div>
+    <!-- User profile text-->
+    <div class="profile-text"><a class=""> {{username}} <i class="ti-angle-down font-12 m-l-5"></i></a></div>
+    
+</div>
+
+<app-folderstree (folderPathChanged$)="onfolderPathChanged($event)"></app-folderstree>
+<div class="storage-space p-10">
+    <div *ngIf="uploadSetting">
+        <mat-progress-bar mode="determinate" 
+        value="{{((uploadSetting.usedSpace/ (uploadSetting.storageSpace * 1024 * 1024) * 100)).toFixed(2)}}"></mat-progress-bar>     
+        <p class="text-muted font-12">{{uploadSetting.usedSpace | bytes:2 }} / {{uploadSetting.storageSpace *1024 *1024 | bytes:2 }}</p>
+    </div>
+    <div *ngIf="!uploadSetting">
+        <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
+        <p class="text-muted font-12">--/--</p>
+    </div>   
+</div>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
+    <ProjectReference Include="..\XtraUpload.Administration.Service.Common\XtraUpload.Administration.Service.Common.csproj" />
+  </ItemGroup>
+
+</Project>

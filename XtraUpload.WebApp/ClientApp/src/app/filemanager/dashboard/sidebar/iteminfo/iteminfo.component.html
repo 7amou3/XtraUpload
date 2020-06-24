@@ -1,0 +1,64 @@
+<div fxLayout="row wrap" *ngIf="itemInfo">
+    <div fxFlex.gt-lg="100" fxFlex.gt-md="100" fxFlex.gt-xs="100" fxFlex="100" >
+      <div class="position-relative" fxLayoutAlign="center center">        
+        <img style="max-height: 200px; max-width: 240px;" src="{{itemInfo.thumbnail}}">
+      </div>
+      <!-- item name -->
+      <div fxLayout="row wrap" class="p-l-10">
+        <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
+          <p class="font-12 font-medium">Name</p>
+        </div>
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+          <p class="font-12">{{itemInfo.name | truncate:[25]}}</p>
+        </div>
+      </div>
+      <!-- item location -->
+      <div fxLayout="row wrap" class="p-l-10">
+        <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
+          <p class="font-12 font-medium">Location</p>
+        </div>
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+          <p class="font-12">{{simplePath}}</p>
+        </div>
+      </div>
+      <!-- Created -->
+      <div fxLayout="row wrap" class="p-l-10">
+        <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
+          <p class="font-12 font-medium">Created</p>
+        </div>
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+          <p class="font-12">{{itemInfo.createdAt | date}}</p>
+        </div>
+      </div>
+      
+      <!-- Modified -->
+      <div fxLayout="row wrap" class="p-l-10">
+        <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
+          <p class="font-12 font-medium">Modified</p>
+        </div>
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+          <p class="font-12">{{itemInfo.lastModified | date}}</p>
+        </div>
+      </div>
+      <!-- Downloads -->
+      <div fxLayout="row wrap" class="p-l-10" *ngIf="isFile">
+        <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
+          <p class="font-12 font-medium">Downloads</p>
+        </div>
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+          <p class="font-12 p-l-10">{{itemInfo.downloadCount}}</p>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+      <!-- Online Availability-->
+      <div fxLayout="row wrap" class="p-l-10">
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70" >
+          <p class="font-12 font-medium">Available Online</p>
+        </div>
+        <div fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" fxLayoutAlign="center center">
+          <mat-slide-toggle [checked]="itemInfo.isAvailableOnline" (change)="onAvailableItemChange($event)"></mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+  </div>

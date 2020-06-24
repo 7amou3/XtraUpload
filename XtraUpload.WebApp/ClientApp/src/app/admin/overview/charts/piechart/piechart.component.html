@@ -1,0 +1,48 @@
+<mat-card class="p-0">
+    <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
+    <mat-accordion>
+        <mat-expansion-panel class="mat-elevation-z0">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Files by type
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div fxLayout fxLayoutWrap>
+                <form [formGroup]="filesSearchFormGroup" style="width: 100%;"
+                    (ngSubmit)="onSearchItemsSubmit()">
+                    <mat-form-field fxFlex.gt-lg="35" fxFlex.gt-md="35" fxFlex="100" style="margin-right: 25px;">
+                        <mat-label>Start Time</mat-label>
+                        <input matInput [matDatepicker]="startpicker" [matDatepickerFilter]="rangeFilter" formControlName="start" required>
+                        <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startpicker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field fxFlex.gt-lg="35" fxFlex.gt-md="35" fxFlex="100" style="margin-right: 25px;">
+                        <mat-label>End Time</mat-label>
+                        <input matInput [matDatepicker]="endpicker" [matDatepickerFilter]="rangeFilter" formControlName="end" required>
+                        <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+                        <mat-datepicker #endpicker></mat-datepicker>
+                    </mat-form-field>
+                    <div fxFlex="35" align="end">
+                        <button class="mat-elevation-z1" type="submit" color="primary" mat-mini-fab
+                            aria-label="Search upload history" matTooltip="Search" [disabled]="isBusy">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+        <div style="display: block;">
+            <canvas baseChart #baseChart="base-chart" height="270px"
+              [data]="pieChartData" 
+              [labels]="pieChartLabels" 
+              [chartType]="pieChartType"
+              [options]="pieChartOptions"
+              [plugins]="pieChartPlugins"
+              [legend]="pieChartLegend">
+            </canvas>
+          </div>
+    </mat-card-content>
+</mat-card>

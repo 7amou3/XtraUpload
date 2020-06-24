@@ -1,0 +1,35 @@
+.mat-card-content {
+    padding: 5px;
+}
+
+
+.selectedRowOnClick {
+    background: #ffffa8 !important;
+}
+  
+.dragging {
+  cursor: move;
+}
+
+.dragging .droppableRow:hover {
+    background: #d7fdd9 !important;
+}
+
+.dragging .mat-card:hover {
+    background: #ffdddd;
+}
+
+.layout-item-drag-preview {
+    background:#03c6fc;
+    color: white;
+    padding: 0.25em 0.5em 0.2em;
+    border-radius: 30px;
+    display: inline-block;
+  
+}
+.cdk-drop-list-dragging .cdk-drag {
+   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+   
+   /* disable cdk row animation  */
+   transform: none !important;
+}

@@ -1,0 +1,42 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <p class="font-14">Application Health</p>
+        </mat-card-title>
+        <mat-card-subtitle>You can check the application health status at:
+            <a class="link" href="{{healthEndpoint}}" target="_blank">{{healthEndpoint}}</a>*</mat-card-subtitle>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+            <!-- Resource Column -->
+            <ng-container matColumnDef="component">
+              <th mat-header-cell *matHeaderCellDef> Resource </th>
+              <td mat-cell *matCellDef="let element"> {{element.component}} </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef> Status </th>
+              <td mat-cell *matCellDef="let element">
+                   <mat-icon *ngIf="element.status == 'Unhealthy'" class="font-18" color="warn">error</mat-icon>
+                   <mat-icon *ngIf="element.status == 'Degraded'" class="font-18" color="accent">warning</mat-icon> 
+                   <mat-icon *ngIf="element.status == 'Healthy'" class="font-18" color="primary">done</mat-icon> 
+                   {{element.status}} 
+              </td>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> Description </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <p class="font-14">* A load balancer can monitor this endpoint to check the current application health.</p>
+    </mat-card-content>
+    
+</mat-card>

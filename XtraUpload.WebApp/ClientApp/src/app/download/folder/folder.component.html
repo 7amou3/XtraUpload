@@ -1,0 +1,32 @@
+<mat-sidenav-container class="page-wrapper">
+    <!-- Side bar -->
+    <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'"
+        fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
+        <app-sidebar [folderId]="folderId"></app-sidebar>
+    </mat-sidenav>
+    <!-- Page container -->
+    <mat-sidenav-content>
+        <mat-card>
+            <div fxLayout="row wrap">
+                <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
+                <h4 class="card-title m-l-15">Folder content</h4>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-card-content style="min-height: 530px;">
+                <app-message [message$]="message$"></app-message>
+                <app-tableview [folderContent$]="folderContent$"></app-tableview>
+                <!--Query in progress-->
+                <div *ngIf="isBusy" fxLayout="row wrap" fxLayoutAlign="center center">
+                    <mat-spinner color="accent" style="margin-top: 80px;"></mat-spinner>
+                </div>
+                <!--Empty folder-->
+                <div *ngIf="(folderContent$ | async)?.length == 0" fxlayoutalign="center center">
+                    <div class="text-center no-records">
+                        <img src="assets/images/folder-icon.png" role="img" style="margin-top: 80px;">
+                        <h5 class="text-muted m-t-10">Empty Folder</h5>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-sidenav-content>
+</mat-sidenav-container>

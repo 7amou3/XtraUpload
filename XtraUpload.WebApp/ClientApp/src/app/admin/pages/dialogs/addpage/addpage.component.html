@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Add page</h2>
+<form [formGroup]="addFormGroup" (ngSubmit)="onSubmit(addFormGroup.value)">
+    <mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Page Title</mat-label>
+            <input matInput formControlName="name" required>
+            <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
+            <mat-error *ngIf="name.hasError('itemExists')">A page with the same name already exists.</mat-error>
+        </mat-form-field>
+        <ngx-wig formControlName="content"></ngx-wig>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button
+            mat-button color="accent"
+            [disabled]="!addFormGroup.valid || isBusy" type="submit"
+            >Add Page
+        </button>
+    </mat-dialog-actions>
+</form>

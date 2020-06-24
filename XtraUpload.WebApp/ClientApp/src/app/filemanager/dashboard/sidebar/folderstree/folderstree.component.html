@@ -1,0 +1,54 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <!-- This is the tree node template for leaf nodes -->
+    <mat-tree-node 
+    *matTreeNodeDef="let node"
+     matTreeNodePadding
+     [matTreeNodePaddingIndent]="10"
+     (click)="onMenuItemClick(node, 7)"
+     (contextmenu)="onContextMenu($event, node)"
+     [class.active-node]="selectedFolderId == node.id"
+     [class.context-menu-on]="contextMenuFolderId == node.id">
+      <!-- use a disabled button to provide padding for tree leaf -->
+      <button mat-icon-button disabled></button>
+      <p>{{node.name}}</p>
+    </mat-tree-node>
+    <!-- This is the tree node template for expandable nodes -->
+    <mat-tree-node 
+    *matTreeNodeDef="let node;when: hasChild"
+     matTreeNodePadding
+     [matTreeNodePaddingIndent]="10"
+     (contextmenu)="onContextMenu($event, node)"
+     (click)="onMenuItemClick(node, 7)"
+     [class.context-menu-on]="contextMenuFolderId == node.id"
+     [class.active-node]="selectedFolderId == node.id">
+      <button mat-icon-button matTreeNodeToggle
+              [attr.aria-label]="'toggle ' + node.name">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+      <p>{{node.name}}</p>
+      <a mat-icon-button mat-button 
+      (click)="onContextMenu($event, node)"
+      *ngIf="node.id === 'root'"
+      class="folderOptions">
+        <mat-icon>more_vert</mat-icon>
+      </a> 
+    </mat-tree-node>
+</mat-tree>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuService.contextMenuPosition.x"
+    [style.top]="contextMenuService.contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<!-- folder option menu -->
+<mat-menu #contextMenu="matMenu" (closed)="onContextMenuClosed()">
+	<ng-template matMenuContent let-itemsMenu="itemsMenu" let-selectedItem="selectedItem">
+    <button mat-menu-item *ngFor="let menu of itemsMenu | async" (click)="onMenuItemClick(selectedItem, menu.action)">
+      <mat-icon class="{{menu.class}}">{{menu.icon}}</mat-icon>
+      <span>{{menu.description}}</span>
+    </button>
+  </ng-template>
+</mat-menu>

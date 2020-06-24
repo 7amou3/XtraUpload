@@ -1,0 +1,170 @@
+<div class="delete-icon">
+    <button mat-mini-fab color="warn" matTooltip="Delete" aria-label="Delete Selected Users"
+    [disabled]="selection.selected.length == 0"
+    (click)="onUserDelete(selection.selected)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+  <mat-accordion fxLayout="row wrap">
+    <mat-expansion-panel fxFlex="100" class="mat-elevation-z1">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>filter_list</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <form [formGroup]="usersSearchFormGroup" (ngSubmit)="onSearchItemsSubmit()">
+        <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-sm="23" fxFlex="40" class="m-r-20">
+          <mat-label>Start Time</mat-label>
+          <input matInput [matDatepicker]="startpicker" [matDatepickerFilter]="rangeFilter" formControlName="start">
+          <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+          <mat-datepicker #startpicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-sm="23" fxFlex="40" class="m-r-20">
+          <mat-label>End Time</mat-label>
+          <input matInput [matDatepicker]="endpicker" [matDatepickerFilter]="rangeFilter" formControlName="end">
+          <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+          <mat-datepicker #endpicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-md="23" fxFlex="40" class="m-r-20">
+          <input matInput type="text" 
+          placeholder="User Name"
+          formControlName="user"
+          [matAutocomplete]="autoUsers">
+          <mat-autocomplete #autoUsers="matAutocomplete" [displayWith]="displayUserName">
+            <mat-option *ngFor="let user of (filteredUsers | async)?.users" [value]="user">
+              <span>{{ user.userName }}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+       
+      
+      </form>
+      <mat-action-row>
+        <button mat-button color="primary" (click)="onSearchItemsSubmit()">Search</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+  
+  <div class="mat-elevation-z1">
+    <table #itemstable mat-table [dataSource]="dataSource" [class.isMobile]="isMobile">
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-spinner *ngIf="isBusy" [diameter]="20"></mat-spinner>
+          <mat-checkbox *ngIf="!isBusy" (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <!-- avatar Column -->
+      <ng-container matColumnDef="avatar">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let element">
+          <img *ngIf="element.avatar; else elseBlock" src="{{element.avatar}}" alt="user" class="profile-pic">
+          <ng-template #elseBlock>
+            <img src="assets/images/users/profile-icon.png" alt="user" class="profile-pic">
+          </ng-template>
+        </td>
+      </ng-container>
+      <!-- userName Column -->
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef> User Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+      </ng-container>
+      <!-- role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let element"> {{element.roleName}} </td>
+      </ng-container>
+  
+      <!-- email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+  
+      <!-- emailConfirmed Column -->
+      <ng-container matColumnDef="emailConfirmed">
+        <th mat-header-cell *matHeaderCellDef> Email Confirmed </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.emailConfirmed, else elseBlock" class="content-center">
+            <mat-icon class="font-18" color="primary">done</mat-icon>
+          </span>
+          <ng-template #elseBlock>
+            <span>
+              <mat-icon class="font-18" color="warn">close</mat-icon>
+            </span>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <!-- Account suspended Column -->
+      <ng-container matColumnDef="accountSuspended">
+        <th mat-header-cell *matHeaderCellDef>Account Suspended</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.accountSuspended, else elseBlock" class="content-center">
+            <mat-icon class="font-18" color="warn">done</mat-icon>
+          </span>
+          <ng-template #elseBlock>
+            <span>
+              <mat-icon class="font-18" color="primary">close</mat-icon>
+            </span>
+          </ng-template>
+        </td>
+      </ng-container>
+  
+      <!-- createdAt Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef> Created At </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdAt | date}} </td>
+      </ng-container>
+
+      <!-- actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" align="end">
+          <a mat-icon-button
+          (click)="$event.stopPropagation()"
+           mat-button
+           [matMenuTriggerFor]="menu"
+           [matMenuTriggerData]="{item: element}"
+           aria-label="Actions">
+            <mat-icon>more_vert</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row 
+          [@rowAnimation]=""
+          *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)"></tr>
+    </table>
+  
+    <mat-paginator *ngIf="page$ | async as page"
+         [pageSize]="page.pageSize" 
+         [pageIndex]="page.pageIndex"
+         [length]="page.length" 
+         [pageSizeOptions]="pageSizeOptions" 
+         (page)="onTableEvent($event)">
+    </mat-paginator>
+  </div>
+  <mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-item="item">
+      <button mat-menu-item (click)="onUserEdit(item)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="onUserDelete([item])">
+        <mat-icon color="warn">delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </ng-template>
+    
+  </mat-menu>

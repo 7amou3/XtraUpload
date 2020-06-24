@@ -1,0 +1,90 @@
+<div class="page-wrapper mat-app-background">
+  <div fxLayout="row wrap" fxLayoutAlign="center center" class="page-content">
+    <!-- column -->
+   <div fxFlex.lt-md="100" fxFlex="70">
+     
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Download {{fileItem?.name }} ({{fileItem?.size | bytes}})</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!--Query in progress-->
+        <div *ngIf="isBusy" fxLayout="row wrap" fxLayoutAlign="center center">
+          <mat-spinner color="accent" style="margin-top: 80px;"></mat-spinner>
+        </div>
+        <!--Error message (if any)-->
+        <app-message [message$]="message$"></app-message>
+        <div *ngIf="timerInProgress" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner 
+            [mode]="'determinate'"
+            [strokeWidth]="3"
+            color="accent"
+            [value]="progressPercent">
+            </mat-spinner>
+            <div class="spinner-text">{{timeToWait | counter}}</div>
+            <div *ngIf="!errorMessage && !isBusy" class="m-b-10">Please wait...</div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="center center">
+          <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+            <p *ngIf="!timerInProgress && !downloadurl" class="m-b-10 text-center">
+              Click the download button below to generate your download link.
+            </p>
+            
+            <button mat-raised-button 
+            *ngIf="!downloadurl"
+            color="accent"
+            [disabled]="timerInProgress || requestInProgress"
+            matTooltip="Generate download link"
+            (click)="onDownloadRequested()"
+            class="btn-block btn-lg m-t-20 m-b-20 mat-raised-button mat-primary">
+            <mat-progress-bar *ngIf="requestInProgress" mode="indeterminate" ></mat-progress-bar>
+              Download &nbsp;<mat-icon style="margin-top: -4px;">cloud_download</mat-icon>  
+            </button>
+            
+            <div fxLayoutAlign="center center">
+              <button
+              *ngIf="downloadurl && downloadState !== 'ended'"
+              [disabled]="downloadState === 'started'"
+              mat-fab color="warn"
+              (click)="startDownload()"
+              matTooltip="Start download"
+              style="height: 125px; width: 125px;"
+              >Start Download</button>
+            </div>
+            <div fxLayoutAlign="center center">
+              <p *ngIf="downloadurl && downloadState === 'unknwown'">
+                Click the button above to start your download.
+              </p>
+              <p *ngIf="downloadurl && downloadState === 'started'">
+                Download in progress, please wait...
+              </p>
+              <p *ngIf="downloadurl && downloadState === 'ended'">
+                <mat-icon class="text-success font-18">done</mat-icon>
+                Download Complete. 
+              </p>
+            </div>
+            
+            <mat-list *ngIf="downloadState === 'started'">
+              <mat-list-item >
+                <mat-progress-bar matLine mode="determinate"
+                color="accent"
+                value="{{downloadProgress?.currentProgress}}"
+                ></mat-progress-bar>
+                <p matLine style="font-size: 13px;">Speed: {{downloadSpeed | bytes}}/s</p>                
+                <mat-icon mat-list-icon matTooltip="Download in progress" class="text-success font-18">arrow_downward</mat-icon>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+        
+        <div *ngIf="!fileItem?.userLoggedIn" class="text-center">
+          <span>
+            Don't have an account? <a [routerLink]="['/signup']" class="text-info link">Create an account</a>
+          </span>
+        </div>
+      </mat-card-content>
+      </mat-card>
+   </div>
+  </div>
+</div>
+ 

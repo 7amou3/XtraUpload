@@ -1,0 +1,39 @@
+<mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
+<h2 mat-dialog-title>Select Destination Folder</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <!-- This is the tree node template for leaf nodes -->
+        <mat-tree-node
+        *matTreeNodeDef="let node"
+         matTreeNodePadding
+         (click)="onItemClick(node)"
+         [class.active-node]="selectedFolderId == node.id"
+         [matTreeNodePaddingIndent]="10">
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button mat-icon-button disabled></button>
+          {{node.name}}
+        </mat-tree-node>
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-tree-node
+        *matTreeNodeDef="let node;when: hasChild"
+         matTreeNodePadding
+         (click)="onItemClick(node)"
+         [class.active-node]="selectedFolderId == node.id"
+         [matTreeNodePaddingIndent]="10">
+          <button mat-icon-button matTreeNodeToggle
+                  [attr.aria-label]="'toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          {{node.name}}
+        </mat-tree-node>
+    </mat-tree>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button
+    [disabled]="isBusy" 
+    (click)="onMove()" 
+    color="primary">Move Files/Folders</button>
+</mat-dialog-actions>

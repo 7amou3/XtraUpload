@@ -1,0 +1,11 @@
+.side-icons {
+    margin-top: 7px;
+    font-size: 18px;
+    color: rgb(112, 112, 112);
+}
+.active-link {
+    background: rgba(180,180,180,0.3);
+}
+.m-t-23 {
+    margin-top: 23px;
+}

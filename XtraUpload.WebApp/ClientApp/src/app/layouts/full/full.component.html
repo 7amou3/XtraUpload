@@ -1,0 +1,39 @@
+<div [class.dark-theme]="currentTheme === 'dark'" class="main-container">
+    <!-- Topbar -->
+    <mat-toolbar color="primary">
+        <!-- Logo -->
+        <div class="navbar-header">
+            <span class="navbar-brand">
+                <mat-icon 
+                *ngIf="!mobileQuery.matches"
+                class="text-white m-r-10"
+                (click)="onOpenCloseNav()">menu</mat-icon>
+                <!-- Logo icon -->
+                    <b [routerLink]="['/login']"> 
+                        <img src="assets/images/logo-icon.png" alt="homepage" class="logo">
+                    </b>
+                    <!-- Logo text -->
+                    <span [routerLink]="['/login']" fxShow="false" fxShow.gt-xs>
+                        <!-- Logo text -->
+                        <span fxLayout="row wrap">
+                            <p class="text-white">Xtra</p>
+                            <p class="text-white op-5">Upload</p>
+                        </span>
+                        <!--<img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage">-->
+                    </span>
+            </span>
+        </div>
+        <span fxFlex></span>
+        <!-- app header component -->
+        <app-header [currentTheme]="currentTheme" (selectedTheme)="onSelectedTheme($event)"></app-header>
+    </mat-toolbar>
+    
+    <router-outlet>
+        <app-spinner></app-spinner>
+    </router-outlet>
+    <!--Footer-->
+    <div style="margin-top: -87px;">
+        <mat-divider [class.devider-light]="currentTheme === 'light'"></mat-divider>
+        <app-footer></app-footer>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+.mat-tree-node {
+    min-height: 3em;
+    height: 3em;
+}
+.mat-tree-node:hover {
+    background: rgba(180,180,180,0.3);
+    cursor: pointer;
+}
+.folderOptions {
+    margin-left: 80px;
+}
+.active-node{
+    background: rgba(180,180,180,0.3);
+}

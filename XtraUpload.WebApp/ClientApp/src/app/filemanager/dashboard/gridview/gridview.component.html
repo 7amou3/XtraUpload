@@ -1,0 +1,55 @@
+<div fxLayout="row wrap" class="p-t-20" >
+    
+    <div *ngFor="let item of itemsContent" fxFlex.lt-lg="15" fxFlex.lt-md="20" fxFlex.gt-xs="14" fxFlex.lt-sm="40" fxFlex="10"
+    cdkDropList 
+    (cdkDropListDropped)="onDrop($event)"
+    [class.dragging]="dragging"
+    >
+        <mat-card
+        [@rowsAnimation]=""
+        (click)="onItemClick(item)"
+        (mousedown)="onItemMouseDown(item)"
+        [class.selectedRowOnClick]="selections.includes(item)"
+        [class.selectedRowsOnDrag]="selections.includes(item)"
+        [class.droppableRow]="isdroppableArea(item)"
+        cdkDrag
+        (cdkDragStarted)="onDragStart(item)"
+        (contextmenu)="onContextMenu($event, item)">
+            <div class="layout-item-drag-preview" *cdkDragPreview>
+                {{ getDragDesc() }}
+            </div>
+            <img mat-card-image src="{{item.thumbnail}}">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="80">
+                        {{item.name}}
+                    </div>
+                    <div fxFlex="20">
+                        <a mat-icon-button mat-button 
+                        (click)="onContextMenu($event, item, true)"
+                        (mousedown)="$event.stopPropagation()">
+                            <mat-icon>more_vert</mat-icon>
+                        </a>
+                    </div>
+                </div>
+            </mat-card-content>
+          </mat-card>
+    </div>
+</div>
+
+<p>Selected items: {{selections.length}} </p>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="ctxMenuService.contextMenuPosition.x"
+    [style.top]="ctxMenuService.contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+<!-- file/folder option menu -->
+<mat-menu #contextMenu="matMenu">
+	<ng-template matMenuContent let-itemsMenu="itemsMenu" let-selectedItem="selectedItem">
+    <button mat-menu-item *ngFor="let menu of itemsMenu | async" (click)="onMenuItemClick(selectedItem, menu.action)">
+      <mat-icon class="{{menu.class}}">{{menu.icon}}</mat-icon>
+      <span>{{menu.description}}</span>
+    </button>
+  </ng-template>
+</mat-menu>
