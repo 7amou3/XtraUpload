@@ -6,7 +6,6 @@ using XtraUpload.Domain;
 
 namespace XtraUpload.ServerApp
 {
-
     public static class ServiceCollectionExtensions
     {
         public static void ConfigureWritable<T>(this IServiceCollection services, IConfigurationSection section, string file = "appsettings.json") where T : class, new()
