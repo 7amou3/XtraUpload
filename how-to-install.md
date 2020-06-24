@@ -17,4 +17,3 @@
  4. Build XtraUpload: Extract *XtraUpload.ServerApp-master.zip* then open a terminal in the XtraUpload.ServerApp-master's root directory, type the following command `dotnet  publish --configuration Release`
 [Release build](https://photos.app.goo.gl/HkzX7yu8pjkyeaGj7)
  
-cd
