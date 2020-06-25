@@ -76,8 +76,9 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> File Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name | truncate:[25]}} <i
-          class="font-10">({{element.size | bytes}})</i></td>
+      <td mat-cell *matCellDef="let element">
+        <a class="text-info" href="/file?id={{element.id}}" target="_blank">{{element.name | truncate:[25]}}</a> 
+        <i class="font-10">({{element.size | bytes}})</i></td>
     </ng-container>
 
     <!-- userName Column -->

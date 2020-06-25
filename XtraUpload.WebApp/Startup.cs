@@ -53,7 +53,7 @@ namespace XtraUpload.ServerApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            // services.AddCors();
             services.AddControllers();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -105,11 +105,12 @@ namespace XtraUpload.ServerApp
             // Uncomment if you would like to use https
             //app.UseHttpsRedirection();
 
-            app.UseCors(builder => builder
+            // Uncomment if you want to serve the angular app from other domain or to allow 3rd paries to query XtraUpload's API
+            /*app.UseCors(builder => builder
                                     .AllowAnyHeader()
                                     .AllowAnyMethod()
                                     .AllowAnyOrigin()
-                                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));
+                                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));*/
 
             app.UseTus(httpContext => Task.FromResult(httpContext.RequestServices.GetService<DefaultTusConfiguration>()));
 
