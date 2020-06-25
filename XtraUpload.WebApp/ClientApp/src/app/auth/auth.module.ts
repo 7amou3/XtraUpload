@@ -9,13 +9,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, UserStorageService, AuthUnGuardService } from '../services';
 import { SocialmediaComponent } from './socialmedia/socialmedia.component';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-import { environment } from '../../environments/environment';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ForgotpwdComponent } from './forgotpwd/forgotpwd.component';
 import { RecoverpwdComponent } from './recoverpwd/recoverpwd.component';
 import { ConfirmemailComponent } from './confirmemail/confirmemail.component';
+
+export function socialLoginFactory(authService: AuthService): Promise<SocialAuthServiceConfig> {
+  return authService.loadConfig().toPromise();
+}
 
 @NgModule({
   declarations: [
@@ -43,21 +45,8 @@ import { ConfirmemailComponent } from './confirmemail/confirmemail.component';
     UserStorageService,
     {
       provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              environment.GoogleAuthSettings.ClienId
-            ),
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.FacebookAuthSettings.AppId),
-          }
-        ],
-      } as SocialAuthServiceConfig
+      useFactory: socialLoginFactory,
+      deps: [AuthService]
     }
   ]
 })

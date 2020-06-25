@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { IProfile, ILoginParams, ISignupParams, RecoverPassword } from '../domain';
+import { tap, map } from 'rxjs/operators';
+import { IProfile, ILoginParams, ISignupParams, RecoverPassword } from 'app/domain';
 import { UserStorageService } from './user.storage.service';
-import { SocialUser } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig, SocialUser } from 'angularx-social-login';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +24,29 @@ export class AuthService {
         this.userStorage.saveUser(profile);
       })
     );
+  }
+  loadConfig(): Observable<SocialAuthServiceConfig> {
+    return this.http.get('setting/socialauthconfig')
+    .pipe(
+      map( (r: any) => {
+        return {
+          autoLogin: false,
+          providers: [
+            {
+              id: GoogleLoginProvider.PROVIDER_ID,
+              provider: new GoogleLoginProvider(
+                r.googleAuth.clientId
+              ),
+            },
+            {
+              id: FacebookLoginProvider.PROVIDER_ID,
+              provider: new FacebookLoginProvider(
+                r.facebookAuth.appId
+                ),
+            }
+          ]
+        };
+       }));
   }
   requestSignup(signupParams: ISignupParams) {
     return this.http.post('user/register', signupParams);

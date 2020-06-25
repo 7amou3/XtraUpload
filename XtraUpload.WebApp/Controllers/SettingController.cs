@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.ServerApp.Common;
@@ -15,12 +16,14 @@ namespace XtraUpload.ServerApp.Controllers
     public class SettingController : BaseController
     {
         readonly IMapper _mapper;
+        readonly SocialAuthSettings _socialSettings;
         readonly ISettingService _settingService;
 
-        public SettingController(ISettingService settingService, IMapper mapper)
+        public SettingController(ISettingService settingService, IOptionsMonitor<SocialAuthSettings> socialSettings, IMapper mapper)
         {
             _mapper = mapper;
             _settingService = settingService;
+            _socialSettings = socialSettings.CurrentValue;
         }
 
         [HttpGet("uploadsetting")]
@@ -77,6 +80,13 @@ namespace XtraUpload.ServerApp.Controllers
             PageResult result = await _settingService.GetPage(name);
 
             return HandleResult(result, result.Page);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("socialauthconfig")]
+        public IActionResult GetSocialAuthConfig()
+        {
+            return Ok(_socialSettings);
         }
     }
 }

@@ -169,6 +169,10 @@ namespace XtraUpload.ServerApp
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
             services.ConfigureWritable<JwtIssuerOptions>(Configuration.GetSection(nameof(JwtIssuerOptions)));
+            // Social Media settings 
+            IConfigurationSection soacilLoginSection = Configuration.GetSection(nameof(SocialAuthSettings));
+            services.Configure<SocialAuthSettings>(soacilLoginSection);
+            services.ConfigureWritable<SocialAuthSettings>(Configuration.GetSection(nameof(SocialAuthSettings)));
 
             // Upload Options
             IConfigurationSection uploadSection = Configuration.GetSection(nameof(UploadOptions));
