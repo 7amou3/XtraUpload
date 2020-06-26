@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
-import { IProfile } from 'app/domain';
+import { IProfile, IWebSetting } from 'app/domain';
 const PROFILE_DATA = 'XtraUpload';
+const WEBPAGE_DATA = 'Webpage';
 /**
  *  Store usefull user data to localstorage
  * */
 @Injectable()
 export class UserStorageService {
   constructor() { }
-
+  getPageSetting(): IWebSetting {
+    const pageSetting = localStorage.getItem(WEBPAGE_DATA);
+    if (!pageSetting) {
+      return null;
+    }
+    return JSON.parse(pageSetting);
+  }
+  savePageSetting(websetting: IWebSetting) {
+    window.localStorage.removeItem(WEBPAGE_DATA);
+    window.localStorage.setItem(WEBPAGE_DATA, JSON.stringify(websetting));
+  }
   saveUser(profile: IProfile): IProfile {
     if (!profile) {
       return;

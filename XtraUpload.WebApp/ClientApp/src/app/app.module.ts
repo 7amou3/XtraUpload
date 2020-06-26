@@ -22,7 +22,7 @@ import { UserStorageService, AuthService, SettingsService, SidenavService } from
 import { SharedModule, MessageModule, SpinnerComponent } from './shared';
 import { PipeModule } from './shared/pipe-modules';
 export function webSettingFactory(settings: SettingsService) {
-  return settings.webappconfig().toPromise();
+  return () => settings.webappconfig().toPromise();
 }
 @NgModule({
   declarations: [
@@ -51,15 +51,16 @@ export function webSettingFactory(settings: SettingsService) {
     { provide: HTTP_INTERCEPTORS, useClass: UrlForwarderHandler, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpProgressHandler, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {
+      provide: APP_INITIALIZER,
+      useFactory: webSettingFactory,
+      deps: [SettingsService],
+      multi: true
+    },
     { provide: UserStorageService},
     { provide: AuthService},
     { provide: SettingsService},
     { provide: SidenavService},
-    {
-      provide: 'WebSetting',
-      useFactory: webSettingFactory,
-      deps: [SettingsService]
-    }
   ],
   bootstrap: [AppComponent]
 })

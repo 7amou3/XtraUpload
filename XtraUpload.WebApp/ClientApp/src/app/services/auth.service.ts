@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
+import { GoogleLoginProvider, FacebookLoginProvider,
+         SocialAuthServiceConfig, SocialUser } from 'angularx-social-login';
 import { IProfile, ILoginParams, ISignupParams, RecoverPassword } from 'app/domain';
 import { UserStorageService } from './user.storage.service';
-import { GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig, SocialUser } from 'angularx-social-login';
 
 @Injectable()
 export class AuthService {

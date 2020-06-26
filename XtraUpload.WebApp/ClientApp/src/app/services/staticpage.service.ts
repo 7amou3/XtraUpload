@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IPage } from '../domain';
+import { IPage } from 'app/domain';
 
 @Injectable()
 export class StaticPageService {

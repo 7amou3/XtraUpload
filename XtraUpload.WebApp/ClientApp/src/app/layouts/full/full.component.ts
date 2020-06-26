@@ -22,11 +22,9 @@ export class FullComponent extends ComponentBase implements OnInit {
     private router: Router,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    private sidenavService: SidenavService,
-    @Inject('WebSetting') private websetting
+    private sidenavService: SidenavService
     ) {
     super();
-    console.log(websetting)
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);

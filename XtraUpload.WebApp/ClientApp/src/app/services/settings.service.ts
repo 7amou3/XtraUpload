@@ -1,13 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IChangePassword } from 'app/domain';
+import { IChangePassword, IWebSetting } from 'app/domain';
+import { map } from 'rxjs/operators';
+import { UserStorageService } from './user.storage.service';
+import { of, Observable } from 'rxjs';
 
 @Injectable()
 export class SettingsService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private userStorage: UserStorageService) { }
 
-  webappconfig() {
-    return this.http.get('setting/webappconfig');
+  webappconfig(): Observable<IWebSetting> {
+    const pagesetting = this.userStorage.getPageSetting();
+    // make request to server only if cache expires (cache is valid for 5 min)
+    if (!pagesetting || new Date().getTime() > new Date(pagesetting?.expire).getTime()) {
+      return this.http.get<IWebSetting>('setting/webappconfig')
+      .pipe(
+        map(result => {
+          result.expire = new Date();
+          result.expire.setMinutes(result.expire.getMinutes() + 5);
+          this.userStorage.savePageSetting(result);
+          return result;
+        })
+      );
+    } else { return of(pagesetting); }
   }
   changePassword(changePassword: IChangePassword) {
     return this.http.patch('setting/password', changePassword);
