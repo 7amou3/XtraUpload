@@ -28,7 +28,7 @@ namespace XtraUpload.ServerApp.Controllers
                 {
                     return BadRequest(result);
                 }
-                return StatusCode((int)HttpStatusCode.InternalServerError);
+                return StatusCode((int)HttpStatusCode.InternalServerError, result);
             }
 
             return Ok(result);

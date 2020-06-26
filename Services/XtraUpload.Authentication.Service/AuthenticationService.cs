@@ -11,6 +11,7 @@ using XtraUpload.ServerApp.Common;
 using XtraUpload.Domain.Infra;
 using XtraUpload.Email.Service.Common;
 using System.Collections.Generic;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace XtraUpload.Authentication.Service
 {
@@ -191,7 +192,13 @@ namespace XtraUpload.Authentication.Service
                 Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
                 return Result;
             }
-
+            // Check email service is up
+            HealthCheckResult health = await (_emailService as IHealthCheck).CheckHealthAsync(null);
+            if (health.Status != HealthStatus.Healthy)
+            {
+                Result.ErrorContent = new ErrorContent("Internal email server error, please check again later.", ErrorOrigin.Server);
+                return Result;
+            }
             // Generate a password reset candidate
             ConfirmationKey token = new ConfirmationKey()
             {

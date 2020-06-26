@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IProfile } from '../domain';
+import { IProfile } from 'app/domain';
 const PROFILE_DATA = 'XtraUpload';
 /**
  *  Store usefull user data to localstorage
@@ -18,7 +18,6 @@ export class UserStorageService {
     else {
       profile.theme = 'light';
     }
-    console.log(profile.theme)
     window.localStorage.removeItem(PROFILE_DATA);
     window.localStorage.setItem(PROFILE_DATA, JSON.stringify(profile));
     return profile;

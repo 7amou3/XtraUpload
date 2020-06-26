@@ -8,21 +8,22 @@ using XtraUpload.Domain;
 using XtraUpload.ServerApp.Common;
 using XtraUpload.Setting.Service.Common;
 
-
 namespace XtraUpload.ServerApp.Controllers
 {
-
     [Authorize(Policy = "User")]
     public class SettingController : BaseController
     {
         readonly IMapper _mapper;
+        readonly WebAppSettings _webappSettings;
         readonly SocialAuthSettings _socialSettings;
         readonly ISettingService _settingService;
 
-        public SettingController(ISettingService settingService, IOptionsMonitor<SocialAuthSettings> socialSettings, IMapper mapper)
+        public SettingController(ISettingService settingService, IOptionsMonitor<SocialAuthSettings> socialSettings,
+            IOptionsMonitor<WebAppSettings> webappSettings, IMapper mapper)
         {
             _mapper = mapper;
             _settingService = settingService;
+            _webappSettings = webappSettings.CurrentValue;
             _socialSettings = socialSettings.CurrentValue;
         }
 
@@ -80,6 +81,13 @@ namespace XtraUpload.ServerApp.Controllers
             PageResult result = await _settingService.GetPage(name);
 
             return HandleResult(result, result.Page);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("webappconfig")]
+        public IActionResult GetWebAppConfig()
+        {
+            return Ok(_webappSettings);
         }
 
         [AllowAnonymous]

@@ -1,6 +1,6 @@
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, APP_INITIALIZER } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,7 +21,9 @@ import {
 import { UserStorageService, AuthService, SettingsService, SidenavService } from 'app/services';
 import { SharedModule, MessageModule, SpinnerComponent } from './shared';
 import { PipeModule } from './shared/pipe-modules';
-
+export function webSettingFactory(settings: SettingsService) {
+  return settings.webappconfig().toPromise();
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +54,12 @@ import { PipeModule } from './shared/pipe-modules';
     { provide: UserStorageService},
     { provide: AuthService},
     { provide: SettingsService},
-    { provide: SidenavService}
+    { provide: SidenavService},
+    {
+      provide: 'WebSetting',
+      useFactory: webSettingFactory,
+      deps: [SettingsService]
+    }
   ],
   bootstrap: [AppComponent]
 })

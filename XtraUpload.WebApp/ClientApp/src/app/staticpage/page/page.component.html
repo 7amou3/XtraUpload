@@ -3,6 +3,7 @@
       
      <div fxFlex.lt-md="100" fxFlex="70">
         <mat-card>
+            <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
             <mat-card-header>
               <mat-card-title>{{page?.name}}</mat-card-title>
             </mat-card-header>

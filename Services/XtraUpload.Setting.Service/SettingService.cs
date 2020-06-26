@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -192,7 +193,13 @@ namespace XtraUpload.Setting.Service
                 Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
                 return Result;
             }
-
+            // Check email service is up
+            HealthCheckResult health = await (_emailService as IHealthCheck).CheckHealthAsync(null);
+            if (health.Status != HealthStatus.Healthy)
+            {
+                Result.ErrorContent = new ErrorContent("Internal email server error, please check again later.", ErrorOrigin.Server);
+                return Result;
+            }
             // Check email confirmation status
             if (user.EmailConfirmed)
             {

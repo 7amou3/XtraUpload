@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
 import { Router, } from '@angular/router';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ComponentBase } from 'app/shared';
@@ -22,9 +22,11 @@ export class FullComponent extends ComponentBase implements OnInit {
     private router: Router,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    @Inject('WebSetting') private websetting
     ) {
     super();
+    console.log(websetting)
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
