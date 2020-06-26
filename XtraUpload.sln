@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Authentication.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.FileManager.Service.Common", "Services\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj", "{AC574C5E-0D75-4382-8DE4-4FA1FC2E7FA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApp.Common", "XtraUpload.ServerApp.Common\XtraUpload.WebApp.Common.csproj", "{5450B971-079D-4E26-85B3-700FC367BC5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApp.Common", "XtraUpload.WebApp.Common\XtraUpload.WebApp.Common.csproj", "{5450B971-079D-4E26-85B3-700FC367BC5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Setting.Service", "Services\XtraUpload.Setting.Service\XtraUpload.Setting.Service.csproj", "{64933E2D-FB96-42EA-A88F-5C4DF616A67B}"
 EndProject
