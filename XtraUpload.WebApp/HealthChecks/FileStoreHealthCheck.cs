@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 using System.IO;
 using System.Security.Permissions;
 using System.Security;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     public class FileStoreHealthCheck : IHealthCheck
     {

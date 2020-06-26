@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Authentication.Service.Common
 {

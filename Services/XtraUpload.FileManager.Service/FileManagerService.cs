@@ -12,7 +12,7 @@ using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.FileManager.Service
 {

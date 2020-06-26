@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
 
-namespace XtraUpload.ServerApp.Controllers
+namespace XtraUpload.WebApp.Controllers
 {
     [Authorize(Policy = "User")]
     public class SettingController : BaseController

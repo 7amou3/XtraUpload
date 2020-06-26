@@ -32,12 +32,12 @@ using XtraUpload.Email.Service;
 using XtraUpload.Email.Service.Common;
 using XtraUpload.FileManager.Service;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.ServerApp.Common;
-using XtraUpload.ServerApp.Filters;
+using XtraUpload.WebApp.Common;
+using XtraUpload.WebApp.Filters;
 using XtraUpload.Setting.Service;
 using XtraUpload.Setting.Service.Common;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     public class Startup
     {

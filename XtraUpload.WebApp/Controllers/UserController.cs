@@ -4,9 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
-namespace XtraUpload.ServerApp.Controllers
+namespace XtraUpload.WebApp.Controllers
 {
     public class UserController : BaseController
     {

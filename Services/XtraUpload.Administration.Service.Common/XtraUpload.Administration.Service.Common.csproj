@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
-    <ProjectReference Include="..\..\XtraUpload.ServerApp.Common\XtraUpload.ServerApp.Common.csproj" />
+    <ProjectReference Include="..\..\XtraUpload.ServerApp.Common\XtraUpload.WebApp.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
   </ItemGroup>
 

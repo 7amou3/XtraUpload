@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using XtraUpload.Domain;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
-namespace XtraUpload.ServerApp.Controllers
+namespace XtraUpload.WebApp.Controllers
 {
 
     [Authorize(Policy = "User")]

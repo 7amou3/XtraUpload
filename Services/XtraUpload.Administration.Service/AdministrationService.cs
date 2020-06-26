@@ -15,7 +15,7 @@ using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Administration.Service
 {

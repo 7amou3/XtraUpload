@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using XtraUpload.Domain;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +8,10 @@ using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
 
-namespace XtraUpload.ServerApp.Controllers
+namespace XtraUpload.WebApp.Controllers
 {
     [Authorize(Policy = "Admin")]
     public class AdminController : BaseController

@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>XtraUpload.WebApp.Common</AssemblyName>
+    <RootNamespace>XtraUpload.WebApp.Common</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

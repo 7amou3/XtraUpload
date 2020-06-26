@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Email.Service
 {

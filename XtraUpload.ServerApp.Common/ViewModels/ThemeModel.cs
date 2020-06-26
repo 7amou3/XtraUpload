@@ -1,6 +1,6 @@
 ﻿using XtraUpload.Domain;
 
-namespace XtraUpload.ServerApp.Common
+namespace XtraUpload.WebApp.Common
 {
     public class ThemeModel
     {

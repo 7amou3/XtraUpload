@@ -2,9 +2,9 @@
 using System;
 using System.Net;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Filters;
+using XtraUpload.WebApp.Filters;
 
-namespace XtraUpload.ServerApp.Controllers
+namespace XtraUpload.WebApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

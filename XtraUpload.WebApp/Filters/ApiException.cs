@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XtraUpload.ServerApp.Filters
+namespace XtraUpload.WebApp.Filters
 {
 
     public class ApiException : Exception

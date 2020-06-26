@@ -4,7 +4,7 @@ using System;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     internal class UserDto
     {

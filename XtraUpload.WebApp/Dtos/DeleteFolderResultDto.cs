@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using XtraUpload.Domain;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     internal class DeleteFolderResultDto
     {

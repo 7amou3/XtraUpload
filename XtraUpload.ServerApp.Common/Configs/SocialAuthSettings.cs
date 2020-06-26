@@ -1,4 +1,4 @@
-﻿namespace XtraUpload.ServerApp.Common
+﻿namespace XtraUpload.WebApp.Common
 {
     /// <summary>
     /// Social media auth providers

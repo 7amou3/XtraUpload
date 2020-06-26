@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     public class MemoryHealthCheck : IHealthCheck
     {

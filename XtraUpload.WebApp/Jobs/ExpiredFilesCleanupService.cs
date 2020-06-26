@@ -7,7 +7,7 @@ using tusdotnet.Interfaces;
 using tusdotnet.Models;
 using tusdotnet.Models.Expiration;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     /// <summary>
     /// A background job used to remove expired non completed/aborted files from the store

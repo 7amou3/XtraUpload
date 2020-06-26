@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace XtraUpload.ServerApp.Common
+namespace XtraUpload.WebApp.Common
 {
     public interface IBackgroundTaskQueue
     {

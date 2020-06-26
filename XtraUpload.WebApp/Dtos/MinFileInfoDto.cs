@@ -1,4 +1,4 @@
-﻿namespace XtraUpload.ServerApp
+﻿namespace XtraUpload.WebApp
 {
     internal class MinFileInfoDto
     {

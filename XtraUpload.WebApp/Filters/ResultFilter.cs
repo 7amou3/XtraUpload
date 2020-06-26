@@ -4,7 +4,7 @@ using System.Net;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 
-namespace XtraUpload.ServerApp.Filters
+namespace XtraUpload.WebApp.Filters
 {
     /// <summary>
     /// Apply a post filter on controller's method operation result

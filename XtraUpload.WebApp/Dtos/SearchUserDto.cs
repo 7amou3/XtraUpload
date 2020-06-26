@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     internal class SearchUserDto
     {

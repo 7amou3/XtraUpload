@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using XtraUpload.Domain.Infra;
 
-namespace XtraUpload.ServerApp.Common
+namespace XtraUpload.WebApp.Common
 {
     /// <summary>
     /// Jwt Configuration option

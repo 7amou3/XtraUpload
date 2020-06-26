@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace XtraUpload.ServerApp.Common
+namespace XtraUpload.WebApp.Common
 {
     public class PublicFolderViewModel
     {

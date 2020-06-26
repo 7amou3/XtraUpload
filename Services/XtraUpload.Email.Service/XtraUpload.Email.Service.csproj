@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\XtraUpload.ServerApp.Common\XtraUpload.ServerApp.Common.csproj" />
+    <ProjectReference Include="..\..\XtraUpload.ServerApp.Common\XtraUpload.WebApp.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
   </ItemGroup>
 

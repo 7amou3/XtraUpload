@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Administration.Service.Common
 {

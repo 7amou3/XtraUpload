@@ -10,9 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.ServerApp.Common;
+using XtraUpload.WebApp.Common;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     /// <summary>
     /// A background job used to remove expired user files from the store

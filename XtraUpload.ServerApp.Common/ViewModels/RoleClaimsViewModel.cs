@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using XtraUpload.Domain;
 
-namespace XtraUpload.ServerApp.Common
+namespace XtraUpload.WebApp.Common
 {
     public class RoleClaimsViewModel
     {

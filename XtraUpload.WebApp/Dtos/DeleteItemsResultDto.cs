@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     internal class DeleteItemsResultDto
     {

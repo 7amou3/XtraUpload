@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XtraUpload.ServerApp
+namespace XtraUpload.WebApp
 {
     internal class RolesResultDto
     {

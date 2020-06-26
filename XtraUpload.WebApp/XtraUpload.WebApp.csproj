@@ -51,7 +51,6 @@
     <ProjectReference Include="..\Services\XtraUpload.FileManager.Service\XtraUpload.FileManager.Service.csproj" />
     <ProjectReference Include="..\Services\XtraUpload.Setting.Service\XtraUpload.Setting.Service.csproj" />
     <ProjectReference Include="..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
-    <ProjectReference Include="..\XtraUpload.ServerApp.Common\XtraUpload.ServerApp.Common.csproj" />
   </ItemGroup>
   
   <ItemGroup>

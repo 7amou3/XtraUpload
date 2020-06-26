@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace XtraUpload.ServerApp.Filters
+namespace XtraUpload.WebApp.Filters
 {
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {

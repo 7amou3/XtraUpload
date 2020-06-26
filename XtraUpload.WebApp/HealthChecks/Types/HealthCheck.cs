@@ -1,4 +1,4 @@
-﻿namespace XtraUpload.ServerApp
+﻿namespace XtraUpload.WebApp
 {
     public class HealthCheck
     {

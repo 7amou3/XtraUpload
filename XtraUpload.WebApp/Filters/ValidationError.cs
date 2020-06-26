@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace XtraUpload.ServerApp.Filters
+namespace XtraUpload.WebApp.Filters
 {
     public class ValidationError
     {

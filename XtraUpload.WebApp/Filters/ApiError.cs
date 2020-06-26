@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace XtraUpload.ServerApp.Filters
+namespace XtraUpload.WebApp.Filters
 {
     public class ApiError
     {
