@@ -1,0 +1,23 @@
+.dropzone {
+    background: transparent; 
+    margin-top: 20px;
+}
+.drop-visibility{
+    display: none;
+}
+.icon-add-files {
+    font-size: 80px; 
+    margin-left: -50px;
+}
+.delete-img {
+	position: absolute;
+    right: 10px;
+    top: 60px;
+    z-index: 2;
+}
+:host {
+    
+    --cropper-overlay-color: {
+        background: transparent;
+    }
+ }

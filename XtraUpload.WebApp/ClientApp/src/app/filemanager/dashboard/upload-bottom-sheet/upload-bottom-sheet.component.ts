@@ -54,8 +54,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       const rejected = event.rejectedFiles[0] as RejectedFile;
         if (rejected.reason === 'type') {
           throw Error ('The selected file type is not allowed.');
-        }
-        else {
+        } else {
           throw Error ('You exceeded the file size limit.');
         }
     }

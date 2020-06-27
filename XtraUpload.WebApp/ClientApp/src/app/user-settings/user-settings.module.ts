@@ -9,6 +9,8 @@ import { UserSettingsRoutes } from './user-setting.routing';
 import { FileManagerService, SettingsService, UserStorageService, AuthGuardService } from 'app/services';
 import {SettingsComponent, OverviewComponent, UserinfoComponent, ChangePasswordComponent,
     AvatarComponent } from './';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @NgModule({
     declarations: [
@@ -27,6 +29,8 @@ import {SettingsComponent, OverviewComponent, UserinfoComponent, ChangePasswordC
         FlexLayoutModule,
         FormsModule,
         ReactiveFormsModule,
+        ImageCropperModule,
+        NgxDropzoneModule
     ],
     providers: [
         SettingsService,

@@ -1,1 +1,51 @@
-<p>avatar works!</p>
+<div fxLayout="row wrap" fxLayoutAlign="center">
+    <div fxFlex="70">
+        <mat-card>
+            
+            <div mat-subheader class="bg-purple text-white">Change Your Avatar</div>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <ngx-dropzone
+                [maxFileSize]="3 *1024 *1024"
+                [multiple]="false"
+                [accept]="'.png, .jpg, .gif, .jpeg'"
+                [class.drop-visibility]="selectedImg" #drop class="dropzone"
+                
+                (change)="onSelect($event)">
+                    <ngx-dropzone-label>
+                    <mat-icon class="icon-add-files">add</mat-icon>
+                    <p class="text-muted font-12">
+                        Max Image Size: 3 Mb
+                    </p>
+                    </ngx-dropzone-label>
+                </ngx-dropzone>
+                <button type="button"
+                [class.drop-visibility]="!selectedImg"
+                (click)="onDeleteImage()"
+                mat-mini-fab color="warn" 
+                matTooltip="Delete"
+                aria-label="Delete Selected Image"
+                class="delete-img">
+                    <mat-icon class="text-white">delete</mat-icon>
+                </button>             
+                <image-cropper
+                [imageFile]="selectedImg"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="4 / 3"
+                format="png"
+                [roundCropper]="true"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()"
+                ></image-cropper>
+                <mat-card-actions>
+                    <button mat-flat-button class="btn-block btn-lg mat-primary"
+                        type="submit">
+                    <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
+                        Update Avatar</button>
+                </mat-card-actions>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
