@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ComponentBase } from '../../shared';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { AuthService } from 'app/services';
+import { AuthService, SeoService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-forgotpwd',
@@ -17,9 +16,9 @@ export class ForgotpwdComponent extends ComponentBase implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private titleService: Title) {
+    private seoService: SeoService) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
   }
 
   ngOnInit(): void {

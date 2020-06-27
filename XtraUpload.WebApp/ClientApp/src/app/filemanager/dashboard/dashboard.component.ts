@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute } from '@angular/router';
 import { MatSidenav, MatBottomSheet } from '@angular/material';
-import { Title } from '@angular/platform-browser';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { Subject, ReplaySubject, merge } from 'rxjs';
 import { ComponentBase } from 'app/shared';
 import { IItemInfo, IFolderInfo, itemAction, IUploadSettings} from 'app/domain';
-import { FileManagerService, UserStorageService } from 'app/services';
+import { FileManagerService, UserStorageService, SeoService } from 'app/services';
 import { FileMngContextMenuService, SnavContextMenuService } from 'app/services/contextmenu';
 import { UploadBottomSheetComponent } from './upload-bottom-sheet/upload-bottom-sheet.component';
 import { SidenavService } from 'app/services/sidenav.service';
@@ -32,7 +31,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   /** flat array pointing to the path of the selected folder (used for breadcrumb) */
   pathSelectedFolder: IFolderInfo[] = [];
   constructor(private route: ActivatedRoute,
-    private titleService: Title,
+    private seoService: SeoService,
     private filemanagerService: FileManagerService,
     private mainCtxMenuService: FileMngContextMenuService,
     private snavCtxMenuService: SnavContextMenuService,
@@ -42,7 +41,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);

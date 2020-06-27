@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from 'app/shared';
-import { Title } from '@angular/platform-browser';
-import { AuthService } from 'app/services';
+import { AuthService, SeoService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
@@ -15,10 +14,10 @@ export class ConfirmemailComponent extends ComponentBase implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
-    private titleService: Title
+    private seoService: SeoService
   ) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
   }
 
   ngOnInit(): void {

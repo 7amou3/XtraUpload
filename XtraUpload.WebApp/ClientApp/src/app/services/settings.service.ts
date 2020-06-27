@@ -4,12 +4,14 @@ import { IChangePassword, IWebSetting } from 'app/domain';
 import { map } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
 import { of, Observable } from 'rxjs';
+import { SeoService } from './seo.service';
 
 @Injectable()
 export class SettingsService {
   constructor(
     private http: HttpClient,
-    private userStorage: UserStorageService) { }
+    private userStorage: UserStorageService,
+    private seoService: SeoService) { }
 
   webappconfig(): Observable<IWebSetting> {
     const pagesetting = this.userStorage.getPageSetting();
@@ -21,6 +23,7 @@ export class SettingsService {
           result.expire = new Date();
           result.expire.setMinutes(result.expire.getMinutes() + 5);
           this.userStorage.savePageSetting(result);
+          this.seoService.setMetaPage(result);
           return result;
         })
       );

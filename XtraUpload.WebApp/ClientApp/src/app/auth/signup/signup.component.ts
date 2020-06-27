@@ -3,8 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ComponentBase } from 'app/shared';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { ISignupParams } from 'app/domain';
-import { AuthService } from 'app/services';
-import { Title } from '@angular/platform-browser';
+import { AuthService, SeoService } from 'app/services';
 
 @Component({
   selector: 'app-signup',
@@ -23,9 +22,9 @@ export class SignupComponent extends ComponentBase implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private titleService: Title) {
+    private seoService: SeoService) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
   }
   ngOnInit(): void {
     this.signupFormGroup = this.fb.group({

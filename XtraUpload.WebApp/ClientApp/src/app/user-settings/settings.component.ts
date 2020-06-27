@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { MatSidenav } from '@angular/material';
-import { Title } from '@angular/platform-browser';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { SidenavService } from 'app/services';
+import { SidenavService, SeoService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -21,10 +20,10 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     private sidenavService: SidenavService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    private titleService: Title
+    private seoService: SeoService
   ) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);

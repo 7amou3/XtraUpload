@@ -10,5 +10,9 @@
         /// Application meta description
         /// </summary>
         public string Description { get; set; }
+        /// <summary>
+        /// Application meta keywords
+        /// </summary>
+        public string Keywords { get; set; }
     }
 }

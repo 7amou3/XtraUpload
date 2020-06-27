@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { ComponentBase } from 'app/shared';
-import { AuthService } from 'app/services';
+import { AuthService, SeoService } from 'app/services';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { RecoverPassword } from 'app/domain';
 
 @Component({
@@ -23,10 +22,10 @@ export class RecoverpwdComponent extends ComponentBase implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private fb: FormBuilder,
-    private titleService: Title
+    private seoService: SeoService
   ) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
    }
 
   ngOnInit(): void {

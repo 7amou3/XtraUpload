@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services';
-import { ILoginParams, IGenericMessage } from '../../domain';
-import { ComponentBase } from '../../shared';
+import { AuthService, SeoService } from 'app/services';
+import { ILoginParams, IGenericMessage } from 'app/domain';
+import { ComponentBase } from 'app/shared';
 import { takeUntil } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 
@@ -20,9 +20,9 @@ export class LoginComponent extends ComponentBase implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private titleService: Title) {
+    private seoService: SeoService) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
   }
   ngOnInit(): void {
     this.loginFormGroup = this.fb.group({

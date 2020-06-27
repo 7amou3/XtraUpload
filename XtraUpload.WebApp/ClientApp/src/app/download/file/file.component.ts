@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import { takeUntil, take, finalize } from 'rxjs/operators';
+import { takeUntil, finalize } from 'rxjs/operators';
 import { ComponentBase } from 'app/shared';
-import { FileManagerService, ProgressNotificationService, IProgressInfo } from 'app/services';
+import { FileManagerService, ProgressNotificationService, IProgressInfo, SeoService } from 'app/services';
 import { IFileInfo } from 'app/domain';
 import { interval, Subscription } from 'rxjs';
 import { timeInterval} from 'rxjs/operators';
@@ -27,7 +26,7 @@ export class FileComponent extends ComponentBase implements OnInit {
   downloadSpeed = 0;
   downloadState: 'unknwown' | 'started' | 'ended';
   constructor(
-    private titleService: Title,
+    private seoService: SeoService,
     private route: ActivatedRoute,
     private router: Router,
     private fileMngService: FileManagerService,
@@ -54,7 +53,7 @@ export class FileComponent extends ComponentBase implements OnInit {
           .subscribe(
             file => {
               this.fileItem = file;
-              this.titleService.setTitle('Download ' + file.name);
+              this.seoService.setPageTitle('Download ' + file.name);
               this.startCountDownTimer(file.waitTime);
             },
             (err) => {

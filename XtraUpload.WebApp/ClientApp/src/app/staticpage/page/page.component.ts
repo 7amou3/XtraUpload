@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ComponentBase } from 'app/shared';
-import { StaticPageService } from 'app/services';
+import { StaticPageService, SeoService } from 'app/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { IPage } from 'app/domain';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page',
@@ -14,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 export class PageComponent extends ComponentBase implements OnInit {
   page: IPage;
   constructor(
-    private titleService: Title,
+    private seoService: SeoService,
     private route: ActivatedRoute,
     private router: Router,
     private pageService: StaticPageService) {
@@ -31,7 +30,7 @@ export class PageComponent extends ComponentBase implements OnInit {
          takeUntil(this.onDestroy),
          finalize(() => this.isBusy = false))
        .subscribe(page => {
-         this.titleService.setTitle(page.name);
+         this.seoService.setPageTitle(page.name);
          this.page = page;
        },
        () => {

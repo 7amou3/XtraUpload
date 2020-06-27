@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { ComponentBase } from 'app/shared';
-import { Title } from '@angular/platform-browser';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { AdminService, SidenavService } from 'app/services';
+import { AdminService, SidenavService, SeoService } from 'app/services';
 import { takeUntil, finalize, delay } from 'rxjs/operators';
 
 @Component({
@@ -22,10 +21,10 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     media: MediaMatcher,
     private adminService: AdminService,
     private sidenavService: SidenavService,
-    private titleService: Title
+    private seoService: SeoService
   ) {
     super();
-    titleService.setTitle(this.pageTitle);
+    seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);

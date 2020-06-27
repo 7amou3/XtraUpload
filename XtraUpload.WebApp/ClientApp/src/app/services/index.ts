@@ -9,3 +9,4 @@ export * from './auth.admin.guard.service';
 export * from './admin.service';
 export * from './staticpage.service';
 export * from './sidenav.service';
+export * from './seo.service';

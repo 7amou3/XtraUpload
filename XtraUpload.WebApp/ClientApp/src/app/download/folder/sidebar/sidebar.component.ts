@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FileManagerService } from 'app/services';
+import { FileManagerService, SeoService } from 'app/services';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
 import { takeUntil } from 'rxjs/operators';
 import { IFlatNode } from 'app/domain';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +16,7 @@ export class SidebarComponent extends TreeBase implements OnInit {
   selectedFolderId: string;
   constructor(
     private filemanagerService: FileManagerService,
-    private titleService: Title,
+    private seoService: SeoService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -38,7 +37,7 @@ export class SidebarComponent extends TreeBase implements OnInit {
     .pipe(takeUntil(this.onDestroy))
     .subscribe(
       folders => {
-        this.titleService.setTitle('Download ' + folders[folders.length - 1].name);
+        this.seoService.setPageTitle('Download ' + folders[folders.length - 1].name);
         const rootFolder = {
           id: this.folderId,
           name: folders[folders.length - 1].name,

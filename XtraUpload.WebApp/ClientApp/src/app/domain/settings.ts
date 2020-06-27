@@ -1,6 +1,7 @@
 export interface IWebSetting {
   title: string;
   description: string;
+  keywords: string;
   expire: Date;
 }
 export interface IChangePassword {
