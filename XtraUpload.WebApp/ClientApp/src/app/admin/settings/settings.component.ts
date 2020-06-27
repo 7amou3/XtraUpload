@@ -35,10 +35,19 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   hdOptsFormGroup: FormGroup;
   memoryThreshold = new FormControl('', [Validators.required, Validators.min(1)]);
   storageThreshold = new FormControl('', [Validators.required, Validators.min(1)]);
+  pageSettingFormGroup: FormGroup;
+  title = new FormControl('', [Validators.required, Validators.min(3)]);
+  description = new FormControl('', [Validators.required, Validators.min(3)]);
+  keywords = new FormControl('', [Validators.required, Validators.min(3)]);
+  socialAuthFormGroup: FormGroup;
+  googleClientId =  new FormControl('', [Validators.required, Validators.min(3)]);
+  facebookAppId = new FormControl('', [Validators.required, Validators.min(3)]);
   jwtBusy = false;
   hdBusy = false;
   emailBusy = false;
   uploadBusy = false;
+  appSettingBusy = false;
+  socialAuthBusy = false;
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
@@ -72,12 +81,25 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       memoryThreshold: this.memoryThreshold,
       storageThreshold: this.storageThreshold
     });
+    this.pageSettingFormGroup = this.fb.group({
+      title: this.title,
+      description: this.description,
+      keywords: this.keywords
+    });
+    this.socialAuthFormGroup = this.fb.group({
+      facebookAppId: this.facebookAppId,
+      googleClientId: this.googleClientId
+    });
     this.adminService.notifyBusy(true);
     this.adminService.getSettings()
     .pipe(
       takeUntil(this.onDestroy),
       finalize(() => this.adminService.notifyBusy(false)))
     .subscribe((data: any) => {
+      // page settings
+      this.title.setValue(data.appSettings.title);
+      this.description.setValue(data.appSettings.description);
+      this.keywords.setValue(data.appSettings.keywords);
       // email settings
       this.server.setValue(data.emailSettings.smtp.server);
       this.port.setValue(data.emailSettings.smtp.port);
@@ -98,6 +120,9 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       this.issuer.setValue(data.jwtIssuerOptions.issuer);
       this.secretKey.setValue(data.jwtIssuerOptions.secretKey);
       this.validFor.setValue(data.jwtIssuerOptions.validFor);
+      // Social Auth settings
+      this.facebookAppId.setValue(data.socialAuthSettings.facebookAuth.appId);
+      this.googleClientId.setValue(data.socialAuthSettings.googleAuth.clientId);
     });
   }
   onJwtSubmit(jwtParams) {
@@ -148,9 +173,8 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   onHDOptionsSubmit(hardwareteParams) {
     this.hdBusy = true;
     this.adminService.updateHardwareOpts(hardwareteParams)
-    .pipe(takeUntil(
-      this.onDestroy),
-      finalize(() => this.hdBusy = false))
+    .pipe(takeUntil(this.onDestroy),
+          finalize(() => this.hdBusy = false))
     .subscribe(
       () => {
         this.showSuccessMsg('Hardware Options');
@@ -160,7 +184,35 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       }
     );
   }
+  onPageSettingsSubmit(pageSettingParams) {
+    this.appSettingBusy = true;
+    this.adminService.updateAppSettings(pageSettingParams)
+    .pipe(takeUntil(this.onDestroy),
+      finalize(() => this.appSettingBusy = false))
+    .subscribe(
+      () => {
+        this.showSuccessMsg('Page Settings');
+      },
+      error => {
+        throw Error(error.error?.title);
+      }
+    );
+  }
+  onSocialAuthSubmit(socialAuthParams) {
+    this.socialAuthBusy = true;
+    this.adminService.updateSocialAuthSettings(socialAuthParams)
+    .pipe(takeUntil(this.onDestroy),
+      finalize(() => this.socialAuthBusy = false))
+    .subscribe(
+      () => {
+        this.showSuccessMsg('Social Auth');
+      },
+      error => {
+        throw Error(error.error?.title);
+      }
+    );
+  }
   showSuccessMsg(section: string) {
-    this.snackBar.open(`${section} had been updated successfully`, '', { duration: 3000 });
+    this.snackBar.open(`${section} has been updated successfully`, '', { duration: 3000 });
   }
 }

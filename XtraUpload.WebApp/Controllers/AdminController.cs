@@ -206,6 +206,20 @@ namespace XtraUpload.WebApp.Controllers
 
             return HandleResult(result);
         }
+        [HttpPatch("appSettings")]
+        public async Task<IActionResult> UpdateAppSettings(WebAppSettings model)
+        {
+            OperationResult result = await _appSettingsService.UpdateSection(model);
+
+            return HandleResult(result);
+        }
+        [HttpPatch("socialAuthSettings")]
+        public async Task<IActionResult> UpdateSocialAuthSettings(SocialAuthSettings model)
+        {
+            OperationResult result = await _appSettingsService.UpdateSection(model);
+
+            return HandleResult(result);
+        }
         [HttpGet("pages")]
         public async Task<IActionResult> GetPages()
         {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using XtraUpload.WebApp.Common;
+﻿using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.WebApp
 {
     internal class ReadAppSettingResultDto
     {
+        public WebAppSettings AppSettings { get; set; }
+        public SocialAuthSettings SocialAuthSettings { get; set; }
         public UploadOptions UploadOptions { get; set; }
         public JwtIssuerOptionsDto JwtIssuerOptions { get; set; }
         public HardwareCheckOptions HardwareCheckOptions { get; set; }

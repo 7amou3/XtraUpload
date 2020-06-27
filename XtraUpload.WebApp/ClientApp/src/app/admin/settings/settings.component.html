@@ -1,5 +1,48 @@
+<section fxLayout="row wrap">
+    <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+        <mat-card>
+            <mat-list>
+                <div mat-subheader class="bg-warning text-white">Page Settings</div>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <form [formGroup]="pageSettingFormGroup" (ngSubmit)="onPageSettingsSubmit(pageSettingFormGroup.value)"
+                    class="font-14">
+                    <!--Page Title-->
+                    <mat-form-field>
+                        <mat-label>Website Name</mat-label>
+                        <input matInput type="text" formControlName="title" required>
+                        <mat-error *ngIf="title.invalid">{{getErrorMessage(title)}}</mat-error>
+                    </mat-form-field>
+                    <!--Page Description-->
+                    <mat-form-field>
+                        <mat-label>Website Meta Description</mat-label>
+                        <input matInput type="text" formControlName="description" required>
+                        <mat-error *ngIf="description.invalid">{{getErrorMessage(description)}}</mat-error>
+                    </mat-form-field>
+                    <!--Page keywords-->
+                    <mat-form-field>
+                        <mat-label>Website Meta Keywords</mat-label>
+                        <input matInput type="text" formControlName="keywords" required>
+                        <mat-error *ngIf="keywords.invalid">{{getErrorMessage(keywords)}}</mat-error>
+                    </mat-form-field>
+                    <!-- Submit button-->
+                    <mat-card-actions>
+                        <button mat-flat-button class="btn-block btn-lg mat-primary"
+                            [disabled]="!pageSettingFormGroup.valid || hdBusy" type="submit">
+                            <mat-progress-bar mode="indeterminate" *ngIf="appSettingBusy"></mat-progress-bar>
+                            Save changes
+                        </button>
+                    </mat-card-actions>
+                    <div class="font-10 text-muted">
+                        <mat-icon class="font-14">help</mat-icon>Changes to these fields may take up to 5 min to be
+                        visible on front page.
+                    </div>
 
-<section id="uploadSetting" fxLayout="row wrap">
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
     <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
         <mat-card>
             <mat-list>
@@ -20,7 +63,8 @@
                     <mat-form-field>
                         <mat-label>Chunk Size (Mb)</mat-label>
                         <input matInput type="number" formControlName="chunkSize" required>
-                        <mat-hint>The size of the uploaded file's chunk must be less than the limit of your server request body size</mat-hint>
+                        <mat-hint>The size of the uploaded file's chunk must be less than the limit of your server
+                            request body size</mat-hint>
                         <mat-error *ngIf="chunkSize.invalid">{{getErrorMessage(chunkSize)}}</mat-error>
                     </mat-form-field>
                     <!--Expiration-->
@@ -42,17 +86,53 @@
             </mat-card-content>
         </mat-card>
     </div>
+</section>
+
+<section fxLayout="row wrap">
     <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
         <mat-card>
             <mat-list>
-                <div mat-subheader class="bg-warning text-white">Hardware Options</div>
+                <div mat-subheader class="bg-success text-white">Social Auth</div>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <form [formGroup]="socialAuthFormGroup" (ngSubmit)="onSocialAuthSubmit(socialAuthFormGroup.value)"
+                    class="font-14">
+                    <!--facebookAppId-->
+                    <mat-form-field>
+                        <mat-label>Facebook App Id</mat-label>
+                        <input matInput type="text" formControlName="facebookAppId" required>
+                        <mat-error *ngIf="facebookAppId.invalid">{{getErrorMessage(facebookAppId)}}</mat-error>
+                    </mat-form-field>
+                    <!--StorageThreshold-->
+                    <mat-form-field>
+                        <mat-label>Google Client Id</mat-label>
+                        <input matInput type="text" formControlName="googleClientId" required>
+                        <mat-error *ngIf="googleClientId.invalid">{{getErrorMessage(googleClientId)}}</mat-error>
+                    </mat-form-field>
+                    <!-- Submit button-->
+                    <mat-card-actions>
+                        <button mat-flat-button class="btn-block btn-lg mat-primary"
+                            [disabled]="!socialAuthFormGroup.valid || socialAuthBusy" type="submit">
+                            <mat-progress-bar mode="indeterminate" *ngIf="hdBusy"></mat-progress-bar>
+                            Save changes
+                        </button>
+                    </mat-card-actions>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+        <mat-card>
+            <mat-list>
+                <div mat-subheader class="bg-purple text-white">Hardware Options</div>
             </mat-list>
             <mat-divider></mat-divider>
             <mat-card-content>
                 <form [formGroup]="hdOptsFormGroup" (ngSubmit)="onHDOptionsSubmit(hdOptsFormGroup.value)"
                     class="font-14">
-                     <!--MemoryThreshold-->
-                     <mat-form-field>
+                    <!--MemoryThreshold-->
+                    <mat-form-field>
                         <mat-label>Memory Threshold (Gb)</mat-label>
                         <input matInput type="number" formControlName="memoryThreshold" required>
                         <mat-hint>The maximum RAM memory that could be allocated by XtraUpload</mat-hint>
@@ -78,6 +158,7 @@
         </mat-card>
     </div>
 </section>
+
 <section fxLayout="row wrap">
     <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
         <mat-card>
@@ -171,7 +252,7 @@
                     <mat-form-field>
                         <mat-label>Token Validity</mat-label>
                         <input matInput type="number" formControlName="validFor" required>
-                        <mat-hint>The duration that the token will be valid for</mat-hint>
+                        <mat-hint>The duration that the token will be valid for (day)</mat-hint>
                         <mat-error *ngIf="validFor.invalid">{{getErrorMessage(validFor)}}</mat-error>
                     </mat-form-field>
                     <!-- Secret key -->

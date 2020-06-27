@@ -160,6 +160,16 @@ export class AdminService {
     updateHardwareOpts(hardwareParams) {
         return this.http.patch('admin/hardwareOptions/', hardwareParams);
     }
+    updateAppSettings(appSettingsParams) {
+        return this.http.patch('admin/appSettings/', appSettingsParams);
+    }
+    updateSocialAuthSettings(socialAuthParams) {
+        const params = {
+            facebookAuth: {appId: socialAuthParams.facebookAppId},
+            GoogleAuth: {clientId: socialAuthParams.googleClientId},
+        };
+        return this.http.patch('admin/socialAuthSettings/', params);
+    }
     getPages(): Observable<IPage[]> {
         return this.http.get<IPage[]>('admin/pages');
     }
