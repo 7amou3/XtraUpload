@@ -112,7 +112,18 @@ namespace XtraUpload.WebApp
                                     .AllowAnyOrigin()
                                     .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));*/
 
-            app.UseTus(httpContext => Task.FromResult(httpContext.RequestServices.GetService<DefaultTusConfiguration>()));
+            app.UseTus(httpContext => 
+            {
+                if (httpContext.Request.Path.StartsWithSegments(new PathString("/avatarupload")))
+                {
+                    return httpContext.RequestServices.GetService<AvatarUploadService>().GetTusConfiguration();
+                }
+                else if (httpContext.Request.Path.StartsWithSegments(new PathString("/fileupload")))
+                {
+                    return httpContext.RequestServices.GetService<FileUploadService>().GetTusConfiguration();
+                }
+                else return null;
+            });
 
             app.UseRouting();
 
@@ -299,11 +310,8 @@ namespace XtraUpload.WebApp
             services.AddScoped<IAdministrationService, AdministrationService>();
             services.AddScoped<IAppSettingsService, AppSettingsService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
-            services.AddSingleton(provider =>
-            {
-                return new FileUploadService(provider).CreateTusConfiguration();
-            });
-
+            services.AddSingleton(provider => new AvatarUploadService(provider));
+            services.AddSingleton(provider => new FileUploadService(provider));
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddHostedService<QueuedHostedService>();
             services.AddHostedService<ExpiredFilesCleanupService>();

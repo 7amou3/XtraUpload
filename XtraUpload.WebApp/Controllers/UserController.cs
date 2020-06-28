@@ -67,7 +67,7 @@ namespace XtraUpload.WebApp.Controllers
 
             return HandleResult(result);
         }
-        
+
         private IActionResult IdentityCheck(XuIdentityResult result)
         {
             if (result.State != OperationState.Success)

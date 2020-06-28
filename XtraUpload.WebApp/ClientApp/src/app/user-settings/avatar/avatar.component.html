@@ -1,12 +1,12 @@
 <div fxLayout="row wrap" fxLayoutAlign="center">
     <div fxFlex="70">
         <mat-card>
-            
-            <div mat-subheader class="bg-purple text-white">Change Your Avatar</div>
+            <div mat-subheader class="bg-info text-white">Change Your Avatar</div>
             <mat-divider></mat-divider>
             <mat-card-content>
+                <app-message [message$]="message$"></app-message>
                 <ngx-dropzone
-                [maxFileSize]="3 *1024 *1024"
+                [maxFileSize]="2 *1024 *1024"
                 [multiple]="false"
                 [accept]="'.png, .jpg, .gif, .jpeg'"
                 [class.drop-visibility]="selectedImg" #drop class="dropzone"
@@ -15,7 +15,7 @@
                     <ngx-dropzone-label>
                     <mat-icon class="icon-add-files">add</mat-icon>
                     <p class="text-muted font-12">
-                        Max Image Size: 3 Mb
+                        Max Image Size: 2 Mb
                     </p>
                     </ngx-dropzone-label>
                 </ngx-dropzone>
@@ -40,7 +40,10 @@
                 (loadImageFailed)="loadImageFailed()"
                 ></image-cropper>
                 <mat-card-actions>
-                    <button mat-flat-button class="btn-block btn-lg mat-primary"
+                    <button mat-flat-button 
+                    class="btn-block btn-lg mat-primary"
+                    [disabled]="isBusy || !selectedImg"
+                    (click)="onUpdateAvatar()"
                         type="submit">
                     <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
                         Update Avatar</button>

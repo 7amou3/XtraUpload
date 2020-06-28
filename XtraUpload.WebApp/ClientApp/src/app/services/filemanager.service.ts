@@ -150,7 +150,7 @@ export class FileManagerService {
     );
   }
 
-  startUpload(file: File, folderId: string, chunkSize: number): Observable<UploadStatus> {
+  startUpload(file: File, folderId: string, chunkSize: number, urlPath?: string): Observable<UploadStatus> {
     let upload: tus.Upload;
     const event = new Subject<UploadStatus>();
     const uploadStatus = new UploadStatus();
@@ -175,8 +175,8 @@ export class FileManagerService {
       uploadStatus.message = progress as Object;
       event.next(uploadStatus);
     };
-
-    const uri = this.baseUrl + 'fileupload';
+    // Defaut urlPath for tus is [fileupload] as configured in the server
+    const uri = this.baseUrl + urlPath;
       upload = new tus.Upload(file,
       {
         endpoint: uri,

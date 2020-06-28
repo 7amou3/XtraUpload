@@ -1,14 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using System;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using tusdotnet.Models;
-using tusdotnet.Models.Concatenation;
 using tusdotnet.Models.Configuration;
-using tusdotnet.Models.Expiration;
-using tusdotnet.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using XtraUpload.Database.Data.Common;
@@ -20,119 +14,28 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
-using Microsoft.Extensions.Options;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.FileManager.Service
 {
     /// <summary>
-    /// A singleton class used to handle the tusdotnet upload notification events
+    /// A singleton class used to handle the tusdotnet file uploads
     /// XtraUpload uses the tus protocol to handle uploading large files efficiently
     /// </summary>
-    public class FileUploadService
+    public class FileUploadService : BaseFileUpload
     {
-        #region Fields
-        readonly UploadOptions _uploadOpts;
-        readonly IServiceProvider _serviceProvider;
-        readonly ILogger<FileUploadService> _logger;
-        #endregion
-
-        #region Constructor
-        public FileUploadService(IServiceProvider serviceProvider)
+        public FileUploadService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _uploadOpts = serviceProvider.GetService<IOptionsMonitor<UploadOptions>>().CurrentValue;
-            _logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<FileUploadService>();
-        }
-        #endregion
-
-        /// <summary>
-        /// Called at startup whenever a tus upload request is issued
-        /// </summary>
-        public DefaultTusConfiguration CreateTusConfiguration()
-        {
-            return new DefaultTusConfiguration
-            {
-                UrlPath = "/fileupload",
-                MaxAllowedUploadSizeInBytes = int.MaxValue,
-                MaxAllowedUploadSizeInBytesLong = int.MaxValue,
-                Store = new TusDiskStore(_uploadOpts.UploadPath),
-                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(_uploadOpts.Expiration)),
-
-                Events = new Events
-                {
-                    OnAuthorizeAsync = OnAuthorize,
-                    OnBeforeCreateAsync = OnBeforeCreate,
-                    OnFileCompleteAsync = OnUploadCompleted
-                }
-            };
-        }
-
-        /// <summary>
-        /// Handle the upload authorization
-        /// </summary>
-        private Task OnAuthorize(AuthorizeContext ctx)
-        {
-            string userId = ctx.HttpContext.User.Claims.FirstOrDefault(s => s.Type == "id")?.Value;
-            if (!ctx.HttpContext.User.Identity.IsAuthenticated || userId == null)
-            {
-                ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
-                ctx.FailRequest(HttpStatusCode.Unauthorized);
-                return Task.CompletedTask;
-            }
-
-            switch (ctx.Intent)
-            {
-                case IntentType.CreateFile:
-                    break;
-                case IntentType.ConcatenateFiles:
-                    break;
-                case IntentType.WriteFile:
-                    break;
-                case IntentType.DeleteFile:
-                    break;
-                case IntentType.GetFileInfo:
-                    break;
-                case IntentType.GetOptions:
-                    break;
-                default:
-                    break;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Handle the pre upload required metadata 
-        /// </summary>
-        private Task OnBeforeCreate(BeforeCreateContext ctx)
-        {
-            // Partial files are not complete so we do not need to validate the metadata in our example.
-            if (ctx.FileConcatenation is FileConcatPartial)
-            {
-                return Task.CompletedTask;
-            }
-            if (!ctx.Metadata.ContainsKey("name"))
-            {
-                ctx.FailRequest("name metadata must be specified.");
-            }
-            if (!ctx.Metadata.ContainsKey("contentType"))
-            {
-                ctx.FailRequest("contentType metadata must be specified.");
-            }
-
-            return Task.CompletedTask;
+            CreateTusConfiguration("/fileupload");
         }
 
         /// <summary>
         /// Handle the upload completion
         /// </summary>
-        private async Task OnUploadCompleted(FileCompleteContext ctx)
+        protected override async Task OnUploadCompleted(FileCompleteContext ctx)
         {
             try
             {
-                string userId = ctx.HttpContext.User.Claims.First(s => s.Type == "id").Value;
-                FileItem file = await PersistMetaData(ctx, userId);
+                FileItem file = await PersistMetaData(ctx);
                 MoveFilesToFolder(ctx, file);
             }
             catch (Exception _ex)
@@ -141,12 +44,12 @@ namespace XtraUpload.FileManager.Service
                 throw _ex;
             }
         }
-
         /// <summary>
         /// Persist the uploaded file data to db
         /// </summary>
-        private async Task<FileItem> PersistMetaData(FileCompleteContext ctx, string userId)
+        private async Task<FileItem> PersistMetaData(FileCompleteContext ctx)
         {
+            string userId = ctx.HttpContext.User.GetUserId();
             ITusFile file = await ((ITusReadableStore)ctx.Store).GetFileAsync(ctx.FileId, ctx.CancellationToken);
             var metadata = await file.GetMetadataAsync(ctx.CancellationToken);
 
@@ -209,12 +112,12 @@ namespace XtraUpload.FileManager.Service
 
             // move all files to the destination folder
             DirectoryInfo directoryInfo = new DirectoryInfo(_uploadOpts.UploadPath);
-            foreach (var file in directoryInfo.GetFiles(ctx.FileId + "*"))
+            foreach (FileInfo file in directoryInfo.GetFiles(ctx.FileId + "*"))
             {
                 // Exemple of file names generated by tus are (...69375.metadata, ...69375.uploadlength ...)
                 string[] subNames = file.Name.Split('.');
                 string subName = subNames.Count() == 2 ? '.' + subNames[1] : string.Empty;
-                File.Move(file.FullName, newFileFullPath + subName);
+                File.Move(file.FullName, newFileFullPath + subName); 
             }
 
             // Create thumbnails for img file (less than 15mb)
