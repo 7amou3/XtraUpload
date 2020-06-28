@@ -594,6 +594,24 @@ namespace XtraUpload.FileManager.Service
             Result.Folders = await _unitOfWork.Folders.FindAsync(f => f.UserId == userId);
             return Result;
         }
+
+        /// <summary>
+        /// Get user's avatar url
+        /// </summary>
+        /// <returns></returns>
+        public async Task<AvatarResult> GetUserAvatar()
+        {
+            AvatarResult result = new AvatarResult();
+            string userId = _caller.GetUserId();
+            var user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == userId);
+            if (user == null)
+            {
+                result.ErrorContent = new ErrorContent("No user with the provided id was found", ErrorOrigin.Client);
+                return result;
+            }
+            result.Url = user.Avatar;
+            return result;
+        }
         #endregion
     }
 }

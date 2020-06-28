@@ -27,28 +27,37 @@ namespace XtraUpload.FileManager.Service
             {
                 MoveFilesToFolder(ctx);
                 //update db
-                using IServiceScope scope = _serviceProvider.CreateScope();
-                IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-                User user = await unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == ctx.HttpContext.User.GetUserId());
-                if (user != null)
-                {
-                    user.LastModified = DateTime.Now;
-                    user.Avatar = ctx.HttpContext.Request.Host.ToString() + "api/file/avatar/" + user.Id;
-                    try
-                    {
-                        await unitOfWork.CompleteAsync();
-                    }
-                    catch (Exception _ex)
-                    {
-                        _logger.LogError(_ex.Message);
-                        throw new Exception("Unhandled exception thrown.");
-                    }
-                }
+                await UpdateDb(ctx);
             }
             catch (Exception _ex)
             {
                 _logger.LogError(_ex.Message);
                 throw _ex;
+            }
+        }
+
+        /// <summary>
+        ///  Update db
+        /// </summary>
+        private async Task UpdateDb(FileCompleteContext ctx)
+        {
+            using IServiceScope scope = _serviceProvider.CreateScope();
+            using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
+            User user = await unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == ctx.HttpContext.User.GetUserId());
+            if (user != null)
+            {
+                var request = ctx.HttpContext.Request;
+                user.LastModified = DateTime.Now;
+                user.Avatar = request.Scheme + "://" + request.Host.ToString() + "/api/file/avatar/" + user.Id;
+                try
+                {
+                    await unitOfWork.CompleteAsync();
+                }
+                catch (Exception _ex)
+                {
+                    _logger.LogError(_ex.Message);
+                    throw new Exception("Unhandled exception thrown.");
+                }
             }
         }
 

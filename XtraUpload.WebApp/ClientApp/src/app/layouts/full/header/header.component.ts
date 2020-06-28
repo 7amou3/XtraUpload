@@ -1,5 +1,5 @@
-import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
-import { AuthService, UserStorageService, SettingsService } from 'app/services';
+import { Component, Output, EventEmitter, Input, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { AuthService, UserStorageService, SettingsService, HeaderService } from 'app/services';
 import { ComponentBase, ILoggedin } from 'app/shared';
 import { takeUntil } from 'rxjs/operators';
 
@@ -15,17 +15,34 @@ export class HeaderComponent extends ComponentBase implements OnInit {
   constructor(
     private authService: AuthService,
     private settingService: SettingsService,
-    private storageService: UserStorageService) {
+    private storageService: UserStorageService,
+    private headerService: HeaderService) {
       super();
     }
    ngOnInit() {
       const profile = this.storageService.getProfile();
       if (!profile?.avatar) {
           this.avatar = 'assets/images/users/profile-icon.png';
-      }
-      else {
+      } else {
         this.avatar = profile.avatar;
       }
+      // Listen to avatar change request
+      this.headerService.subscribeAvatarChange()
+     .pipe(takeUntil(this.onDestroy))
+     .subscribe(() => {
+       // get the avatar url
+       this.headerService.getAvatarUrl()
+       .pipe(takeUntil(this.onDestroy))
+       .subscribe(url => {
+        const user = this.storageService.getProfile();
+
+        if (user) {
+          this.avatar = null;
+            this.avatar = user.avatar = url;
+            this.storageService.saveUser(user);
+        }
+       })
+     });
    }
   onLoggedIn(loggedIn: ILoggedin) {
     this.loggedIn = loggedIn;

@@ -24,5 +24,6 @@ namespace XtraUpload.FileManager.Service.Common
         Task<DeleteFolderResult> DeleteFolder(string folderid);
         Task<DeleteItemsResult> DeleteItems(DeleteItemsViewModel items);
         Task<MoveItemsResult> MoveItems(MoveItemsViewModel items);
+        Task<AvatarResult> GetUserAvatar();
     }
 }

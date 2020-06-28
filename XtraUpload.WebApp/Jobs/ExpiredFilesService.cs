@@ -51,7 +51,7 @@ namespace XtraUpload.WebApp
                 _logger.LogInformation("Running cleanup job...");
 
                 using IServiceScope scope = _serviceProvider.CreateScope();
-                IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
+                using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
                 IEnumerable<FileItem> files = await unitOfWork.Files.GetExpiredFiles();
                 
                 // Remove the files from the drive

@@ -10,3 +10,4 @@ export * from './admin.service';
 export * from './staticpage.service';
 export * from './sidenav.service';
 export * from './seo.service';
+export * from './header.service';

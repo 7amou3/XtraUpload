@@ -73,7 +73,7 @@ namespace XtraUpload.FileManager.Service
 
             // Add the uploaded file to db
             using IServiceScope scope = _serviceProvider.CreateScope();
-            IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
+            using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
             unitOfWork.Files.Add(fileitem);
 
             // Try to save to db

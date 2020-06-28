@@ -18,7 +18,7 @@ import {
   GlobalErrorHandler,
   ProgressComponent
 } from './http-interceptor';
-import { UserStorageService, AuthService, SettingsService, SidenavService } from 'app/services';
+import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService } from 'app/services';
 import { SharedModule, MessageModule, SpinnerComponent } from './shared';
 import { PipeModule } from './shared/pipe-modules';
 export function webSettingFactory(settings: SettingsService) {
@@ -60,6 +60,7 @@ export function webSettingFactory(settings: SettingsService) {
     { provide: UserStorageService},
     { provide: AuthService},
     { provide: SettingsService},
+    { provide: HeaderService},
     { provide: SidenavService},
   ],
   bootstrap: [AppComponent]

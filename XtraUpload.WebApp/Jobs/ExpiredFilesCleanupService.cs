@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using tusdotnet.Interfaces;
+using tusdotnet.Models;
 using tusdotnet.Models.Expiration;
 using XtraUpload.FileManager.Service;
 
@@ -14,15 +15,15 @@ namespace XtraUpload.WebApp
     /// </summary>
     public class ExpiredFilesCleanupService : IHostedService, IDisposable
     {
+        private Timer _timer;
         private readonly ITusExpirationStore _expirationStore;
         private readonly ExpirationBase _expiration;
         private readonly ILogger<ExpiredFilesCleanupService> _logger;
-        private Timer _timer;
 
         public ExpiredFilesCleanupService(FileUploadService fileUploadService, ILogger<ExpiredFilesCleanupService> logger)
         {
             _logger = logger;
-            var config = fileUploadService.GetTusConfiguration();
+            DefaultTusConfiguration config = fileUploadService.GetTusConfiguration();
             _expirationStore = (ITusExpirationStore)config.Store;
             _expiration = config.Expiration;
         }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using XtraUpload.Domain;
+using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.WebApp.Common;
 
@@ -171,6 +170,29 @@ namespace XtraUpload.WebApp.Controllers
             MoveItemsResult Result = await _filemanagerService.MoveItems(items);
 
             return HandleResult(Result);
+        }
+
+        [HttpGet("avatarurl")]
+        public async Task<IActionResult> GetAvatarUrl()
+        {
+            AvatarResult Result = await _filemanagerService.GetUserAvatar();
+
+            return HandleResult(Result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}")]
+        public IActionResult GetAvatar(string userid)
+        {
+            string filePath = Path.Combine(_uploadOpts.UploadPath, userid, "avatar", "avatar.png");
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return BadRequest("The file has not been found");
+            }
+
+            using var img = System.IO.File.OpenRead(filePath);
+            return PhysicalFile(filePath, "image/png");
         }
 
     }

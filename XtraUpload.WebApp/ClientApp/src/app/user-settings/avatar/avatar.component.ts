@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { ComponentBase } from 'app/shared';
-import { FileManagerService } from 'app/services';
-import { take, takeUntil, finalize } from 'rxjs/operators';
+import { FileManagerService, HeaderService } from 'app/services';
+import { takeUntil, finalize } from 'rxjs/operators';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class AvatarComponent extends ComponentBase implements OnInit {
   selectedImg: File;
   croppedImage: any = '';
   constructor(
-    private fileMngService: FileManagerService) {
+    private fileMngService: FileManagerService,
+    private headerService: HeaderService) {
     super();
   }
 
@@ -59,6 +60,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
               this.isBusy = false;
               this.selectedImg = null;
               this.message$.next({successMessage: 'Your avatar has been updated successfully.'});
+              this.headerService.notifyAvatarChanged();
             }
           });
       });
