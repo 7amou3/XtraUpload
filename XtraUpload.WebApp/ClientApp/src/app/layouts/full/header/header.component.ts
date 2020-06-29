@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { AuthService, UserStorageService, SettingsService, HeaderService } from 'app/services';
 import { ComponentBase, ILoggedin } from 'app/shared';
 import { takeUntil } from 'rxjs/operators';
@@ -38,10 +38,11 @@ export class HeaderComponent extends ComponentBase implements OnInit {
 
         if (user) {
           this.avatar = null;
-            this.avatar = user.avatar = url;
+            this.avatar = url + '/' + Date.now();
+            user.avatar = url;
             this.storageService.saveUser(user);
         }
-       })
+       });
      });
    }
   onLoggedIn(loggedIn: ILoggedin) {

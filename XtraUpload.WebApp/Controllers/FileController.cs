@@ -181,8 +181,8 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}")]
-        public IActionResult GetAvatar(string userid)
+        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
+        public IActionResult GetAvatar(string userid, string timespan = null)
         {
             string filePath = Path.Combine(_uploadOpts.UploadPath, userid, "avatar", "avatar.png");
 

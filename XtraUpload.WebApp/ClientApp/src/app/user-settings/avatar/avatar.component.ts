@@ -25,11 +25,11 @@ export class AvatarComponent extends ComponentBase implements OnInit {
   onSelect(event: NgxDropzoneChangeEvent): void {
     if (event.rejectedFiles.length > 0) {
       const rejected = event.rejectedFiles[0] as RejectedFile;
-        if (rejected.reason === 'type') {
-          this.message$.next({errorMessage: 'The selected file type is not allowed.'});
-        } else {
-          this.message$.next({errorMessage: 'You exceeded the file size limit.'});
-        }
+      if (rejected.reason === 'type') {
+        this.message$.next({ errorMessage: 'The selected file type is not allowed.' });
+      } else {
+        this.message$.next({ errorMessage: 'You exceeded the file size limit.' });
+      }
     }
     this.selectedImg = event.addedFiles[0];
   }
@@ -43,33 +43,35 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     // cropper ready
   }
   loadImageFailed() {
-    // show message
+    this.message$.next({ errorMessage: 'Error occured while loading image.' });
   }
   onDeleteImage() {
     this.selectedImg = null;
   }
   onUpdateAvatar() {
     this.isBusy = true;
-    this.urltoFile(this.croppedImage, 'avatar.png', 'image/png')
-      .then( avatar => {
-        this.fileMngService.startUpload(avatar, null, 1024 * 1024 * 2, 'avatarupload')
-          .pipe(takeUntil(this.onDestroy),
-            finalize(() => this.isBusy = false))
-          .subscribe(result => {
-            if (result.status === 'Success') {
-              this.isBusy = false;
-              this.selectedImg = null;
-              this.message$.next({successMessage: 'Your avatar has been updated successfully.'});
-              this.headerService.notifyAvatarChanged();
-            }
-          });
+    const file = this.urltoBlob(this.croppedImage, 'avatar.png', 'image/png');
+    this.fileMngService.startUpload(file, null, 1024 * 1024 * 2, 'avatarupload')
+      .pipe(takeUntil(this.onDestroy),
+        finalize(() => this.isBusy = false))
+      .subscribe(result => {
+        if (result.status === 'Success') {
+          this.isBusy = false;
+          this.selectedImg = null;
+          this.message$.next({ successMessage: 'Your avatar has been updated successfully.' });
+          this.headerService.notifyAvatarChanged();
+        }
       });
-
   }
-  urltoFile(url, filename, mimeType) {
-    return (fetch(url)
-      .then(function (res) { return res.arrayBuffer(); })
-      .then(function (buf) { return new File([buf], filename, { type: mimeType }); })
-    );
+  urltoBlob(dataurl, fileName, mimeType): File {
+    let arr = dataurl.split(','), bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    const blob: any = new Blob([u8arr], {type : mimeType});
+    // IE Edge doesn't support File construct, see https://stackoverflow.com/questions/40911927/instantiate-file-object-in-microsoft-edge
+    blob.lastModifiedDate = new Date();
+    blob.name = fileName;
+    return blob as File;
   }
 }
