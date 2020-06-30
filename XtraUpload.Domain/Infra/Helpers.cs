@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -119,6 +120,45 @@ namespace XtraUpload.Domain.Infra
         public static string GetUserId(this ClaimsPrincipal caller)
         {
             return caller.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+        }
+
+        /// <summary>
+        /// Generate a default folder structure for the newly created user
+        /// </summary>
+        public static IEnumerable<FolderItem> GenerateDefaultFolders(string userId)
+        {
+            List<FolderItem> folders = new List<FolderItem>()
+            {
+                new FolderItem()
+                {
+                    Id = GenerateUniqueId(),
+                    Name = "Documents",
+                    Parentid = "root",
+                    UserId = userId,
+                    CreatedAt = DateTime.Now,
+                    LastModified = DateTime.Now
+                },
+                new FolderItem()
+                {
+                    Id = GenerateUniqueId(),
+                    Name = "Images",
+                    Parentid = "root",
+                    UserId = userId,
+                    CreatedAt = DateTime.Now,
+                    LastModified = DateTime.Now
+                },
+                new FolderItem()
+                {
+                    Id = GenerateUniqueId(),
+                    Name = "Videos",
+                    Parentid = "root",
+                    UserId = userId,
+                    CreatedAt = DateTime.Now,
+                    LastModified = DateTime.Now
+                }
+            };
+
+            return folders;
         }
     }
     /// <summary>

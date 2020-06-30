@@ -21,41 +21,34 @@ namespace XtraUpload.FileManager.Service
     public abstract class BaseFileUpload
     {
         #region Fields
-        protected readonly UploadOptions _uploadOpts;
         protected readonly IServiceProvider _serviceProvider;
         protected readonly ILogger<FileUploadService> _logger;
-        private DefaultTusConfiguration _defaultTusCfg;
+        private readonly string _urlPath;
         #endregion
 
         #region Constructor
-        public BaseFileUpload(IServiceProvider serviceProvider)
+        public BaseFileUpload(IServiceProvider serviceProvider, string urlPath)
         {
+            _urlPath = urlPath;
             _serviceProvider = serviceProvider;
-            _uploadOpts = serviceProvider.GetService<IOptionsMonitor<UploadOptions>>().CurrentValue;
             _logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<FileUploadService>();
         }
         #endregion
 
         /// <summary>
-        /// Called whenever a tus upload http request is issued
+        /// Factory called for every http tus upload request
         /// </summary>
-        public DefaultTusConfiguration GetTusConfiguration()
+        public DefaultTusConfiguration CreateTusConfiguration()
         {
-            return _defaultTusCfg;
-        }
+            UploadOptions uploadOpts = _serviceProvider.GetService<IOptionsMonitor<UploadOptions>>().CurrentValue;
 
-        /// <summary>
-        /// Create tus base configuration
-        /// </summary>
-        protected void CreateTusConfiguration(string urlPath)
-        {
-            _defaultTusCfg = new DefaultTusConfiguration
+            return new DefaultTusConfiguration
             {
-                UrlPath = urlPath,
+                UrlPath = _urlPath,
                 MaxAllowedUploadSizeInBytes = int.MaxValue,
                 MaxAllowedUploadSizeInBytesLong = int.MaxValue,
-                Store = new TusDiskStore(_uploadOpts.UploadPath),
-                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(_uploadOpts.Expiration)),
+                Store = new TusDiskStore(uploadOpts.UploadPath),
+                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(uploadOpts.Expiration)),
                 Events = new Events
                 {
                     OnAuthorizeAsync = OnAuthorize,

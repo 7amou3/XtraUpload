@@ -23,7 +23,7 @@ namespace XtraUpload.WebApp
         public ExpiredFilesCleanupService(FileUploadService fileUploadService, ILogger<ExpiredFilesCleanupService> logger)
         {
             _logger = logger;
-            DefaultTusConfiguration config = fileUploadService.GetTusConfiguration();
+            DefaultTusConfiguration config = fileUploadService.CreateTusConfiguration();
             _expirationStore = (ITusExpirationStore)config.Store;
             _expiration = config.Expiration;
         }

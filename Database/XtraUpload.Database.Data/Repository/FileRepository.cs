@@ -26,10 +26,10 @@ namespace XtraUpload.Database.Data
                         .Where(s => s.CreatedAt >= start && s.CreatedAt <= end)
                         .GroupBy(f => f.CreatedAt.Date)
                         .OrderBy(s => s.Key)
-                        .Select(s => new ItemCountResult 
+                        .Select(s => new ItemCountResult
                         {
-                            Date = s.Key.Date,
-                            ItemCount = s.Count() 
+                            Date = s.Key,
+                            ItemCount = s.Count()
                         });
 
             return await query.ToListAsync();

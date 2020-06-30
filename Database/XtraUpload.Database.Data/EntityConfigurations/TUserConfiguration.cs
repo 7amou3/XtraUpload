@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using XtraUpload.Domain.Infra;
 using System;
+using System.Collections.Generic;
 
 namespace XtraUpload.Database.Data
 {
@@ -11,6 +12,11 @@ namespace XtraUpload.Database.Data
     /// </summary>
     public class TUserConfiguration : IEntityTypeConfiguration<User>
     {
+        private readonly EntityTypeBuilder<FolderItem> _tfolder;
+        public TUserConfiguration(EntityTypeBuilder<FolderItem> tfolder)
+        {
+            _tfolder = tfolder;
+        }
         public void Configure(EntityTypeBuilder<User> builder)
         {
             // Primary key
@@ -30,9 +36,8 @@ namespace XtraUpload.Database.Data
             builder.HasMany(u => u.Folders).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Cascade);
             // Each user can have many confirmationtokens
             builder.HasMany(u => u.ConfirmationKeys).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Cascade);
-            
-            // Add admin
-            builder.HasData(new User()
+
+            User admin = new User()
             {
                 UserName = "Admin",
                 Email = "admin@admin.com",
@@ -41,7 +46,13 @@ namespace XtraUpload.Database.Data
                 LastModified = DateTime.Now,
                 RoleId = "1", // admin rol id
                 Theme = Theme.Light
-            });
+            };
+            // Add admin
+            builder.HasData(admin);
+
+            // Add his folders
+            IEnumerable<FolderItem> folders = Helpers.GenerateDefaultFolders(admin.Id);
+            _tfolder.HasData(folders);
 
             // Maps to the Users table
             builder.ToTable("Users");

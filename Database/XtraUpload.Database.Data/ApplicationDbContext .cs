@@ -29,7 +29,7 @@ namespace XtraUpload.Database.Data
            
             builder.ApplyConfiguration(new TRoleConfiguration());
             builder.ApplyConfiguration(new TRoleClaimConfiguration());
-            builder.ApplyConfiguration(new TUserConfiguration());
+            builder.ApplyConfiguration(new TUserConfiguration(builder.Entity<FolderItem>()));
             builder.ApplyConfiguration(new TFileExtensionConfiguration());
             builder.ApplyConfiguration(new TPageConfiguration());
 

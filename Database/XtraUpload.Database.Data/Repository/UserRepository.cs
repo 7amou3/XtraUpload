@@ -72,7 +72,7 @@ namespace XtraUpload.Database.Data
                         .OrderBy(s => s.Key)
                         .Select(s => new ItemCountResult
                         {
-                            Date = s.Key.Date,
+                            Date = s.Key,
                             ItemCount = s.Count()
                         });
 

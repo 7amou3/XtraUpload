@@ -343,7 +343,7 @@ namespace XtraUpload.Authentication.Service
         private async Task PostRegistration(User user)
         {
             // Create default folders tree for this user
-            _unitOfWork.Folders.AddRange(GenerateDefaultFolders(user.Id));
+            _unitOfWork.Folders.AddRange(Helpers.GenerateDefaultFolders(user.Id));
 
             // Store a confirmation email token
             _unitOfWork.ConfirmationKeys.Add(new ConfirmationKey()
@@ -365,44 +365,5 @@ namespace XtraUpload.Authentication.Service
             }
         }
 
-        /// <summary>
-        /// Generate a default folder structure for the newly created user
-        /// </summary>
-        private IEnumerable<FolderItem> GenerateDefaultFolders(string userId)
-        {
-
-            List<FolderItem> folders = new List<FolderItem>()
-            {
-                new FolderItem()
-                {
-                    Id = Helpers.GenerateUniqueId(),
-                    Name = "Documents",
-                    Parentid = "root",
-                    UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    LastModified = DateTime.Now
-                },
-                new FolderItem()
-                {
-                    Id = Helpers.GenerateUniqueId(),
-                    Name = "Images",
-                    Parentid = "root",
-                    UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    LastModified = DateTime.Now
-                },
-                new FolderItem()
-                {
-                    Id = Helpers.GenerateUniqueId(),
-                    Name = "Videos",
-                    Parentid = "root",
-                    UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    LastModified = DateTime.Now
-                }
-            };
-
-            return folders;
-        }
     }
 }

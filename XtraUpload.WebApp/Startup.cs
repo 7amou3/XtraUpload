@@ -18,7 +18,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using tusdotnet;
-using tusdotnet.Models;
 using XtraUpload.Administration.Service;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service;
@@ -115,11 +114,11 @@ namespace XtraUpload.WebApp
             {
                 if (httpContext.Request.Path.StartsWithSegments(new PathString("/avatarupload")))
                 {
-                    return httpContext.RequestServices.GetService<AvatarUploadService>().GetTusConfiguration();
+                    return httpContext.RequestServices.GetService<AvatarUploadService>().CreateTusConfiguration();
                 }
                 else if (httpContext.Request.Path.StartsWithSegments(new PathString("/fileupload")))
                 {
-                    return httpContext.RequestServices.GetService<FileUploadService>().GetTusConfiguration();
+                    return httpContext.RequestServices.GetService<FileUploadService>().CreateTusConfiguration();
                 }
                 else return null;
             });
@@ -277,7 +276,7 @@ namespace XtraUpload.WebApp
                 services.AddDbContext<ApplicationDbContext>(options =>
                    options.UseMySql(
                        Configuration["DataBase:ConnectionString"],
-                       sqlServerOptions => sqlServerOptions.MigrationsAssembly("XtraUpload.Database.Migrations")));
+                       mySqlServerOptions => mySqlServerOptions.MigrationsAssembly("XtraUpload.Database.Migrations")));
             }
             else
             {
@@ -309,8 +308,8 @@ namespace XtraUpload.WebApp
             services.AddScoped<IAdministrationService, AdministrationService>();
             services.AddScoped<IAppSettingsService, AppSettingsService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
-            services.AddSingleton(provider => new AvatarUploadService(provider));
-            services.AddSingleton(provider => new FileUploadService(provider));
+            services.AddSingleton<AvatarUploadService>();
+            services.AddSingleton<FileUploadService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddHostedService<QueuedHostedService>();
             services.AddHostedService<ExpiredFilesCleanupService>();
