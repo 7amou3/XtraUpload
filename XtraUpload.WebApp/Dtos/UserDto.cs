@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 

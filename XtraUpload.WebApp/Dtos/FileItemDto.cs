@@ -2,16 +2,12 @@
 
 namespace XtraUpload.WebApp
 {
-    internal class FileItemDto
+    internal class FileItemDto : FileItemHeaderDto
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool HasPassword { get; set; }
+        public DateTime LastModified { get; set; }
         public bool IsAvailableOnline { get; set; }
-        public string Extension { get; set; }
         public int DownloadCount { get; set; }
-        public long Size { get; set; }
         /// <summary>
         /// Time to wait before download link is generated
         /// </summary>

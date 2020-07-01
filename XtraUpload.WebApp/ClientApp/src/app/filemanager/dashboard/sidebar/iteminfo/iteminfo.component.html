@@ -53,8 +53,11 @@
       <mat-divider></mat-divider>
       <!-- Online Availability-->
       <div fxLayout="row wrap" class="p-l-10">
-        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70" >
-          <p class="font-12 font-medium">Available Online</p>
+        <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
+          <p class="font-12 font-medium">
+            Available Online
+            <mat-icon class="font-12" *ngIf="itemInfo.isAvailableOnline === false" matTooltip="This item can't be downloaded by other users.">help</mat-icon>
+          </p>
         </div>
         <div fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" fxLayoutAlign="center center">
           <mat-slide-toggle [checked]="itemInfo.isAvailableOnline" (change)="onAvailableItemChange($event)"></mat-slide-toggle>

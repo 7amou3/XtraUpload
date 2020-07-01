@@ -65,7 +65,7 @@ namespace XtraUpload.WebApp.Controllers
         {
             DeleteFileResult Result = await _filemanagerService.DeleteFile(fileid);
            
-            return HandleResult(Result, _mapper.Map<MinFileInfoDto>(Result.File));
+            return HandleResult(Result, _mapper.Map<FileItemHeaderDto>(Result.File));
         }
         [HttpDelete("deleteitems")]
         public async Task<IActionResult> DeleteItems(DeleteItemsViewModel items)
@@ -137,7 +137,7 @@ namespace XtraUpload.WebApp.Controllers
         {
             FileAvailabilityResult Result = await _filemanagerService.UpdateFileAvailability(fileAvailability.Fileid, fileAvailability.Available);
             
-            return HandleResult(Result, _mapper.Map<MinFileInfoDto>(Result.File));
+            return HandleResult(Result, _mapper.Map<FileItemDto>(Result.File));
         }
 
         [HttpPatch("rename")]
@@ -145,7 +145,7 @@ namespace XtraUpload.WebApp.Controllers
         {
             RenameFileResult Result = await _filemanagerService.UpdateFileName(file.FileId, file.NewName);
             
-            return HandleResult(Result, _mapper.Map<MinFileInfoDto>(Result.File));
+            return HandleResult(Result, _mapper.Map<FileItemHeaderDto>(Result.File));
         }
 
         [AllowAnonymous]

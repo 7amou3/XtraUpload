@@ -1,6 +1,6 @@
 ﻿namespace XtraUpload.WebApp
 {
-    internal class MinFileInfoDto
+    internal class FileItemHeaderDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

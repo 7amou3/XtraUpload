@@ -333,7 +333,7 @@ namespace XtraUpload.WebApp
                 cfg.CreateMap<RoleClaim, RoleClaimDto>();
                 cfg.CreateMap<FolderItem, FolderViewModel>();
                 cfg.CreateMap<FileItem, FileItemDto>();
-                cfg.CreateMap<FileItem, MinFileInfoDto>();
+                cfg.CreateMap<FileItem, FileItemHeaderDto>();
                 cfg.CreateMap<UploadSettingResult, UploadSettingDto>();
                 cfg.CreateMap<FilesStatsResult, FilesStatsDto>();
                 cfg.CreateMap<AccountOverviewResult, AccountOverviewDto>();
