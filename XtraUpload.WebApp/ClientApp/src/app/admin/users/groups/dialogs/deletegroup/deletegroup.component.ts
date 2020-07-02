@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ComponentBase } from 'app/shared';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { IUserRoleClaims } from 'app/domain';

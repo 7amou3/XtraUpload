@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material';
+import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ComponentBase } from 'app/shared';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { IItemInfo, ICreateFolderModel, IFolderInfo } from '../../../domain';
+import { ICreateFolderModel, IFolderInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 
 @Component({

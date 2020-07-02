@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute } from '@angular/router';
-import { MatSidenav, MatBottomSheet } from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatSidenav } from '@angular/material/sidenav';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { Subject, ReplaySubject, merge } from 'rxjs';
 import { ComponentBase } from 'app/shared';

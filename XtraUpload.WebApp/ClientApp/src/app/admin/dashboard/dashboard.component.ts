@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { ComponentBase } from 'app/shared';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AdminService, SidenavService, SeoService } from 'app/services';

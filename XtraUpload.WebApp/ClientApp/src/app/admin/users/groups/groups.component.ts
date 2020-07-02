@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IUserRoleClaims, IRoleClaim } from 'app/domain';
-import { MatTableDataSource, MatTable, MatSnackBar, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
 import { takeUntil, finalize } from 'rxjs/operators';

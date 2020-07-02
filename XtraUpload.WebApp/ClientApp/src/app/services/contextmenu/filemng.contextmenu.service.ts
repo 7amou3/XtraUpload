@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatMenuTrigger, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { isFile } from '../../filemanager/dashboard/helpers';
-import { IItemsMenu, itemAction, IItemInfo } from '../../domain';
+import { IItemsMenu, itemAction, IItemInfo } from 'app/domain';
 import { ContextMenuBase } from './contextmenu.base';
-import { FileManagerService } from '../../services';
+import { FileManagerService } from 'app/services';
 
 const itemsMenu: IItemsMenu[] = [
     { description: 'Move Selected', icon: 'open_with', action: itemAction.move },

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IFileExtension } from 'app/domain';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';

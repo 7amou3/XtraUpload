@@ -4,7 +4,7 @@ import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { IEmailSettings } from 'app/domain';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings',

@@ -6,7 +6,8 @@ import { FileMngContextMenuService } from 'app/services/contextmenu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
-import { MatSort, MatTable, MatTableDataSource, Sort } from '@angular/material';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
 import { takeUntil } from 'rxjs/operators';
 import { isFile, rowAnimation } from 'app/filemanager/dashboard/helpers';
 

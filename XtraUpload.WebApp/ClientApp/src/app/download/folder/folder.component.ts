@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { ComponentBase } from 'app/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileManagerService, SidenavService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { IItemInfo } from 'app/domain';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ReplaySubject } from 'rxjs';
 

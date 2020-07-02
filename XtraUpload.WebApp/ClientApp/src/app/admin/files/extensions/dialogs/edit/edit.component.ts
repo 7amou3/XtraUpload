@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IFileExtension, IEditExtension } from 'app/domain';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ComponentBase } from 'app/shared';

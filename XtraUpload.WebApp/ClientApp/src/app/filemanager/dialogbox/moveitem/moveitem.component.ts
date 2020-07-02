@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileManagerService } from 'app/services';
 import { IItemInfo, IFolderNode } from 'app/domain';
 import { takeUntil, finalize } from 'rxjs/operators';

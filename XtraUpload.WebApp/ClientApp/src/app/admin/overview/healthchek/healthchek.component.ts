@@ -3,7 +3,7 @@ import { ICheckResource, IHealthCheck } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({

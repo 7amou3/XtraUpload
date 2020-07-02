@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatDialog, MatTable, MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { IFileExtension, IEditExtension } from 'app/domain';

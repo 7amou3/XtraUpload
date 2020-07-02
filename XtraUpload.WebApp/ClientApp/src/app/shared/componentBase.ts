@@ -1,9 +1,9 @@
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, Directive } from '@angular/core';
 import { FormControl, FormGroup, } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { IGenericMessage } from 'app/domain';
 
-// TODO: Add Angular decorator.
+@Directive()
 export abstract class ComponentBase implements OnDestroy {
   /** Indicate wether the component is busy (sending data over the wire, heavy computation...) */
   isBusy = false;
@@ -35,8 +35,9 @@ export abstract class ComponentBase implements OnDestroy {
  handleError(error) {
   if (error?.error?.errorContent) {
     throw new Error(error?.error?.errorContent?.message);
+  } else {
+    throw error;
   }
-  else throw error;
  }
   ngOnDestroy() {
     this.onDestroy.next();

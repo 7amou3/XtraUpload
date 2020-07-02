@@ -1,13 +1,13 @@
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { ComponentBase } from 'app/shared';
 import { takeUntil } from 'rxjs/operators';
 import { RenameItemComponent, DeleteItemComponent, PasswordComponent, CreatefolderComponent,
     MoveItemComponent } from 'app/filemanager/dialogbox';
 import { itemAction, IItemsMenu, IItemInfo, IRenameItemModel, ISetPasswordItemModel, ICreateFolderModel,
-    IFolderInfo } from '../../domain';
-import { FileManagerService } from '../../services';
+    IFolderInfo } from 'app/domain';
+import { FileManagerService } from 'app/services';
 import { isFile } from 'app/filemanager/dashboard/helpers';
 
 export abstract class ContextMenuBase extends ComponentBase {

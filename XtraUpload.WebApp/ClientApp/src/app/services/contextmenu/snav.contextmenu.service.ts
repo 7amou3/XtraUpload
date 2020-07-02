@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatMenuTrigger, MatDialog } from '@angular/material';
-import { itemAction, IFlatNode, } from '../../domain';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { itemAction, IFlatNode, } from 'app/domain';
 import { ContextMenuBase } from './contextmenu.base';
-import { FileManagerService } from '../../services';
+import { FileManagerService } from 'app/services';
 
 const rootFolderMenu = [
   { description: 'Open', icon: 'subdirectory_arrow_right', action: itemAction.openFolder },

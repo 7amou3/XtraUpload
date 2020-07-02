@@ -1,5 +1,5 @@
-import { Input, ViewChild } from '@angular/core';
-import { MatMenuTrigger, MatMenu } from '@angular/material';
+import { Input, ViewChild, Directive } from '@angular/core';
+import { MatMenuTrigger, MatMenu } from '@angular/material/menu';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -10,6 +10,7 @@ import { FileManagerService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 
 /** Manages the common functionalities of a filemanager component  */
+@Directive()
 export abstract class FilemanagerBase extends ComponentBase {
   @Input() folderContent$: ReplaySubject<IItemInfo[]>;
   /** Selected items (files and folders) */
