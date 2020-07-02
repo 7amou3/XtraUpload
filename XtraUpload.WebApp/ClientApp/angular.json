@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "xtraUpload": {
+    "xtraupload": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -22,7 +22,6 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/chartist/dist/chartist.css",
               "src/styles.css",
               "src/assets/styles/style.scss"
             ],
@@ -57,18 +56,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "xtraUpload:build"
+            "browserTarget": "xtraupload:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "xtraUpload:build:production"
+              "browserTarget": "xtraupload:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "xtraUpload:build"
+            "browserTarget": "xtraupload:build"
           }
         },
         "test": {
@@ -105,7 +104,7 @@
         }
       }
     },
-    "xtraUpload-e2e": {
+    "xtraupload-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -113,7 +112,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "xtraUpload:serve"
+            "devServerTarget": "xtraupload:serve"
           }
         },
         "lint": {
@@ -126,7 +125,7 @@
       }
     }
   },
-  "defaultProject": "xtraUpload",
+  "defaultProject": "xtraupload",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
