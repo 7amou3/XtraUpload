@@ -1,4 +1,4 @@
-import { Input, ViewChild, Inject } from '@angular/core';
+import { Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger, MatMenu } from '@angular/material';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { takeUntil } from 'rxjs/operators';

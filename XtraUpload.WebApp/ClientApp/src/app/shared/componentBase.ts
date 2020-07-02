@@ -3,6 +3,7 @@ import { FormControl, FormGroup, } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { IGenericMessage } from 'app/domain';
 
+// TODO: Add Angular decorator.
 export abstract class ComponentBase implements OnDestroy {
   /** Indicate wether the component is busy (sending data over the wire, heavy computation...) */
   isBusy = false;

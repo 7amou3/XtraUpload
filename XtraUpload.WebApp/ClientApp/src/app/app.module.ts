@@ -57,11 +57,11 @@ export function webSettingFactory(settings: SettingsService) {
       deps: [SettingsService],
       multi: true
     },
-    { provide: UserStorageService},
-    { provide: AuthService},
-    { provide: SettingsService},
-    { provide: HeaderService},
-    { provide: SidenavService},
+    UserStorageService,
+    AuthService,
+    SettingsService,
+    HeaderService,
+    SidenavService
   ],
   bootstrap: [AppComponent]
 })
