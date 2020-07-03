@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StaticPageRoutes } from './staticpage.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SharedModule } from '../shared';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { StaticPageService } from '../services';
 import { NgxWigModule } from 'ngx-wig';
 import { PageComponent } from './page/page.component';
@@ -16,7 +19,10 @@ import { PageComponent } from './page/page.component';
     CommonModule,
     RouterModule.forChild(StaticPageRoutes),
     FlexLayoutModule,
-    SharedModule,
+    MatIconModule,
+    MatCardModule,
+    MatDividerModule,
+    MatProgressBarModule,
     NgxWigModule
   ],
   providers: [

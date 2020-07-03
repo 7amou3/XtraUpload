@@ -3,29 +3,28 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotificationService, UserStorageService } from '../services';
 
-
 /** Intercept incomming http error responses and displays them to the user */
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 
-  constructor(private injector: Injector) { }
+  constructor(
+    private errorNotifService: ErrorNotificationService,
+    private router: Router,
+    private userStorage: UserStorageService) { }
   handleError(error: Error | HttpErrorResponse) {
-    const notifier = this.injector.get(ErrorNotificationService);
 
     let message: string;
     if (error instanceof HttpErrorResponse) {
       // Server response error
-      message = notifier.getServerErrorMessage(error);
+      message = this.errorNotifService.getServerErrorMessage(error);
       switch (error.status) {
         case 400:
           // Client Bad request, let the front handle this error
           return;
         case 401:
             // Expired token
-            const router = this.injector.get(Router);
-            const userStorage = this.injector.get(UserStorageService);
-            userStorage.clearLocalStorage();
-            router.navigate(['/login']);
+            this.userStorage.clearLocalStorage();
+            this.router.navigate(['/login']);
             break;
         case 403:
           // Forbidden
@@ -37,11 +36,11 @@ export class GlobalErrorHandler implements ErrorHandler {
         default :
               break;
       }
-      notifier.showError(message);
+      this.errorNotifService.showError(message);
     } else {
       // Client Error
-      message = notifier.getClientErrorMessage(error);
-      notifier.showError(message);
+      message = this.errorNotifService.getClientErrorMessage(error);
+      this.errorNotifService.showError(message);
     }
     // todo: send error to server
     console.error(error);

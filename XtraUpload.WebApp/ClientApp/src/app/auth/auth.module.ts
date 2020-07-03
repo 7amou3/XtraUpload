@@ -3,7 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthRoutes } from './auth.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SharedModule, MessageModule } from '../shared';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MessageModule } from '../shared';
 import { PipeModule } from '../shared/pipe-modules';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, UserStorageService, AuthUnGuardService } from '../services';
@@ -32,9 +41,17 @@ export function socialLoginFactory(authService: AuthService): Promise<SocialAuth
     CommonModule,
     RouterModule.forChild(AuthRoutes),
     FlexLayoutModule,
-    SharedModule,
     MessageModule,
+    MatButtonModule,
     PipeModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatCardModule,
+    MatIconModule,
+    MatDividerModule,
+    MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule,
     SocialLoginModule

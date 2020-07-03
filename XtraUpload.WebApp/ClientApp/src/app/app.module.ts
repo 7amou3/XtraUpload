@@ -8,6 +8,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { IsLoggedInDirective } from './shared/loggedin.directive';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppComponent } from './app.component';
 import { FullComponent, HeaderComponent, FooterComponent, PageNotFoundComponent } from './layouts';
 
@@ -19,7 +27,7 @@ import {
   ProgressComponent
 } from './http-interceptor';
 import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService } from 'app/services';
-import { SharedModule, MessageModule, SpinnerComponent } from './shared';
+import { SpinnerComponent } from './shared';
 import { PipeModule } from './shared/pipe-modules';
 export function webSettingFactory(settings: SettingsService) {
   return () => settings.webappconfig().toPromise();
@@ -32,17 +40,23 @@ export function webSettingFactory(settings: SettingsService) {
     FullComponent,
     FooterComponent,
     ProgressComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    IsLoggedInDirective
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     FlexLayoutModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSnackBarModule,
     HttpClientModule,
     RouterModule.forRoot(AppRoutes, {scrollPositionRestoration: 'enabled'}),
-    SharedModule,
-    MessageModule,
     PipeModule
   ],
   providers: [

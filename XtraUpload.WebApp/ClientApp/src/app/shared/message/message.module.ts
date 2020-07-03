@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SharedModule } from '../shared-modules';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MessageComponent } from './message.component';
 
 @NgModule({
@@ -11,7 +12,8 @@ import { MessageComponent } from './message.component';
   imports: [
     CommonModule,
     FlexLayoutModule,
-    SharedModule
+    MatIconModule,
+    MatButtonModule
   ],
   exports: [
     MessageComponent
