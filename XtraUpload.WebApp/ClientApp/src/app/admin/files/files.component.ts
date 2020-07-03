@@ -102,8 +102,7 @@ export class FilesComponent extends ComponentBase implements OnInit {
   private refreshTable() {
     try {
       this.itemstable.renderRows();
-    }
-    catch (ex) {
+    } catch (ex) {
       // console.log(ex);
     }
   }
@@ -148,6 +147,7 @@ export class FilesComponent extends ComponentBase implements OnInit {
     this.queryFiles(pageEvent, this.filesSearchFormGroup.value);
   }
 private queryFiles(pageEvent: PageEvent, search: ISearchFile) {
+  this.selection.clear();
   this.isBusy = true;
   this.adminService.getFiles(pageEvent, search)
       .pipe(

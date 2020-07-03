@@ -138,6 +138,7 @@ export class UserListComponent extends ComponentBase implements OnInit {
     this.queryUsers(pageEvent, this.usersSearchFormGroup.value);
   }
   private queryUsers(pageEvent: PageEvent, search: ISearchFile) {
+    this.selection.clear();
     this.isBusy = true;
     this.adminService.getUsers(pageEvent, search)
       .pipe(

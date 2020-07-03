@@ -1,4 +1,3 @@
-export * from './shared-modules';
 export * from './componentBase';
 export * from './spinner.component';
 export * from './truncate.pipe';
