@@ -1,17 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { takeUntil, finalize, debounceTime} from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { fromEvent } from 'rxjs';
+import { IEmailSettings } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { IEmailSettings } from 'app/domain';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MediaMatcher } from '@angular/cdk/layout';
 
+interface Link {
+  /* id of the section*/
+  fragment: string;
+  /* If the anchor is in view of the page */
+  active: boolean;
+
+  /* name of the anchor */
+  name: string;
+   /* top offset px of the anchor */
+   top?: number;
+}
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent extends ComponentBase implements OnInit {
+  @Input() container: string;
+  links: Link[] = [];
   jwtFormGroup: FormGroup;
   hideSecretKey = true;
   secretKey = new FormControl('', [Validators.required, Validators.maxLength(32) ]);
@@ -48,15 +66,61 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   uploadBusy = false;
   appSettingBusy = false;
   socialAuthBusy = false;
+  private _urlFragment = '';
+  private _scrollContainer: any;
+  mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
+  @ViewChild('snva') sidenav: MatSidenav;
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    router: Router,
+    private _route: ActivatedRoute,
+    private _element: ElementRef,
+    @Inject(DOCUMENT) private document: Document,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
   ) {
     super();
+    this.mobileQuery = media.matchMedia('(min-width: 768px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+    // TODO: move content table management to a component (Single Responsibility Principle)
+    const links: Link[] = [
+      { fragment: 'pagesettings', name: 'Page Settings', active: true },
+      { fragment: 'uploadsettings', name: 'Upload Settings', active: false },
+      { fragment: 'jwtsettings', name: 'Jwt Settings', active: false },
+      { fragment: 'socialauth', name: 'Social Auth', active: false },
+      { fragment: 'emailsettings', name: 'Email Settings', active: false },
+      { fragment: 'hardwareoptions', name: 'Hardware Options', active: false }
+    ];
+    this.links.push(...links);
   }
 
   ngOnInit(): void {
+    // On init, the sidenav content element doesn't yet exist, so it's not possible
+    // to subscribe to its scroll event until next tick (when it does exist).
+    Promise.resolve().then(() => {
+      this.links.forEach(link => {
+        link.top = this.document.querySelectorAll('#' + link.fragment)[0].getBoundingClientRect().y;
+      });
+      this._scrollContainer = this.document.querySelectorAll('mat-sidenav-content')[0];
+      fromEvent(this._scrollContainer, 'scroll')
+      .pipe(
+        takeUntil(this.onDestroy),
+        debounceTime(20))
+      .subscribe(() => this.onScroll());
+    });
+    this._route.fragment
+    .pipe(takeUntil(this.onDestroy))
+    .subscribe(fragment => {
+      this._urlFragment = fragment;
+      const target = document.getElementById(this._urlFragment);
+      if (target) {
+        target.scrollIntoView();
+      }
+    });
     this.jwtFormGroup = this.fb.group({
       audience: this.audience,
       issuer: this.issuer,
@@ -124,6 +188,30 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       this.facebookAppId.setValue(data.socialAuthSettings.facebookAuth.appId);
       this.googleClientId.setValue(data.socialAuthSettings.googleAuth.clientId);
     });
+  }
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
+    super.ngOnDestroy();
+  }
+  private onScroll(): void {
+    for (let i = 0; i < this.links.length; i++) {
+      this.links[i].active = this.isLinkActive(this.links[i], this.links[i + 1]);
+    }
+  }
+  private isLinkActive(currentLink: any, nextLink: any): boolean {
+    // A link is considered active if the page is scrolled passed the anchor without also
+    // being scrolled passed the next link
+    const scrollOffset = this.getScrollOffset();
+    return scrollOffset >= currentLink.top && !(nextLink && nextLink.top < scrollOffset);
+  }
+  /** Gets the scroll offset of the scroll container */
+  private getScrollOffset(): number | void {
+    const {top} = this._element.nativeElement.getBoundingClientRect();
+    if (typeof this._scrollContainer.scrollTop !== 'undefined') {
+      return this._scrollContainer.scrollTop + 150;
+    } else if (typeof this._scrollContainer.pageYOffset !== 'undefined') {
+      return this._scrollContainer.pageYOffset + top;
+    }
   }
   onJwtSubmit(jwtParams) {
     this.jwtBusy = true;

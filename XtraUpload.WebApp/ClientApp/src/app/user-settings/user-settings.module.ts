@@ -61,7 +61,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
         SettingsService,
         AuthGuardService,
         FileManagerService,
-        UserStorageService,
+        UserStorageService
     ]
 })
 export class UserSettingsModule { }
