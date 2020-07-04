@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { ComponentBase } from 'app/shared';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { Router, NavigationEnd } from '@angular/router';
+import { takeUntil, finalize, delay, filter } from 'rxjs/operators';
 import { AdminService, SidenavService, SeoService } from 'app/services';
-import { takeUntil, finalize, delay } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +22,8 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     media: MediaMatcher,
     private adminService: AdminService,
     private sidenavService: SidenavService,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private router: Router
   ) {
     super();
     seoService.setPageTitle(this.pageTitle);
@@ -45,26 +47,34 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     .subscribe(() => {
       this.sidenav.toggle();
     });
+    // Subscribe to navigation to set component title
+    this.setSubPageTitle(this.router.url);
+    this.router.events
+        .pipe(filter(e => e instanceof NavigationEnd), takeUntil(this.onDestroy))
+        .subscribe( (event: NavigationEnd) => {
+            this.setSubPageTitle(event.urlAfterRedirects);
+          }
+        );
   }
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     super.ngOnDestroy();
   }
-  onActivate(ev) {
-    switch (ev.constructor.name) {
-      case 'OverviewComponent':
+  setSubPageTitle(title: string) {
+    switch (title) {
+      case '/administration/overview':
         this.subTitle = 'Dashboard'; break;
-      case 'FilesComponent':
+      case '/administration/files':
         this.subTitle = 'Files'; break;
-      case 'UserListComponent':
+      case '/administration/users':
         this.subTitle = 'Users'; break;
-      case 'SettingsComponent':
+      case '/administration/settings':
         this.subTitle = 'Settings'; break;
-      case 'GroupsComponent':
+      case '/administration/groups':
         this.subTitle = 'User group'; break;
-      case 'ExtensionsComponent':
+      case '/administration/extensions':
         this.subTitle = 'Extensions'; break;
-      case 'PagesComponent':
+      case '/administration/pages':
         this.subTitle = 'Pages'; break;
       default:
         this.subTitle = 'Dashboard'; break;

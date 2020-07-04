@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ComponentBase } from 'app/shared';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { takeUntil, filter } from 'rxjs/operators';
+import { Router, NavigationEnd } from '@angular/router';
 import { SidenavService, SeoService } from 'app/services';
-import { takeUntil } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared';
 
 @Component({
   selector: 'app-settings',
@@ -20,6 +21,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     private sidenavService: SidenavService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
+    private router: Router,
     private seoService: SeoService
   ) {
     super();
@@ -36,23 +38,31 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     .subscribe(() => {
       this.sidenav.toggle();
     });
+    // Subscribe to navigation to set component title
+    this.setSubPageTitle(this.router.url);
+    this.router.events
+        .pipe(filter(e => e instanceof NavigationEnd), takeUntil(this.onDestroy))
+        .subscribe( (event: NavigationEnd) => {
+            this.setSubPageTitle(event.urlAfterRedirects);
+          }
+        );
   }
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     super.ngOnDestroy();
   }
-  onActivate(ev) {
-    switch (ev.constructor.name) {
-      case 'OverviewComponent':
+  setSubPageTitle(title: string) {
+    switch (title) {
+      case '/settings/overview':
         this.subTitle = 'Overview';
         break;
       case 'AvatarComponent':
         this.subTitle = 'Avatar';
         break;
-      case 'ChangePasswordComponent':
+      case '/settings/password':
         this.subTitle = 'Password';
         break;
-      case 'UserinfoComponent':
+      case '/settings/avatar':
         this.subTitle = 'User Info';
         break;
       default:

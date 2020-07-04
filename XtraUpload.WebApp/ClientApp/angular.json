@@ -12,6 +12,14 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "tus-js-client",
+              "js-base64",
+              "url-parse",
+              "file-saver",
+              "ng2-charts",
+              "chart.js"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
