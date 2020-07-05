@@ -1,4 +1,4 @@
-![.NET Core](https://github.com/veteran1/XtraUpload.ServerApp/workflows/.NET%20Core/badge.svg)
+![Build](https://github.com/veteran1/XtraUpload/workflows/Build/badge.svg)
 
 
 # How to install XtraUpload on Linux
