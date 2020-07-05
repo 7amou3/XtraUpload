@@ -33,14 +33,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-        
-    - name: Build Angular Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: |
+    - name: Build Angular
+      run: |
         npm ci
         npm run build
-    - working-directory: "XtraUpload.WebApp/ClientApp/" 
+      working-directory: "XtraUpload.WebApp/ClientApp/" 
          
   
   
