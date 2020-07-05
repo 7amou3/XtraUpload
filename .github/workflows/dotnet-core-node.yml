@@ -27,6 +27,9 @@ jobs:
   job_2:
      name: Build Angular
      runs-on: ubuntu-latest
+     strategy:
+         matrix:
+            node-version: [12.x]
      steps:
       # cache node module if package-lock.json doesn't change
       - name: Cache node modules
