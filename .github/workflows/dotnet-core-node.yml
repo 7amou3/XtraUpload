@@ -8,11 +8,9 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  job_1:
+    name: Build .NET core
     runs-on: ubuntu-latest
-    strategy:
-         matrix:
-            node-version: [12.x]
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -25,22 +23,26 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+      
+  job_2:
+     name: Build Angular
+     runs-on: ubuntu-latest
+     steps:
       # cache node module if package-lock.json doesn't change
-    - name: Cache node modules
-      uses: actions/cache@v2
-      with:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-        
-    - name: Install Node dependencies
-      if: success()
-      run: npm ci
-      working-directory: "XtraUpload.WebApp/ClientApp/"
-    - name: Build Angular for production
-      if: success()
-      run: npm run build
-      working-directory: "XtraUpload.WebApp/ClientApp/"
+      - name: Install Node dependencies
+        run: npm ci
+        working-directory: "XtraUpload.WebApp/ClientApp/"
+      - name: Build Angular for production
+        if: success()
+        run: npm run build
+        working-directory: "XtraUpload.WebApp/ClientApp/"
          
   
   
