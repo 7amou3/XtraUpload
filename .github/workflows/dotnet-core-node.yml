@@ -34,10 +34,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-        
     - name: Install Node dependencies
+      if: success()
       run: npm ci
       working-directory: "XtraUpload.WebApp/ClientApp/"
     - name: Build Angular for production
-      run: npm run build --prod
+      if: success()
+      run: npm run build
       working-directory: "XtraUpload.WebApp/ClientApp/"
          
   
