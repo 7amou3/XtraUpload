@@ -36,7 +36,7 @@ jobs:
     - name: Build Angular
       run: |
         npm ci
-        npm run build
+        ng build --prod
       working-directory: "XtraUpload.WebApp/ClientApp/" 
          
   
