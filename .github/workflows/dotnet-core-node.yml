@@ -19,9 +19,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    - name: Install dependencies
+    - name: Install .Net dependencies
       run: dotnet restore
-    - name: Build
+    - name: Build Release
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
@@ -33,11 +33,12 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-        
-    - name: Build Angular
-      run: |
-        npm ci
-        ng build --prod
-      working-directory: "XtraUpload.WebApp/ClientApp/" 
+    - name: Install Node dependencies
+      run: npm ci
+      working-directory: "XtraUpload.WebApp/ClientApp/"
+    - name: Build Angular for production
+      run: npm run build --prod
+      working-directory: "XtraUpload.WebApp/ClientApp/"
          
   
   
