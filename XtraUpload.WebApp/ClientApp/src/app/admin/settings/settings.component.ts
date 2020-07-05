@@ -189,6 +189,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       this.googleClientId.setValue(data.socialAuthSettings.googleAuth.clientId);
     });
   }
+  /** do not implement inerface */
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     super.ngOnDestroy();
