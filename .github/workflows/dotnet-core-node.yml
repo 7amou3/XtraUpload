@@ -1,6 +1,5 @@
 # Build .net core and angular for every push on master branche
-name: Build
-
+name: Build pipelines
 on:
   push:
     branches: [ master ]
@@ -9,7 +8,7 @@ on:
 
 jobs:
   job_1:
-    name: Build .NET core
+    name: Build Server App
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,11 +24,14 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
       
   job_2:
-     name: Build Angular
+     name: Build Client App
      runs-on: ubuntu-latest
      strategy:
          matrix:
             node-version: [12.x]
+     defaults: 
+          run: 
+            working-directory: "XtraUpload.WebApp/ClientApp/"
      steps:
       # cache node module if package-lock.json doesn't change
       - name: Cache node modules
@@ -41,11 +43,6 @@ jobs:
             ${{ runner.os }}-node-        
       - name: Install Node dependencies
         run: npm ci
-        working-directory: "XtraUpload.WebApp/ClientApp/"
       - name: Build Angular for production
         if: success()
         run: npm run build
-        working-directory: "XtraUpload.WebApp/ClientApp/"
-         
-  
-  
