@@ -42,12 +42,12 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node- 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-           node-version: ${{ matrix.node-version }}      
-      - name: Install Node dependencies
-        run: npm ci
-      - name: Build Angular for production
-        if: success()
-        run: npm run build
+      #- name: Use Node.js ${{ matrix.node-version }}
+      #  uses: actions/setup-node@v1
+      #  with:
+      #    node-version: ${{ matrix.node-version }}      
+      # - name: Install Node dependencies
+      #  run: npm ci
+      # - name: Build Angular for production
+      #  if: success()
+      #  run: npm run build
