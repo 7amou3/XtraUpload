@@ -13,8 +13,9 @@ Before you begin the install, there are a few things you need to have and do.
 1. Create a MySQL database user who has all privileges for accessing and modifying it.
 1. In XtraUpload.WebApp folder edit `appsettings.json` and provide your database connection string (user, and password) [Database config](https://photos.app.goo.gl/fqz4A5WC5Yrhb1Z38).
 1. In XtraUpload rootfolder give execution permission to `install.sh` script by running the command `chmod +x ./install.sh`
-1. Run the script, once the installation is done navigate to localhost:5000 to login to your admin panel
-## Manual Installation
+1. Run the script, once the installation is done navigate to localhost:5000 to login to your admin panel.
+1. XtraUpload is running on Kestrel webserver at http://localhost:5000, Kestrel is great for serving .Net but it's not a full-blown webserver, we highly recommand putting a reverse proxy (Nginx or Apache) in front of Kestrel, follow this guide to setup a [reverse proxy](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1#configure-a-reverse-proxy-server)
+## Manual Installation, 
 
 1. To install **.NET Runtime and SDKs** on your Linux machine, please refer to Microsoft documentation at:
 [Install .NET Core on Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux), please note that the SDK is used to build/package the application and it's not needed once the application is deployed (only the .NET runtime is needed on your production server).
