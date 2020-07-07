@@ -1,4 +1,4 @@
-![Build](https://github.com/veteran1/XtraUpload/workflows/Build/badge.svg)
+![Build pipelines](https://github.com/veteran1/XtraUpload/workflows/Build%20pipelines/badge.svg)
 
 
 # How to install XtraUpload on Linux
