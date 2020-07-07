@@ -2,6 +2,19 @@
 
 
 # How to install XtraUpload on Linux
+You can Install XtraUpload by executing a shell script or manually, we recommend using the automated script.
+## Things to Know Before Installing
+Before you begin the install, there are a few things you need to have and do.
+1. Access to your web server (eg. FTP, PuTTY, Remote Desktop...)
+1. Ability to create MySql Server databases (XtraUpload also support SQL Server databases)
+1. An [FTP Client](https://filezilla-project.org/)
+## 5-Minute Installation (shell script)
+1. Upload and unzip the XtraUpload package on your server.
+1. Create a MySQL database user who has all privileges for accessing and modifying it.
+1. In XtraUpload.WebApp folder edit `appsettings.json` and provide your database connection string (user, and password) [Database config](https://photos.app.goo.gl/fqz4A5WC5Yrhb1Z38).
+1. In XtraUpload rootfolder give execution permission to `install.sh` script by running the command `chmod +x ./install.sh`
+1. Run the script, once the installation is done navigate to localhost:5000 to login to your admin panel
+## Manual Installation
 
 1. To install **.NET Runtime and SDKs** on your Linux machine, please refer to Microsoft documentation at:
 [Install .NET Core on Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux), please note that the SDK is used to build/package the application and it's not needed once the application is deployed (only the .NET runtime is needed on your production server).
