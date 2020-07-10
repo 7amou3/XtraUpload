@@ -15,10 +15,8 @@ dotnet ef migrations script -o ./Database/XtraUpload.Database.Migrations/script.
 echo "The sql script [script.sql] has been successfully generated, path: ./Database/XtraUpload.Database.Migrations/"
 echo "7. updating db..."
 dotnet ef database update initCommit -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApp
-buildDir="$HOME/wwwroot"
+buildDir="/var/www/xtraupload"
 echo "8. Moving build directory to " $buildDir
 mkdir -p $buildDir; mv ./XtraUpload.WebApp/bin/Release/netcoreapp3.1/publish/* $_
 rm ./XtraUpload.WebApp/bin/*
-echo "9. starting web server..."
-cd $buildDir
-dotnet XtraUpload.WebApp.dll
+echo "Installation completed, please setup a reverse proxy to serve XtraUpload, and a daemon for monitoring: https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1#monitor-the-app"
