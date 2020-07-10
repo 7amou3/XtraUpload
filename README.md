@@ -7,8 +7,9 @@ You can Install XtraUpload by executing a shell script or manually, we recommend
 Before you begin the install, there are a few things you need to have and do.
 1. Access to your web server (eg. FTP, PuTTY, Remote Desktop...)
 1. Ability to create MySql Server databases (XtraUpload also support SQL Server databases)
-1. An [FTP Client](https://filezilla-project.org/)
-## 5-Minute Installation (shell script)
+1. Install .NET Runtime and SDKs on your Linux machine, please refer to Microsoft documentation at: Install .NET Core on Linux, please note that the SDK is used to build/package the application and it's not needed once the application is deployed (only the .NET runtime is needed on your production server).
+1. Since you just installed the .NET Core SDK, you will need to logout or restart your session.
+## Automatic Installation (shell script)
 1. Upload and unzip the XtraUpload package on your server.
 1. Create a MySQL database user who has all privileges for accessing and modifying it.
 1. In XtraUpload.WebApp folder edit `appsettings.json` and provide your database connection string (user, and password) [Database config](https://photos.app.goo.gl/fqz4A5WC5Yrhb1Z38).
@@ -18,7 +19,7 @@ Before you begin the install, there are a few things you need to have and do.
 ## Manual Installation, 
 
 1. To install **.NET Runtime and SDKs** on your Linux machine, please refer to Microsoft documentation at:
-[Install .NET Core on Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux), please note that the SDK is used to build/package the application and it's not needed once the application is deployed (only the .NET runtime is needed on your production server).
+[Install .NET Core on Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux).
 1. Check if the .NET runtime is install successfully, open your terminal and type `dotnet --info` you should get a result like this:
 [SDKs & runtime](https://photos.google.com/share/AF1QipOPxqzGwFwxSRmboRJUBE5V2AJStsU_-hoOhFZZb9dcnsbZXqHZceZDCr9T1eulRg/photo/AF1QipN76ujJrqiwJW250M7Ioh_6yyMAljXqyTSdubX8?key=TXRBSTNLbW9UUktYRVhsSjJFRVFkc2V2NFFRT1ZB)
 1. Install NodeJs and npm: node js and npm are used to build the angular application and they are not needed on your production server, to install nodejs run the following command `sudo apt install nodejs` then type `nodejs -v` to check your nodejs version [node version](https://photos.app.goo.gl/tvLbAGkMuz5AXCnp7).  
