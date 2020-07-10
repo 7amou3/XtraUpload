@@ -34,6 +34,7 @@ using XtraUpload.WebApp.Common;
 using XtraUpload.WebApp.Filters;
 using XtraUpload.Setting.Service;
 using XtraUpload.Setting.Service.Common;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace XtraUpload.WebApp
 {
@@ -88,6 +89,11 @@ namespace XtraUpload.WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseDefaultFiles();
 

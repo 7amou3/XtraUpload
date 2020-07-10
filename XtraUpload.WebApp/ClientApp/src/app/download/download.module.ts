@@ -13,6 +13,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -50,6 +51,7 @@ import { FileMngContextMenuService, SnavContextMenuService } from 'app/services/
     MatButtonModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
+    MatDialogModule,
     MatTreeModule,
     MatTableModule,
     MatTooltipModule,
