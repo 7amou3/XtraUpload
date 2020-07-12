@@ -16,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { IsLoggedInDirective } from './shared/loggedin.directive';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Angulartics2Module } from 'angulartics2';
 import { AppComponent } from './app.component';
 import { FullComponent, HeaderComponent, FooterComponent, PageNotFoundComponent } from './layouts';
 
@@ -57,6 +58,7 @@ export function webSettingFactory(settings: SettingsService) {
     MatSnackBarModule,
     HttpClientModule,
     RouterModule.forRoot(AppRoutes, {scrollPositionRestoration: 'enabled'}),
+    Angulartics2Module.forRoot(),
     PipeModule
   ],
   providers: [
