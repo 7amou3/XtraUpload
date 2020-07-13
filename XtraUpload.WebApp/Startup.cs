@@ -95,19 +95,20 @@ namespace XtraUpload.WebApp
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            app.UseDefaultFiles();
-
             app.UseStaticFiles();
 
             if (!env.IsDevelopment())
             {
-                app.UseSpaStaticFiles();
+                app.UseSpaStaticFiles(new StaticFileOptions
+                {
+                    OnPrepareResponse = ctx =>
+                    {
+                        ctx.Context.Response.Headers.Add("Cache-Control", "max-age=7200");
+                    }
+                });
             }
 
             app.UseAuthentication();
-
-            // Uncomment if you would like to use https
-            //app.UseHttpsRedirection();
 
             // Uncomment if you want to serve the angular app from other domain or to allow 3rd paries to query XtraUpload's API
             /*app.UseCors(builder => builder
@@ -164,7 +165,6 @@ namespace XtraUpload.WebApp
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
                 spa.Options.SourcePath = "ClientApp";
-
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");

@@ -25,6 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'app/shared';
 import { AdminRoutes } from './admin.routing';
@@ -114,6 +115,7 @@ import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
     CdkAccordionModule,
     MatAutocompleteModule,
     MatCheckboxModule,
+    MatPaginatorModule,
     ChartsModule,
     PipeModule,
     FlexLayoutModule,
