@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace XtraUpload.Domain
@@ -17,18 +14,18 @@ namespace XtraUpload.Domain
     }
     public class WritableOptions<T> : IWritableOptions<T> where T : class, new()
     {
-        private readonly IHostingEnvironment _environment;
+        private readonly IFileProvider _fileProvider;
         private readonly IOptionsMonitor<T> _options;
         private readonly string _section;
         private readonly string _file;
 
         public WritableOptions(
-            IHostingEnvironment environment,
+            IFileProvider fileProvider,
             IOptionsMonitor<T> options,
             string section,
             string file)
         {
-            _environment = environment;
+            _fileProvider = fileProvider;
             _options = options;
             _section = section;
             _file = file;
@@ -39,8 +36,7 @@ namespace XtraUpload.Domain
 
         public async Task Update(Action<T> applyChanges)
         {
-            var fileProvider = _environment.ContentRootFileProvider;
-            var fileInfo = fileProvider.GetFileInfo(_file);
+            var fileInfo = _fileProvider.GetFileInfo(_file);
             var physicalPath = fileInfo.PhysicalPath;
 
             var jObject = JsonConvert.DeserializeObject<JObject>(await File.ReadAllTextAsync(physicalPath));

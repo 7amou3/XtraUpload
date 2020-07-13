@@ -13,9 +13,9 @@ namespace XtraUpload.WebApp
             services.Configure<T>(section);
             services.AddTransient<IWritableOptions<T>>(provider =>
             {
-                var environment = provider.GetService<IHostingEnvironment>(); // IWebHostEnvironment
+                var environment = provider.GetService<IWebHostEnvironment>(); // IWebHostEnvironment
                 var options = provider.GetService<IOptionsMonitor<T>>();
-                return new WritableOptions<T>(environment, options, section.Key, file);
+                return new WritableOptions<T>(environment.ContentRootFileProvider, options, section.Key, file);
             });
         }
     }
