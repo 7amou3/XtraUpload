@@ -14,7 +14,6 @@ using XtraUpload.WebApp.Filters;
 
 namespace XtraUpload.WebApp.Controllers
 {
-    [DemoFilter]
     [Authorize(Policy = "Admin")]
     public class AdminController : BaseController
     {
