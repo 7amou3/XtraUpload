@@ -30,7 +30,7 @@ export class DeletepageComponent extends ComponentBase implements OnInit {
     .subscribe(
       () => {
         this.dialogRef.close(this.page);
-      }
+      }, (error) => this.handleError(error)
     );
   }
 

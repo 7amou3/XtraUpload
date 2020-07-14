@@ -85,7 +85,7 @@ export class AddgroupComponent extends ComponentBase implements OnInit {
       .subscribe(
         (result) => {
           this.dialogRef.close(result);
-        }
+        }, (error) => this.handleError(error)
       );
   }
 

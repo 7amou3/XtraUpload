@@ -30,7 +30,7 @@ export class DeleteuserComponent extends ComponentBase implements OnInit {
     .subscribe(
       () => {
         this.dialogRef.close(this.users);
-      }
+      }, (error) => this.handleError(error)
     );
   }
 

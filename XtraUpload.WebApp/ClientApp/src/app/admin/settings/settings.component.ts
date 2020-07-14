@@ -225,7 +225,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         this.showSuccessMsg('Jwt Options');
       },
       error => {
-        throw Error(error.error?.title);
+        this.handleError(error);
       }
     );
   }
@@ -240,7 +240,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         this.showSuccessMsg('Upload Options');
       },
       error => {
-        throw Error(error.error?.title);
+        this.handleError(error);
       }
     );
   }
@@ -255,7 +255,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         this.showSuccessMsg('Email Options');
       },
       error => {
-        throw Error(error.error?.title);
+        this.handleError(error);
       }
     );
   }
@@ -269,7 +269,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         this.showSuccessMsg('Hardware Options');
       },
       error => {
-        throw Error(error.error?.title);
+        this.handleError(error);
       }
     );
   }
@@ -283,7 +283,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         this.showSuccessMsg('Page Settings');
       },
       error => {
-        throw Error(error.error?.title);
+        this.handleError(error);
       }
     );
   }
@@ -297,7 +297,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         this.showSuccessMsg('Social Auth');
       },
       error => {
-        throw Error(error.error?.title);
+        this.handleError(error);
       }
     );
   }

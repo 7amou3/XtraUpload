@@ -45,7 +45,7 @@ export class EditpageComponent extends ComponentBase  implements OnInit {
       .subscribe(
         (page) => {
           this.dialogRef.close(page);
-        }
+        }, (error) => this.handleError(error)
       );
   }
 

@@ -49,6 +49,6 @@ export class EdituserComponent extends ComponentBase implements OnInit {
     .pipe(takeUntil(this.onDestroy))
     .subscribe(() => {
       this.dialogRef.close(user);
-    });
+    }, (error) => this.handleError(error));
   }
 }

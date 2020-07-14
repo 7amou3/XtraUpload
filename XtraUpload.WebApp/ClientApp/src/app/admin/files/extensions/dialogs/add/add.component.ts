@@ -41,7 +41,7 @@ export class AddComponent extends ComponentBase implements OnInit {
       .subscribe(
         (extension) => {
           this.dialogRef.close(extension);
-        }
+        }, (error) => this.handleError(error)
       );
   }
 }

@@ -44,7 +44,7 @@ export class EditComponent extends ComponentBase implements OnInit {
       .subscribe(
         () => {
           this.dialogRef.close(formParams);
-        }
+        }, (error) => this.handleError(error)
       );
   }
 

@@ -43,7 +43,7 @@ export class AddpageComponent extends ComponentBase implements OnInit {
       .subscribe(
         (newPage) => {
           this.dialogRef.close(newPage);
-        }
+        }, (error) => this.handleError(error)
       );
   }
 

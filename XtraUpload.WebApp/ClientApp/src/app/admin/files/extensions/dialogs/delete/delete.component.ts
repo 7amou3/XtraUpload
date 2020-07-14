@@ -30,7 +30,7 @@ export class DeleteComponent extends ComponentBase implements OnInit {
     .subscribe(
       () => {
         this.dialogRef.close(this.item);
-      }
+      }, (error) => this.handleError(error)
     );
   }
 }
