@@ -103,7 +103,7 @@ namespace XtraUpload.WebApp
                 {
                     OnPrepareResponse = ctx =>
                     {
-                        ctx.Context.Response.Headers.Add("Cache-Control", "max-age=7200");
+                        ctx.Context.Response.Headers.Add("Cache-Control", "max-age=86400");
                     }
                 });
             }
