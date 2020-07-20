@@ -118,7 +118,7 @@
                         <p mat-line>Concurent uploads</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
-                        <p mat-line>{{accountOverview?.uploadSetting.maxFileSize | bytes}}</p>
+                      <p mat-line>{{accountOverview?.uploadSetting.maxFileSize *1024 *1024 | bytes}}</p>
                         <p mat-line>Maximum file size</p>
                     </mat-list-item>
                 </mat-list>
