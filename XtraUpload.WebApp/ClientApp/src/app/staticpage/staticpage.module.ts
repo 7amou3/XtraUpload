@@ -8,7 +8,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { StaticPageService } from '../services';
-import { NgxWigModule } from 'ngx-wig';
 import { PageComponent } from './page/page.component';
 
 @NgModule({
@@ -22,8 +21,7 @@ import { PageComponent } from './page/page.component';
     MatIconModule,
     MatCardModule,
     MatDividerModule,
-    MatProgressBarModule,
-    NgxWigModule
+    MatProgressBarModule
   ],
   providers: [
     StaticPageService,
