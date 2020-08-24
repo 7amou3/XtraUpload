@@ -4,11 +4,11 @@ echo "1. installing NodeJs..."
 sudo apt install nodejs
 echo "2. installing npm..."
 sudo apt install npm
-echo "3. installing ef tools..." 
+echo "3. installing ef tools..."
 dotnet tool install --global dotnet-ef
 echo "4. Building XtraUpload (Release version)..."
 dotnet publish --configuration Release
-echo "5. Building initial database migration"
+echo "5. Building database migration"
 dotnet ef migrations add initCommit -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApp
 echo "6. Generating sql script"
 dotnet ef migrations script -o ./Database/XtraUpload.Database.Migrations/script.sql -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApp
