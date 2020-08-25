@@ -41,7 +41,8 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node- 
+            ${{ runner.os }}-node-
+      # Uncomment if you want to build ClientApp 
       #- name: Use Node.js ${{ matrix.node-version }}
       #  uses: actions/setup-node@v1
       #  with:
