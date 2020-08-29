@@ -10,9 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
-    <ProjectReference Include="..\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
-    <ProjectReference Include="..\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj" />
+    <ProjectReference Include="..\..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Email\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,6 @@ using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.Email.Service;
-using XtraUpload.Email.Service.Common;
 using XtraUpload.FileManager.Service;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.WebApp.Common;
@@ -35,6 +34,7 @@ using XtraUpload.WebApp.Filters;
 using XtraUpload.Setting.Service;
 using XtraUpload.Setting.Service.Common;
 using Microsoft.AspNetCore.HttpOverrides;
+using XtraUpload.Email.Service.Common;
 
 namespace XtraUpload.WebApp
 {

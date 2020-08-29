@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\XtraUpload.Administration.Service.Common\XtraUpload.Administration.Service.Common.csproj" />
-    <ProjectReference Include="..\..\Services\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
-    <ProjectReference Include="..\..\Services\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
-    <ProjectReference Include="..\..\Services\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj" />
+    <ProjectReference Include="..\..\Services\Administration\XtraUpload.Administration.Service.Common\XtraUpload.Administration.Service.Common.csproj" />
+    <ProjectReference Include="..\..\Services\Authentication\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
+    <ProjectReference Include="..\..\Services\FileManager\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
+    <ProjectReference Include="..\..\Services\Setting\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj" />
     <ProjectReference Include="..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
   </ItemGroup>
 

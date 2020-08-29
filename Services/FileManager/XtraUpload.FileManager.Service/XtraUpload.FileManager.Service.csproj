@@ -15,9 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
-    <ProjectReference Include="..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
-    <ProjectReference Include="..\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
+    <ProjectReference Include="..\..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
+    <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
   </ItemGroup>
 
 </Project>

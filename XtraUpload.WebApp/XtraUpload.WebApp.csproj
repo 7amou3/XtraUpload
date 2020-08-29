@@ -44,12 +44,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Database\XtraUpload.Database.Data\XtraUpload.Database.Data.csproj" />
     <ProjectReference Include="..\Database\XtraUpload.Database.Migrations\XtraUpload.Database.Migrations.csproj" />
-    <ProjectReference Include="..\Services\XtraUpload.Administration.Service\XtraUpload.Administration.Service.csproj" />
-    <ProjectReference Include="..\Services\XtraUpload.Authentication.Service\XtraUpload.Authentication.Service.csproj" />
-    <ProjectReference Include="..\Services\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
-    <ProjectReference Include="..\Services\XtraUpload.Email.Service\XtraUpload.Email.Service.csproj" />
-    <ProjectReference Include="..\Services\XtraUpload.FileManager.Service\XtraUpload.FileManager.Service.csproj" />
-    <ProjectReference Include="..\Services\XtraUpload.Setting.Service\XtraUpload.Setting.Service.csproj" />
+    <ProjectReference Include="..\Services\Administration\XtraUpload.Administration.Service\XtraUpload.Administration.Service.csproj" />
+    <ProjectReference Include="..\Services\Authentication\XtraUpload.Authentication.Service\XtraUpload.Authentication.Service.csproj" />
+    <ProjectReference Include="..\Services\Email\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
+    <ProjectReference Include="..\Services\Email\XtraUpload.Email.Service\XtraUpload.Email.Service.csproj" />
+    <ProjectReference Include="..\Services\FileManager\XtraUpload.FileManager.Service\XtraUpload.FileManager.Service.csproj" />
+    <ProjectReference Include="..\Services\Setting\XtraUpload.Setting.Service\XtraUpload.Setting.Service.csproj" />
     <ProjectReference Include="..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
   </ItemGroup>
   
