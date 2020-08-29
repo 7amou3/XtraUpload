@@ -11,9 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Database\XtraUpload.Database.Data\XtraUpload.Database.Data.csproj" />
-    <ProjectReference Include="..\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
-    <ProjectReference Include="..\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
+    <ProjectReference Include="..\..\..\Database\XtraUpload.Database.Data\XtraUpload.Database.Data.csproj" />
+    <ProjectReference Include="..\..\Email\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
   </ItemGroup>
 
 </Project>

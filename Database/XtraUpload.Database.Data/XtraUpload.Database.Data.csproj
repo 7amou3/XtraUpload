@@ -10,8 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
-    <ProjectReference Include="..\..\Services\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
   </ItemGroup>
 
