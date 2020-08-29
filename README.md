@@ -2,7 +2,8 @@
 
 
 # How to install XtraUpload on Linux
-You can Install XtraUpload by executing a shell script or manually, we recommend using the automated script.
+You can Install XtraUpload by executing a shell script or manually, I recommend using the automated script.  
+PS: A detailed guid can be found [here](https://soft-valley.net/how-to-install-xtraupload/)
 ## Things to Know Before Installing
 Before you begin the install, there are a few things you need to have and do.
 1. Access to your web server (eg. FTP, PuTTY, Remote Desktop...)
