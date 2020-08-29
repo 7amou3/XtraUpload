@@ -16,7 +16,6 @@ using System.Linq;
 using XtraUpload.Domain.Infra;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.FileManager.Service
 {

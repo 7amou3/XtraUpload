@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
-using XtraUpload.WebApp.Filters;
+using XtraUpload.FileManager.Service.Common;
+using XtraUpload.Email.Service.Common;
 
 namespace XtraUpload.WebApp.Controllers
 {

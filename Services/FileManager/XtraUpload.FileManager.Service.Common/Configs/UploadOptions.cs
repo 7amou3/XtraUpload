@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.FileManager.Service.Common
 {
     /// <summary>
     /// Upload configuration options

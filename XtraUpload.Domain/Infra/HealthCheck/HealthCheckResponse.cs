@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XtraUpload.WebApp
+namespace XtraUpload.Domain
 {
     public class HealthCheckResponse
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Email.Service.Common
 {
     /// <summary>
     /// Email configuration

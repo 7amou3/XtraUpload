@@ -10,9 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
+using XtraUpload.FileManager.Service.Common;
 
-namespace XtraUpload.WebApp
+namespace XtraUpload.FileManager.Host
 {
     /// <summary>
     /// A background job used to remove expired user files from the store
@@ -22,9 +22,10 @@ namespace XtraUpload.WebApp
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ExpiredFilesService> _logger;
+        private readonly int _dueTime = 3600 * 1000; // 1 hour
         readonly UploadOptions _uploadOpt;
         private Timer _timer;
-        private TimeSpan _timeout = new TimeSpan(1, 0, 0);
+
         public ExpiredFilesService(IServiceProvider serviceProvider, IOptionsMonitor<UploadOptions> uploadOpt, ILogger<ExpiredFilesService> logger)
         {
             _logger = logger;
@@ -34,8 +35,7 @@ namespace XtraUpload.WebApp
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await RunCleanup(cancellationToken);
-            _timer = new Timer(async (e) => await RunCleanup((CancellationToken)e), cancellationToken, TimeSpan.Zero, _timeout);
+            _timer = new Timer(RunCleanup, cancellationToken, _dueTime, Timeout.Infinite);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -44,7 +44,7 @@ namespace XtraUpload.WebApp
             return Task.CompletedTask;
         }
 
-        private async Task RunCleanup(CancellationToken cancellationToken)
+        private async void RunCleanup(object state)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace XtraUpload.WebApp
 
                 using IServiceScope scope = _serviceProvider.CreateScope();
                 using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-                IEnumerable<FileItem> files = await unitOfWork.Files.GetExpiredFiles();
+                IEnumerable<FileItem> files = await unitOfWork.Files.GetExpiredFiles((CancellationToken)state);
                 
                 // Remove the files from the drive
                 foreach (var file in files)
@@ -69,11 +69,19 @@ namespace XtraUpload.WebApp
                 unitOfWork.Files.RemoveRange(files);
                 await unitOfWork.CompleteAsync();
 
-                _logger.LogInformation($"Removed {files.Count()} expired files. Scheduled to run again in {_timeout.TotalMinutes} minutes");
+                _logger.LogInformation($"Removed {files.Count()} expired files. Scheduled to run again in {_dueTime / 1000 / 60} minutes");
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                _logger.LogWarning("Failed to run cleanup job: " + exc.Message);
+                _logger.LogWarning("Failed to run cleanup job: " + ex.Message);
+            }
+            finally
+            {
+                if ( ! ((CancellationToken)state).IsCancellationRequested)
+                {
+                    // Re-schedule timer
+                    _timer.Change(_dueTime, Timeout.Infinite);
+                }
             }
         }
 

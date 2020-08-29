@@ -1,4 +1,4 @@
-﻿namespace XtraUpload.WebApp.Common
+﻿namespace XtraUpload.Setting.Service.Common
 {
     public class WebAppSettings
     {

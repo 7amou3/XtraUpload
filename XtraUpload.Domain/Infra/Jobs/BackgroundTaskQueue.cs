@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.WebApp.Common;
 
-namespace XtraUpload.WebApp
+namespace XtraUpload.Domain
 {
+    /// <summary>
+    /// interface used to resolve instances from DI
+    /// </summary>
+    public interface IBackgroundTaskQueue
+    {
+        void QueueBackgroundWorkItem(Func<CancellationToken, Task> workItem);
+
+        Task<Func<CancellationToken, Task>> DequeueAsync(CancellationToken cancellationToken);
+    }
+
     public class BackgroundTaskQueue: IBackgroundTaskQueue
     {
-        private ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new ConcurrentQueue<Func<CancellationToken, Task>>();
-        private SemaphoreSlim _signal = new SemaphoreSlim(0);
+        private readonly ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new ConcurrentQueue<Func<CancellationToken, Task>>();
+        private readonly SemaphoreSlim _signal = new SemaphoreSlim(0);
 
         public void QueueBackgroundWorkItem(Func<CancellationToken, Task> workItem)
         {

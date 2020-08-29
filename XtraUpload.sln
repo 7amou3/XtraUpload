@@ -49,6 +49,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Setting.Service"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Setting.Service.Common", "Services\Setting\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj", "{F93C0F1D-ECB5-4ADB-9EB2-14C50ECAC456}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Authentication.Host", "Services\Authentication\XtraUpload.Authentication.Host\XtraUpload.Authentication.Host.csproj", "{B6F4FD87-CE76-4C2F-9211-E06D13D63910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.FileManager.Host", "Services\FileManager\XtraUpload.FileManager.Host\XtraUpload.FileManager.Host.csproj", "{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Email.Host", "Services\Email\XtraUpload.Email.Host\XtraUpload.Email.Host.csproj", "{DE782035-27E7-4736-9172-9316D1CB844E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Administration.Host", "Services\Administration\XtraUpload.Administration.Host\XtraUpload.Administration.Host.csproj", "{516D4CD0-87EB-48B3-A286-759FA99F0FF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Setting.Host", "Services\Setting\XtraUpload.Setting.Host\XtraUpload.Setting.Host.csproj", "{EEF62A8E-04F1-4532-9EEE-73EB17F81780}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Database.Host", "Database\XtraUpload.Database.Host\XtraUpload.Database.Host.csproj", "{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +131,30 @@ Global
 		{F93C0F1D-ECB5-4ADB-9EB2-14C50ECAC456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F93C0F1D-ECB5-4ADB-9EB2-14C50ECAC456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F93C0F1D-ECB5-4ADB-9EB2-14C50ECAC456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F4FD87-CE76-4C2F-9211-E06D13D63910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F4FD87-CE76-4C2F-9211-E06D13D63910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F4FD87-CE76-4C2F-9211-E06D13D63910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F4FD87-CE76-4C2F-9211-E06D13D63910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE782035-27E7-4736-9172-9316D1CB844E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE782035-27E7-4736-9172-9316D1CB844E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE782035-27E7-4736-9172-9316D1CB844E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE782035-27E7-4736-9172-9316D1CB844E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516D4CD0-87EB-48B3-A286-759FA99F0FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516D4CD0-87EB-48B3-A286-759FA99F0FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516D4CD0-87EB-48B3-A286-759FA99F0FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516D4CD0-87EB-48B3-A286-759FA99F0FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF62A8E-04F1-4532-9EEE-73EB17F81780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF62A8E-04F1-4532-9EEE-73EB17F81780}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF62A8E-04F1-4532-9EEE-73EB17F81780}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF62A8E-04F1-4532-9EEE-73EB17F81780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +178,12 @@ Global
 		{7CA6F3EE-4398-4AFD-960D-475600CB1ECB} = {09655B89-9208-47C5-9167-DAC154BB94C3}
 		{6BF2168C-BFCA-41F0-9D50-23C4E68CE88B} = {7CA6F3EE-4398-4AFD-960D-475600CB1ECB}
 		{F93C0F1D-ECB5-4ADB-9EB2-14C50ECAC456} = {7CA6F3EE-4398-4AFD-960D-475600CB1ECB}
+		{B6F4FD87-CE76-4C2F-9211-E06D13D63910} = {A48BD293-C779-4425-89DC-E506A1207C3C}
+		{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F} = {96AED244-388B-44C7-9016-701E9B4F5F4B}
+		{DE782035-27E7-4736-9172-9316D1CB844E} = {12029614-9E99-4399-806A-139F068384E0}
+		{516D4CD0-87EB-48B3-A286-759FA99F0FF3} = {29006F95-A24E-4946-913A-72375029795E}
+		{EEF62A8E-04F1-4532-9EEE-73EB17F81780} = {7CA6F3EE-4398-4AFD-960D-475600CB1ECB}
+		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3} = {3726D6EF-D89F-4AEA-A678-CFBC89890180}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2D11451-0DF7-4384-9CB9-F8C1B4777FCF}

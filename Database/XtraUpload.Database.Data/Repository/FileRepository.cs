@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Database.Data.Common;
@@ -55,7 +56,7 @@ namespace XtraUpload.Database.Data
             var query = _context.Files
                             .Include(s => s.User)
                             .Where(searchCriteria)
-                            .OrderBy(s => s.CreatedAt)
+                            .OrderByDescending(s => s.CreatedAt)
                             .Skip(model.PageIndex * model.PageSize)
                             .Take(model.PageSize)
                             .Select(s => new FileItemExtended()
@@ -72,12 +73,12 @@ namespace XtraUpload.Database.Data
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<FileItem>> GetExpiredFiles()
+        public async Task<IEnumerable<FileItem>> GetExpiredFiles(CancellationToken cancellationToken)
         {
             List<RoleClaim> rcList = await _context.RoleClaims
                                     .Where(s => s.ClaimType == XtraUploadClaims.FileExpiration.ToString())
                                     .Where(s => s.ClaimValue != "0")
-                                    .ToListAsync();
+                                    .ToListAsync(cancellationToken);
 
             List<FileItem> expiredFiles = new List<FileItem>();
             rcList.ForEach(userGroup =>

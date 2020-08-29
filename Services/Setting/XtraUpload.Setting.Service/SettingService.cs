@@ -13,6 +13,7 @@ using XtraUpload.Domain.Infra;
 using XtraUpload.Email.Service.Common;
 using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
+using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.Setting.Service
 {

@@ -13,7 +13,7 @@ using tusdotnet.Models.Configuration;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.WebApp.Common;
+using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service
 {

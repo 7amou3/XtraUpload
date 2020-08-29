@@ -98,7 +98,7 @@ namespace XtraUpload.Database.Data
             var query = _context.Users
                                .Include(s => s.Role)
                                .Where(searchCriteria)
-                               .OrderBy(s => s.CreatedAt)
+                               .OrderByDescending(s => s.CreatedAt)
                                .Skip(model.PageIndex * model.PageSize)
                                .Take(model.PageSize)
                                .Select(s => new UserExtended()

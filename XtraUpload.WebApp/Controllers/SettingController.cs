@@ -7,6 +7,7 @@ using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
+using XtraUpload.Authentication.Service.Common;
 
 namespace XtraUpload.WebApp.Controllers
 {

@@ -3,9 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using XtraUpload.Domain.Infra;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Authentication.Service.Common
 {
     /// <summary>
     /// Jwt Configuration option

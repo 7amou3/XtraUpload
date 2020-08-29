@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
@@ -13,6 +14,6 @@ namespace XtraUpload.Database.Data.Common
         Task<IEnumerable<ItemCountResult>> FilesCountByDateRange(DateTime start, DateTime end);
         Task<IEnumerable<FileTypesCountResult>> FileTypesByDateRange(DateTime start, DateTime end);
         Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchViewModel model, Expression<Func<FileItem, bool>> searchCriteria);
-        Task<IEnumerable<FileItem>> GetExpiredFiles();
+        Task<IEnumerable<FileItem>> GetExpiredFiles(CancellationToken cancellationToken);
     }
 }

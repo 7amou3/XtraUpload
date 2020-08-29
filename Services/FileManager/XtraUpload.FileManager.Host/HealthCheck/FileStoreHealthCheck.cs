@@ -1,16 +1,13 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.WebApp.Common;
 using System.IO;
 using System.Security.Permissions;
 using System.Security;
+using XtraUpload.FileManager.Service.Common;
 
-namespace XtraUpload.WebApp
+namespace XtraUpload.FileManager.Host
 {
     public class FileStoreHealthCheck : IHealthCheck
     {

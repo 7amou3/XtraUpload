@@ -15,7 +15,7 @@ using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 using Microsoft.Extensions.Options;
-using XtraUpload.WebApp.Common;
+using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service
 {

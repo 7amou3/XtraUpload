@@ -8,7 +8,7 @@ using tusdotnet.Models;
 using tusdotnet.Models.Expiration;
 using XtraUpload.FileManager.Service;
 
-namespace XtraUpload.WebApp
+namespace XtraUpload.FileManager.Host
 {
     /// <summary>
     /// A background job used to remove expired non completed/aborted files from the store
@@ -36,8 +36,8 @@ namespace XtraUpload.WebApp
                 return;
             }
 
-            await RunCleanup(cancellationToken);
-            _timer = new Timer(async (e) => await RunCleanup((CancellationToken)e), cancellationToken, TimeSpan.Zero, _expiration.Timeout);
+            // await RunCleanup(cancellationToken);
+            _timer = new Timer(RunCleanup, cancellationToken, int.Parse(_expiration.Timeout.TotalMilliseconds.ToString()), Timeout.Infinite);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -46,17 +46,25 @@ namespace XtraUpload.WebApp
             return Task.CompletedTask;
         }
 
-        private async Task RunCleanup(CancellationToken cancellationToken)
+        private async void RunCleanup(object state)
         {
             try
             {
                 _logger.LogInformation("Running cleanup job...");
-                int numberOfRemovedFiles = await _expirationStore.RemoveExpiredFilesAsync(cancellationToken);
+                int numberOfRemovedFiles = await _expirationStore.RemoveExpiredFilesAsync((CancellationToken)state);
                 _logger.LogInformation($"Removed {numberOfRemovedFiles} expired files. Scheduled to run again in {_expiration.Timeout.TotalMilliseconds} ms");
             }
             catch (Exception exc)
             {
                 _logger.LogWarning("Failed to run cleanup job: " + exc.Message);
+            }
+            finally
+            {
+                if (!((CancellationToken)state).IsCancellationRequested)
+                {
+                    // Re-schedule timer
+                    _timer.Change(int.Parse(_expiration.Timeout.TotalMilliseconds.ToString()), Timeout.Infinite);
+                }
             }
         }
 
