@@ -97,17 +97,12 @@ namespace XtraUpload.FileManager.Service
             _unitOfWork.Downloads.Add(download);
 
             // Try to save in db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.FileDownload = download;
             }
 
-            Result.FileDownload = download;
             return Result;
         }
 
@@ -139,19 +134,7 @@ namespace XtraUpload.FileManager.Service
             dResult.File.LastModified = DateTime.Now;
 
             // Try to save in db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-            }
-            //_unitOfWork.Files.SingleOrDefaultAsync(s => s.Id == dResult.File.Id);
-            //await _fileRepository.IncrementDownloadCounter(dResult.File);
-
-            return Result;
+            return await _unitOfWork.CompleteAsync(Result);
         }
 
         #endregion

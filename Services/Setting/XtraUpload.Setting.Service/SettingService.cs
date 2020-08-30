@@ -125,18 +125,9 @@ namespace XtraUpload.Setting.Service
             // Update
             user.Theme = theme;
             user.LastModified = DateTime.Now;
-            // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
 
-            return result;
+            // Save to db
+            return await _unitOfWork.CompleteAsync(result);
         }
 
         /// <summary>
@@ -167,17 +158,7 @@ namespace XtraUpload.Setting.Service
             user.LastModified = DateTime.Now;
 
             // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            return Result;
+            return await _unitOfWork.CompleteAsync(Result);
         }
 
         /// <summary>
@@ -217,18 +198,13 @@ namespace XtraUpload.Setting.Service
                 IpAdress = clientIp
             };
             _unitOfWork.ConfirmationKeys.Add(token);
-            try
+            // Save changes to db
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
+                // Send Pass recovery email 
+                _emailService.SendConfirmEmail(token, user);
             }
-            catch (Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            // Send Pass recovery email 
-            _emailService.SendConfirmEmail(token, user);
 
             return Result;
         }
@@ -262,17 +238,8 @@ namespace XtraUpload.Setting.Service
             confirmationKey.User.EmailConfirmed = true;
             confirmationKey.User.LastModified = DateTime.Now;
 
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            return Result;
+            // Save changes to db
+            return await _unitOfWork.CompleteAsync(Result);
         }
 
         /// <summary>

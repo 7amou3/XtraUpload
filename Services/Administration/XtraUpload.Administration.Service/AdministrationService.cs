@@ -178,16 +178,7 @@ namespace XtraUpload.Administration.Service
             user.LastModified = DateTime.Now;
 
             // Persist changes
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent(_ex.Message, ErrorOrigin.Server);
-                _logger.LogError(result.ErrorContent.ToString());
-            }
-            return result;
+            return await _unitOfWork.CompleteAsync(result);
         }
 
         /// <summary>
@@ -211,9 +202,10 @@ namespace XtraUpload.Administration.Service
             _unitOfWork.Files.RemoveRange(files);
 
             // Persist changes
-            try
+            result = await _unitOfWork.CompleteAsync(result);
+
+            if (result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
                 // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
                 foreach (var file in files)
                 {
@@ -225,11 +217,7 @@ namespace XtraUpload.Administration.Service
                     }
                 }
             }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent(_ex.Message, ErrorOrigin.Server);
-                _logger.LogError(result.ErrorContent.ToString());
-            }
+
             return result;
         }
 
@@ -299,17 +287,12 @@ namespace XtraUpload.Administration.Service
             _unitOfWork.FileExtensions.Add(newFileType);
 
             // Save to db
-            try
+            result = await _unitOfWork.CompleteAsync(result);
+            if (result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
+                result.FileExtension = newFileType;
             }
 
-            result.FileExtension = newFileType;
             return result;
         }
 
@@ -330,17 +313,7 @@ namespace XtraUpload.Administration.Service
             ext.Name = model.NewExt;
 
             // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            return result;
+            return await _unitOfWork.CompleteAsync(result);
         }
 
         /// <summary>
@@ -360,17 +333,7 @@ namespace XtraUpload.Administration.Service
             _unitOfWork.FileExtensions.Remove(ext);
 
             // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            return result;
+            return await _unitOfWork.CompleteAsync(result);
         }
 
         /// <summary>
@@ -382,13 +345,13 @@ namespace XtraUpload.Administration.Service
             IEnumerable<FileItem> files = await _unitOfWork.Files.FindAsync(s => ids.Contains(s.Id));
             if (files != null && files.Any())
             {
-                // remove from collection
+                // Remove from collection
                 _unitOfWork.Files.RemoveRange(files);
-                // Save to db
-                try
-                {
-                    await _unitOfWork.CompleteAsync();
 
+                // Save to db
+                result = await _unitOfWork.CompleteAsync(result);
+                if (result.State == OperationState.Success)
+                {
                     // Delete from disk (no need to queue to background thread, because Directory.Delete does not block)
                     foreach (FileItem file in files)
                     {
@@ -398,11 +361,6 @@ namespace XtraUpload.Administration.Service
                             Directory.Delete(folderPath, true);
                         }
                     }
-                }
-                catch (Exception _ex)
-                {
-                    result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                    _logger.LogError(_ex.Message);
                 }
             }
             else
@@ -486,19 +444,15 @@ namespace XtraUpload.Administration.Service
             }
 
             _unitOfWork.RoleClaims.AddRange(claims);
-            // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
 
-            result.Role = role;
-            result.Claims = claims;
+            // Save to db
+            result = await _unitOfWork.CompleteAsync(result);
+            if (result.State == OperationState.Success)
+            {
+                result.Role = role;
+                result.Claims = claims;
+            }
+            
             return result;
         }
 
@@ -583,15 +537,7 @@ namespace XtraUpload.Administration.Service
                 _unitOfWork.RoleClaims.AddRange(updatedClaims);
 
                 // Save to db
-                try
-                {
-                    await _unitOfWork.CompleteAsync();
-                }
-                catch (Exception _ex)
-                {
-                    result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                    _logger.LogError(_ex.Message);
-                }
+                result = await _unitOfWork.CompleteAsync(result);
             }
 
             result.Role = role;
@@ -619,18 +565,9 @@ namespace XtraUpload.Administration.Service
             }
 
             _unitOfWork.Roles.Remove(role);
-            // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
 
-            return result;
+            // Save to db
+            return await _unitOfWork.CompleteAsync(result);
         }
         /// <summary>
         /// Get all pages
@@ -662,17 +599,12 @@ namespace XtraUpload.Administration.Service
             _unitOfWork.Pages.Add(p);
 
             // Save to db
-            try
+            result = await _unitOfWork.CompleteAsync(result);
+            if (result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
+                result.Page = p;
             }
 
-            result.Page = p;
             return result;
         }
         /// <summary>
@@ -702,17 +634,11 @@ namespace XtraUpload.Administration.Service
             page.Url = Regex.Replace(p.Name.ToLower(), @"\s+", "_");
 
             // Save to db
-            try
+            result = await _unitOfWork.CompleteAsync(result);
+            if (result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
+                result.Page = page;
             }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            result.Page = page;
             return result;
         }
 
@@ -733,17 +659,7 @@ namespace XtraUpload.Administration.Service
             _unitOfWork.Pages.Remove(page);
 
             // Save to db
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            return result;
+            return await _unitOfWork.CompleteAsync(result);
         }
 
         private async Task<IEnumerable<ItemCountResult>> GetUploadsHistory(DateRangeViewModel range)

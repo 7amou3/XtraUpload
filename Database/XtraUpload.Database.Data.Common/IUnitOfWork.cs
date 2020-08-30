@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using XtraUpload.Domain;
 
 namespace XtraUpload.Database.Data.Common
 {
@@ -16,5 +17,6 @@ namespace XtraUpload.Database.Data.Common
         IPageRepository Pages { get; }
 
         Task<int> CompleteAsync();
+        Task<T> CompleteAsync<T>(T result) where T : OperationResult;
     }
 }

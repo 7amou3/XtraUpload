@@ -1,17 +1,21 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
+using XtraUpload.Domain;
 
 namespace XtraUpload.Database.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
         readonly ApplicationDbContext _context;
+        readonly ILogger<UnitOfWork> _logger;
 
         public UnitOfWork(ApplicationDbContext context, IUserRepository users, IRoleRepository roles, IRoleClaimsRepository roleClaims, IFileRepository files, IFolderRepository folders,
-            IDownloadRepository downloads, IConfirmationKeyRepository confirmationKeys, IFileExtensionRepository fileExtensions, IPageRepository pages)
+            IDownloadRepository downloads, IConfirmationKeyRepository confirmationKeys, IFileExtensionRepository fileExtensions, IPageRepository pages, ILogger<UnitOfWork> logger)
         {
             _context = context;
+            _logger = logger;
             Users = users;
             Roles = roles;
             RoleClaims = roleClaims;
@@ -35,14 +39,32 @@ namespace XtraUpload.Database.Data
 
         public async Task<int> CompleteAsync()
         {
+            int result;
             try
             {
-                return await _context.SaveChangesAsync();
+                result = await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                _logger.LogError(ex.Message.ToString());
+                result = -1;
             }
+
+            return result;
+        }
+        public async Task<T> CompleteAsync<T>(T result) where T: OperationResult
+        {
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                _logger.LogError(ex.Message.ToString());
+            }
+            
+            return result;
         }
 
         #region IDisposable support

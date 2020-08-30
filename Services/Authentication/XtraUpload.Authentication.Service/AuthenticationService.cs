@@ -68,17 +68,12 @@ namespace XtraUpload.Authentication.Service
             _unitOfWork.Users.Add(user);
 
             // try to save to db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State != OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
                 return Result;
             }
-
+           
             await PostRegistration(user);
 
             Result.NewUser = user;
@@ -154,17 +149,15 @@ namespace XtraUpload.Authentication.Service
                 _unitOfWork.Users.Add(userInfo);
 
                 // Try to save to db
-                try
+                Result = await _unitOfWork.CompleteAsync(Result);
+                if (Result.State == OperationState.Success)
                 {
-                    await _unitOfWork.CompleteAsync();
+                    await PostRegistration(userInfo);
                 }
-                catch (Exception _ex)
+                else
                 {
-                    Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                    _logger.LogError(_ex.Message);
+                    return Result;
                 }
-
-                await PostRegistration(userInfo);
             }
 
             // Check user is not suspended
@@ -210,18 +203,15 @@ namespace XtraUpload.Authentication.Service
             };
             // add the key to current collection
             _unitOfWork.ConfirmationKeys.Add(token);
-            try
+
+            // Save to db
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
                 // if success, send an email to the user
                 _emailService.SendPassRecovery(token, user);
             }
-            catch(Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-            
+
             return Result;
         }
 
@@ -288,17 +278,7 @@ namespace XtraUpload.Authentication.Service
             recoveryInfo.Status = RequestStatus.Completed;
 
             // Commit changes
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
-                _logger.LogError(_ex.Message);
-            }
-
-            return Result;
+            return await _unitOfWork.CompleteAsync(Result);
         }
         #endregion
 
@@ -355,14 +335,8 @@ namespace XtraUpload.Authentication.Service
             });
             // todo: send a welcome email with email confirmation request
 
-            try
-            {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-            }
+            await _unitOfWork.CompleteAsync();
+
         }
 
     }
