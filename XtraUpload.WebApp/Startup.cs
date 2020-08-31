@@ -79,19 +79,12 @@ namespace XtraUpload.WebApp
                 context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null;
                 return next.Invoke();
             });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
-            app.UseStaticFiles();
-
-            if (!env.IsDevelopment())
+            else
             {
                 app.UseSpaStaticFiles(new StaticFileOptions
                 {
@@ -101,6 +94,14 @@ namespace XtraUpload.WebApp
                     }
                 });
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             
             app.UseRouting();
