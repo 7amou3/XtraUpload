@@ -14,13 +14,11 @@ namespace XtraUpload.Authentication.Service
     {
         #region Fields
         readonly IUnitOfWork _unitOfWork;
-        readonly IEmailService _emailService;
         #endregion
 
         #region Constructor
-        public AuthenticationService(IUnitOfWork unitOfWork, IEmailService emailService)
+        public AuthenticationService(IUnitOfWork unitOfWork)
         {
-            _emailService = emailService;
             _unitOfWork = unitOfWork;
         }
         #endregion
@@ -28,51 +26,6 @@ namespace XtraUpload.Authentication.Service
         #region IAuthenticationService members
 
         
-
-        /// <summary>
-        /// Manages the lost password action
-        /// </summary>
-        public async Task<OperationResult> LostPassword(string email, string clientIp)
-        {
-            OperationResult Result = new OperationResult();
-            User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Email == email);
-
-            // Check the user exist
-            if (user == null)
-            {
-                Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
-                return Result;
-            }
-            // Check email service is up
-            HealthCheckResult health = await (_emailService as IHealthCheck).CheckHealthAsync(null);
-            if (health.Status != HealthStatus.Healthy)
-            {
-                Result.ErrorContent = new ErrorContent("Internal email server error, please check again later.", ErrorOrigin.Server);
-                return Result;
-            }
-            // Generate a password reset candidate
-            ConfirmationKey token = new ConfirmationKey()
-            {
-                Id = Helpers.GenerateUniqueId(),
-                Status = RequestStatus.InProgress,
-                GenerateAt = DateTime.Now,
-                UserId = user.Id,
-                IpAdress = clientIp
-            };
-            // add the key to current collection
-            _unitOfWork.ConfirmationKeys.Add(token);
-
-            // Save to db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                // if success, send an email to the user
-                _emailService.SendPassRecovery(token, user);
-            }
-
-            return Result;
-        }
-
         /// <summary>
         /// Gets Password recovey info by id
         /// </summary>

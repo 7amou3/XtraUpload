@@ -11,11 +11,8 @@ namespace XtraUpload.Email.Host
     {
         public static void AddEmail(this IServiceCollection services, IConfiguration config)
         {
-            // Service
-            services.AddScoped<IEmailService, EmailService>();
-
             // Health check
-            services.AddHealthChecks().AddCheck<EmailService>("Email Service");
+            services.AddHealthChecks().AddCheck<EmailHealthCheckHandler>("Email Service");
 
             // Config Options
             IConfigurationSection emailSection = config.GetSection(nameof(EmailSettings));

@@ -6,7 +6,6 @@ namespace XtraUpload.Authentication.Service.Common
 {
     public interface IAuthenticationService
     {
-        Task<OperationResult> LostPassword(string email, string clientIp);
         Task<OperationResult> CheckRecoveryInfo(string recoeryId);
         Task<OperationResult> RecoverPassword(RecoverPasswordViewModel model);
 

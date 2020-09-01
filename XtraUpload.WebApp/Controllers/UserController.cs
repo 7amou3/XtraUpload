@@ -55,7 +55,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPost("lostpassword")]
         public async Task<IActionResult> LostPassword(LostPasswordViewModel model)
         {
-            OperationResult result = await _authService.LostPassword(model.Email, Request.Host.Host);
+            OperationResult result = await _mediator.Send(new ResetPasswordCommand(model.Email, Request.Host.Host));
 
             return HandleResult(result);
         }
