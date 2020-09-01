@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using XtraUpload.Database.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using MediatR;
 
 namespace XtraUpload.Authentication.Host
 {
@@ -20,12 +21,15 @@ namespace XtraUpload.Authentication.Host
             // Registre services
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
-
+            
             // Register jwt
             ConfigureJwt(services, config);
 
             // Deserialize jwt configs from appsettings and store them for DI
             RegisterOptions(services, config);
+
+            // Add mediatr
+            services.AddMediatR(typeof(StandardLoginQueryHandler));
         }
         /// <summary>
         /// Configure jwt settings

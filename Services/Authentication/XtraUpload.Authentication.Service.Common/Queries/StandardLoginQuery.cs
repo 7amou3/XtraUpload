@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using System.ComponentModel.DataAnnotations;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Authentication.Service.Common
 {
-    public class RegistrationViewModel
+    public class StandardLoginQuery: IRequest<XuIdentityResult>
     {
-        [Required]
-        [MinLength(4)]
-        public string UserName { get; set; }
-
         [Required]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
@@ -16,5 +13,7 @@ namespace XtraUpload.WebApp.Common
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 }

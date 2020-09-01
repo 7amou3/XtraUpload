@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
@@ -12,38 +13,45 @@ namespace XtraUpload.WebApp.Controllers
     {
         readonly IMapper _mapper;
         readonly IAuthenticationService _authService;
+        readonly IMediator _mediator;
 
-        public UserController(IAuthenticationService authService, IMapper mapper)
+        public UserController(IAuthenticationService authService, IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
+            _mediator = mediator;
             _authService = authService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> CreateNewAccount(RegistrationViewModel model)
+        public async Task<IActionResult> CreateNewAccount(CreateUserViewModel cmd)
         {
-            CreateUserAccountResult result = await _authService.CreateUserAccount(model);
+            var user = new User()
+            {
+                Email = cmd.Email,
+                UserName = cmd.UserName,
+                Password = cmd.Password
+            };
+            CreateUserResult result = await _mediator.Send(new CreateUserCommand(user));
 
-            return HandleResult(result, _mapper.Map<UserDto>(result.NewUser));
+            return HandleResult(result, _mapper.Map<UserDto>(result.User));
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> StandardAuth(CredentialsViewModel credentials)
+        public async Task<IActionResult> StandardAuth(StandardLoginQuery credentials)
         {
-            XuIdentityResult result = await _authService.StandardAuth(credentials);
+            XuIdentityResult result = await _mediator.Send(credentials);
 
             return IdentityCheck(result);
         }
 
         [HttpPost("socialauth")]
-        public async Task<IActionResult> SocialAuth(SocialMediaLoginViewModel model)
+        public async Task<IActionResult> SocialAuth(SocialMediaLoginQuery model)
         {
-            XuIdentityResult result = await _authService.SocialMediaAuth(model);
+            XuIdentityResult result = await _mediator.Send(model);
 
             return IdentityCheck(result);
         }
 
-        // POST: api/lostpassword
         [HttpPost("lostpassword")]
         public async Task<IActionResult> LostPassword(LostPasswordViewModel model)
         {

@@ -25,6 +25,8 @@ using XtraUpload.Email.Host;
 using XtraUpload.Administration.Host;
 using XtraUpload.Setting.Host;
 using XtraUpload.Database.Host;
+using MediatR;
+using System.Reflection;
 
 namespace XtraUpload.WebApp
 {
@@ -56,6 +58,11 @@ namespace XtraUpload.WebApp
             // Add background worker
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddHostedService<QueuedHostedService>();
+
+            // Add mediatr
+            services.AddMediatR(
+                typeof(Startup),
+                typeof(Authentication.Host.Startup));
 
             RegisterDto(services);
 
@@ -160,8 +167,7 @@ namespace XtraUpload.WebApp
         private void RegisterDto(IServiceCollection services)
         {
             services.AddAutoMapper(cfg => {
-                cfg.CreateMap<User, RegistrationViewModel>();
-                cfg.CreateMap<User, CredentialsViewModel>();
+                cfg.CreateMap<User, StandardLoginQuery>();
                 cfg.CreateMap<User, UserDto>();
                 cfg.CreateMap<User, SearchUserDto>();
                 cfg.CreateMap<Role, RoleDto>();
@@ -175,7 +181,7 @@ namespace XtraUpload.WebApp
                 cfg.CreateMap<FilesStatsResult, FilesStatsDto>();
                 cfg.CreateMap<AccountOverviewResult, AccountOverviewDto>();
                 cfg.CreateMap<DownloadSettingResult, DownloadSettingDto>();
-                cfg.CreateMap<SocialMediaUser, SocialMediaLoginViewModel>();
+                cfg.CreateMap<SocialMediaUser, SocialMediaLoginQuery>();
                 cfg.CreateMap<JwtIssuerOptions, JwtIssuerOptionsDto>();
                 cfg.CreateMap<ReadAppSettingResult, ReadAppSettingResultDto>();
                 cfg.CreateMap<DeleteFolderResult, DeleteFolderResultDto>();
