@@ -29,11 +29,6 @@ namespace XtraUpload.Setting.Service.Common
         Task<OperationResult> UpdateTheme(Theme theme);
 
         /// <summary>
-        /// Request a confirmation email
-        /// </summary>
-        Task<OperationResult> RequestConfirmationEmail(string clienIp);
-
-        /// <summary>
         /// Confirm email based on the provided token
         /// </summary>
         Task<OperationResult> ConfirmEmail(string emailToken);

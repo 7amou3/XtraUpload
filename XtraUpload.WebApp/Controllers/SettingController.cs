@@ -8,6 +8,7 @@ using XtraUpload.Domain;
 using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.Authentication.Service.Common;
+using MediatR;
 
 namespace XtraUpload.WebApp.Controllers
 {
@@ -15,17 +16,19 @@ namespace XtraUpload.WebApp.Controllers
     public class SettingController : BaseController
     {
         readonly IMapper _mapper;
+        readonly IMediator _mediatr;
         readonly WebAppSettings _webappSettings;
         readonly SocialAuthSettings _socialSettings;
         readonly ISettingService _settingService;
 
         public SettingController(ISettingService settingService, IOptionsMonitor<SocialAuthSettings> socialSettings,
-            IOptionsMonitor<WebAppSettings> webappSettings, IMapper mapper)
+            IOptionsMonitor<WebAppSettings> webappSettings, IMapper mapper, IMediator mediatr)
         {
             _mapper = mapper;
             _settingService = settingService;
             _webappSettings = webappSettings.CurrentValue;
             _socialSettings = socialSettings.CurrentValue;
+            _mediatr = mediatr;
         }
 
         [HttpGet("uploadsetting")]
@@ -62,7 +65,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("confirmemail")]
         public async Task<IActionResult> ConfirmEmail()
         {
-            OperationResult result = await _settingService.RequestConfirmationEmail(Request.Host.Host);
+            OperationResult result = await _mediatr.Send(new RequestConfirmationEmailCommand(Request.Host.Host));
 
             return HandleResult(result);
         }

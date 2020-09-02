@@ -22,15 +22,13 @@ namespace XtraUpload.Setting.Service
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
         readonly UploadOptions _uploadOpt;
-        readonly IEmailService _emailService; 
         readonly ILogger<SettingService> _logger;
 
         #region Constructor
-        public SettingService(IEmailService emailService, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IOptions<UploadOptions> uploadOpt,
+        public SettingService( IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IOptions<UploadOptions> uploadOpt,
             ILogger<SettingService> logger)
         {
             _logger = logger;
-            _emailService = emailService;
             _uploadOpt = uploadOpt.Value;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
@@ -161,53 +159,7 @@ namespace XtraUpload.Setting.Service
             return await _unitOfWork.CompleteAsync(Result);
         }
 
-        /// <summary>
-        /// Request a confirmation email
-        /// </summary>
-        public async Task<OperationResult> RequestConfirmationEmail(string clientIp)
-        {
-            string userId = _caller.GetUserId();
-            OperationResult Result = new OperationResult();
-            User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == userId);
-            // Check user exist
-            if (user == null)
-            {
-                Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
-                return Result;
-            }
-            // Check email service is up
-            HealthCheckResult health = await (_emailService as IHealthCheck).CheckHealthAsync(null);
-            if (health.Status != HealthStatus.Healthy)
-            {
-                Result.ErrorContent = new ErrorContent("Internal email server error, please check again later.", ErrorOrigin.Server);
-                return Result;
-            }
-            // Check email confirmation status
-            if (user.EmailConfirmed)
-            {
-                Result.ErrorContent = new ErrorContent("The email has been already confirmed.", ErrorOrigin.Client);
-                return Result;
-            }
-            // Create and store a mail confirmation token
-            ConfirmationKey token = new ConfirmationKey()
-            {
-                Id = Helpers.GenerateUniqueId(),
-                GenerateAt = DateTime.Now,
-                Status = RequestStatus.InProgress,
-                UserId = userId,
-                IpAdress = clientIp
-            };
-            _unitOfWork.ConfirmationKeys.Add(token);
-            // Save changes to db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                // Send Pass recovery email 
-                _emailService.SendConfirmEmail(token, user);
-            }
-
-            return Result;
-        }
+        
 
         /// <summary>
         /// Confirm email based on the provided token
