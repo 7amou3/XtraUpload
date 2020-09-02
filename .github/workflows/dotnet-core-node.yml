@@ -2,9 +2,9 @@
 name: Build pipelines
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ dev ]
 
 jobs:
   job_1:
@@ -18,7 +18,7 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install .Net dependencies
       run: dotnet restore
-     - name: Build Release
+    - name: Build Release
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
