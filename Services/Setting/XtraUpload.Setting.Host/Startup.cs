@@ -3,6 +3,7 @@ using XtraUpload.Setting.Service;
 using XtraUpload.Setting.Service.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MediatR;
 
 namespace XtraUpload.Setting.Host
 {
@@ -18,6 +19,9 @@ namespace XtraUpload.Setting.Host
             services.AddHealthChecks()
                 .AddCheck<MemoryHealthCheck>("Memory")
                 .AddCheck<StorageHealthCheck>("Storage Space");
+
+            // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
+            services.AddMediatR(typeof(RequestConfirmationEmailCommandHandler));
 
             // config options
             RegisterOptions(services, config);

@@ -18,4 +18,13 @@
     <ProjectReference Include="..\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EmailTemplates\ConfirmEmail.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailTemplates\ResetPassword.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

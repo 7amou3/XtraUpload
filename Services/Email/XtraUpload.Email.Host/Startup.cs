@@ -18,7 +18,7 @@ namespace XtraUpload.Email.Host
             IConfigurationSection emailSection = config.GetSection(nameof(EmailSettings));
             services.Configure<EmailSettings>(emailSection);
 
-            // Add mediatr
+            // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
             services.AddMediatR(typeof(UserCreatedNotificationHandler));
         }
     }

@@ -28,7 +28,7 @@ namespace XtraUpload.Authentication.Host
             // Deserialize jwt configs from appsettings and store them for DI
             RegisterOptions(services, config);
 
-            // Add mediatr
+            // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
             services.AddMediatR(typeof(StandardLoginQueryHandler));
         }
         /// <summary>

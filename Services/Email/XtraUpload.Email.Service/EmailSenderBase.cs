@@ -5,6 +5,7 @@ using MimeKit;
 using MimeKit.Text;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
@@ -79,9 +80,9 @@ namespace XtraUpload.Email.Service
 
         protected string GetTemplatePath(string templateName)
         {
-            string assemblyName = typeof(EmailSenderBase).Assembly.GetName().Name;
-            string baseDirectory = Path.GetDirectoryName(Environment.CurrentDirectory);
-            string templatePath = Path.Combine(baseDirectory, "Services", assemblyName, "Templates", templateName);
+            var dirPath = Assembly.GetExecutingAssembly().Location;
+            dirPath = Path.GetDirectoryName(dirPath);
+            string templatePath = Path.GetFullPath(Path.Combine(dirPath, "EmailTemplates", templateName));
 
             if (!File.Exists(templatePath))
             {

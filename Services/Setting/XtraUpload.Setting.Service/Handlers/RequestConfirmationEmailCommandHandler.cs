@@ -11,7 +11,7 @@ using XtraUpload.Domain.Infra;
 using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
 
-namespace XtraUpload.Setting.Service.Handlers
+namespace XtraUpload.Setting.Service
 {
     /// <summary>
     /// Process the command when a user request to confirm his email

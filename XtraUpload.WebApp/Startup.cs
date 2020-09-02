@@ -62,6 +62,7 @@ namespace XtraUpload.WebApp
             // Add mediatr
             services.AddMediatR(
                 typeof(Startup),
+                typeof(Setting.Host.Startup),
                 typeof(Authentication.Host.Startup));
 
             RegisterDto(services);

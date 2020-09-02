@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using MailKit.Net.Smtp;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using XtraUpload.Email.Service.Common;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -13,11 +14,13 @@ namespace XtraUpload.Email.Service
     {
         #region Fields
         readonly EmailSettings _emailSetting;
+        readonly ILogger<EmailHealthCheckHandler> _logger;
         #endregion
 
         #region Constructor
-        public EmailHealthCheckHandler(IOptionsMonitor<EmailSettings> emailSetting)
+        public EmailHealthCheckHandler(IOptionsMonitor<EmailSettings> emailSetting, ILogger<EmailHealthCheckHandler> logger)
         {
+            _logger = logger;
             _emailSetting = emailSetting.CurrentValue;
         }
         #endregion
@@ -50,8 +53,9 @@ namespace XtraUpload.Email.Service
                 return Task.FromResult(HealthCheckResult.Healthy());
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 // Do not return the exception message, it may carry account sensitive data..
                 return Task.FromResult(HealthCheckResult.Degraded("Cannot connect to the mail server, please check your mail configuratoin."));
             }
