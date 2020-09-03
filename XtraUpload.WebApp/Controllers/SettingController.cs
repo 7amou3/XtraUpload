@@ -34,7 +34,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("uploadsetting")]
         public async Task<IActionResult> UploadSetting()
         {
-            UploadSettingResult Result = await _settingService.UploadSetting();
+            UploadSettingResult Result = await _mediatr.Send(new GetUploadSettingQuery());
 
             return HandleResult(Result);
         }
@@ -42,7 +42,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("accountoverview")]
         public async Task<IActionResult> AccountOverview()
         {
-            AccountOverviewResult Result = await _settingService.AccountOverview();
+            AccountOverviewResult Result = await _mediatr.Send(new GetAccountOverviewQuery());
 
             return HandleResult(Result, _mapper.Map<AccountOverviewDto>(Result));
         }

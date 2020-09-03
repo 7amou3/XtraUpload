@@ -9,16 +9,6 @@ namespace XtraUpload.Setting.Service.Common
     public interface ISettingService
     {
         /// <summary>
-        /// User account overview
-        /// </summary>
-        Task<AccountOverviewResult> AccountOverview();
-
-        /// <summary>
-        /// Upload Settings
-        /// </summary>
-        Task<UploadSettingResult> UploadSetting();
-
-        /// <summary>
         /// Updates a user password
         /// </summary>
         Task<UpdatePasswordResult> UpdatePassword(UpdatePassword model);

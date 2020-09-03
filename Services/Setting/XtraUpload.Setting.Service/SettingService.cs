@@ -21,15 +21,10 @@ namespace XtraUpload.Setting.Service
     {
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
-        readonly UploadOptions _uploadOpt;
-        readonly ILogger<SettingService> _logger;
 
         #region Constructor
-        public SettingService( IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IOptions<UploadOptions> uploadOpt,
-            ILogger<SettingService> logger)
+        public SettingService( IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
-            _uploadOpt = uploadOpt.Value;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -37,74 +32,6 @@ namespace XtraUpload.Setting.Service
 
         #region ISettingService members
 
-        /// <summary>
-        /// Get the upload setting for the connected user
-        /// </summary>
-        public async Task<UploadSettingResult> UploadSetting()
-        {
-            string userId = _caller.GetUserId();
-
-            UploadSettingResult Result = new UploadSettingResult();
-            try
-            {
-                var extensions = await _unitOfWork.FileExtensions.GetAll();
-                Result.UsedSpace = await _unitOfWork.Files.SumAsync(s => s.UserId == userId, s => s.Size);
-                Result.StorageSpace = double.Parse(_caller.Claims.Single(c => c.Type == "StorageSpace").Value);
-                Result.ConcurrentUpload = int.Parse(_caller.Claims.Single(c => c.Type == "ConcurrentUpload").Value);
-                Result.MaxFileSize = int.Parse(_caller.Claims.Single(c => c.Type == "MaxFileSize").Value);
-                Result.ChunkSize = _uploadOpt.ChunkSize * 1024 * 1024;
-                Result.FileExtensions = string.Join(", ", extensions.Select(s => s.Name));
-            }
-            catch (Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent(_ex.Message, ErrorOrigin.Server);
-                #region Trace
-                _logger.LogError(_ex.Message);
-                #endregion
-            }
-
-            return Result;
-        }
-
-        /// <summary>
-        /// User account overview
-        /// </summary>
-        public async Task<AccountOverviewResult> AccountOverview()
-        {
-            string userId = _caller.GetUserId();
-
-            AccountOverviewResult Result = new AccountOverviewResult
-            {
-                // Read the download setting from jwt token
-                DownloadSetting = new DownloadSettingResult()
-                {
-                    DownloadSpeed = int.Parse(_caller.Claims.Single(c => c.Type == "DownloadSpeed").Value) * 1024,
-                    DownloadTTW = int.Parse(_caller.Claims.Single(c => c.Type == "DownloadTTW").Value),
-                    FileExpiration = int.Parse(_caller.Claims.Single(c => c.Type == "FileExpiration").Value),
-                    TimeToWait = int.Parse(_caller.Claims.Single(c => c.Type == "WaitTime").Value),
-                },
-
-                // Get the upload settings
-                UploadSetting = await UploadSetting()
-            };
-            if (Result.UploadSetting.State != OperationState.Success)
-            {
-                Result = OperationResult.CopyResult<AccountOverviewResult>(Result.UploadSetting);
-                return Result;
-            }
-
-            // Get the files stats
-            Result.FilesStats = new FilesStatsResult()
-            {
-                TotalDownloads = await _unitOfWork.Files.SumAsync(s => s.UserId == userId, s => s.DownloadCount),
-                TotalFiles = await _unitOfWork.Files.CountAsync(s => s.UserId == userId)
-            };
-
-            // Get user info
-            Result.User = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == userId);
-            
-            return Result;
-        }
 
         /// <summary>
         /// Update the user theme
