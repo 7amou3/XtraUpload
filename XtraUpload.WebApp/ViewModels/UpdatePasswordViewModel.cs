@@ -6,11 +6,9 @@ namespace XtraUpload.WebApp
     {
         [Required]
         [MinLength(6)]
-        public string NewPassword { get; set; }
-
+        public string OldPassword { get; set; }
         [Required]
         [MinLength(6)]
-        [RegularExpression("^[a-zA-Z0-9]*$")]
-        public string RecoveryKey { get; set; }
+        public string NewPassword { get; set; }
     }
 }

@@ -12,7 +12,6 @@ namespace XtraUpload.Setting.Host
         public static void AddXtraUploadSetting(this IServiceCollection services, IConfiguration config)
         {
             // Register services
-            services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<IAppSettingsService, AppSettingsService>();
 
             // Health check

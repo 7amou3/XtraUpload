@@ -14,21 +14,21 @@ namespace XtraUpload.Authentication.Service
     /// <summary>
     /// Update the password based on the provided token
     /// </summary>
-    public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordCommand, OperationResult>
+    public class ValidatePwdTokenCommandHandler : IRequestHandler<ValidatePwdTokenCommand, OperationResult>
     {
         #region Fields
         readonly IUnitOfWork _unitOfWork;
         #endregion
 
         #region Constructor
-        public UpdatePasswordCommandHandler(IUnitOfWork unitOfWork)
+        public ValidatePwdTokenCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         #endregion
 
         #region Handler
-        public async Task<OperationResult> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(ValidatePwdTokenCommand request, CancellationToken cancellationToken)
         {
             OperationResult Result = new OperationResult();
             ConfirmationKey recoveryInfo = await _unitOfWork.ConfirmationKeys.FirstOrDefaultAsync(s => s.Id == request.RecoveryKey);

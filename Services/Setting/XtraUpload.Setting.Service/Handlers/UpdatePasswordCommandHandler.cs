@@ -1,41 +1,34 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
-using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.Administration.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.Email.Service.Common;
-using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
-using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.Setting.Service
 {
-    public class SettingService: ISettingService
+    public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordCommand, UpdatePasswordResult>
     {
-        readonly IUnitOfWork _unitOfWork;
+        #region Fields
         readonly ClaimsPrincipal _caller;
+        readonly IUnitOfWork _unitOfWork;
+        #endregion
 
         #region Constructor
-        public SettingService( IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public UpdatePasswordCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
         #endregion
 
-        #region ISettingService members
+        #region Hnadler
 
-        /// <summary>
-        /// Updates a user password
-        /// </summary>
-        public async Task<UpdatePasswordResult> UpdatePassword(UpdatePassword model)
+        public async Task<UpdatePasswordResult> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
         {
             string userId = _caller.GetUserId();
             UpdatePasswordResult Result = new UpdatePasswordResult();
@@ -49,22 +42,19 @@ namespace XtraUpload.Setting.Service
             }
 
             // Check password match
-            if (!Helpers.CheckPassword(model.OldPassword, user.Password))
+            if (!Helpers.CheckPassword(request.OldPassword, user.Password))
             {
                 Result.ErrorContent = new ErrorContent("Your current password is incorrect.", ErrorOrigin.Client);
                 return Result;
             }
 
             // Update the password in the collection
-            user.PasswordHash = Helpers.HashPassword(model.NewPassword);
+            user.Password = Helpers.HashPassword(request.NewPassword);
             user.LastModified = DateTime.Now;
 
             // Save to db
             return await _unitOfWork.CompleteAsync(Result);
         }
-
-       
         #endregion
-
     }
 }

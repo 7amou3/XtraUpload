@@ -3,9 +3,9 @@ using XtraUpload.Domain;
 
 namespace XtraUpload.Authentication.Service.Common
 {
-    public class UpdatePasswordCommand : IRequest<OperationResult>
+    public class ValidatePwdTokenCommand : IRequest<OperationResult>
     {
-        public UpdatePasswordCommand(string newPassword, string recoveryKey)
+        public ValidatePwdTokenCommand(string newPassword, string recoveryKey)
         {
             NewPassword = newPassword;
             RecoveryKey = recoveryKey;

@@ -19,13 +19,11 @@ namespace XtraUpload.WebApp.Controllers
         readonly IMediator _mediatr;
         readonly WebAppSettings _webappSettings;
         readonly SocialAuthSettings _socialSettings;
-        readonly ISettingService _settingService;
 
-        public SettingController(ISettingService settingService, IOptionsMonitor<SocialAuthSettings> socialSettings,
+        public SettingController(IOptionsMonitor<SocialAuthSettings> socialSettings,
             IOptionsMonitor<WebAppSettings> webappSettings, IMapper mapper, IMediator mediatr)
         {
             _mapper = mapper;
-            _settingService = settingService;
             _webappSettings = webappSettings.CurrentValue;
             _socialSettings = socialSettings.CurrentValue;
             _mediatr = mediatr;
@@ -48,9 +46,9 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPatch("password")]
-        public async Task<IActionResult> UpdatePassword(UpdatePassword model)
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model)
         {
-            UpdatePasswordResult result = await _settingService.UpdatePassword(model);
+            UpdatePasswordResult result = await _mediatr.Send(new UpdatePasswordCommand(model.OldPassword, model.NewPassword));
 
             return HandleResult(result);
         }
