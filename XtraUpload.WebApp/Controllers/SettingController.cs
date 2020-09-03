@@ -56,10 +56,11 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPatch("theme")]
-        public async Task<IActionResult> UpdateTheme(ThemeModel model)
+        public async Task<IActionResult> UpdateTheme(UpdateThemeCommand cmd)
         {
-            await _settingService.UpdateTheme(model.Theme);
-            return Ok();
+            OperationResult result = await _mediatr.Send(cmd);
+
+            return HandleResult(result);
         }
 
         [HttpGet("confirmemail")]

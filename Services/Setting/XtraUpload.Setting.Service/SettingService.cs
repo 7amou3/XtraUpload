@@ -32,29 +32,6 @@ namespace XtraUpload.Setting.Service
 
         #region ISettingService members
 
-
-        /// <summary>
-        /// Update the user theme
-        /// </summary>
-        public async Task<OperationResult> UpdateTheme(Theme theme)
-        {
-            string userId = _caller.GetUserId();
-            OperationResult result = new OperationResult();
-            User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == userId);
-            // Check user exist
-            if (user == null)
-            {
-                result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
-                return result;
-            }
-            // Update
-            user.Theme = theme;
-            user.LastModified = DateTime.Now;
-
-            // Save to db
-            return await _unitOfWork.CompleteAsync(result);
-        }
-
         /// <summary>
         /// Updates a user password
         /// </summary>
@@ -85,8 +62,6 @@ namespace XtraUpload.Setting.Service
             // Save to db
             return await _unitOfWork.CompleteAsync(Result);
         }
-
-        
 
         /// <summary>
         /// Confirm email based on the provided token

@@ -14,11 +14,6 @@ namespace XtraUpload.Setting.Service.Common
         Task<UpdatePasswordResult> UpdatePassword(UpdatePassword model);
 
         /// <summary>
-        /// Update the user theme
-        /// </summary>
-        Task<OperationResult> UpdateTheme(Theme theme);
-
-        /// <summary>
         /// Confirm email based on the provided token
         /// </summary>
         Task<OperationResult> ConfirmEmail(string emailToken);
