@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
@@ -53,19 +52,13 @@ namespace XtraUpload.FileManager.Service
             };
             _unitOfWork.Folders.Add(newFolder);
 
-            CreateFolderResult Result = new CreateFolderResult();
-
-            try
+            // Save to db
+            var Result = await _unitOfWork.CompleteAsync(new CreateFolderResult());
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.Folder = newFolder;
             }
 
-            Result.Folder = newFolder;
             return Result;
         }
 
@@ -220,17 +213,12 @@ namespace XtraUpload.FileManager.Service
             file.LastModified = DateTime.Now;
 
             // Try to save in db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.File = file;
             }
 
-            Result.File = file;
             return Result;
         }
 
@@ -256,17 +244,12 @@ namespace XtraUpload.FileManager.Service
             folder.LastModified = DateTime.Now;
 
             // Try to save in db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.Folder = folder;
             }
 
-            Result.Folder = folder;
             return Result;
         }
 
@@ -290,17 +273,12 @@ namespace XtraUpload.FileManager.Service
             file.LastModified = DateTime.Now;
 
             // Try to save to db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.File = file;
             }
 
-            Result.File = file;
             return Result;
         }
 
@@ -324,17 +302,12 @@ namespace XtraUpload.FileManager.Service
             folder.LastModified = DateTime.Now;
 
             // Try to save to db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.Folder = folder;
             }
 
-            Result.Folder = folder;
             return Result;
         }
 
@@ -356,25 +329,20 @@ namespace XtraUpload.FileManager.Service
             // Remove file from collection
             _unitOfWork.Files.Remove(file);
 
-            try
+            // Save to db
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                // Delete from db
-                await _unitOfWork.CompleteAsync();
-
                 // Delete from disk (no need to queue to background thread, because Directory.Delete does not block)
                 string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
                 if (Directory.Exists(folderPath))
                 {
                     Directory.Delete(folderPath, true);
-                }  
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                }
+                // Append new data
+                Result.File = file;
             }
 
-            Result.File = file;
             return Result;
         }
 
@@ -409,11 +377,10 @@ namespace XtraUpload.FileManager.Service
             _unitOfWork.Folders.RemoveRange(folders);
             _unitOfWork.Files.RemoveRange(files);
 
-            try
+            // Persist changes
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                // Persist changes
-                await _unitOfWork.CompleteAsync();
-
                 // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
                 foreach (var file in files)
                 {
@@ -424,15 +391,11 @@ namespace XtraUpload.FileManager.Service
                         Directory.Delete(folderPath, true);
                     }
                 }
-            }
-            catch (Exception _ex)
-            {
-                Result.ErrorContent = new ErrorContent(_ex.Message, ErrorOrigin.Server);
-                _logger.LogError(Result.ErrorContent.ToString());
+                // Append new data
+                Result.Folders = folders;
+                Result.Files = files;
             }
 
-            Result.Folders = folders;
-            Result.Files = files;
             return Result;
         }
 
@@ -462,11 +425,10 @@ namespace XtraUpload.FileManager.Service
                 }
             }
 
-            try
+            // Persist changes
+            result = await _unitOfWork.CompleteAsync(result);
+            if (result.State == OperationState.Success)
             {
-                // Persist changes
-                await _unitOfWork.CompleteAsync();
-
                 // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
                 foreach (var file in files)
                 {
@@ -477,15 +439,11 @@ namespace XtraUpload.FileManager.Service
                         Directory.Delete(folderPath, true);
                     }
                 }
-            }
-            catch (Exception _ex)
-            {
-                result.ErrorContent = new ErrorContent(_ex.Message, ErrorOrigin.Server);
-                _logger.LogError(result.ErrorContent.ToString());
+                // Append new data
+                result.Folders = folders;
+                result.Files = files;
             }
 
-            result.Folders = folders;
-            result.Files = files;
             return result;
         }
 
@@ -576,22 +534,16 @@ namespace XtraUpload.FileManager.Service
                     movedIds.Add(file.Id);
                 }
             }
-            
+
             // Try to save to db
-            try
+            Result = await _unitOfWork.CompleteAsync(Result);
+            if (Result.State == OperationState.Success)
             {
-                await _unitOfWork.CompleteAsync();
-                
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                Result.ErrorContent = new ErrorContent("Unknown error occured, please try again", ErrorOrigin.Server);
+                Result.MovedItemsIds = movedIds;
+                // Get the new folder structure
+                Result.Folders = await _unitOfWork.Folders.FindAsync(f => f.UserId == userId);
             }
 
-            Result.MovedItemsIds = movedIds;
-            // Get the new folder structure
-            Result.Folders = await _unitOfWork.Folders.FindAsync(f => f.UserId == userId);
             return Result;
         }
 

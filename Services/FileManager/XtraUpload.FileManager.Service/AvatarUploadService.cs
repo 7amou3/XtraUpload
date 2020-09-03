@@ -13,7 +13,7 @@ using tusdotnet.Models.Configuration;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.WebApp.Common;
+using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service
 {
@@ -54,15 +54,7 @@ namespace XtraUpload.FileManager.Service
                 var request = ctx.HttpContext.Request;
                 user.LastModified = DateTime.Now;
                 user.Avatar = request.Scheme + "://" + request.Host.ToString() + "/api/file/avatar/" + user.Id;
-                try
-                {
-                    await unitOfWork.CompleteAsync();
-                }
-                catch (Exception _ex)
-                {
-                    _logger.LogError(_ex.Message);
-                    throw new Exception("Unhandled exception thrown.");
-                }
+                await unitOfWork.CompleteAsync();
             }
         }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using XtraUpload.Domain;
+﻿using XtraUpload.Domain;
 
 namespace XtraUpload.Database.Data.Common
 {

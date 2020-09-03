@@ -2,9 +2,9 @@
 name: Build pipelines
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ dev ]
 
 jobs:
   job_1:

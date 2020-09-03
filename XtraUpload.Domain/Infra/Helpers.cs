@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -160,7 +164,22 @@ namespace XtraUpload.Domain.Infra
 
             return folders;
         }
+        /// <summary>
+        /// Extension method, allows to register config sections as writable
+        /// </summary>
+        public static void ConfigureWritable<T>(this IServiceCollection services, IConfigurationSection section, string file = "appsettings.json") where T : class, new()
+        {
+            services.Configure<T>(section);
+            services.AddTransient<IWritableOptions<T>>(provider =>
+            {
+                var environment = provider.GetService<IHostingEnvironment>();
+                var options = provider.GetService<IOptionsMonitor<T>>();
+                return new WritableOptions<T>(environment.ContentRootFileProvider, options, section.Key, file);
+            });
+        }
+
     }
+
     /// <summary>
     /// TimeSpans are not serialized consistently depending on what properties are present. So this 
     /// serializer will ensure the format is maintained no matter what.

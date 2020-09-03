@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
-using XtraUpload.WebApp.Filters;
+using XtraUpload.FileManager.Service.Common;
+using XtraUpload.Email.Service.Common;
+using MediatR;
 
 namespace XtraUpload.WebApp.Controllers
 {
@@ -18,14 +18,14 @@ namespace XtraUpload.WebApp.Controllers
     public class AdminController : BaseController
     {
         readonly IMapper _mapper;
+        readonly IMediator _mediatr;
         readonly IAdministrationService _administration;
-        readonly IAppSettingsService _appSettingsService;
 
-        public AdminController(IAdministrationService administration, IAppSettingsService appSettingsService, IMapper mapper)
+        public AdminController(IAdministrationService administration, IMediator mediatr, IMapper mapper)
         {
             _mapper = mapper;
+            _mediatr = mediatr;
             _administration = administration;
-            _appSettingsService = appSettingsService;
         }
 
         [HttpGet("overview")]
@@ -171,9 +171,9 @@ namespace XtraUpload.WebApp.Controllers
             return HandleResult(result);
         }
         [HttpGet("appsettings")]
-        public IActionResult GetAppSettings()
+        public async Task<IActionResult> GetAppSettings()
         {
-            ReadAppSettingResult result = _appSettingsService.ReadAppSetting();
+            ReadAppSettingResult result = await _mediatr.Send(new GetAppSettingsQuery());
 
             return HandleResult(result, _mapper.Map<ReadAppSettingResultDto>(result));
         }
@@ -181,7 +181,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("jwtOptions")]
         public async Task<IActionResult> UpdateJwtOptions(JwtIssuerOptions model)
         {
-            OperationResult result = await _appSettingsService.UpdateSection(model);
+            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
             return HandleResult(result);
         }
@@ -189,35 +189,35 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("uploadOptions")]
         public async Task<IActionResult> UpdateUploadOptions(UploadOptions model)
         {
-            OperationResult result = await _appSettingsService.UpdateSection(model);
+            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
             return HandleResult(result);
         }
         [HttpPatch("emailOptions")]
         public async Task<IActionResult> UpdateEmailOptions(EmailSettings model)
         {
-            OperationResult result = await _appSettingsService.UpdateSection(model);
+            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
             return HandleResult(result);
         }
         [HttpPatch("hardwareOptions")]
         public async Task<IActionResult> UpdateHardwareOpts(HardwareCheckOptions model)
         {
-            OperationResult result = await _appSettingsService.UpdateSection(model);
+            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
             return HandleResult(result);
         }
         [HttpPatch("appSettings")]
         public async Task<IActionResult> UpdateAppSettings(WebAppSettings model)
         {
-            OperationResult result = await _appSettingsService.UpdateSection(model);
+            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
             return HandleResult(result);
         }
         [HttpPatch("socialAuthSettings")]
         public async Task<IActionResult> UpdateSocialAuthSettings(SocialAuthSettings model)
         {
-            OperationResult result = await _appSettingsService.UpdateSection(model);
+            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
             return HandleResult(result);
         }

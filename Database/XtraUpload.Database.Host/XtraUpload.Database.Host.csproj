@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
+
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
+    <ProjectReference Include="..\XtraUpload.Database.Data\XtraUpload.Database.Data.csproj" />
+    <ProjectReference Include="..\XtraUpload.Database.Migrations\XtraUpload.Database.Migrations.csproj" />
+  </ItemGroup>
+  
+</Project>

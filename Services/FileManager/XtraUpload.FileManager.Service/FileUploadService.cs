@@ -15,7 +15,7 @@ using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 using Microsoft.Extensions.Options;
-using XtraUpload.WebApp.Common;
+using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service
 {
@@ -80,16 +80,8 @@ namespace XtraUpload.FileManager.Service
             unitOfWork.Files.Add(fileitem);
 
             // Try to save to db
-            try
-            {
-                await unitOfWork.CompleteAsync();
-            }
-            catch (Exception _ex)
-            {
-                _logger.LogError(_ex.Message);
-                throw new Exception("Unhandled exception thrown.");
-            }
-            
+            await unitOfWork.CompleteAsync();
+
             return fileitem;
         }
 
