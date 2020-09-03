@@ -63,22 +63,7 @@ namespace XtraUpload.Setting.Service
             return await _unitOfWork.CompleteAsync(Result);
         }
 
-        /// <summary>
-        /// Get a page by name
-        /// </summary>
-        public async Task<PageResult> GetPage(string pageName)
-        {
-            PageResult result = new PageResult();
-            Page page = await _unitOfWork.Pages.FirstOrDefaultAsync(s => s.Url.ToLower() == pageName);
-            if (page == null)
-            {
-                result.ErrorContent = new ErrorContent("Page not found.", ErrorOrigin.Client);
-                return result;
-            }
-
-            result.Page = page;
-            return result;
-        }
+       
         #endregion
 
     }

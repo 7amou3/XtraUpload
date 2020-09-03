@@ -13,9 +13,5 @@ namespace XtraUpload.Setting.Service.Common
         /// </summary>
         Task<UpdatePasswordResult> UpdatePassword(UpdatePassword model);
 
-        /// <summary>
-        /// Get a page by name
-        /// </summary>
-        Task<PageResult> GetPage(string pageName);
     }
 }

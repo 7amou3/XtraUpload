@@ -83,7 +83,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("page/{name:regex(^[[a-zA-Z0-9_]]*$)}")]
         public async Task<IActionResult> GetPage(string name)
         {
-            PageResult result = await _settingService.GetPage(name);
+            PageResult result = await _mediatr.Send(new GetPageQuery(name));
 
             return HandleResult(result, result.Page);
         }
