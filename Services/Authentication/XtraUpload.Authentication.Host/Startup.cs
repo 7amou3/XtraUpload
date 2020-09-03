@@ -19,7 +19,6 @@ namespace XtraUpload.Authentication.Host
         public static void AddXtraUploadAuthentication(this IServiceCollection services, IConfiguration config)
         {
             // Registre services
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
             
             // Register jwt

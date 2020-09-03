@@ -1,12 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using System.ComponentModel.DataAnnotations;
+using XtraUpload.Domain;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Authentication.Service.Common
 {
-    public class RecoverPasswordViewModel
+    public class UpdatePasswordCommand : IRequest<OperationResult>
     {
         [Required]
         [MinLength(6)]
         public string NewPassword { get; set; }
+
         [Required]
         [MinLength(6)]
         [RegularExpression("^[a-zA-Z0-9]*$")]

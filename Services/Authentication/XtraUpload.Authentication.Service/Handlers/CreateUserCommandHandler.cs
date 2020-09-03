@@ -16,17 +16,22 @@ namespace XtraUpload.Authentication.Service
     /// </summary>
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserResult>
     {
+        #region Fields
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
         readonly ILogger<CreateUserCommandHandler> _logger;
+        #endregion
 
+        #region Constructor
         public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMediator mediator, ILogger<CreateUserCommandHandler> logger)
         {
             _logger = logger;
             _mediator = mediator;
             _unitOfWork = unitOfWork;
         }
+        #endregion
 
+        #region Handler
         public async Task<CreateUserResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             CreateUserResult Result = new CreateUserResult();
@@ -75,5 +80,6 @@ namespace XtraUpload.Authentication.Service
 
             return Result;
         }
+        #endregion
     }
 }

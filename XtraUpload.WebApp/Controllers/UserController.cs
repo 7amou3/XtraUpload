@@ -12,14 +12,12 @@ namespace XtraUpload.WebApp.Controllers
     public class UserController : BaseController
     {
         readonly IMapper _mapper;
-        readonly IAuthenticationService _authService;
         readonly IMediator _mediator;
 
-        public UserController(IAuthenticationService authService, IMediator mediator, IMapper mapper)
+        public UserController(IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
             _mediator = mediator;
-            _authService = authService;
         }
 
         [HttpPost("register")]
@@ -63,15 +61,15 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("pwdrecoveryinfo/{recoveryId:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> PasswordRecoveryInfo(string recoveryId)
         {
-            OperationResult result = await _authService.CheckRecoveryInfo(recoveryId);
+            OperationResult result = await _mediator.Send(new CheckPwdRecoveryInfoQuery(recoveryId));
 
             return HandleResult(result);
         }
 
         [HttpPut("recoverPassword")]
-        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        public async Task<IActionResult> RecoverPassword(UpdatePasswordCommand model)
         {
-            OperationResult result = await _authService.RecoverPassword(model);
+            OperationResult result = await _mediator.Send(model);
 
             return HandleResult(result);
         }
@@ -87,8 +85,8 @@ namespace XtraUpload.WebApp.Controllers
             {
                 opts.AfterMap((src, dest) =>
                 { 
-                    ((UserDto)dest).JwtToken = result.JwtToken;
-                    ((UserDto)dest).Role = result.Role.RoleClaims.Any(s => s.ClaimType == XtraUploadClaims.AdminAreaAccess.ToString()) ? "Admin" : "User";
+                    dest.JwtToken = result.JwtToken;
+                    dest.Role = result.Role.RoleClaims.Any(s => s.ClaimType == XtraUploadClaims.AdminAreaAccess.ToString()) ? "Admin" : "User";
                 });
             });
             return Ok(response);
