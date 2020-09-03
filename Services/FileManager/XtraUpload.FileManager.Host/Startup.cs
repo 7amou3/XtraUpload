@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XtraUpload.FileManager.Service;
 using XtraUpload.FileManager.Service.Common;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.FileManager.Host
 {
@@ -52,6 +53,7 @@ namespace XtraUpload.FileManager.Host
             // Upload Options
             IConfigurationSection uploadSection = config.GetSection(nameof(UploadOptions));
             services.Configure<UploadOptions>(uploadSection);
+            services.ConfigureWritable<UploadOptions>(uploadSection);
         }
     }
 }

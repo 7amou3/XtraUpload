@@ -51,5 +51,5 @@ namespace XtraUpload.Domain
             await File.WriteAllTextAsync(physicalPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
         }
     }
-
+    
 }

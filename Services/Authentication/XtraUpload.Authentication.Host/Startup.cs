@@ -10,6 +10,7 @@ using XtraUpload.Database.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using MediatR;
+using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.Authentication.Host
 {
@@ -90,15 +91,19 @@ namespace XtraUpload.Authentication.Host
         /// </summary>
         private static void RegisterOptions(IServiceCollection services, IConfiguration config)
         {
-            services.Configure<JwtIssuerOptions>(config.GetSection(nameof(JwtIssuerOptions)));
+            // Jwt settings
+            IConfigurationSection jwtSection = config.GetSection(nameof(JwtIssuerOptions));
+            services.Configure<JwtIssuerOptions>(jwtSection);
             services.Configure<JwtIssuerOptions>(options =>
             {
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
+            services.ConfigureWritable<JwtIssuerOptions>(jwtSection);
 
             // Social Auth settings 
             IConfigurationSection socialAuthSection = config.GetSection(nameof(SocialAuthSettings));
             services.Configure<SocialAuthSettings>(socialAuthSection);
+            services.ConfigureWritable<SocialAuthSettings>(socialAuthSection);
         }
     }
 }

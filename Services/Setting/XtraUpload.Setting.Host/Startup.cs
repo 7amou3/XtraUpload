@@ -4,6 +4,7 @@ using XtraUpload.Setting.Service.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.Setting.Host
 {
@@ -32,12 +33,14 @@ namespace XtraUpload.Setting.Host
         private static void RegisterOptions(IServiceCollection services, IConfiguration config)
         {
             // WebApp settings
-            IConfigurationSection WebAppSection = config.GetSection(nameof(WebAppSettings));
-            services.Configure<WebAppSettings>(WebAppSection);
+            IConfigurationSection webAppSection = config.GetSection(nameof(WebAppSettings));
+            services.Configure<WebAppSettings>(webAppSection);
+            services.ConfigureWritable<WebAppSettings>(webAppSection);
 
             // Hardware Options
             IConfigurationSection hardwareSection = config.GetSection(nameof(HardwareCheckOptions));
             services.Configure<HardwareCheckOptions>(hardwareSection);
+            services.ConfigureWritable<HardwareCheckOptions>(hardwareSection);
         }
 
     }
