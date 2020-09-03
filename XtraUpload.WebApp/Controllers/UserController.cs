@@ -67,9 +67,9 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPut("recoverPassword")]
-        public async Task<IActionResult> RecoverPassword(UpdatePasswordCommand model)
+        public async Task<IActionResult> RecoverPassword(UpdatePasswordViewModel model)
         {
-            OperationResult result = await _mediator.Send(model);
+            OperationResult result = await _mediator.Send(new UpdatePasswordCommand(model.NewPassword, model.RecoveryKey));
 
             return HandleResult(result);
         }
