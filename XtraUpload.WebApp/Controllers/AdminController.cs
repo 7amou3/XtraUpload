@@ -20,14 +20,12 @@ namespace XtraUpload.WebApp.Controllers
         readonly IMapper _mapper;
         readonly IMediator _mediatr;
         readonly IAdministrationService _administration;
-        readonly IAppSettingsService _appSettingsService;
 
-        public AdminController(IAdministrationService administration, IAppSettingsService appSettingsService, IMediator mediatr, IMapper mapper)
+        public AdminController(IAdministrationService administration, IMediator mediatr, IMapper mapper)
         {
             _mapper = mapper;
             _mediatr = mediatr;
             _administration = administration;
-            _appSettingsService = appSettingsService;
         }
 
         [HttpGet("overview")]
@@ -173,9 +171,9 @@ namespace XtraUpload.WebApp.Controllers
             return HandleResult(result);
         }
         [HttpGet("appsettings")]
-        public IActionResult GetAppSettings()
+        public async Task<IActionResult> GetAppSettings()
         {
-            ReadAppSettingResult result = _appSettingsService.ReadAppSetting();
+            ReadAppSettingResult result = await _mediatr.Send(new GetAppSettingsQuery());
 
             return HandleResult(result, _mapper.Map<ReadAppSettingResultDto>(result));
         }

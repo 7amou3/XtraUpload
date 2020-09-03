@@ -1,23 +1,30 @@
-﻿using System.Threading.Tasks;
-using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
-using XtraUpload.Setting.Service.Common;
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
-using Microsoft.Extensions.Options;
-using XtraUpload.FileManager.Service.Common;
+using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
+using XtraUpload.FileManager.Service.Common;
+using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.Setting.Service
 {
-    public class AppSettingsService : IAppSettingsService
+    public class GetAppSettingsQueryHandler : IRequestHandler<GetAppSettingsQuery, ReadAppSettingResult>
     {
+        #region Fields
         readonly IWritableOptions<JwtIssuerOptions> _JwtOpts;
         readonly IWritableOptions<UploadOptions> _uploadOpts;
         readonly IWritableOptions<EmailSettings> _emailSettings;
         readonly IWritableOptions<HardwareCheckOptions> _hdOpts;
         readonly IWritableOptions<WebAppSettings> _appSettings;
         readonly IWritableOptions<SocialAuthSettings> _socialSettings;
-        public AppSettingsService(IWritableOptions<JwtIssuerOptions> jwtOpts, IWritableOptions<UploadOptions> uploadOpts,
+        #endregion
+
+        #region Constructor
+        public GetAppSettingsQueryHandler(IWritableOptions<JwtIssuerOptions> jwtOpts, IWritableOptions<UploadOptions> uploadOpts,
             IWritableOptions<EmailSettings> emailSettings, IWritableOptions<HardwareCheckOptions> hdOpts,
             IWritableOptions<WebAppSettings> appSettings, IWritableOptions<SocialAuthSettings> socialSettings)
         {
@@ -29,13 +36,12 @@ namespace XtraUpload.Setting.Service
             _socialSettings = socialSettings;
         }
 
-        /// <summary>
-        /// Read Appsettings configuraion
-        /// </summary>
-        /// <returns></returns>
-        public ReadAppSettingResult ReadAppSetting()
+        #endregion
+
+        #region Handler
+        public Task<ReadAppSettingResult> Handle(GetAppSettingsQuery request, CancellationToken cancellationToken)
         {
-            return new ReadAppSettingResult()
+            ReadAppSettingResult settings = new ReadAppSettingResult()
             {
                 AppSettings = _appSettings.Value,
                 EmailSettings = _emailSettings.Value,
@@ -44,7 +50,9 @@ namespace XtraUpload.Setting.Service
                 UploadOptions = _uploadOpts.Value,
                 SocialAuthSettings = _socialSettings.Value
             };
+            return Task.FromResult(settings);
         }
 
+        #endregion
     }
 }
