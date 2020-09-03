@@ -74,7 +74,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPut("confirmemail")]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
         {
-            OperationResult result = await _settingService.ConfirmEmail(model.EmailToken);
+            OperationResult result = await _mediatr.Send(new ConfirmEmailCommand(model.EmailToken));
 
             return HandleResult(result);
         }
