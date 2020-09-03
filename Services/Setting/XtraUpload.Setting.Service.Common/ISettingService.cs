@@ -21,7 +21,7 @@ namespace XtraUpload.Setting.Service.Common
         /// <summary>
         /// Updates a user password
         /// </summary>
-        Task<UpdatePasswordResult> UpdatePassword(UpdatePasswordViewModel model);
+        Task<UpdatePasswordResult> UpdatePassword(UpdatePassword model);
 
         /// <summary>
         /// Update the user theme

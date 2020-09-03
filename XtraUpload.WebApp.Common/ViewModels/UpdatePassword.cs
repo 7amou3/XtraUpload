@@ -2,7 +2,7 @@
 
 namespace XtraUpload.WebApp.Common
 {
-    public class UpdatePasswordViewModel
+    public class UpdatePassword
     {
         [Required]
         [MinLength(6)]

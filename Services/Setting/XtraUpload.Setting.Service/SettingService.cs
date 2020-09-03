@@ -131,7 +131,7 @@ namespace XtraUpload.Setting.Service
         /// <summary>
         /// Updates a user password
         /// </summary>
-        public async Task<UpdatePasswordResult> UpdatePassword(UpdatePasswordViewModel model)
+        public async Task<UpdatePasswordResult> UpdatePassword(UpdatePassword model)
         {
             string userId = _caller.GetUserId();
             UpdatePasswordResult Result = new UpdatePasswordResult();

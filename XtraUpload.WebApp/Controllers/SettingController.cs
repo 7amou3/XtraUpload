@@ -48,7 +48,7 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPatch("password")]
-        public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model)
+        public async Task<IActionResult> UpdatePassword(UpdatePassword model)
         {
             UpdatePasswordResult result = await _settingService.UpdatePassword(model);
 
