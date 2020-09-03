@@ -12,10 +12,5 @@ namespace XtraUpload.Setting.Service.Common
         /// Read Appsettings configuraion
         /// </summary>
         ReadAppSettingResult ReadAppSetting();
-
-        /// <summary>
-        /// Updates appsettings section
-        /// </summary>
-        Task<OperationResult> UpdateSection<T>(T model) where T : class;
     }
 }
