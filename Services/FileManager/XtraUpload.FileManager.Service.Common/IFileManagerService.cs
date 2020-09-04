@@ -9,7 +9,6 @@ namespace XtraUpload.FileManager.Service.Common
 {
     public interface IFileManagerService
     {
-        Task<MoveItemsResult> MoveItems(MoveItemsViewModel items);
         Task<AvatarResult> GetUserAvatar();
     }
 }

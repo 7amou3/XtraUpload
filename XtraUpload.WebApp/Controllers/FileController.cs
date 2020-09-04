@@ -170,7 +170,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPut("moveitems")]
         public async Task<IActionResult> MoveItems(MoveItemsViewModel items)
         {
-            MoveItemsResult Result = await _filemanagerService.MoveItems(items);
+            MoveItemsResult Result = await _mediator.Send(new MoveItemsCommand(items.DestFolderId, items.SelectedFiles, items.SelectedFolders));
 
             return HandleResult(Result);
         }
