@@ -31,25 +31,6 @@ namespace XtraUpload.FileManager.Service
         
         #region IFileManagerService members
 
-        /// <summary>
-        /// Get a user folder content
-        /// </summary>
-        public async Task<GetFolderContentResult> GetUserFolder(string folderid)
-        {
-            string userId = _caller.GetUserId();   
-            // user can pass null as root folder
-            string parentid = folderid ?? "root";
-
-            GetFolderContentResult Result = new GetFolderContentResult()
-            {
-                // Get folders
-                Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == parentid && s.UserId == userId),
-                // get Files, the root folder is represented by a null value in TFile table
-                Files = await _unitOfWork.Files.FindAsync(s => s.FolderId == folderid && s.UserId == userId)
-            };
-           
-            return Result;
-        }
 
         /// <summary>
         /// Get a public folder content

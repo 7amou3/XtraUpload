@@ -28,7 +28,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet(@"{folderid:regex(^[[a-zA-Z0-9]]*$)?}")]
         public async Task<IActionResult> GetFolderContent(string folderid)
         {
-            GetFolderContentResult result = await _FilemanagerService.GetUserFolder(folderid);
+            GetFolderContentResult result = await _mediatr.Send(new GetFolderContentQuery(folderid));
 
             return HandleResult(result);
         }
