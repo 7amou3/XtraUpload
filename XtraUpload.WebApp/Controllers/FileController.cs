@@ -146,7 +146,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("rename")]
         public async Task<IActionResult> Rename(RenameFileViewModel file)
         {
-            RenameFileResult Result = await _filemanagerService.UpdateFileName(file.FileId, file.NewName);
+            RenameFileResult Result = await _mediator.Send(new UpdateFileNameCommand(file.FileId, file.NewName));
             
             return HandleResult(Result, _mapper.Map<FileItemHeaderDto>(Result.File));
         }
