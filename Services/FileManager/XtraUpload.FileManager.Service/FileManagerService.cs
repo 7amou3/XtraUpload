@@ -32,35 +32,6 @@ namespace XtraUpload.FileManager.Service
         #region IFileManagerService members
 
         /// <summary>
-        /// Update folder name
-        /// </summary>
-        public async Task<RenameFolderResult> UpdateFolderName(string folderId, string newName)
-        {
-            RenameFolderResult Result = new RenameFolderResult();
-            string userId = _caller.Claims.Single(c => c.Type == "id")?.Value;
-            FolderItem folder = await _unitOfWork.Folders.FirstOrDefaultAsync(s => s.Id == folderId && s.UserId == userId);
-            // Check if folder exist
-            if (folder == null)
-            {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-
-            // Prepare data
-            folder.Name = newName;
-            folder.LastModified = DateTime.Now;
-
-            // Try to save to db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                Result.Folder = folder;
-            }
-
-            return Result;
-        }
-
-        /// <summary>
         /// Delete the file from the drive and db
         /// </summary>
         public async Task<DeleteFileResult> DeleteFile(string fileId)

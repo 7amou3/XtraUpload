@@ -84,7 +84,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("rename")]
         public async Task<IActionResult> Rename(RenameFolderViewModel folder)
         {
-            RenameFolderResult Result = await _FilemanagerService.UpdateFolderName(folder.FileId, folder.NewName);
+            RenameFolderResult Result = await _mediatr.Send(new UpdateFolderNameCommand(folder.FileId, folder.NewName));
 
             return HandleResult(Result, Result.Folder);
         }

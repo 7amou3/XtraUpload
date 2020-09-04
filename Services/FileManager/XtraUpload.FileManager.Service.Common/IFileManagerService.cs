@@ -9,7 +9,6 @@ namespace XtraUpload.FileManager.Service.Common
 {
     public interface IFileManagerService
     {
-        Task<RenameFolderResult> UpdateFolderName(string folderId, string newName);
         Task<DeleteFileResult> DeleteFile(string fileId);
         Task<DeleteFolderResult> DeleteFolder(string folderid);
         Task<DeleteItemsResult> DeleteItems(DeleteItemsViewModel items);
