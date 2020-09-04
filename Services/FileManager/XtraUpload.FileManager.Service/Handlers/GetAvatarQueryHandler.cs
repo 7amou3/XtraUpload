@@ -16,18 +16,13 @@ namespace XtraUpload.FileManager.Service
     /// </summary>
     public class GetAvatarQueryHandler : IRequestHandler<GetAvatarQuery, AvatarUrlResult>
     {
-        #region Fields
-        UploadOptions _uploadOpt;
-        #endregion
-
-        #region Constructor
+        readonly UploadOptions _uploadOpt;
+        
         public GetAvatarQueryHandler(IOptionsMonitor<UploadOptions> uploadOpt)
         {
             _uploadOpt = uploadOpt.CurrentValue;
         }
-        #endregion
-
-        #region Handler
+        
         public async Task<AvatarUrlResult> Handle(GetAvatarQuery request, CancellationToken cancellationToken)
         {
             AvatarUrlResult Result = new AvatarUrlResult();
@@ -50,6 +45,5 @@ namespace XtraUpload.FileManager.Service
 
             return Result;
         }
-        #endregion
     }
 }

@@ -108,4 +108,13 @@
         Dark,
         Light
     }
+    /// <summary>
+    /// Thumbnail size
+    /// </summary>
+    public enum ThumbnailSize
+    {
+        Small,
+        Medium,
+        Avatar
+    }
 }

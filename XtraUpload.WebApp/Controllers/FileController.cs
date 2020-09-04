@@ -5,7 +5,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using XtraUpload.Domain;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.WebApp.Common;
@@ -75,7 +74,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("smallthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetSmallThumb(string fileid)
         {
-            AvatarUrlResult Result = await _mediator.Send(new GetSmallThumbUrlQuery(fileid));
+            AvatarUrlResult Result = await _mediator.Send(new GetThumbnailQuery(ThumbnailSize.Small, fileid));
 
             if (Result.State != OperationState.Success)
             {
@@ -96,7 +95,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("mediumthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetMediumThumb(string fileid)
         {
-            AvatarUrlResult Result = await _mediator.Send(new GetMediumThumbQuery(fileid));
+            AvatarUrlResult Result = await _mediator.Send(new GetThumbnailQuery(ThumbnailSize.Medium, fileid));
 
             if (Result.State != OperationState.Success)
             {
