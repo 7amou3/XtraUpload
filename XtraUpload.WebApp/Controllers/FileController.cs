@@ -18,14 +18,12 @@ namespace XtraUpload.WebApp.Controllers
     {
         readonly IMapper _mapper;
         readonly IMediator _mediator;
-        readonly UploadOptions _uploadOpts;
         readonly IFileDownloadService _fileDownloadService;
 
-        public FileController(IFileDownloadService fileDownloadService, IOptionsMonitor<UploadOptions> uploadOpts, IMediator mediator, IMapper mapper)
+        public FileController(IFileDownloadService fileDownloadService, IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
             _mediator = mediator;
-            _uploadOpts = uploadOpts.CurrentValue;
             _fileDownloadService = fileDownloadService;
         }
 
@@ -77,7 +75,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("smallthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetSmallThumb(string fileid)
         {
-            GetFileResult Result = await _mediator.Send(new GetFileByIdQuery(fileid));
+            AvatarUrlResult Result = await _mediator.Send(new GetSmallThumbUrlQuery(fileid));
 
             if (Result.State != OperationState.Success)
             {
@@ -88,22 +86,17 @@ namespace XtraUpload.WebApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            string filePath = Path.Combine(_uploadOpts.UploadPath, Result.File.UserId.ToString(), Result.File.Id, Result.File.Id + ".smallthumb.png");
-            
-            if (!System.IO.File.Exists(filePath))
-            {
-                return BadRequest("The file has not been found");
-            }
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
 
-            using var img = System.IO.File.OpenRead(filePath);
-            return PhysicalFile(filePath, "image/png");
+            return File(stream, "image/png");
         }
 
         [AllowAnonymous]
         [HttpGet("mediumthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetMediumThumb(string fileid)
         {
-            GetFileResult Result = await _mediator.Send(new GetFileByIdQuery(fileid));
+            AvatarUrlResult Result = await _mediator.Send(new GetMediumThumbQuery(fileid));
 
             if (Result.State != OperationState.Success)
             {
@@ -114,20 +107,39 @@ namespace XtraUpload.WebApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            string filePath = Path.Combine(_uploadOpts.UploadPath, Result.File.UserId.ToString(), Result.File.Id, Result.File.Id + ".mediumthumb.png");
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
 
-            if (!System.IO.File.Exists(filePath))
+            return new FileStreamResult(stream, "image/png");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
+        public async Task<IActionResult> GetAvatar(string userid, string timespan = null)
+        {
+            AvatarUrlResult Result = await _mediator.Send(new GetAvatarQuery(userid));
+
+            if (Result.State != OperationState.Success)
             {
-                // the image has no medium thumb because it's small
-                filePath = Path.Combine(_uploadOpts.UploadPath, Result.File.UserId.ToString(), Result.File.Id, Result.File.Id + ".smallthumb.png");
-                if (!System.IO.File.Exists(filePath))
+                if (Result.ErrorContent.ErrorType == ErrorOrigin.Client)
                 {
-                    return BadRequest("The file has not been found");
+                    return BadRequest(Result);
                 }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            using var img = System.IO.File.OpenRead(filePath);
-            return PhysicalFile(filePath, "image/png");
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
+
+            return new FileStreamResult(stream, "image/png");
+        }
+
+        [HttpGet("avatarurl")]
+        public async Task<IActionResult> GetAvatarUrl()
+        {
+            AvatarUrlResult Result = await _mediator.Send(new GetUserAvatarQuery());
+
+            return HandleResult(Result);
         }
 
         [HttpPatch("fileavailability")]
@@ -168,29 +180,6 @@ namespace XtraUpload.WebApp.Controllers
             MoveItemsResult Result = await _mediator.Send(new MoveItemsCommand(items.DestFolderId, items.SelectedFiles, items.SelectedFolders));
 
             return HandleResult(Result);
-        }
-
-        [HttpGet("avatarurl")]
-        public async Task<IActionResult> GetAvatarUrl()
-        {
-            AvatarUrlResult Result = await _mediator.Send(new GetUserAvatarQuery());
-
-            return HandleResult(Result);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
-        public IActionResult GetAvatar(string userid, string timespan = null)
-        {
-            string filePath = Path.Combine(_uploadOpts.UploadPath, userid, "avatar", "avatar.png");
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                return BadRequest("The file has not been found");
-            }
-
-            using var img = System.IO.File.OpenRead(filePath);
-            return PhysicalFile(filePath, "image/png");
         }
 
     }
