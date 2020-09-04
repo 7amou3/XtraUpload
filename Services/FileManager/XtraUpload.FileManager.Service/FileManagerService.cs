@@ -32,41 +32,6 @@ namespace XtraUpload.FileManager.Service
         #region IFileManagerService members
 
         /// <summary>
-        /// Delete the file from the drive and db
-        /// </summary>
-        public async Task<DeleteFileResult> DeleteFile(string fileId)
-        {
-            DeleteFileResult Result = new DeleteFileResult();
-            FileItem file = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.Id == fileId);
-
-            // Check if file exist
-            if (file == null)
-            {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-
-            // Remove file from collection
-            _unitOfWork.Files.Remove(file);
-
-            // Save to db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                // Delete from disk (no need to queue to background thread, because Directory.Delete does not block)
-                string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
-                if (Directory.Exists(folderPath))
-                {
-                    Directory.Delete(folderPath, true);
-                }
-                // Append new data
-                Result.File = file;
-            }
-
-            return Result;
-        }
-
-        /// <summary>
         /// Delete a folder and all it's content
         /// </summary>
         public async Task<DeleteFolderResult> DeleteFolder(string folderid)
