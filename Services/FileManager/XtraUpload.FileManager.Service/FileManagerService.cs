@@ -32,37 +32,6 @@ namespace XtraUpload.FileManager.Service
         #region IFileManagerService members
 
         /// <summary>
-        /// Update online folder availability
-        /// </summary>
-        public async Task<FolderAvailabilityResult> UpdateFolderAvailability(string folderId, bool isOnline)
-        {
-            FolderAvailabilityResult Result = new FolderAvailabilityResult();
-
-            string userId = _caller.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-
-            var folder = await _unitOfWork.Folders.FirstOrDefaultAsync(s => s.Id == folderId && s.UserId == userId);
-            // Check if folder exist
-            if (folder == null)
-            {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-
-            // Prepare data
-            folder.IsAvailableOnline = isOnline;
-            folder.LastModified = DateTime.Now;
-
-            // Try to save in db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                Result.Folder = folder;
-            }
-
-            return Result;
-        }
-
-        /// <summary>
         /// Update the file name
         /// </summary>
         public async Task<RenameFileResult> UpdateFileName(string fileId, string newName)

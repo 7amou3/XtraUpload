@@ -92,7 +92,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("folderavailability")]
         public async Task<IActionResult> FileAvailability(FolderAvailabilityViewModel folderAvailability)
         {
-            FolderAvailabilityResult Result = await _FilemanagerService.UpdateFolderAvailability(folderAvailability.Folderid, folderAvailability.Available);
+            FolderAvailabilityResult Result = await _mediatr.Send(new UpdateFolderAvailabilityCommand(folderAvailability.Folderid, folderAvailability.Available));
 
             return HandleResult(Result, Result.Folder);
         }

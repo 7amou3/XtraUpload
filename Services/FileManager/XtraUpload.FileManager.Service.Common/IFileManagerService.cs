@@ -9,7 +9,6 @@ namespace XtraUpload.FileManager.Service.Common
 {
     public interface IFileManagerService
     {
-        Task<FolderAvailabilityResult> UpdateFolderAvailability(string folderId, bool isOnline);
         Task<RenameFileResult> UpdateFileName(string fileId, string newName);
         Task<RenameFolderResult> UpdateFolderName(string folderId, string newName);
         Task<DeleteFileResult> DeleteFile(string fileId);
