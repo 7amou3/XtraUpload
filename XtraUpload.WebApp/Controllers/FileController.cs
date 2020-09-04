@@ -138,7 +138,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("fileavailability")]
         public async Task<IActionResult> FileAvailability(FileAvailabilityViewModel fileAvailability)
         {
-            FileAvailabilityResult Result = await _filemanagerService.UpdateFileAvailability(fileAvailability.Fileid, fileAvailability.Available);
+            FileAvailabilityResult Result = await _mediator.Send(new UpdateFileAvailabilityCommand(fileAvailability.Fileid, fileAvailability.Available));
             
             return HandleResult(Result, _mapper.Map<FileItemDto>(Result.File));
         }

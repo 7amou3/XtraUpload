@@ -32,37 +32,6 @@ namespace XtraUpload.FileManager.Service
         #region IFileManagerService members
 
         /// <summary>
-        /// Updates the online availability state of the given file
-        /// </summary>
-        public async Task<FileAvailabilityResult> UpdateFileAvailability(string fileId, bool isOnline)
-        {
-            FileAvailabilityResult Result = new FileAvailabilityResult();
-
-            string userId = _caller.GetUserId();
-            FileItem file = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.Id == fileId && s.UserId == userId);
-
-            // Check file exist
-            if (file == null)
-            {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-
-            // Prepare data
-            file.IsAvailableOnline = isOnline;
-            file.LastModified = DateTime.Now;
-
-            // Try to save in db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                Result.File = file;
-            }
-
-            return Result;
-        }
-
-        /// <summary>
         /// Update online folder availability
         /// </summary>
         public async Task<FolderAvailabilityResult> UpdateFolderAvailability(string folderId, bool isOnline)
