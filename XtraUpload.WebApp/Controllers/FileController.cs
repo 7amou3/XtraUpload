@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,15 @@ namespace XtraUpload.WebApp.Controllers
     public class FileController : BaseController
     {
         readonly IMapper _mapper;
+        readonly IMediator _mediator;
         readonly UploadOptions _uploadOpts;
         readonly IFileManagerService _filemanagerService;
         readonly IFileDownloadService _fileDownloadService;
-        
-        public FileController(IFileManagerService filemanagerService, IFileDownloadService fileDownloadService, IOptionsMonitor<UploadOptions> uploadOpts, IMapper mapper)
+
+        public FileController(IFileManagerService filemanagerService, IFileDownloadService fileDownloadService, IOptionsMonitor<UploadOptions> uploadOpts, IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
+            _mediator = mediator;
             _uploadOpts = uploadOpts.CurrentValue;
             _filemanagerService = filemanagerService;
             _fileDownloadService = fileDownloadService;
@@ -34,7 +37,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("{tusid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> Get(string tusid)
         {
-            GetFileResult Result = await _filemanagerService.GetFileByTusId(tusid);
+            GetFileResult Result = await _mediator.Send(new GetFileByTusIdQuery(tusid));
 
             return HandleResult(Result, Result.File);
         }
