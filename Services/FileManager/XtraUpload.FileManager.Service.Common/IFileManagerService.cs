@@ -13,7 +13,6 @@ namespace XtraUpload.FileManager.Service.Common
         Task<GetFileResult> GetFileById(string fileid);
         Task<GetFolderContentResult> GetUserFolder(string folderId);
         Task<GetFolderContentResult> GetPublicFolder(PublicFolderViewModel folderid);
-        Task<GetFoldersResult> GetFolders(string parentId);
         Task<FileAvailabilityResult> UpdateFileAvailability(string fileId, bool isOnline);
         Task<FolderAvailabilityResult> UpdateFolderAvailability(string folderId, bool isOnline);
         Task<RenameFileResult> UpdateFileName(string fileId, string newName);

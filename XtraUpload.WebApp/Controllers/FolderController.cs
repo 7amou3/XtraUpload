@@ -54,7 +54,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("folders/{parentId:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetFolders(string parentId)
         {
-            GetFoldersResult result = await _FilemanagerService.GetFolders(parentId);
+            GetFoldersResult result = await _mediatr.Send(new GetInnerFoldersQuery(parentId));
 
             return HandleResult(result, result.Folders);
         }
