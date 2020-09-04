@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,9 @@ namespace XtraUpload.FileManager.Service
         readonly ClaimsPrincipal _caller;
         readonly UploadOptions _uploadOpt;
         
-        public FileManagerService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, 
+        public FileManagerService(
+            IUnitOfWork unitOfWork, 
+            IHttpContextAccessor httpContextAccessor, 
             IOptionsMonitor<UploadOptions> uploadOpt)
         {
             _unitOfWork = unitOfWork;
@@ -30,107 +31,6 @@ namespace XtraUpload.FileManager.Service
         }
         
         #region IFileManagerService members
-
-        /// <summary>
-        /// Delete a folder and all it's content
-        /// </summary>
-        public async Task<DeleteFolderResult> DeleteFolder(string folderid)
-        {
-            DeleteFolderResult Result = new DeleteFolderResult();
-
-            string userId = _caller.GetUserId();
-            FolderItem folder = await _unitOfWork.Folders.FirstOrDefaultAsync(s => s.Id == folderid);
-
-            // Check if file exist
-            if (folder == null)
-            {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-
-            IEnumerable<FolderItem> folders = await GetFolderChildren(folder, userId);
-
-            // Extract folders id 
-            List<string> foldersId = new List<string>() { folder.Id };
-            foldersId.AddRange(folders.Select(s => s.Id).ToList());
-
-            // Get all files in those folders
-            var files = await _unitOfWork.Files.FindAsync(s => s.UserId == userId && foldersId.Contains(s.FolderId));
-
-            // Delete files from db
-            _unitOfWork.Folders.Remove(folder);
-            _unitOfWork.Folders.RemoveRange(folders);
-            _unitOfWork.Files.RemoveRange(files);
-
-            // Persist changes
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
-                foreach (var file in files)
-                {
-                    string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
-
-                    if (Directory.Exists(folderPath))
-                    {
-                        Directory.Delete(folderPath, true);
-                    }
-                }
-                // Append new data
-                Result.Folders = folders;
-                Result.Files = files;
-            }
-
-            return Result;
-        }
-
-        /// <summary>
-        /// Delete folders and files
-        /// </summary>
-        public async Task<DeleteItemsResult> DeleteItems(DeleteItemsViewModel items)
-        {
-            DeleteItemsResult result = new DeleteItemsResult();
-            IEnumerable<FileItem> files = new List<FileItem>();
-            List<DeleteFolderResult> folders = new List<DeleteFolderResult>();
-
-            string userId = _caller.GetUserId();
-            // Delete files
-            if (items.SelectedFiles.Any())
-            {
-                List<string> filesIds = items.SelectedFiles.Select(s => s.Id).ToList();
-                files = await _unitOfWork.Files.FindAsync(s => filesIds.Contains(s.Id) && s.UserId == userId);
-                _unitOfWork.Files.RemoveRange(files);
-            }
-            // Delete folders
-            if (items.SelectedFolders.Any())
-            {
-                foreach (var folder in items.SelectedFolders)
-                {
-                    folders.Add(await DeleteFolder(folder.Id));
-                }
-            }
-
-            // Persist changes
-            result = await _unitOfWork.CompleteAsync(result);
-            if (result.State == OperationState.Success)
-            {
-                // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
-                foreach (var file in files)
-                {
-                    string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
-
-                    if (Directory.Exists(folderPath))
-                    {
-                        Directory.Delete(folderPath, true);
-                    }
-                }
-                // Append new data
-                result.Folders = folders;
-                result.Files = files;
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Recursively get all folders within a folder

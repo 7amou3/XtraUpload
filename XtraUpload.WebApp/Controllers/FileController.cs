@@ -73,7 +73,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("deleteitems")]
         public async Task<IActionResult> DeleteItems(DeleteItemsViewModel items)
         {
-            DeleteItemsResult result = await _filemanagerService.DeleteItems(items);
+            DeleteItemsResult result = await _mediator.Send(new DeleteItemsCommand(items.SelectedFolders, items.SelectedFiles));
 
             return HandleResult(result, _mapper.Map<DeleteItemsResultDto>(result));
         }
