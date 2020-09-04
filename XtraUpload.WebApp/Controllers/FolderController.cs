@@ -45,7 +45,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("folders")]
         public async Task<IActionResult> GetUserFolders()
         {
-            GetFoldersResult result = await _FilemanagerService.GetUserFolders();
+            GetFoldersResult result = await _mediatr.Send(new GetUserFoldersQuery());
 
             return HandleResult(result, result.Folders);
         }

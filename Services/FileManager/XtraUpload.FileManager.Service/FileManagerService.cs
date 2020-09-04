@@ -32,45 +32,6 @@ namespace XtraUpload.FileManager.Service
         #region IFileManagerService members
 
         /// <summary>
-        /// Get all user folders
-        /// </summary>
-        public async Task<GetFoldersResult> GetUserFolders()
-        {
-            GetFoldersResult Result = new GetFoldersResult();
-
-            string userId = _caller.GetUserId();
-            Result.Folders = await _unitOfWork.Folders.FindAsync(s => s.UserId == userId);           
-           
-            return Result;
-        }
-
-        /// <summary>
-        /// Get folder(s) relative to it's parent id
-        /// </summary>
-        public async Task<GetFoldersResult> GetFolders(string parentId)
-        {
-            GetFoldersResult Result = new GetFoldersResult();
-            string userId = _caller.GetUserId();
-
-            FolderItem folder = await _unitOfWork.Folders.FirstOrDefaultAsync(s => s.Id == parentId);
-            if (folder == null)
-            {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-            // If anonymous user, check if folder is public
-            if (userId != folder.UserId && folder.IsAvailableOnline == false)
-            {
-                Result.ErrorContent = new ErrorContent("This folder is not available for public downloads", ErrorOrigin.Client);
-                return Result;
-            }
-
-            Result.Folders = await GetFolderChildren(folder, folder.UserId);
-
-            return Result;
-        }
-
-        /// <summary>
         /// Get a user folder content
         /// </summary>
         public async Task<GetFolderContentResult> GetUserFolder(string folderid)
