@@ -76,7 +76,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("{folderid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> Delete(string folderid)
         {
-            DeleteFolderResult Result = await _FilemanagerService.DeleteFolder(folderid);
+            DeleteFolderResult Result = await _mediatr.Send(new DeleteFolderCommand(folderid));
 
             return HandleResult(Result, Result.Folders.First(s => s.Id == folderid));
         }
