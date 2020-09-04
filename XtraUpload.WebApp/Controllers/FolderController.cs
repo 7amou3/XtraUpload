@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Domain;
@@ -13,10 +15,14 @@ namespace XtraUpload.WebApp.Controllers
     public class FolderController : BaseController
     {
         readonly IFileManagerService _FilemanagerService;
+        readonly IMediator _mediatr;
+        readonly IMapper _mapper;
 
-        public FolderController(IFileManagerService filemanagerService)
+        public FolderController(IFileManagerService filemanagerService, IMediator mediatr, IMapper mapper)
         {
             _FilemanagerService = filemanagerService;
+            _mediatr = mediatr;
+            _mapper = mapper;
         }
 
         [HttpGet(@"{folderid:regex(^[[a-zA-Z0-9]]*$)?}")]
@@ -56,7 +62,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFolder(CreateFolderViewModel folder)
         {
-            CreateFolderResult result = await _FilemanagerService.CreateFolder(folder);
+            CreateFolderResult result = await _mediatr.Send(new CreateFolderCommand(folder.FolderName, folder.ParentFolder.Id));
             if (result.State == OperationState.Success)
             {
                 return Created($"{BaseUrl}/folder={result.Folder.Id}", result.Folder);

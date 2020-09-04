@@ -20,47 +20,16 @@ namespace XtraUpload.FileManager.Service
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
         readonly UploadOptions _uploadOpt;
-        readonly ILogger<FileManagerService> _logger;
         
         public FileManagerService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, 
-            IOptionsMonitor<UploadOptions> uploadOpt, ILogger<FileManagerService> logger)
+            IOptionsMonitor<UploadOptions> uploadOpt)
         {
-            _logger = logger;
             _unitOfWork = unitOfWork;
             _uploadOpt = uploadOpt.CurrentValue;
             _caller = httpContextAccessor.HttpContext.User;
         }
         
         #region IFileManagerService members
-
-        /// <summary>
-        /// Create a new folder
-        /// </summary>
-        public async Task<CreateFolderResult> CreateFolder(CreateFolderViewModel folder)
-        {
-            string userId = _caller.GetUserId();
-
-            FolderItem newFolder = new FolderItem()
-            {
-                Id = Helpers.GenerateUniqueId(),
-                Name = folder.FolderName,
-                CreatedAt = DateTime.Now,
-                IsAvailableOnline = true,
-                LastModified = DateTime.Now,
-                Parentid = folder.ParentFolder.Id,
-                UserId = userId
-            };
-            _unitOfWork.Folders.Add(newFolder);
-
-            // Save to db
-            var Result = await _unitOfWork.CompleteAsync(new CreateFolderResult());
-            if (Result.State == OperationState.Success)
-            {
-                Result.Folder = newFolder;
-            }
-
-            return Result;
-        }
 
         /// <summary>
         /// Get all user folders

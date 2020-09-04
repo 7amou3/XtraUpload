@@ -7,6 +7,7 @@ using XtraUpload.FileManager.Service;
 using XtraUpload.FileManager.Service.Common;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using XtraUpload.Domain.Infra;
+using MediatR;
 
 namespace XtraUpload.FileManager.Host
 {
@@ -42,6 +43,9 @@ namespace XtraUpload.FileManager.Host
             services.AddSingleton<AvatarUploadService>();
             services.AddSingleton<FileUploadService>();
             services.AddImageSharp();
+
+            // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
+            services.AddMediatR(typeof(CreateFolderCommandHandler));
 
             // Background jobs
             services.AddHostedService<ExpiredFilesCleanupService>();
