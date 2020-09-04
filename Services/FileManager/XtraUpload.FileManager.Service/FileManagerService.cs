@@ -31,38 +31,6 @@ namespace XtraUpload.FileManager.Service
         
         #region IFileManagerService members
 
-
-        /// <summary>
-        /// Get a public folder content
-        /// </summary>
-        public async Task<GetFolderContentResult> GetPublicFolder(PublicFolderViewModel model)
-        {
-            GetFolderContentResult Result = new GetFolderContentResult();
-            string userId = _caller.GetUserId();
-            // Display child folder if requested
-            string folderId = model.ChildFolderId ?? model.MainFolderId;
-            FolderItem folder = await _unitOfWork.Folders.FirstOrDefaultAsync(f => f.Id == folderId);
-            // Check if folder exist
-            if (folder == null)
-            {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-            // If anonymous user, check if folder is public
-            if (userId != folder.UserId && folder.IsAvailableOnline == false)
-            {
-                Result.ErrorContent = new ErrorContent("This folder is not available for public downloads", ErrorOrigin.Client);
-                return Result;
-            }
-
-            // Get folders
-            Result.Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == folderId);
-            // get Files, the root folder is represented by a null value in TFile table
-            Result.Files = await _unitOfWork.Files.FindAsync(s => s.FolderId == folderId);
-
-            return Result;
-        }
-
         /// <summary>
         /// Get a file by it's tus id
         /// </summary>

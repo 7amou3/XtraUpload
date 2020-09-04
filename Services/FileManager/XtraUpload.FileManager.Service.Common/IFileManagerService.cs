@@ -11,7 +11,6 @@ namespace XtraUpload.FileManager.Service.Common
     {
         Task<GetFileResult> GetFileByTusId(string tusid);
         Task<GetFileResult> GetFileById(string fileid);
-        Task<GetFolderContentResult> GetPublicFolder(PublicFolderViewModel folderid);
         Task<FileAvailabilityResult> UpdateFileAvailability(string fileId, bool isOnline);
         Task<FolderAvailabilityResult> UpdateFolderAvailability(string folderId, bool isOnline);
         Task<RenameFileResult> UpdateFileName(string fileId, string newName);

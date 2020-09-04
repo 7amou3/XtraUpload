@@ -37,7 +37,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("publicfolder")]
         public async Task<IActionResult> GetPublicFolder([FromQuery]PublicFolderViewModel model)
         {
-            GetFolderContentResult result = await _FilemanagerService.GetPublicFolder(model);
+            GetFolderContentResult result = await _mediatr.Send(new GetPublicFolderQuery(model.MainFolderId, model.ChildFolderId));
 
             return HandleResult(result);
         }
