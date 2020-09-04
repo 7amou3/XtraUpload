@@ -1,15 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.WebApp.Common;
 
@@ -22,15 +19,13 @@ namespace XtraUpload.WebApp.Controllers
         readonly IMapper _mapper;
         readonly IMediator _mediator;
         readonly UploadOptions _uploadOpts;
-        readonly IFileManagerService _filemanagerService;
         readonly IFileDownloadService _fileDownloadService;
 
-        public FileController(IFileManagerService filemanagerService, IFileDownloadService fileDownloadService, IOptionsMonitor<UploadOptions> uploadOpts, IMediator mediator, IMapper mapper)
+        public FileController(IFileDownloadService fileDownloadService, IOptionsMonitor<UploadOptions> uploadOpts, IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
             _mediator = mediator;
             _uploadOpts = uploadOpts.CurrentValue;
-            _filemanagerService = filemanagerService;
             _fileDownloadService = fileDownloadService;
         }
 
@@ -178,7 +173,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("avatarurl")]
         public async Task<IActionResult> GetAvatarUrl()
         {
-            AvatarResult Result = await _filemanagerService.GetUserAvatar();
+            AvatarUrlResult Result = await _mediator.Send(new GetUserAvatarQuery());
 
             return HandleResult(Result);
         }

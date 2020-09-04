@@ -14,15 +14,11 @@ namespace XtraUpload.WebApp.Controllers
     [Authorize(Policy = "User")]
     public class FolderController : BaseController
     {
-        readonly IFileManagerService _FilemanagerService;
         readonly IMediator _mediatr;
-        readonly IMapper _mapper;
 
-        public FolderController(IFileManagerService filemanagerService, IMediator mediatr, IMapper mapper)
+        public FolderController( IMediator mediatr)
         {
-            _FilemanagerService = filemanagerService;
             _mediatr = mediatr;
-            _mapper = mapper;
         }
 
         [HttpGet(@"{folderid:regex(^[[a-zA-Z0-9]]*$)?}")]
