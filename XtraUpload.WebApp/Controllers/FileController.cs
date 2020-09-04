@@ -82,7 +82,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("smallthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetSmallThumb(string fileid)
         {
-            GetFileResult Result = await _filemanagerService.GetFileById(fileid);
+            GetFileResult Result = await _mediator.Send(new GetFileByIdQuery(fileid));
 
             if (Result.State != OperationState.Success)
             {
@@ -108,7 +108,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("mediumthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetMediumThumb(string fileid)
         {
-            GetFileResult Result = await _filemanagerService.GetFileById(fileid);
+            GetFileResult Result = await _mediator.Send(new GetFileByIdQuery(fileid));
 
             if (Result.State != OperationState.Success)
             {

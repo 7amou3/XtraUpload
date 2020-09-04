@@ -32,25 +32,6 @@ namespace XtraUpload.FileManager.Service
         #region IFileManagerService members
 
         /// <summary>
-        /// Get a file by it's id
-        /// </summary>
-        public async Task<GetFileResult> GetFileById(string fileid)
-        {
-            GetFileResult Result = new GetFileResult()
-            {
-                File = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.Id == fileid)
-            };
-
-            // Check if file exist
-            if (Result.File == null)
-            {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
-            }
-
-            return Result;
-        }
-
-        /// <summary>
         /// Updates the online availability state of the given file
         /// </summary>
         public async Task<FileAvailabilityResult> UpdateFileAvailability(string fileId, bool isOnline)
