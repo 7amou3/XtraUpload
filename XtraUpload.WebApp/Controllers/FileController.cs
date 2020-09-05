@@ -38,7 +38,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("requestdownload/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> RequestDownload(string fileid)
         {
-            RequestDownloadResult Result = await _fileDownloadService.RequestDownload(fileid);
+            RequestDownloadResult Result = await _mediator.Send(new RequestDownloadQuery(fileid));
             if (Result.State == OperationState.Success)
             {
                 var filedto = _mapper.Map<FileItemDto>(Result.File, opts =>

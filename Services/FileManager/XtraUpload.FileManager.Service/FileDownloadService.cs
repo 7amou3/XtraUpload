@@ -43,42 +43,7 @@ namespace XtraUpload.FileManager.Service
 
         #region IFileDownloadService members
 
-        /// <summary>
-        /// Request to download a file
-        /// </summary>
-        public async Task<RequestDownloadResult> RequestDownload(string fileid)
-        {
-            string userId = _caller.GetUserId();
-
-            RequestDownloadResult Result = new RequestDownloadResult()
-            {
-                File = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.Id == fileid)
-            };
-            // Check if file exist
-            if (Result.File == null)
-            {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
-                return Result;
-            }
-            // Check file availablability
-            if (userId != Result.File.UserId && !Result.File.IsAvailableOnline)
-            {
-                Result.ErrorContent = new ErrorContent("This file is not available for public downloads", ErrorOrigin.Client);
-                return Result;
-            }
-
-            DownloadOption option = await GetDownloadOption();
-
-            // Check if there is already a download in progress and get remaining time
-            var currentDownloads = await GetTTW(option);
-
-            Result.WaitTime = currentDownloads.TotalDownloads > 0
-                              ? currentDownloads.TimeToWait
-                              : option.WaitTime;
-
-            return Result;
-        }
-
+        
         /// <summary>
         /// Generate a templink
         /// </summary>
@@ -139,29 +104,7 @@ namespace XtraUpload.FileManager.Service
 
         #endregion
 
-        /// <summary>
-        /// Get time to wait before a new download is permitted
-        /// </summary>
-        private async Task<GetTTWResult> GetTTW(DownloadOption option)
-        {
-            string clientIp = _httpContext.Request.Host.Host;
-
-            // count the total current client downloads
-            var query = await _unitOfWork.Downloads.FindAsync(s => s.IpAdress == clientIp
-                                                                    && s.StartedAt.AddSeconds(option.TTW) > DateTime.Now);
-
-            GetTTWResult Result = new GetTTWResult
-            {
-                TotalDownloads = query.Count()
-            };
-            if (Result.TotalDownloads != 0)
-            {
-                var elapsedTime = (query.ElementAt(query.Count() - 1).StartedAt.AddSeconds(option.TTW) - DateTime.Now).TotalSeconds;
-                Result.TimeToWait = elapsedTime > 0 ? (int)Math.Round(elapsedTime) : 0;
-            }
-
-            return Result;
-        }
+        
 
         private async Task StartDownload(FileItem file, StartDownloadResult result, string filePath)
         {
