@@ -11,10 +11,6 @@ namespace XtraUpload.Administration.Service.Common
     {
         
         /// <summary>
-        /// Get user count grouped by the given period of time
-        /// </summary>
-        Task<AdminOverViewResult> UserCounts(DateRangeViewModel range);
-        /// <summary>
         /// Get file type count grouped by the given period of time
         /// </summary>
         Task<AdminOverViewResult> FileTypesCounts(DateRangeViewModel range);

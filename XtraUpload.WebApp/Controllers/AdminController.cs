@@ -47,7 +47,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("userstats")]
         public async Task<IActionResult> UserStats([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.UserCounts(range);
+            var Result = await _mediatr.Send(new GetUserStatsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.UsersCount);
         }

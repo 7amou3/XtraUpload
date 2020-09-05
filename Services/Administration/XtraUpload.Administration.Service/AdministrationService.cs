@@ -40,21 +40,6 @@ namespace XtraUpload.Administration.Service
             { FileType.Documents, new List<string>() {".docx", ".pdf", ".txt", ".xml", ".xlsx", ".csv", ".pptx"} }
         };
 
-       
-        public async Task<AdminOverViewResult> UserCounts(DateRangeViewModel range)
-        {
-            AdminOverViewResult Result = new AdminOverViewResult();
-            // Check date range is valid
-            if (range.Start.Date > range.End.Date)
-            {
-                Result.ErrorContent = new ErrorContent("Invalid date range.", ErrorOrigin.Client);
-                return Result;
-            }
-
-            Result.UsersCount = await GetUsersHistory(range);
-            return Result;
-        }
-
         /// <summary>
         /// Get file type count grouped by the given period of time
         /// </summary>
