@@ -17,13 +17,11 @@ namespace XtraUpload.WebApp.Controllers
     {
         readonly IMapper _mapper;
         readonly IMediator _mediator;
-        readonly IFileDownloadService _fileDownloadService;
 
-        public FileController(IFileDownloadService fileDownloadService, IMediator mediator, IMapper mapper)
+        public FileController(IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
             _mediator = mediator;
-            _fileDownloadService = fileDownloadService;
         }
 
         [HttpGet("{tusid:regex(^[[a-zA-Z0-9]]*$)}")]
@@ -170,7 +168,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("download/{downloadid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task Download(string downloadid)
         {
-            await _fileDownloadService.StartDownload(downloadid);
+            await _mediator.Send(new StartDownloadCommand(downloadid));
         }
 
         [HttpPut("moveitems")]

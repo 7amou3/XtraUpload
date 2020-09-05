@@ -38,7 +38,6 @@ namespace XtraUpload.FileManager.Host
         public static void AddFileManager(this IServiceCollection services, IConfiguration config)
         {
             // Registre services
-            services.AddScoped<IFileDownloadService, FileDownloadService>();
             services.AddSingleton<AvatarUploadService>();
             services.AddSingleton<FileUploadService>();
             services.AddImageSharp();

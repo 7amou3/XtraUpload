@@ -1,56 +1,54 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using System;
-using System.IO;
-using System.Text;
-using System.Web;
 using Microsoft.Extensions.Logging;
-using XtraUpload.FileManager.Service.Common;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using System.Security.Claims;
-using System.Linq;
-using XtraUpload.Domain.Infra;
-using System.Collections.Generic;
-using Microsoft.Extensions.Options;
+using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service
 {
-    public class FileDownloadService: IFileDownloadService
+    /// <summary>
+    /// Start download a file 
+    /// </summary>
+    public class StartDownloadCommandHandler : IRequestHandler<StartDownloadCommand, StartDownloadResult>
     {
-        #region Fields
-        readonly ClaimsPrincipal _caller;
-        readonly HttpContext _httpContext;
-        readonly UploadOptions _uploadOpts;
+        readonly IMediator _mediatr;
         readonly IUnitOfWork _unitOfWork;
-        readonly ILogger<FileDownloadService> _logger;
-        #endregion
+        readonly HttpContext _httpContext;
+        readonly UploadOptions _uploadOpt;
+        readonly ILogger<StartDownloadCommandHandler> _logger;
 
-        #region Constructor
-        public FileDownloadService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IOptionsMonitor<UploadOptions> uploadOpts, 
-            ILogger<FileDownloadService> logger)
+        public StartDownloadCommandHandler(
+            IUnitOfWork unitOfWork,
+            IMediator mediatr,
+            IHttpContextAccessor httpContextAccessor,
+            IOptionsMonitor<UploadOptions> uploadOpt,
+            ILogger<StartDownloadCommandHandler> logger)
         {
             _logger = logger;
+            _mediatr = mediatr;
             _unitOfWork = unitOfWork;
-            _uploadOpts = uploadOpts.CurrentValue;
-            _caller = httpContextAccessor.HttpContext.User;
+            _uploadOpt = uploadOpt.CurrentValue;
             _httpContext = httpContextAccessor.HttpContext;
         }
-        #endregion
 
-        #region IFileDownloadService members
-
-        /// <summary>
-        /// Download a file 
-        /// </summary>
-        public async Task<StartDownloadResult> StartDownload(string downloadId)
+        public async Task<StartDownloadResult> Handle(StartDownloadCommand request, CancellationToken cancellationToken)
         {
             StartDownloadResult Result = new StartDownloadResult();
 
-            DownloadedFileResult dResult = await _unitOfWork.Downloads.GetDownloadedFile(downloadId);
+            DownloadedFileResult dResult = await _unitOfWork.Downloads.GetDownloadedFile(request.DownloadId);
             // Check download exist
             if (dResult.Download == null || dResult.File == null)
             {
@@ -64,8 +62,9 @@ namespace XtraUpload.FileManager.Service
                 return Result;
             }
 
-            string filePath = Path.Combine(_uploadOpts.UploadPath, dResult.File.UserId, dResult.File.Id, dResult.File.Id);
+            string filePath = Path.Combine(_uploadOpt.UploadPath, dResult.File.UserId, dResult.File.Id, dResult.File.Id);
             await StartDownload(dResult.File, Result, filePath);
+
             // Increment download counter
             dResult.File.DownloadCount++;
             dResult.File.LastModified = DateTime.Now;
@@ -73,11 +72,6 @@ namespace XtraUpload.FileManager.Service
             // Try to save in db
             return await _unitOfWork.CompleteAsync(Result);
         }
-
-        #endregion
-
-        
-
         private async Task StartDownload(FileItem file, StartDownloadResult result, string filePath)
         {
             if (!IsFileExists(filePath))
@@ -172,7 +166,7 @@ namespace XtraUpload.FileManager.Service
 
             string eTag = HttpUtility.UrlEncode(fileName, Encoding.UTF8) + " " + lastUpdateTimeStr;
             string contentDisposition = "attachment;filename=" + HttpUtility.UrlEncode(fileName, Encoding.UTF8).Replace("+", "%20");
-            
+
             if (_httpContext.Request.Headers["Range"] != StringValues.Empty)
             {
                 string[] range = _httpContext.Request.Headers["Range"].ToString().Split(new char[] { '=', '-' });
@@ -226,7 +220,14 @@ namespace XtraUpload.FileManager.Service
             {
                 return;
             }
-            DownloadOption downloadOption = await GetDownloadOption();
+            // Get download options
+            DownloadOptionsResult downloadOption = await _mediatr.Send(new GetDownloadOptionsQuery(_httpContext.User.Identity.IsAuthenticated));
+            if (downloadOption.State != OperationState.Success)
+            {
+                _logger.LogError("Error while reading download options", ErrorOrigin.Client);
+                return;
+            }
+
             if (!string.IsNullOrEmpty(responseHeader.ContentRange))
             {
                 _httpContext.Response.StatusCode = 206;
@@ -277,65 +278,7 @@ namespace XtraUpload.FileManager.Service
             }
         }
 
-        /// <summary>
-        /// Get the download option for the client
-        /// </summary>
-        /// <returns></returns>
-        private async Task<DownloadOption> GetDownloadOption()
-        {
-            DownloadOption option = new DownloadOption()
-            {
-                Speed = 500,
-                TTW = 5,
-                WaitTime = 60
-            };
-            if (_httpContext.User.Identity.IsAuthenticated)
-            {
-                if (double.TryParse(_caller.Claims.Single(c => c.Type == "DownloadSpeed").Value, out double downloadSpeed))
-                {
-                    option.Speed = downloadSpeed;
-                }
-                if (int.TryParse(_caller.Claims.Single(c => c.Type == "DownloadTTW").Value, out int downloadTTW))
-                {
-                    option.TTW = downloadTTW;
-                }
-                if (int.TryParse(_caller.Claims.Single(c => c.Type == "WaitTime").Value, out int waitTime))
-                {
-                    option.WaitTime = waitTime;
-                }
-            }
-            // Guest user
-            else
-            {
-                IEnumerable<RoleClaim> roleClaims = await _unitOfWork.RoleClaims.FindAsync(s => s.RoleId == "3"); // Guest have Id = 3 in RoleClaims table
-
-                if (roleClaims.Any())
-                {
-                    if (double.TryParse(roleClaims.First(s => s.ClaimType == XtraUploadClaims.DownloadSpeed.ToString()).ClaimValue, out double downloadSpeed))
-                    {
-                        option.Speed = downloadSpeed;
-                    }
-                    if (int.TryParse(roleClaims.First(s => s.ClaimType == XtraUploadClaims.DownloadTTW.ToString()).ClaimValue, out int downloadTTW))
-                    {
-                        option.TTW = downloadTTW;
-                    }
-                    if (int.TryParse(roleClaims.First(s => s.ClaimType == XtraUploadClaims.WaitTime.ToString()).ClaimValue, out int downloadWaitTime))
-                    {
-                        option.WaitTime = downloadWaitTime;
-                    }
-                }
-                else
-                {
-                    #region Trace
-                    _logger.LogError("No role claims found for guest user.");
-                    #endregion
-                }
-            }
-
-            return option;
-        }
     }
-
     /// <summary>
     /// Respresent the HttpResponse header information.
     /// </summary>
@@ -352,13 +295,4 @@ namespace XtraUpload.FileManager.Service
         public string LastModified { get; set; }
     }
 
-    /// <summary>
-    /// Download client option
-    /// </summary>
-    internal class DownloadOption
-    {
-        public double Speed { get; set; }
-        public int TTW { get; set; }
-        public int WaitTime { get; set; }
-    }
 }
