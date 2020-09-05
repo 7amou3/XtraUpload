@@ -55,7 +55,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("filetypesstats")]
         public async Task<IActionResult> FileTypesStats([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.FileTypesCounts(range);
+            var Result = await _mediatr.Send(new GetFileTypeStatsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.FileTypesCount);
         }

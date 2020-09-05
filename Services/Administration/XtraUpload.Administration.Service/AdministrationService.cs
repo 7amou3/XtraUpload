@@ -33,30 +33,6 @@ namespace XtraUpload.Administration.Service
             _uploadOpts = uploadsOpts.CurrentValue;
         }
 
-        readonly Dictionary<FileType, List<string>> fileTypes = new Dictionary<FileType, List<string>>()
-        {
-            { FileType.Archives, new List<string>() {".rar", ".zip", ".tar", ".gzip", ".aaf", ".iso", ".bin" } },
-            { FileType.Multimedia, new List<string>() {".mp4", ".flv", ".mov", ".avi", ".mp3", ".wav", ".png", ".gif", ".jpe" ,".jpg", ".jpeg"} },
-            { FileType.Documents, new List<string>() {".docx", ".pdf", ".txt", ".xml", ".xlsx", ".csv", ".pptx"} }
-        };
-
-        /// <summary>
-        /// Get file type count grouped by the given period of time
-        /// </summary>
-        public async Task<AdminOverViewResult> FileTypesCounts(DateRangeViewModel range)
-        {
-            AdminOverViewResult Result = new AdminOverViewResult();
-            // Check date range is valid
-            if (range.Start.Date > range.End.Date)
-            {
-                Result.ErrorContent = new ErrorContent("Invalid date range.", ErrorOrigin.Client);
-                return Result;
-            }
-
-            Result.FileTypesCount = await GetFileTypesCount(range);
-            return Result;
-        }
-
         /// <summary>
         /// Get a list of users
         /// </summary>
@@ -598,60 +574,5 @@ namespace XtraUpload.Administration.Service
         }
 
         
-
-        private async Task<IEnumerable<ItemCountResult>> GetUsersHistory(DateRangeViewModel range)
-        {
-            List<ItemCountResult> users = new List<ItemCountResult>(await _unitOfWork.Users.UsersCountByDateRange(range.Start, range.End));
-
-            return FormatResult(range, users);
-        }
-
-        private static IEnumerable<ItemCountResult> FormatResult(DateRangeViewModel range, List<ItemCountResult> items)
-        {
-            // Check if all days are included (even the days with 0 downloads)
-            var totalDays = Math.Round((range.End - range.Start).TotalDays);
-            if (items.Count < totalDays)
-            {
-                for (int i = 0; i <= totalDays; i++)
-                {
-                    if (items.FirstOrDefault(s => s.Date.Date.CompareTo(range.Start.AddDays(i).Date) == 0) == null)
-                    {
-                        items.Add(new ItemCountResult()
-                        {
-                            Date = range.Start.AddDays(i),
-                            ItemCount = 0
-                        });
-                    }
-                }
-
-                items = items.OrderBy(s => s.Date).ToList();
-            }
-            return items;
-        }
-
-        private async Task<IEnumerable<FileTypeResult>> GetFileTypesCount(DateRangeViewModel range)
-        {
-            IEnumerable<FileTypesCountResult> queryResult = await _unitOfWork.Files.FileTypesByDateRange(range.Start, range.End);
-            List<FileTypeResult> result = new List<FileTypeResult>();
-            // Collect common file types
-            foreach (var item in fileTypes)
-            {
-                result.Add(new FileTypeResult()
-                {
-                     FileType = item.Key,
-                     ItemCount = queryResult.Where(s => fileTypes[item.Key].Contains(s.Extension)).Sum(s => s.ItemCount)
-                });
-            }
-            // other file type
-            result.Add(new FileTypeResult()
-            {
-                FileType = FileType.Others,
-                ItemCount = queryResult.Where(s => !fileTypes[FileType.Archives].Contains(s.Extension))
-                                       .Where(s => !fileTypes[FileType.Multimedia].Contains(s.Extension))
-                                       .Where(s => !fileTypes[FileType.Documents].Contains(s.Extension))
-                                       .Sum(s => s.ItemCount)
-            });
-            return result;
-        }
     }
 }
