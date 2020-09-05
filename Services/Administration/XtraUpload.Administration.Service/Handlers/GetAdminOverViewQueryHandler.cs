@@ -58,12 +58,15 @@ namespace XtraUpload.Administration.Service
                 _logger.LogError($"No drive found with the name: {rootDrive}, please check your appsettings.json configs");
                 #endregion
             }
+            var userStats = await _mediator.Send(new GetUserStatsQuery(request.DateRange));
+            var uploadStats = await _mediator.Send(new GetUploadStatsQuery(request.DateRange));
+            var fileStats = await _mediator.Send(new GetFileTypeStatsQuery(request.DateRange));
 
+            Result.UsersCount = userStats.UsersCount;
+            Result.FilesCount = uploadStats.FilesCount;
+            Result.FileTypesCount = fileStats.FileTypesCount;
             Result.TotalFiles = await _unitOfWork.Files.CountAsync();
             Result.TotalUsers = await _unitOfWork.Users.CountAsync();
-            Result.FilesCount = await _mediator.Send(new GetUploadsHistoryQuery(request.DateRange));
-            Result.UsersCount = await _mediator.Send(new GetUsersHistoryQuery(request.DateRange));
-            Result.FileTypesCount = await _mediator.Send(new GetFileTypesCountQuery(request.DateRange));
             Result.DriveSize = totalsize;
             Result.FreeSpace = freeSpace;
 

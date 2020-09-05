@@ -6,13 +6,13 @@ namespace XtraUpload.Administration.Service.Common
     /// <summary>
     /// Get upload count grouped by the given period of time
     /// </summary>
-    public class GetUploadCountsQuery : IRequest<AdminOverViewResult>
+    public class GetUploadStatsQuery : IRequest<AdminOverViewResult>
     {
-        public GetUploadCountsQuery(DateTime start, DateTime end)
+        public GetUploadStatsQuery(DateTime start, DateTime end)
         {
             Range = new DateRangeModel(start, end);
         }
-        public GetUploadCountsQuery(DateRangeModel range)
+        public GetUploadStatsQuery(DateRangeModel range)
         {
             Range = new DateRangeModel(range.Start, range.End);
         }

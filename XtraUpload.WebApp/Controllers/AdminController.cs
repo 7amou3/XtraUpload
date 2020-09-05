@@ -39,7 +39,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("uploadstats")]
         public async Task<IActionResult> UploadStats([FromQuery]DateRangeViewModel range)
         {
-            AdminOverViewResult Result = await _mediatr.Send(new GetUploadCountsQuery(range.Start, range.End));
+            AdminOverViewResult Result = await _mediatr.Send(new GetUploadStatsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.FilesCount);
         }

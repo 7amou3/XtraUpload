@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
+using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 
 namespace XtraUpload.Administration.Service
@@ -14,11 +16,16 @@ namespace XtraUpload.Administration.Service
     /// </summary>
     public class GetFileTypeStatsQueryHandler : IRequestHandler<GetFileTypeStatsQuery, AdminOverViewResult>
     {
-        readonly IMediator _mediatr;
-
-        public GetFileTypeStatsQueryHandler(IMediator mediatr)
+        readonly Dictionary<FileType, List<string>> fileTypes = new Dictionary<FileType, List<string>>()
         {
-            _mediatr = mediatr;
+            { FileType.Archives, new List<string>() {".rar", ".zip", ".tar", ".gzip", ".aaf", ".iso", ".bin" } },
+            { FileType.Multimedia, new List<string>() {".mp4", ".flv", ".mov", ".avi", ".mp3", ".wav", ".png", ".gif", ".jpe" ,".jpg", ".jpeg"} },
+            { FileType.Documents, new List<string>() {".docx", ".pdf", ".txt", ".xml", ".xlsx", ".csv", ".pptx"} }
+        };
+        readonly IUnitOfWork _unitOfWork;
+        public GetFileTypeStatsQueryHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<AdminOverViewResult> Handle(GetFileTypeStatsQuery request, CancellationToken cancellationToken)
@@ -30,9 +37,36 @@ namespace XtraUpload.Administration.Service
                 Result.ErrorContent = new ErrorContent("Invalid date range.", ErrorOrigin.Client);
                 return Result;
             }
+            // Query db
+            IEnumerable<FileTypesCountResult> queryResult = await _unitOfWork.Files.FileTypesByDateRange(request.Range.Start, request.Range.End);
 
-            Result.FileTypesCount = await _mediatr.Send(new GetFileTypesCountQuery(request.Range));
+            Result.FileTypesCount = FormatResult(queryResult);
+
             return Result;
+        }
+
+        private IEnumerable<FileTypeResult> FormatResult(IEnumerable<FileTypesCountResult> queryResult)
+        {
+            List<FileTypeResult> result = new List<FileTypeResult>();
+            // Collect common file types
+            foreach (var item in fileTypes)
+            {
+                result.Add(new FileTypeResult()
+                {
+                    FileType = item.Key,
+                    ItemCount = queryResult.Where(s => fileTypes[item.Key].Contains(s.Extension)).Sum(s => s.ItemCount)
+                });
+            }
+            // other file type
+            result.Add(new FileTypeResult()
+            {
+                FileType = FileType.Others,
+                ItemCount = queryResult.Where(s => !fileTypes[FileType.Archives].Contains(s.Extension))
+                                       .Where(s => !fileTypes[FileType.Multimedia].Contains(s.Extension))
+                                       .Where(s => !fileTypes[FileType.Documents].Contains(s.Extension))
+                                       .Sum(s => s.ItemCount)
+            });
+            return result;
         }
     }
 }

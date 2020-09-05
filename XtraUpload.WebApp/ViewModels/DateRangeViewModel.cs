@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.WebApp
 {
     public class DateRangeViewModel
     {

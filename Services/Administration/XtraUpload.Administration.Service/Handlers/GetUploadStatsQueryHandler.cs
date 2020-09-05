@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
+using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 
 namespace XtraUpload.Administration.Service
@@ -12,16 +13,17 @@ namespace XtraUpload.Administration.Service
     /// <summary>
     /// Get upload count grouped by the given period of time
     /// </summary>
-    public class GetUploadCountsQueryHandler : IRequestHandler<GetUploadCountsQuery, AdminOverViewResult>
+    public class GetUploadStatsQueryHandler : IRequestHandler<GetUploadStatsQuery, AdminOverViewResult>
     {
-        readonly IMediator _mediatr;
-        public GetUploadCountsQueryHandler(IMediator mediatr)
+        readonly IUnitOfWork _unitOfWork;
+        public GetUploadStatsQueryHandler(IUnitOfWork unitOfWork)
         {
-            _mediatr = mediatr;
+            _unitOfWork = unitOfWork;
         }
-        public async Task<AdminOverViewResult> Handle(GetUploadCountsQuery request, CancellationToken cancellationToken)
+        public async Task<AdminOverViewResult> Handle(GetUploadStatsQuery request, CancellationToken cancellationToken)
         {
             AdminOverViewResult Result = new AdminOverViewResult();
+
             // Check date range is valid
             if (request.Range.Start.Date > request.Range.End.Date)
             {
@@ -29,7 +31,10 @@ namespace XtraUpload.Administration.Service
                 return Result;
             }
 
-            Result.FilesCount = await _mediatr.Send( new GetUploadsHistoryQuery(request.Range));
+            // Query db
+            List<ItemCountResult> files = new List<ItemCountResult>(await _unitOfWork.Files.FilesCountByDateRange(request.Range.Start, request.Range.End));
+
+            Result.FilesCount = AdministrationHelpers.FormatResult(request.Range, files);
             return Result;
         }
     }
