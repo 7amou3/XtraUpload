@@ -29,7 +29,7 @@ namespace XtraUpload.Administration.Service.Common
         /// <summary>
         /// Get a list of users
         /// </summary>
-        Task<PagingResult<UserExtended>> GetUsers(PageSearchViewModel model);
+        Task<PagingResult<UserExtended>> GetUsers(PageSearchModel model);
 
         /// <summary>
         /// Edit a user
@@ -44,7 +44,7 @@ namespace XtraUpload.Administration.Service.Common
         /// <summary>
         /// Get a list of files 
         /// </summary>
-        Task<PagingResult<FileItemExtended>> GetFiles(PageSearchViewModel model);
+        Task<PagingResult<FileItemExtended>> GetFiles(PageSearchModel model);
 
         /// <summary>
         /// Get a list of file extensions

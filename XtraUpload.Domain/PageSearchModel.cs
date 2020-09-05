@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Domain
 {
     /// <summary>
     /// Used to paginate data
     /// </summary>
-    public class PageSearchViewModel
+    public class PageSearchModel
     {
         /// <summary>
         /// The current page index.
@@ -22,11 +22,11 @@ namespace XtraUpload.WebApp.Common
         /// <summary>
         /// Index of the page that was selected previously
         /// </summary>
-        public Nullable<ushort> PreviousPageIndex { get; set; }
+        public ushort? PreviousPageIndex { get; set; }
         /// <summary>
         /// Search start date 
         /// </summary>
-        public Nullable<DateTime> Start { get; set; }
+        public DateTime? Start { get; set; }
         /// <summary>
         /// Search end date 
         /// </summary>
@@ -35,11 +35,11 @@ namespace XtraUpload.WebApp.Common
             get { return _end; }
             set { _end = value.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59); }
         }
-        private Nullable<DateTime> _end;
+        private DateTime? _end;
         /// <summary>
         /// Files owner 
         /// </summary>
-        public Nullable<Guid> UserId { get; set; }
+        public Guid? UserId { get; set; }
         /// <summary>
         /// files extensions
         /// </summary>

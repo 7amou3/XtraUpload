@@ -93,7 +93,7 @@ namespace XtraUpload.Database.Data
         /// <summary>
         /// Search and return a paging list of users
         /// </summary>
-        public async Task<IEnumerable<UserExtended>> GetUsers(PageSearchViewModel model, Expression<Func<User, bool>> searchCriteria)
+        public async Task<IEnumerable<UserExtended>> GetUsers(PageSearchModel model, Expression<Func<User, bool>> searchCriteria)
         {
             var query = _context.Users
                                .Include(s => s.Role)

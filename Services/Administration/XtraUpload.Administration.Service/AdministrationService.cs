@@ -125,7 +125,7 @@ namespace XtraUpload.Administration.Service
         /// <summary>
         /// Get a list of users
         /// </summary>
-        public async Task<PagingResult<UserExtended>> GetUsers(PageSearchViewModel model)
+        public async Task<PagingResult<UserExtended>> GetUsers(PageSearchModel model)
         {
             PagingResult<UserExtended> result = new PagingResult<UserExtended>();
             Expression<Func<User, bool>> criteria = s => true;
@@ -224,7 +224,7 @@ namespace XtraUpload.Administration.Service
         /// <summary>
         /// Get a list of files 
         /// </summary>
-        public async Task<PagingResult<FileItemExtended>> GetFiles(PageSearchViewModel model)
+        public async Task<PagingResult<FileItemExtended>> GetFiles(PageSearchModel model)
         {
             PagingResult<FileItemExtended> Result = new PagingResult<FileItemExtended>();
 

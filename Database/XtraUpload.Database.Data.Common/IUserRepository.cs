@@ -40,6 +40,6 @@ namespace XtraUpload.Database.Data.Common
         /// <summary>
         /// Search of paging users
         /// </summary>
-        Task<IEnumerable<UserExtended>> GetUsers(PageSearchViewModel model, Expression<Func<User, bool>> searchCriteria);
+        Task<IEnumerable<UserExtended>> GetUsers(PageSearchModel model, Expression<Func<User, bool>> searchCriteria);
     }
 }

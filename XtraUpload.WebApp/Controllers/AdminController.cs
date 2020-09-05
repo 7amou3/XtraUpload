@@ -61,7 +61,7 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers([FromQuery]PageSearchViewModel model)
+        public async Task<IActionResult> GetUsers([FromQuery]PageSearchModel model)
         {
             PagingResult<UserExtended> Result = await _administration.GetUsers(model);
 
@@ -84,7 +84,7 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpGet("files")]
-        public async Task<IActionResult> GetFiles([FromQuery]PageSearchViewModel model)
+        public async Task<IActionResult> GetFiles([FromQuery]PageSearchModel model)
         {
             PagingResult<FileItemExtended> Result = await _administration.GetFiles(model);
 

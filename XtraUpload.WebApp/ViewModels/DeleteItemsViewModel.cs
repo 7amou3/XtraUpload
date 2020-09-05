@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using XtraUpload.Domain;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.WebApp
 {
     public class DeleteItemsViewModel
     {
