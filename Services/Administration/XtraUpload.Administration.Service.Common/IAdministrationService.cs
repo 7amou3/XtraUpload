@@ -18,7 +18,7 @@ namespace XtraUpload.Administration.Service.Common
         /// <summary>
         /// Edit a user
         /// </summary>
-        Task<EditUserResult> EditUser(EditUserViewModel model);
+        Task<EditUserResult> EditUser(EditUserCommand model);
 
         /// <summary>
         /// Delete a user

@@ -68,9 +68,9 @@ namespace XtraUpload.WebApp.Controllers
             return HandleResult(Result);
         }
         [HttpPatch("user")]
-        public async Task<IActionResult> UpdateUser(EditUserViewModel model)
+        public async Task<IActionResult> UpdateUser(EditUserCommand command)
         {
-            EditUserResult result = await _administration.EditUser(model);
+            EditUserResult result = await _mediatr.Send(command);
 
             return HandleResult(result, result.User);
         }

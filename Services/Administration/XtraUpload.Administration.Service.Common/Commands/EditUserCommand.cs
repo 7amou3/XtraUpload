@@ -1,8 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using System.ComponentModel.DataAnnotations;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Administration.Service.Common
 {
-    public class EditUserViewModel
+    /// <summary>
+    /// Edit a user
+    /// </summary>
+    public class EditUserCommand : IRequest<EditUserResult>
     {
         [Required]
         public string Id { get; set; }

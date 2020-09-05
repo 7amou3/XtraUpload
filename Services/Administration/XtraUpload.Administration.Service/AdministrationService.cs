@@ -59,7 +59,7 @@ namespace XtraUpload.Administration.Service
         /// <summary>
         /// Edit a user
         /// </summary>
-        public async Task<EditUserResult> EditUser(EditUserViewModel model)
+        public async Task<EditUserResult> EditUser(EditUserCommand model)
         {
             EditUserResult result = new EditUserResult();
             // Check email is not duplicated
