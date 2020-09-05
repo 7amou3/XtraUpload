@@ -1,14 +1,21 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
+using System.Text;
+using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Administration.Service.Common
 {
-    public class RoleClaimsViewModel
+    /// <summary>
+    /// Add a new role claims
+    /// </summary>
+    public class AddRoleClaimsCommand : IRequest<RoleClaimsResult>
     {
         public Role Role { get; set; }
         public XuClaims Claims { get; set; }
     }
+
     public class XuClaims
     {
         public bool? AdminAreaAccess { get; set; }

@@ -148,17 +148,17 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPost("groups")]
-        public async Task<IActionResult> AddRoleClaims(RoleClaimsViewModel model)
+        public async Task<IActionResult> AddRoleClaims(AddRoleClaimsCommand cmd)
         {
-            RoleClaimsResult result = await _administration.AddRoleClaims(model);
+            RoleClaimsResult result = await _mediatr.Send(cmd);
 
             return HandleResult(result, _mapper.Map<RoleClaimsResultDto>(result));
         }
 
         [HttpPatch("groups")]
-        public async Task<IActionResult> UpdateRoleClaims(RoleClaimsViewModel model)
+        public async Task<IActionResult> UpdateRoleClaims(UpdateRoleClaimsCommand cmd)
         {
-            RoleClaimsResult result = await _administration.UpdateRoleClaims(model);
+            RoleClaimsResult result = await _mediatr.Send(cmd);
 
             return HandleResult(result, _mapper.Map<RoleClaimsResultDto>(result));
         }

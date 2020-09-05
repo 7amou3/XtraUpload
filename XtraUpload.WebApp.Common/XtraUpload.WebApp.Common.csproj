@@ -10,4 +10,8 @@
     <ProjectReference Include="..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

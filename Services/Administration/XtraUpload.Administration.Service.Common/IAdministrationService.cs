@@ -60,15 +60,6 @@ namespace XtraUpload.Administration.Service.Common
         /// </summary>
         Task<RolesResult> GetUsersRole();
 
-        /// <summary>
-        /// Add a new role claims
-        /// </summary>
-        Task<RoleClaimsResult> AddRoleClaims(RoleClaimsViewModel model);
-
-        /// <summary>
-        /// Updates claims of a role
-        /// </summary>
-        Task<RoleClaimsResult> UpdateRoleClaims(RoleClaimsViewModel model);
 
         /// <summary>
         /// Delete a role claim
