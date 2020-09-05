@@ -43,34 +43,6 @@ namespace XtraUpload.FileManager.Service
 
         #region IFileDownloadService members
 
-        
-        /// <summary>
-        /// Generate a templink
-        /// </summary>
-        public async Task<TempLinkResult> TempLink(string fileId)
-        {
-            TempLinkResult Result = new TempLinkResult();
-
-            // Generate the download data to store
-            Download download = new Download()
-            {
-                Id = Helpers.GenerateUniqueId(),
-                FileId = fileId,
-                IpAdress = _httpContext.Request.Host.Host,
-                StartedAt = DateTime.Now
-            };
-            _unitOfWork.Downloads.Add(download);
-
-            // Try to save in db
-            Result = await _unitOfWork.CompleteAsync(Result);
-            if (Result.State == OperationState.Success)
-            {
-                Result.FileDownload = download;
-            }
-
-            return Result;
-        }
-
         /// <summary>
         /// Download a file 
         /// </summary>

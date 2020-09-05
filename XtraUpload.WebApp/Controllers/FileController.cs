@@ -161,7 +161,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("templink/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> Downloadlink(string fileid)
         {
-            TempLinkResult Result = await _fileDownloadService.TempLink(fileid);
+            TempLinkResult Result = await _mediator.Send(new GenerateTempLinkCommand(fileid));
 
             return HandleResult(Result, new { downloadurl = BaseUrl + "/api/file/download/" + Result.FileDownload.Id });
         }
