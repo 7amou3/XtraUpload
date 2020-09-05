@@ -17,20 +17,20 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class UpdateConfigSectionCommandHandler : IRequestHandler<UpdateConfigSectionCommand, OperationResult>
     {
-        #region Fields
         readonly IWritableOptions<JwtIssuerOptions> _JwtOpts;
         readonly IWritableOptions<UploadOptions> _uploadOpts;
         readonly IWritableOptions<EmailSettings> _emailSettings;
         readonly IWritableOptions<HardwareCheckOptions> _hdOpts;
         readonly IWritableOptions<WebAppSettings> _appSettings;
         readonly IWritableOptions<SocialAuthSettings> _socialSettings;
-        #endregion
-
-        #region Constructor
-
-        public UpdateConfigSectionCommandHandler(IWritableOptions<JwtIssuerOptions> jwtOpts, IWritableOptions<UploadOptions> uploadOpts,
-            IWritableOptions<EmailSettings> emailSettings, IWritableOptions<HardwareCheckOptions> hdOpts,
-            IWritableOptions<WebAppSettings> appSettings, IWritableOptions<SocialAuthSettings> socialSettings)
+       
+        public UpdateConfigSectionCommandHandler(
+            IWritableOptions<JwtIssuerOptions> jwtOpts,
+            IWritableOptions<UploadOptions> uploadOpts,
+            IWritableOptions<EmailSettings> emailSettings,
+            IWritableOptions<HardwareCheckOptions> hdOpts,
+            IWritableOptions<WebAppSettings> appSettings, 
+            IWritableOptions<SocialAuthSettings> socialSettings)
         {
             _hdOpts = hdOpts;
             _JwtOpts = jwtOpts;
@@ -39,10 +39,6 @@ namespace XtraUpload.Setting.Service
             _emailSettings = emailSettings;
             _socialSettings = socialSettings;
         }
-
-        #endregion
-
-        #region Handler
 
         public async Task<OperationResult> Handle(UpdateConfigSectionCommand request, CancellationToken cancellationToken)
         {
@@ -119,6 +115,5 @@ namespace XtraUpload.Setting.Service
             return new OperationResult();
         }
 
-        #endregion
     }
 }

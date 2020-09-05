@@ -13,19 +13,13 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class GetPageQueryHandler : IRequestHandler<GetPageQuery, PageResult>
     {
-        #region Fields
         readonly IUnitOfWork _unitOfWork;
-        #endregion
-
-        #region Constructor
+        
         public GetPageQueryHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        #endregion
-
-        #region Handler
-
+        
         public async Task<PageResult> Handle(GetPageQuery request, CancellationToken cancellationToken)
         {
             PageResult result = new PageResult();
@@ -39,6 +33,5 @@ namespace XtraUpload.Setting.Service
             result.Page = page;
             return result;
         }
-        #endregion
     }
 }

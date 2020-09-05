@@ -2,12 +2,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
-using XtraUpload.Authentication.Service.Common;
 using MediatR;
 
 namespace XtraUpload.WebApp.Controllers
@@ -17,15 +14,10 @@ namespace XtraUpload.WebApp.Controllers
     {
         readonly IMapper _mapper;
         readonly IMediator _mediatr;
-        readonly WebAppSettings _webappSettings;
-        readonly SocialAuthSettings _socialSettings;
 
-        public SettingController(IOptionsMonitor<SocialAuthSettings> socialSettings,
-            IOptionsMonitor<WebAppSettings> webappSettings, IMapper mapper, IMediator mediatr)
+        public SettingController(IMediator mediatr, IMapper mapper)
         {
             _mapper = mapper;
-            _webappSettings = webappSettings.CurrentValue;
-            _socialSettings = socialSettings.CurrentValue;
             _mediatr = mediatr;
         }
 
@@ -88,16 +80,20 @@ namespace XtraUpload.WebApp.Controllers
 
         [AllowAnonymous]
         [HttpGet("webappconfig")]
-        public IActionResult GetWebAppConfig()
+        public async Task<IActionResult> GetWebAppConfig()
         {
-            return Ok(_webappSettings);
+            ReadAppSettingResult result = await _mediatr.Send(new GetAppSettingsQuery());
+
+            return Ok(result.AppSettings);
         }
 
         [AllowAnonymous]
         [HttpGet("socialauthconfig")]
-        public IActionResult GetSocialAuthConfig()
+        public async Task<IActionResult> GetSocialAuthConfig()
         {
-            return Ok(_socialSettings);
+            ReadAppSettingResult result = await _mediatr.Send(new GetAppSettingsQuery());
+
+            return Ok(result.SocialAuthSettings);
         }
     }
 }

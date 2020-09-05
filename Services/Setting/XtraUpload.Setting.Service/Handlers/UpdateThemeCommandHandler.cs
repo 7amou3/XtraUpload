@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
@@ -18,20 +16,15 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class UpdateThemeCommandHandler : IRequestHandler<UpdateThemeCommand, OperationResult>
     {
-        #region Fields
         readonly ClaimsPrincipal _caller;
         readonly IUnitOfWork _unitOfWork;
-        #endregion
-
-        #region Constructor
+       
         public UpdateThemeCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Hnadler
+        
         public async Task<OperationResult> Handle(UpdateThemeCommand request, CancellationToken cancellationToken)
         {
             string userId = _caller.GetUserId();
@@ -50,6 +43,5 @@ namespace XtraUpload.Setting.Service
             // Save to db
             return await _unitOfWork.CompleteAsync(result);
         }
-        #endregion
     }
 }

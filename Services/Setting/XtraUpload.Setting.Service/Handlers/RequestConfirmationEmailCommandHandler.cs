@@ -18,23 +18,17 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class RequestConfirmationEmailCommandHandler : IRequestHandler<RequestConfirmationEmailCommand, OperationResult>
     {
-        #region Fields
         readonly IMediator _mediatr;
         readonly ClaimsPrincipal _caller;
         readonly IUnitOfWork _unitOfWork;
-        #endregion
-
-        #region Constructor
+        
         public RequestConfirmationEmailCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IMediator mediatr)
         {
             _mediatr = mediatr;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Hnadler
-
+        
         public async Task<OperationResult> Handle(RequestConfirmationEmailCommand request, CancellationToken cancellationToken)
         {
             string userId = _caller.GetUserId();
@@ -81,6 +75,5 @@ namespace XtraUpload.Setting.Service
             return Result;
         }
 
-        #endregion
     }
 }
