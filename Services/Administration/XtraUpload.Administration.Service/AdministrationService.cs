@@ -208,26 +208,6 @@ namespace XtraUpload.Administration.Service
         }
 
         /// <summary>
-        /// Update extension name
-        /// </summary>
-        public async Task<FileExtensionResult> UpdateExtension(EditExtensionViewModel model)
-        {
-            FileExtensionResult result = new FileExtensionResult();
-            FileExtension ext = await _unitOfWork.FileExtensions.FirstOrDefaultAsync(s => s.Id == model.Id);
-            if (ext == null)
-            {
-                result.ErrorContent = new ErrorContent("No file type found with the provided id.", ErrorOrigin.Client);
-                return result;
-            }
-
-            // update extension name
-            ext.Name = model.NewExt;
-
-            // Save to db
-            return await _unitOfWork.CompleteAsync(result);
-        }
-
-        /// <summary>
         /// Delete extension
         /// </summary>
         public async Task<OperationResult> DeleteExtension(int id)

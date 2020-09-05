@@ -124,9 +124,9 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPatch("extension")]
-        public async Task<IActionResult> UpdateExtension(EditExtensionViewModel model)
+        public async Task<IActionResult> UpdateExtension(EditExtensionViewModel ext)
         {
-            FileExtensionResult result = await _administration.UpdateExtension(model);
+            FileExtensionResult result = await _mediatr.Send(new UpdateExtensionCommand(ext.Id, ext.NewExt));
 
             return HandleResult(result);
         }
