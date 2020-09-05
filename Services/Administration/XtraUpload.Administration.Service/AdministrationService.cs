@@ -40,43 +40,6 @@ namespace XtraUpload.Administration.Service
             { FileType.Documents, new List<string>() {".docx", ".pdf", ".txt", ".xml", ".xlsx", ".csv", ".pptx"} }
         };
 
-        public async Task<AdminOverViewResult> AdminOverView(DateRangeViewModel range)
-        {
-            AdminOverViewResult Result = new AdminOverViewResult();
-            // Check date range is valid
-            if (range.Start.Date >= range.End.Date)
-            {
-                Result.ErrorContent = new ErrorContent("Invalid date range.", ErrorOrigin.Client);
-                return Result;
-            }
-
-            long freeSpace = 0;
-            long totalsize = 0;
-            string rootDrive = Path.GetPathRoot(_uploadOpts.UploadPath);
-            DriveInfo driveInfo = DriveInfo.GetDrives().FirstOrDefault(s => s.Name == rootDrive);
-            if (driveInfo != null)
-            {
-                freeSpace = driveInfo.TotalFreeSpace;
-                totalsize = driveInfo.TotalSize;
-            }
-            else
-            {
-                #region Trace
-                _logger.LogError($"No drive found with the name: {rootDrive}, please check your appsettings.json configs");
-                #endregion
-            }
-
-            Result.TotalFiles = await _unitOfWork.Files.CountAsync();
-            Result.TotalUsers = await _unitOfWork.Users.CountAsync();
-            Result.FilesCount = await GetUploadsHistory(range);
-            Result.UsersCount = await GetUsersHistory(range);
-            Result.FileTypesCount = await GetFileTypesCount(range);
-            Result.DriveSize = totalsize;
-            Result.FreeSpace = freeSpace;
-
-            return Result;
-        }
-
         public async Task<AdminOverViewResult> UploadCounts(DateRangeViewModel range)
         {
             AdminOverViewResult Result = new AdminOverViewResult();

@@ -9,10 +9,7 @@ namespace XtraUpload.Administration.Service.Common
 {
     public interface IAdministrationService
     {
-        /// <summary>
-        /// An overview of the current stats (users, files, disk..)
-        /// </summary>
-        Task<AdminOverViewResult> AdminOverView(DateRangeViewModel range);
+        
         /// <summary>
         /// Get upload count grouped by the given period of time
         /// </summary>

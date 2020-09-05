@@ -31,8 +31,8 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("overview")]
         public async Task<IActionResult> OverView([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.AdminOverView(range);
-
+            var Result = await _mediatr.Send(new GetAdminOverViewQuery(range.Start, range.End));
+            
             return HandleResult(Result);
         }
 
