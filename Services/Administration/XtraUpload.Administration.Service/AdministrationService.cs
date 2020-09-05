@@ -40,20 +40,7 @@ namespace XtraUpload.Administration.Service
             { FileType.Documents, new List<string>() {".docx", ".pdf", ".txt", ".xml", ".xlsx", ".csv", ".pptx"} }
         };
 
-        public async Task<AdminOverViewResult> UploadCounts(DateRangeViewModel range)
-        {
-            AdminOverViewResult Result = new AdminOverViewResult();
-            // Check date range is valid
-            if (range.Start.Date > range.End.Date)
-            {
-                Result.ErrorContent = new ErrorContent("Invalid date range.", ErrorOrigin.Client);
-                return Result;
-            }
-
-            Result.FilesCount = await GetUploadsHistory(range);
-            return Result;
-        }
-
+       
         public async Task<AdminOverViewResult> UserCounts(DateRangeViewModel range)
         {
             AdminOverViewResult Result = new AdminOverViewResult();
@@ -625,12 +612,7 @@ namespace XtraUpload.Administration.Service
             return await _unitOfWork.CompleteAsync(result);
         }
 
-        private async Task<IEnumerable<ItemCountResult>> GetUploadsHistory(DateRangeViewModel range)
-        {
-            List<ItemCountResult> files = new List<ItemCountResult>(await _unitOfWork.Files.FilesCountByDateRange(range.Start, range.End));
-
-            return FormatResult(range, files);
-        }
+        
 
         private async Task<IEnumerable<ItemCountResult>> GetUsersHistory(DateRangeViewModel range)
         {

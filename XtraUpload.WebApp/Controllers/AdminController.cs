@@ -31,7 +31,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("overview")]
         public async Task<IActionResult> OverView([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _mediatr.Send(new GetAdminOverViewQuery(range.Start, range.End));
+            AdminOverViewResult Result = await _mediatr.Send(new GetAdminOverViewQuery(range.Start, range.End));
             
             return HandleResult(Result);
         }
@@ -39,7 +39,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("uploadstats")]
         public async Task<IActionResult> UploadStats([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.UploadCounts(range);
+            AdminOverViewResult Result = await _mediatr.Send(new GetUploadCountsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.FilesCount);
         }
