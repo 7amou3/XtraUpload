@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
-    <ProjectReference Include="..\..\..\XtraUpload.WebApp.Common\XtraUpload.WebApp.Common.csproj" />
   </ItemGroup>
 
 </Project>

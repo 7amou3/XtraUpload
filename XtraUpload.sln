@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Database.Migrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Database.Data.Common", "Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj", "{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApp.Common", "XtraUpload.WebApp.Common\XtraUpload.WebApp.Common.csproj", "{5450B971-079D-4E26-85B3-700FC367BC5C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApp", "XtraUpload.WebApp\XtraUpload.WebApp.csproj", "{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Administration", "Administration", "{29006F95-A24E-4946-913A-72375029795E}"
@@ -51,15 +49,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Setting.Service.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Authentication.Host", "Services\Authentication\XtraUpload.Authentication.Host\XtraUpload.Authentication.Host.csproj", "{B6F4FD87-CE76-4C2F-9211-E06D13D63910}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.FileManager.Host", "Services\FileManager\XtraUpload.FileManager.Host\XtraUpload.FileManager.Host.csproj", "{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.FileManager.Host", "Services\FileManager\XtraUpload.FileManager.Host\XtraUpload.FileManager.Host.csproj", "{EF86A6B7-5E9D-42E4-88B3-3E7657D08E8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Email.Host", "Services\Email\XtraUpload.Email.Host\XtraUpload.Email.Host.csproj", "{DE782035-27E7-4736-9172-9316D1CB844E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Email.Host", "Services\Email\XtraUpload.Email.Host\XtraUpload.Email.Host.csproj", "{DE782035-27E7-4736-9172-9316D1CB844E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Administration.Host", "Services\Administration\XtraUpload.Administration.Host\XtraUpload.Administration.Host.csproj", "{516D4CD0-87EB-48B3-A286-759FA99F0FF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Administration.Host", "Services\Administration\XtraUpload.Administration.Host\XtraUpload.Administration.Host.csproj", "{516D4CD0-87EB-48B3-A286-759FA99F0FF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Setting.Host", "Services\Setting\XtraUpload.Setting.Host\XtraUpload.Setting.Host.csproj", "{EEF62A8E-04F1-4532-9EEE-73EB17F81780}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Setting.Host", "Services\Setting\XtraUpload.Setting.Host\XtraUpload.Setting.Host.csproj", "{EEF62A8E-04F1-4532-9EEE-73EB17F81780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.Database.Host", "Database\XtraUpload.Database.Host\XtraUpload.Database.Host.csproj", "{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Database.Host", "Database\XtraUpload.Database.Host\XtraUpload.Database.Host.csproj", "{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,10 +81,6 @@ Global
 		{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5450B971-079D-4E26-85B3-700FC367BC5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5450B971-079D-4E26-85B3-700FC367BC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5450B971-079D-4E26-85B3-700FC367BC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5450B971-079D-4E26-85B3-700FC367BC5C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
