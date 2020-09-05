@@ -9,32 +9,16 @@ namespace XtraUpload.Administration.Service.Common
 {
     public interface IAdministrationService
     {
-        /// <summary>
-        /// An overview of the current stats (users, files, disk..)
-        /// </summary>
-        Task<AdminOverViewResult> AdminOverView(DateRangeViewModel range);
-        /// <summary>
-        /// Get upload count grouped by the given period of time
-        /// </summary>
-        Task<AdminOverViewResult> UploadCounts(DateRangeViewModel range);
-        /// <summary>
-        /// Get user count grouped by the given period of time
-        /// </summary>
-        Task<AdminOverViewResult> UserCounts(DateRangeViewModel range);
-        /// <summary>
-        /// Get file type count grouped by the given period of time
-        /// </summary>
-        Task<AdminOverViewResult> FileTypesCounts(DateRangeViewModel range);
 
         /// <summary>
         /// Get a list of users
         /// </summary>
-        Task<PagingResult<UserExtended>> GetUsers(PageSearchViewModel model);
+        Task<PagingResult<UserExtended>> GetUsers(PageSearchModel model);
 
         /// <summary>
         /// Edit a user
         /// </summary>
-        Task<EditUserResult> EditUser(EditUserViewModel model);
+        Task<EditUserResult> EditUser(EditUserCommand model);
 
         /// <summary>
         /// Delete a user
@@ -44,7 +28,7 @@ namespace XtraUpload.Administration.Service.Common
         /// <summary>
         /// Get a list of files 
         /// </summary>
-        Task<PagingResult<FileItemExtended>> GetFiles(PageSearchViewModel model);
+        Task<PagingResult<FileItemExtended>> GetFiles(PageSearchModel model);
 
         /// <summary>
         /// Get a list of file extensions
@@ -62,11 +46,6 @@ namespace XtraUpload.Administration.Service.Common
         Task<FileExtensionResult> AddExtension(string name);
 
         /// <summary>
-        /// Update extension name
-        /// </summary>
-        Task<FileExtensionResult> UpdateExtension(EditExtensionViewModel model);
-
-        /// <summary>
         /// Delete extension
         /// </summary>
         Task<OperationResult> DeleteExtension(int id);
@@ -81,15 +60,6 @@ namespace XtraUpload.Administration.Service.Common
         /// </summary>
         Task<RolesResult> GetUsersRole();
 
-        /// <summary>
-        /// Add a new role claims
-        /// </summary>
-        Task<RoleClaimsResult> AddRoleClaims(RoleClaimsViewModel model);
-
-        /// <summary>
-        /// Updates claims of a role
-        /// </summary>
-        Task<RoleClaimsResult> UpdateRoleClaims(RoleClaimsViewModel model);
 
         /// <summary>
         /// Delete a role claim

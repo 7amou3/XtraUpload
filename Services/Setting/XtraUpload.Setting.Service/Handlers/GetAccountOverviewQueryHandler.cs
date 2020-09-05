@@ -16,22 +16,17 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class GetAccountOverviewQueryHandler : IRequestHandler<GetAccountOverviewQuery, AccountOverviewResult>
     {
-        #region Fields
         readonly IMediator _mediatr;
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
-        #endregion
-
-        #region Constructor
+        
         public GetAccountOverviewQueryHandler(IUnitOfWork unitOfWork, IMediator mediatr, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mediatr = mediatr;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Handler
+        
         public async Task<AccountOverviewResult> Handle(GetAccountOverviewQuery request, CancellationToken cancellationToken)
         {
             string userId = _caller.GetUserId();
@@ -69,6 +64,5 @@ namespace XtraUpload.Setting.Service
 
             return Result;
         }
-        #endregion
     }
 }

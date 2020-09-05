@@ -31,15 +31,15 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("overview")]
         public async Task<IActionResult> OverView([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.AdminOverView(range);
-
+            AdminOverViewResult Result = await _mediatr.Send(new GetAdminOverViewQuery(range.Start, range.End));
+            
             return HandleResult(Result);
         }
 
         [HttpGet("uploadstats")]
         public async Task<IActionResult> UploadStats([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.UploadCounts(range);
+            AdminOverViewResult Result = await _mediatr.Send(new GetUploadStatsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.FilesCount);
         }
@@ -47,7 +47,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("userstats")]
         public async Task<IActionResult> UserStats([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.UserCounts(range);
+            var Result = await _mediatr.Send(new GetUserStatsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.UsersCount);
         }
@@ -55,22 +55,22 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("filetypesstats")]
         public async Task<IActionResult> FileTypesStats([FromQuery]DateRangeViewModel range)
         {
-            var Result = await _administration.FileTypesCounts(range);
+            var Result = await _mediatr.Send(new GetFileTypeStatsQuery(range.Start, range.End));
 
             return HandleResult(Result, Result.FileTypesCount);
         }
 
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers([FromQuery]PageSearchViewModel model)
+        public async Task<IActionResult> GetUsers([FromQuery]PageSearchModel model)
         {
             PagingResult<UserExtended> Result = await _administration.GetUsers(model);
 
             return HandleResult(Result);
         }
         [HttpPatch("user")]
-        public async Task<IActionResult> UpdateUser(EditUserViewModel model)
+        public async Task<IActionResult> UpdateUser(EditUserCommand command)
         {
-            EditUserResult result = await _administration.EditUser(model);
+            EditUserResult result = await _mediatr.Send(command);
 
             return HandleResult(result, result.User);
         }
@@ -84,7 +84,7 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpGet("files")]
-        public async Task<IActionResult> GetFiles([FromQuery]PageSearchViewModel model)
+        public async Task<IActionResult> GetFiles([FromQuery]PageSearchModel model)
         {
             PagingResult<FileItemExtended> Result = await _administration.GetFiles(model);
 
@@ -124,9 +124,9 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPatch("extension")]
-        public async Task<IActionResult> UpdateExtension(EditExtensionViewModel model)
+        public async Task<IActionResult> UpdateExtension(EditExtensionViewModel ext)
         {
-            FileExtensionResult result = await _administration.UpdateExtension(model);
+            FileExtensionResult result = await _mediatr.Send(new UpdateExtensionCommand(ext.Id, ext.NewExt));
 
             return HandleResult(result);
         }
@@ -148,17 +148,17 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpPost("groups")]
-        public async Task<IActionResult> AddRoleClaims(RoleClaimsViewModel model)
+        public async Task<IActionResult> AddRoleClaims(AddRoleClaimsCommand cmd)
         {
-            RoleClaimsResult result = await _administration.AddRoleClaims(model);
+            RoleClaimsResult result = await _mediatr.Send(cmd);
 
             return HandleResult(result, _mapper.Map<RoleClaimsResultDto>(result));
         }
 
         [HttpPatch("groups")]
-        public async Task<IActionResult> UpdateRoleClaims(RoleClaimsViewModel model)
+        public async Task<IActionResult> UpdateRoleClaims(UpdateRoleClaimsCommand cmd)
         {
-            RoleClaimsResult result = await _administration.UpdateRoleClaims(model);
+            RoleClaimsResult result = await _mediatr.Send(cmd);
 
             return HandleResult(result, _mapper.Map<RoleClaimsResultDto>(result));
         }

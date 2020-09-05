@@ -20,15 +20,15 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class GetUploadSettingQueryHandler : IRequestHandler<GetUploadSettingQuery, UploadSettingResult>
     {
-        #region Fields
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
         readonly UploadOptions _uploadOpt;
         readonly ILogger<GetUploadSettingQueryHandler> _logger;
-        #endregion
-
-        #region Constructor
-        public GetUploadSettingQueryHandler(IUnitOfWork unitOfWork, IOptionsMonitor<UploadOptions> uploadOpt, IHttpContextAccessor httpContextAccessor,
+ 
+        public GetUploadSettingQueryHandler(
+            IUnitOfWork unitOfWork,
+            IOptionsMonitor<UploadOptions> uploadOpt,
+            IHttpContextAccessor httpContextAccessor,
             ILogger<GetUploadSettingQueryHandler> logger)
         {
             _logger = logger;
@@ -36,10 +36,7 @@ namespace XtraUpload.Setting.Service
             _uploadOpt = uploadOpt.CurrentValue;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Handler
-
+        
         public async Task<UploadSettingResult> Handle(GetUploadSettingQuery request, CancellationToken cancellationToken)
         {
             string userId = _caller.GetUserId();
@@ -65,6 +62,5 @@ namespace XtraUpload.Setting.Service
 
             return Result;
         }
-        #endregion
     }
 }

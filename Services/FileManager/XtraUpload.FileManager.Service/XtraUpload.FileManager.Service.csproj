@@ -12,6 +12,7 @@
     <PackageReference Include="SixLabors.ImageSharp.Web" Version="1.0.0-beta0009" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
     <PackageReference Include="tusdotnet" Version="2.3.0" />
+    <PackageReference Include="MediatR" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>

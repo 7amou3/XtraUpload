@@ -13,18 +13,13 @@ namespace XtraUpload.Setting.Service
     /// </summary>
     public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, OperationResult>
     {
-        #region Fields
         readonly IUnitOfWork _unitOfWork;
-        #endregion
-
-        #region Constructor
+        
         public ConfirmEmailCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        #endregion
-
-        #region Hnadler
+        
         public async Task<OperationResult> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
         {
             OperationResult Result = new OperationResult();
@@ -53,6 +48,5 @@ namespace XtraUpload.Setting.Service
             // Save changes to db
             return await _unitOfWork.CompleteAsync(Result);
         }
-        #endregion
     }
 }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.WebApp.Common;
 
@@ -19,22 +16,18 @@ namespace XtraUpload.WebApp.Controllers
     public class FileController : BaseController
     {
         readonly IMapper _mapper;
-        readonly UploadOptions _uploadOpts;
-        readonly IFileManagerService _filemanagerService;
-        readonly IFileDownloadService _fileDownloadService;
-        
-        public FileController(IFileManagerService filemanagerService, IFileDownloadService fileDownloadService, IOptionsMonitor<UploadOptions> uploadOpts, IMapper mapper)
+        readonly IMediator _mediator;
+
+        public FileController(IMediator mediator, IMapper mapper)
         {
             _mapper = mapper;
-            _uploadOpts = uploadOpts.CurrentValue;
-            _filemanagerService = filemanagerService;
-            _fileDownloadService = fileDownloadService;
+            _mediator = mediator;
         }
 
         [HttpGet("{tusid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> Get(string tusid)
         {
-            GetFileResult Result = await _filemanagerService.GetFileByTusId(tusid);
+            GetFileResult Result = await _mediator.Send(new GetFileByTusIdQuery(tusid));
 
             return HandleResult(Result, Result.File);
         }
@@ -43,7 +36,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("requestdownload/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> RequestDownload(string fileid)
         {
-            RequestDownloadResult Result = await _fileDownloadService.RequestDownload(fileid);
+            RequestDownloadResult Result = await _mediator.Send(new RequestDownloadQuery(fileid));
             if (Result.State == OperationState.Success)
             {
                 var filedto = _mapper.Map<FileItemDto>(Result.File, opts =>
@@ -63,14 +56,14 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> Delete(string fileid)
         {
-            DeleteFileResult Result = await _filemanagerService.DeleteFile(fileid);
+            DeleteFileResult Result = await _mediator.Send(new DeleteFileCommand(fileid));
            
             return HandleResult(Result, _mapper.Map<FileItemHeaderDto>(Result.File));
         }
         [HttpDelete("deleteitems")]
         public async Task<IActionResult> DeleteItems(DeleteItemsViewModel items)
         {
-            DeleteItemsResult result = await _filemanagerService.DeleteItems(items);
+            DeleteItemsResult result = await _mediator.Send(new DeleteItemsCommand(items.SelectedFolders, items.SelectedFiles));
 
             return HandleResult(result, _mapper.Map<DeleteItemsResultDto>(result));
         }
@@ -79,7 +72,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("smallthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetSmallThumb(string fileid)
         {
-            GetFileResult Result = await _filemanagerService.GetFileById(fileid);
+            AvatarUrlResult Result = await _mediator.Send(new GetThumbnailQuery(ThumbnailSize.Small, fileid));
 
             if (Result.State != OperationState.Success)
             {
@@ -90,22 +83,17 @@ namespace XtraUpload.WebApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            string filePath = Path.Combine(_uploadOpts.UploadPath, Result.File.UserId.ToString(), Result.File.Id, Result.File.Id + ".smallthumb.png");
-            
-            if (!System.IO.File.Exists(filePath))
-            {
-                return BadRequest("The file has not been found");
-            }
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
 
-            using var img = System.IO.File.OpenRead(filePath);
-            return PhysicalFile(filePath, "image/png");
+            return File(stream, "image/png");
         }
 
         [AllowAnonymous]
         [HttpGet("mediumthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetMediumThumb(string fileid)
         {
-            GetFileResult Result = await _filemanagerService.GetFileById(fileid);
+            AvatarUrlResult Result = await _mediator.Send(new GetThumbnailQuery(ThumbnailSize.Medium, fileid));
 
             if (Result.State != OperationState.Success)
             {
@@ -116,26 +104,45 @@ namespace XtraUpload.WebApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            string filePath = Path.Combine(_uploadOpts.UploadPath, Result.File.UserId.ToString(), Result.File.Id, Result.File.Id + ".mediumthumb.png");
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
 
-            if (!System.IO.File.Exists(filePath))
+            return new FileStreamResult(stream, "image/png");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
+        public async Task<IActionResult> GetAvatar(string userid, string timespan = null)
+        {
+            AvatarUrlResult Result = await _mediator.Send(new GetAvatarQuery(userid));
+
+            if (Result.State != OperationState.Success)
             {
-                // the image has no medium thumb because it's small
-                filePath = Path.Combine(_uploadOpts.UploadPath, Result.File.UserId.ToString(), Result.File.Id, Result.File.Id + ".smallthumb.png");
-                if (!System.IO.File.Exists(filePath))
+                if (Result.ErrorContent.ErrorType == ErrorOrigin.Client)
                 {
-                    return BadRequest("The file has not been found");
+                    return BadRequest(Result);
                 }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            using var img = System.IO.File.OpenRead(filePath);
-            return PhysicalFile(filePath, "image/png");
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
+
+            return new FileStreamResult(stream, "image/png");
+        }
+
+        [HttpGet("avatarurl")]
+        public async Task<IActionResult> GetAvatarUrl()
+        {
+            AvatarUrlResult Result = await _mediator.Send(new GetUserAvatarQuery());
+
+            return HandleResult(Result);
         }
 
         [HttpPatch("fileavailability")]
         public async Task<IActionResult> FileAvailability(FileAvailabilityViewModel fileAvailability)
         {
-            FileAvailabilityResult Result = await _filemanagerService.UpdateFileAvailability(fileAvailability.Fileid, fileAvailability.Available);
+            FileAvailabilityResult Result = await _mediator.Send(new UpdateFileAvailabilityCommand(fileAvailability.Fileid, fileAvailability.Available));
             
             return HandleResult(Result, _mapper.Map<FileItemDto>(Result.File));
         }
@@ -143,7 +150,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPatch("rename")]
         public async Task<IActionResult> Rename(RenameFileViewModel file)
         {
-            RenameFileResult Result = await _filemanagerService.UpdateFileName(file.FileId, file.NewName);
+            RenameFileResult Result = await _mediator.Send(new UpdateFileNameCommand(file.FileId, file.NewName));
             
             return HandleResult(Result, _mapper.Map<FileItemHeaderDto>(Result.File));
         }
@@ -152,7 +159,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("templink/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> Downloadlink(string fileid)
         {
-            TempLinkResult Result = await _fileDownloadService.TempLink(fileid);
+            TempLinkResult Result = await _mediator.Send(new GenerateTempLinkCommand(fileid));
 
             return HandleResult(Result, new { downloadurl = BaseUrl + "/api/file/download/" + Result.FileDownload.Id });
         }
@@ -161,38 +168,15 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("download/{downloadid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task Download(string downloadid)
         {
-            await _fileDownloadService.StartDownload(downloadid);
+            await _mediator.Send(new StartDownloadCommand(downloadid));
         }
 
         [HttpPut("moveitems")]
         public async Task<IActionResult> MoveItems(MoveItemsViewModel items)
         {
-            MoveItemsResult Result = await _filemanagerService.MoveItems(items);
+            MoveItemsResult Result = await _mediator.Send(new MoveItemsCommand(items.DestFolderId, items.SelectedFiles, items.SelectedFolders));
 
             return HandleResult(Result);
-        }
-
-        [HttpGet("avatarurl")]
-        public async Task<IActionResult> GetAvatarUrl()
-        {
-            AvatarResult Result = await _filemanagerService.GetUserAvatar();
-
-            return HandleResult(Result);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
-        public IActionResult GetAvatar(string userid, string timespan = null)
-        {
-            string filePath = Path.Combine(_uploadOpts.UploadPath, userid, "avatar", "avatar.png");
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                return BadRequest("The file has not been found");
-            }
-
-            using var img = System.IO.File.OpenRead(filePath);
-            return PhysicalFile(filePath, "image/png");
         }
 
     }

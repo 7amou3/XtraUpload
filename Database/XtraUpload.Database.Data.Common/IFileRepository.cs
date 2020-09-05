@@ -13,7 +13,7 @@ namespace XtraUpload.Database.Data.Common
     {
         Task<IEnumerable<ItemCountResult>> FilesCountByDateRange(DateTime start, DateTime end);
         Task<IEnumerable<FileTypesCountResult>> FileTypesByDateRange(DateTime start, DateTime end);
-        Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchViewModel model, Expression<Func<FileItem, bool>> searchCriteria);
+        Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchModel model, Expression<Func<FileItem, bool>> searchCriteria);
         Task<IEnumerable<FileItem>> GetExpiredFiles(CancellationToken cancellationToken);
     }
 }

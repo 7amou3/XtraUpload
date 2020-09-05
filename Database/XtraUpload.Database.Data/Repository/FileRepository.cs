@@ -51,7 +51,7 @@ namespace XtraUpload.Database.Data
             return await query.ToListAsync(); 
         }
         
-        public async Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchViewModel model, Expression<Func<FileItem, bool>> searchCriteria)
+        public async Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchModel model, Expression<Func<FileItem, bool>> searchCriteria)
         {
             var query = _context.Files
                             .Include(s => s.User)

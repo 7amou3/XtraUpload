@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
-    <ProjectReference Include="..\..\..\XtraUpload.WebApp.Common\XtraUpload.WebApp.Common.csproj" />
     <ProjectReference Include="..\..\Authentication\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
   </ItemGroup>

@@ -13,21 +13,15 @@ namespace XtraUpload.Setting.Service
 {
     public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordCommand, UpdatePasswordResult>
     {
-        #region Fields
         readonly ClaimsPrincipal _caller;
         readonly IUnitOfWork _unitOfWork;
-        #endregion
-
-        #region Constructor
+        
         public UpdatePasswordCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Hnadler
-
+        
         public async Task<UpdatePasswordResult> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
         {
             string userId = _caller.GetUserId();
@@ -55,6 +49,5 @@ namespace XtraUpload.Setting.Service
             // Save to db
             return await _unitOfWork.CompleteAsync(Result);
         }
-        #endregion
     }
 }
