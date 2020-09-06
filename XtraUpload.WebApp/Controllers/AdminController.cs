@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using XtraUpload.Administration.Service.Common;
-using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
+using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.Email.Service.Common;
-using MediatR;
+using XtraUpload.Administration.Service.Common;
+using XtraUpload.Authentication.Service.Common;
+
 
 namespace XtraUpload.WebApp.Controllers
 {
@@ -19,13 +19,11 @@ namespace XtraUpload.WebApp.Controllers
     {
         readonly IMapper _mapper;
         readonly IMediator _mediatr;
-        readonly IAdministrationService _administration;
 
-        public AdminController(IAdministrationService administration, IMediator mediatr, IMapper mapper)
+        public AdminController(IMediator mediatr, IMapper mapper)
         {
             _mapper = mapper;
             _mediatr = mediatr;
-            _administration = administration;
         }
 
         [HttpGet("overview")]
@@ -63,7 +61,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers([FromQuery]PageSearchModel model)
         {
-            PagingResult<UserExtended> Result = await _administration.GetUsers(model);
+            PagingResult<UserExtended> Result = await _mediatr.Send(new GetUsersQuery(model));
 
             return HandleResult(Result);
         }
@@ -78,15 +76,15 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("users")]
         public async Task<IActionResult> DeleteUsers(IEnumerable<string> ids)
         {
-            OperationResult result = await _administration.DeleteUsers(ids);
+            OperationResult result = await _mediatr.Send(new DeleteUsersCommand(ids));
 
             return HandleResult(result);
         }
 
         [HttpGet("files")]
-        public async Task<IActionResult> GetFiles([FromQuery]PageSearchModel model)
+        public async Task<IActionResult> GetFiles([FromQuery]PageSearchModel pageSearch)
         {
-            PagingResult<FileItemExtended> Result = await _administration.GetFiles(model);
+            PagingResult<FileItemExtended> Result = await _mediatr.Send(new GetFilesQuery(pageSearch));
 
             return HandleResult(Result);
         }
@@ -94,7 +92,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("fileextensions")]
         public async Task<IActionResult> GetFileExtensions()
         {
-            FileExtensionsResult Result = await _administration.GetFileExtensions();
+            FileExtensionsResult Result = await _mediatr.Send(new GetFileExtensionsQuery());
 
             return HandleResult(Result, Result.FileExtensions);
         }
@@ -102,7 +100,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("searchusers")]
         public async Task<IActionResult> SearchUsers([FromQuery]SearchUserViewModel model)
         {
-            SearchUserResult Result = await _administration.SearchUsers(model.Name);
+            SearchUserResult Result = await _mediatr.Send(new SearchUsersQuery(model.Name));
 
             return HandleResult(Result, new { users = _mapper.Map<IEnumerable<SearchUserDto>>(Result.Users) });
         }
@@ -110,7 +108,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("files")]
         public async Task<IActionResult> DeleteFiles(IEnumerable<string> ids)
         {
-            DeleteFilesResult result = await _administration.DeleteFiles(ids);
+            DeleteFilesResult result = await _mediatr.Send(new DeleteFilesCommand(ids));
 
             return HandleResult(result, result.Files);
         }
@@ -118,7 +116,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPost("extension")]
         public async Task<IActionResult> AddExtension(AddExtensionViewModel model)
         {
-            FileExtensionResult result = await _administration.AddExtension(model.Name);
+            FileExtensionResult result = await _mediatr.Send(new AddExtensionCommand(model.Name));
 
             return HandleResult(result, result.FileExtension);
         }
@@ -134,7 +132,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("extension/{id:regex(^[[0-9]]*$)}")]
         public async Task<IActionResult> DeleteExtension(int id)
         {
-            OperationResult result = await _administration.DeleteExtension(id);
+            OperationResult result = await _mediatr.Send(new DeleteExtensionCommand(id));
 
             return HandleResult(result);
         }
@@ -142,7 +140,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("groups")]
         public async Task<IActionResult> GetUsersRole()
         {
-            RolesResult result = await _administration.GetUsersRole();
+            RolesResult result = await _mediatr.Send(new GetUsersRoleQuery());
 
             return HandleResult(result, _mapper.Map<IEnumerable<RoleClaimsResultDto>>(result.Roles));
         }
@@ -166,7 +164,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("groups/{roleId:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> DeleteRoleClaims(string roleId)
         {
-            OperationResult result = await _administration.DeleteRoleClaims(roleId);
+            OperationResult result = await _mediatr.Send(new DeleteRoleClaimsCommand(roleId));
 
             return HandleResult(result);
         }
@@ -224,28 +222,28 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("pages")]
         public async Task<IActionResult> GetPages()
         {
-            var result = await _administration.GetPages();
+            var result = await _mediatr.Send(new GetPagesQuery());
 
             return HandleResult(result, result.Pages);
         }
         [HttpPost("page")]
         public async Task<IActionResult> AddPage(Page page)
         {
-            PageResult result = await _administration.AddPage(page);
+            PageResult result = await _mediatr.Send(new AddPageCommand(page));
 
             return HandleResult(result, result.Page);
         }
         [HttpPatch("page")]
         public async Task<IActionResult> UpdatePage(Page page)
         {
-            PageResult result = await _administration.UpdatePage(page);
+            PageResult result = await _mediatr.Send(new UpdatePageCommand(page));
 
             return HandleResult(result, result.Page);
         }
         [HttpDelete("page/{id:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> DeletePage(string id)
         {
-            OperationResult result = await _administration.DeletePage(id);
+            OperationResult result = await _mediatr.Send(new DeletePageCommand(id));
 
             return HandleResult(result);
         }

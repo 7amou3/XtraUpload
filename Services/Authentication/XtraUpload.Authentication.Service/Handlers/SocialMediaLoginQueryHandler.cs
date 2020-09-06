@@ -6,7 +6,6 @@ using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Authentication.Service
 {

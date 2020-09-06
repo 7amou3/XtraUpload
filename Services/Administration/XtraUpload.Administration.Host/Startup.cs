@@ -10,8 +10,6 @@ namespace XtraUpload.Administration.Host
     {
         public static void AddAdministration(this IServiceCollection services)
         {
-            services.AddScoped<IAdministrationService, AdministrationService>();
-
             // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
             services.AddMediatR(typeof(GetAdminOverViewQueryHandler));
         }

@@ -11,7 +11,6 @@ using tusdotnet.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using XtraUpload.Domain.Infra;
 using Microsoft.Extensions.Options;
-using XtraUpload.WebApp.Common;
 using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service

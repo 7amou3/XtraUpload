@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
+using XtraUpload.Domain;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
-using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
 using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.Database.Data.Common

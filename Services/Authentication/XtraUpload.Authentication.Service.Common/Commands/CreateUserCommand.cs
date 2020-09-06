@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Authentication.Service.Common
 {
     public class CreateUserCommand: IRequest<CreateUserResult>
     {

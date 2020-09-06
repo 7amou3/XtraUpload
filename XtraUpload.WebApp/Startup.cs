@@ -1,5 +1,6 @@
 using System.Linq;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -15,7 +16,6 @@ using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.WebApp.Common;
 using XtraUpload.WebApp.Filters;
 using XtraUpload.Setting.Service.Common;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -25,8 +25,6 @@ using XtraUpload.Email.Host;
 using XtraUpload.Administration.Host;
 using XtraUpload.Setting.Host;
 using XtraUpload.Database.Host;
-using MediatR;
-using System.Reflection;
 
 namespace XtraUpload.WebApp
 {

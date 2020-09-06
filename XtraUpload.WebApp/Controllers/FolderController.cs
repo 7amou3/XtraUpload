@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Domain;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.WebApp.Controllers
 {
-
     [Authorize(Policy = "User")]
     public class FolderController : BaseController
     {

@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
-using XtraUpload.Authentication.Service.Common;
 
-namespace XtraUpload.WebApp.Common
+namespace XtraUpload.Authentication.Service.Common
 {
     public class SocialMediaLoginQuery: IRequest<XuIdentityResult>
     {

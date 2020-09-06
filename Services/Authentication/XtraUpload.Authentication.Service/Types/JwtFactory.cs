@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Authentication.Service
 {
