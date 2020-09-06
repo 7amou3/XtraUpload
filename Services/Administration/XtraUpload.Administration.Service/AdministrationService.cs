@@ -108,26 +108,6 @@ namespace XtraUpload.Administration.Service
         }
 
         /// <summary>
-        /// Delete extension
-        /// </summary>
-        public async Task<OperationResult> DeleteExtension(int id)
-        {
-            OperationResult result = new OperationResult();
-            FileExtension ext = await _unitOfWork.FileExtensions.FirstOrDefaultAsync(s => s.Id == id);
-            if (ext == null)
-            {
-                result.ErrorContent = new ErrorContent("No file type found with the provided id.", ErrorOrigin.Client);
-                return result;
-            }
-
-            // remove from collection
-            _unitOfWork.FileExtensions.Remove(ext);
-
-            // Save to db
-            return await _unitOfWork.CompleteAsync(result);
-        }
-
-        /// <summary>
         /// Delete file(s) by id
         /// </summary>
         public async Task<DeleteFilesResult> DeleteFiles(IEnumerable<string> ids)

@@ -29,10 +29,6 @@ namespace XtraUpload.Administration.Service.Common
         /// </summary>
         Task<FileExtensionResult> AddExtension(string name);
 
-        /// <summary>
-        /// Delete extension
-        /// </summary>
-        Task<OperationResult> DeleteExtension(int id);
 
         /// <summary>
         /// Delete file(s) by id

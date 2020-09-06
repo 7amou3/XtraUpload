@@ -134,7 +134,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("extension/{id:regex(^[[0-9]]*$)}")]
         public async Task<IActionResult> DeleteExtension(int id)
         {
-            OperationResult result = await _administration.DeleteExtension(id);
+            OperationResult result = await _mediatr.Send(new DeleteExtensionCommand(id));
 
             return HandleResult(result);
         }
