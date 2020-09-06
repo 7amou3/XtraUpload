@@ -9,7 +9,6 @@ using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Setting.Service.Common;
 using System.Linq.Expressions;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.Database.Data
 {
