@@ -118,7 +118,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPost("extension")]
         public async Task<IActionResult> AddExtension(AddExtensionViewModel model)
         {
-            FileExtensionResult result = await _administration.AddExtension(model.Name);
+            FileExtensionResult result = await _mediatr.Send(new AddExtensionCommand(model.Name));
 
             return HandleResult(result, result.FileExtension);
         }

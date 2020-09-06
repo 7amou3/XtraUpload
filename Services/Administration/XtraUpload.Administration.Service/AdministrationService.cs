@@ -55,28 +55,6 @@ namespace XtraUpload.Administration.Service
         }
 
         /// <summary>
-        /// Add an extension
-        /// </summary>
-        public async Task<FileExtensionResult> AddExtension(string name)
-        {
-            FileExtensionResult result = new FileExtensionResult();
-            FileExtension newFileType = new FileExtension()
-            {
-                Name = name
-            };
-            _unitOfWork.FileExtensions.Add(newFileType);
-
-            // Save to db
-            result = await _unitOfWork.CompleteAsync(result);
-            if (result.State == OperationState.Success)
-            {
-                result.FileExtension = newFileType;
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Get the users role
         /// </summary>
         public async Task<RolesResult> GetUsersRole()

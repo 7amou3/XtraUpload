@@ -20,10 +20,6 @@ namespace XtraUpload.Administration.Service.Common
         /// </summary>
         Task<SearchUserResult> SearchUsers(string name);
 
-        /// <summary>
-        /// Add an extension
-        /// </summary>
-        Task<FileExtensionResult> AddExtension(string name);
 
         /// <summary>
         /// Get the users role
