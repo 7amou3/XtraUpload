@@ -48,7 +48,11 @@ namespace XtraUpload.Domain
         public DateTime? End
         {
             get { return _end; }
-            set { _end = value.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59); }
+            set 
+            {
+                if (value == null) return;
+                _end = value.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+            }
         }
         private DateTime? _end;
         /// <summary>
