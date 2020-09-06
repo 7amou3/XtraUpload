@@ -84,9 +84,9 @@ namespace XtraUpload.WebApp.Controllers
         }
 
         [HttpGet("files")]
-        public async Task<IActionResult> GetFiles([FromQuery]PageSearchModel model)
+        public async Task<IActionResult> GetFiles([FromQuery]PageSearchModel pageSearch)
         {
-            PagingResult<FileItemExtended> Result = await _administration.GetFiles(model);
+            PagingResult<FileItemExtended> Result = await _mediatr.Send(new GetFilesQuery(pageSearch));
 
             return HandleResult(Result);
         }

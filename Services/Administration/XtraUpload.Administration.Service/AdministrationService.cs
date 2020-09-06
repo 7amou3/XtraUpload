@@ -23,41 +23,10 @@ namespace XtraUpload.Administration.Service
     public class AdministrationService : IAdministrationService
     {
         readonly IUnitOfWork _unitOfWork;
-        readonly UploadOptions _uploadOpts;
 
-        public AdministrationService(IUnitOfWork unitOfWork, IOptionsMonitor<UploadOptions> uploadsOpts)
+        public AdministrationService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _uploadOpts = uploadsOpts.CurrentValue;
-        }
-
-       
-        /// <summary>
-        /// Get a list of files 
-        /// </summary>
-        public async Task<PagingResult<FileItemExtended>> GetFiles(PageSearchModel model)
-        {
-            PagingResult<FileItemExtended> Result = new PagingResult<FileItemExtended>();
-
-            Expression<Func<FileItem, bool>> criteria = s => true;
-
-            if (model.Start != null && model.End != null)
-            {
-                criteria = criteria.And(s => s.CreatedAt > model.Start && s.CreatedAt < model.End);
-            }
-            if (model.UserId != null && model.UserId != Guid.Empty)
-            {
-                criteria = criteria.And(s => s.UserId == model.UserId.ToString());
-            }
-            if (model.FileExtension != null)
-            {
-                criteria = criteria.And(s => s.Extension == model.FileExtension);
-            }
-
-            Result.TotalItems = await _unitOfWork.Files.CountAsync(criteria);
-            Result.Items = await _unitOfWork.Files.GetFiles(model, criteria);
-
-            return Result;
         }
 
         /// <summary>

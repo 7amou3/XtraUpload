@@ -10,7 +10,7 @@ namespace XtraUpload.Administration.Service.Common
     {
         public GetUsersQuery(PageSearchModel pageSearch)
         {
-            PageSearch = pageSearch;
+            PageSearch = new PageSearchModel(pageSearch);
         }
         public PageSearchModel PageSearch { get; }
     }

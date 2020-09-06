@@ -7,6 +7,21 @@ namespace XtraUpload.Domain
     /// </summary>
     public class PageSearchModel
     {
+        public PageSearchModel()
+        {
+
+        }
+        public PageSearchModel(PageSearchModel pageSearch)
+        {
+            PageIndex = pageSearch.PageIndex;
+            PageSize = pageSearch.PageSize;
+            Length = pageSearch.Length;
+            PreviousPageIndex = pageSearch.PreviousPageIndex;
+            Start = pageSearch.Start;
+            End = pageSearch.End;
+            UserId = pageSearch.UserId;
+            FileExtension = pageSearch.FileExtension;
+        }
         /// <summary>
         /// The current page index.
         /// </summary>
@@ -30,7 +45,7 @@ namespace XtraUpload.Domain
         /// <summary>
         /// Search end date 
         /// </summary>
-        public Nullable<DateTime> End
+        public DateTime? End
         {
             get { return _end; }
             set { _end = value.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59); }

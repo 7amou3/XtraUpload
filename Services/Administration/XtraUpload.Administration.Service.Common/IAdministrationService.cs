@@ -9,11 +9,7 @@ namespace XtraUpload.Administration.Service.Common
 {
     public interface IAdministrationService
     {
-        /// <summary>
-        /// Get a list of files 
-        /// </summary>
-        Task<PagingResult<FileItemExtended>> GetFiles(PageSearchModel model);
-
+        
         /// <summary>
         /// Get a list of file extensions
         /// </summary>
