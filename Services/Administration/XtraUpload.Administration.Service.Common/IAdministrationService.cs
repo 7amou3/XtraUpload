@@ -9,17 +9,6 @@ namespace XtraUpload.Administration.Service.Common
 {
     public interface IAdministrationService
     {
-
-        /// <summary>
-        /// Edit a user
-        /// </summary>
-        Task<EditUserResult> EditUser(EditUserCommand model);
-
-        /// <summary>
-        /// Delete a user
-        /// </summary>
-        Task<OperationResult> DeleteUsers(IEnumerable<string> usersId);
-
         /// <summary>
         /// Get a list of files 
         /// </summary>

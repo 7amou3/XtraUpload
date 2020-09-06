@@ -24,92 +24,14 @@ namespace XtraUpload.Administration.Service
     {
         readonly IUnitOfWork _unitOfWork;
         readonly UploadOptions _uploadOpts;
-        readonly ILogger<AdministrationService> _logger;
 
-        public AdministrationService(IUnitOfWork unitOfWork, IOptionsMonitor<UploadOptions> uploadsOpts, ILogger<AdministrationService> logger)
+        public AdministrationService(IUnitOfWork unitOfWork, IOptionsMonitor<UploadOptions> uploadsOpts)
         {
-            _logger = logger;
             _unitOfWork = unitOfWork;
             _uploadOpts = uploadsOpts.CurrentValue;
         }
 
-        
-        /// <summary>
-        /// Edit a user
-        /// </summary>
-        public async Task<EditUserResult> EditUser(EditUserCommand model)
-        {
-            EditUserResult result = new EditUserResult();
-            // Check email is not duplicated
-            User duplicatedUser = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Email == model.Email && s.Id != model.Id);
-            if (duplicatedUser != null)
-            {
-                result.ErrorContent = new ErrorContent("A user with the provided email already exists.", ErrorOrigin.Client);
-                return result;
-            }
-            // Check user exists
-            User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == model.Id);
-            if (user == null)
-            {
-                result.ErrorContent = new ErrorContent("No user found with provided Id.", ErrorOrigin.Client);
-                return result;
-            }
-            
-            if (!string.IsNullOrEmpty(model.NewPassword))
-            {
-                user.Password = Helpers.HashPassword(model.NewPassword);
-            }
-            user.Email = model.Email;
-            user.RoleId = model.RoleId;
-            user.UserName = model.UserName;
-            user.EmailConfirmed = model.EmailConfirmed;
-            user.AccountSuspended = model.SuspendAccount;
-            user.LastModified = DateTime.Now;
-
-            // Persist changes
-            return await _unitOfWork.CompleteAsync(result);
-        }
-
-        /// <summary>
-        /// Delete a user
-        /// </summary>
-        public async Task<OperationResult> DeleteUsers(IEnumerable<string> usersId)
-        {
-            OperationResult result = new OperationResult();
-            IEnumerable<User> users = await _unitOfWork.Users.FindAsync(s => usersId.Contains(s.Id));
-            // Check if users exist
-            if (!users.Any())
-            {
-                result.ErrorContent = new ErrorContent("No user found whith the provided Ids.", ErrorOrigin.Client);
-                return result;
-            }
-            // Get users files
-            IEnumerable<FileItem> files = await _unitOfWork.Files.FindAsync(s => usersId.Contains(s.UserId));
-
-            // Delete from db
-            _unitOfWork.Users.RemoveRange(users);
-            _unitOfWork.Files.RemoveRange(files);
-
-            // Persist changes
-            result = await _unitOfWork.CompleteAsync(result);
-
-            if (result.State == OperationState.Success)
-            {
-                // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
-                foreach (var file in files)
-                {
-                    string folderPath = Path.Combine(_uploadOpts.UploadPath, file.UserId, file.Id);
-
-                    if (Directory.Exists(folderPath))
-                    {
-                        Directory.Delete(folderPath, true);
-                    }
-                }
-            }
-
-            return result;
-        }
-
+       
         /// <summary>
         /// Get a list of files 
         /// </summary>

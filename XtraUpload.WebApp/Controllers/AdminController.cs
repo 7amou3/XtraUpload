@@ -78,7 +78,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("users")]
         public async Task<IActionResult> DeleteUsers(IEnumerable<string> ids)
         {
-            OperationResult result = await _administration.DeleteUsers(ids);
+            OperationResult result = await _mediatr.Send(new DeleteUsersCommand(ids));
 
             return HandleResult(result);
         }
