@@ -63,7 +63,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers([FromQuery]PageSearchModel model)
         {
-            PagingResult<UserExtended> Result = await _administration.GetUsers(model);
+            PagingResult<UserExtended> Result = await _mediatr.Send(new GetUsersQuery(model));
 
             return HandleResult(Result);
         }

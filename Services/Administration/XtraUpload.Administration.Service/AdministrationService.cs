@@ -33,29 +33,7 @@ namespace XtraUpload.Administration.Service
             _uploadOpts = uploadsOpts.CurrentValue;
         }
 
-        /// <summary>
-        /// Get a list of users
-        /// </summary>
-        public async Task<PagingResult<UserExtended>> GetUsers(PageSearchModel model)
-        {
-            PagingResult<UserExtended> result = new PagingResult<UserExtended>();
-            Expression<Func<User, bool>> criteria = s => true;
-
-            if (model.Start != null && model.End != null)
-            {
-                criteria = criteria.And(s => s.CreatedAt > model.Start && s.CreatedAt < model.End);
-            }
-            if (model.UserId != null && model.UserId != Guid.Empty)
-            {
-                criteria = criteria.And(s => s.Id == model.UserId.ToString());
-            }
-
-            result.TotalItems = await _unitOfWork.Users.CountAsync(criteria);
-            result.Items = await _unitOfWork.Users.GetUsers(model, criteria);
-
-            return result;
-        }
-
+        
         /// <summary>
         /// Edit a user
         /// </summary>

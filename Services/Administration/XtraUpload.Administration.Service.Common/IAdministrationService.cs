@@ -11,11 +11,6 @@ namespace XtraUpload.Administration.Service.Common
     {
 
         /// <summary>
-        /// Get a list of users
-        /// </summary>
-        Task<PagingResult<UserExtended>> GetUsers(PageSearchModel model);
-
-        /// <summary>
         /// Edit a user
         /// </summary>
         Task<EditUserResult> EditUser(EditUserCommand model);
