@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using MediatR;
 using AutoMapper;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.Setting.Service.Common;
-using MediatR;
+using XtraUpload.Administration.Service.Common;
 
 namespace XtraUpload.WebApp.Controllers
 {

@@ -8,15 +8,14 @@ namespace XtraUpload.WebApp.Filters
 {
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {
-        private ILogger<ApiExceptionFilter> _Logger;
-        private IWebHostEnvironment _env;
+        readonly ILogger<ApiExceptionFilter> _logger;
+        readonly IWebHostEnvironment _env;
 
         public ApiExceptionFilter(ILogger<ApiExceptionFilter> logger, IWebHostEnvironment env)
         {
-            _Logger = logger;
+            _logger = logger;
             _env = env;
         }
-
 
         public override void OnException(ExceptionContext context)
         {
@@ -31,7 +30,7 @@ namespace XtraUpload.WebApp.Filters
 
                 context.HttpContext.Response.StatusCode = ex.StatusCode;
 
-                _Logger.LogError($"Application thrown error: {ex.Message}", ex);
+                _logger.LogError($"Application thrown error: {ex.Message}", ex);
             }
             else
             {
@@ -57,7 +56,7 @@ namespace XtraUpload.WebApp.Filters
                 context.HttpContext.Response.StatusCode = 500;
 
                 // handle logging here
-                _Logger.LogError(new EventId(0), context.Exception, msg);
+                _logger.LogError(new EventId(0), context.Exception, msg);
             }
 
             // always return a JSON result

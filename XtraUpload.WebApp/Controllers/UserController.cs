@@ -1,11 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.WebApp.Controllers
 {

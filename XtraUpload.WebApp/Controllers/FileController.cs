@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -7,11 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Domain;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.WebApp.Common;
 
 namespace XtraUpload.WebApp.Controllers
 {
-
     [Authorize(Policy = "User")]
     public class FileController : BaseController
     {

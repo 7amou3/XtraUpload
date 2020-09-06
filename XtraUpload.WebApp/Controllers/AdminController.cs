@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using XtraUpload.Administration.Service.Common;
-using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.WebApp.Common;
+using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.FileManager.Service.Common;
-using XtraUpload.Email.Service.Common;
-using MediatR;
+using XtraUpload.Administration.Service.Common;
+using XtraUpload.Authentication.Service.Common;
+
 
 namespace XtraUpload.WebApp.Controllers
 {
@@ -19,13 +19,11 @@ namespace XtraUpload.WebApp.Controllers
     {
         readonly IMapper _mapper;
         readonly IMediator _mediatr;
-        readonly IAdministrationService _administration;
 
-        public AdminController(IAdministrationService administration, IMediator mediatr, IMapper mapper)
+        public AdminController(IMediator mediatr, IMapper mapper)
         {
             _mapper = mapper;
             _mediatr = mediatr;
-            _administration = administration;
         }
 
         [HttpGet("overview")]
@@ -245,7 +243,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("page/{id:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> DeletePage(string id)
         {
-            OperationResult result = await _administration.DeletePage(id);
+            OperationResult result = await _mediatr.Send(new DeletePageCommand(id));
 
             return HandleResult(result);
         }
