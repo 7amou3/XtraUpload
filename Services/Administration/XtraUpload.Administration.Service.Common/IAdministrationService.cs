@@ -9,12 +9,6 @@ namespace XtraUpload.Administration.Service.Common
 {
     public interface IAdministrationService
     {
-        
-
-        /// <summary>
-        /// Add a new page
-        /// </summary>
-        Task<PageResult> AddPage(Page page);
 
         /// <summary>
         /// Update a page

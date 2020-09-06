@@ -231,7 +231,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpPost("page")]
         public async Task<IActionResult> AddPage(Page page)
         {
-            PageResult result = await _administration.AddPage(page);
+            PageResult result = await _mediatr.Send(new AddPageCommand(page));
 
             return HandleResult(result, result.Page);
         }

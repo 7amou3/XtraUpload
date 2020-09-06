@@ -30,34 +30,6 @@ namespace XtraUpload.Administration.Service
         }
 
         /// <summary>
-        /// Add a new page
-        /// </summary>
-        public async Task<PageResult> AddPage(Page p)
-        {
-            PageResult result = new PageResult();
-            // Check page name is unique
-            Page pageNameUnique = await _unitOfWork.Pages.FirstOrDefaultAsync(s => s.Name == p.Name);
-            if (pageNameUnique != null)
-            {
-                result.ErrorContent = new ErrorContent($"A page with the same name already exists", ErrorOrigin.Client);
-                return result;
-            }
-            p.Id = Helpers.GenerateUniqueId();
-            p.CreatedAt = DateTime.Now;
-            p.UpdatedAt = DateTime.Now;
-            p.Url = Regex.Replace(p.Name.ToLower(), @"\s+", "_");
-            _unitOfWork.Pages.Add(p);
-
-            // Save to db
-            result = await _unitOfWork.CompleteAsync(result);
-            if (result.State == OperationState.Success)
-            {
-                result.Page = p;
-            }
-
-            return result;
-        }
-        /// <summary>
         /// Update a page
         /// </summary>
         public async Task<PageResult> UpdatePage(Page p)
