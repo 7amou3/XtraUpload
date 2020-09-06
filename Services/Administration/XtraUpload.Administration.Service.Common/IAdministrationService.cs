@@ -10,10 +10,6 @@ namespace XtraUpload.Administration.Service.Common
     public interface IAdministrationService
     {
         
-        /// <summary>
-        /// Get a list of file extensions
-        /// </summary>
-        Task<FileExtensionsResult> GetFileExtensions();
 
         /// <summary>
         /// Search for users by name

@@ -29,17 +29,6 @@ namespace XtraUpload.Administration.Service
             _unitOfWork = unitOfWork;
         }
 
-        /// <summary>
-        /// Get a list of file extensions
-        /// </summary>
-        public async Task<FileExtensionsResult> GetFileExtensions()
-        {
-            var Result = new FileExtensionsResult()
-            {
-                FileExtensions = await _unitOfWork.FileExtensions.GetAll()
-            };
-            return Result;
-        }
 
         /// <summary>
         /// Search for users by name

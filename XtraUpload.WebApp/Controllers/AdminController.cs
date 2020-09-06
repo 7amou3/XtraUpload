@@ -94,7 +94,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("fileextensions")]
         public async Task<IActionResult> GetFileExtensions()
         {
-            FileExtensionsResult Result = await _administration.GetFileExtensions();
+            FileExtensionsResult Result = await _mediatr.Send(new GetFileExtensionsQuery());
 
             return HandleResult(Result, Result.FileExtensions);
         }
