@@ -29,19 +29,6 @@ namespace XtraUpload.Administration.Service
             _unitOfWork = unitOfWork;
         }
 
-
-        /// <summary>
-        /// Get the users role
-        /// </summary>
-        public async Task<RolesResult> GetUsersRole()
-        {
-            RolesResult Result = new RolesResult()
-            {
-                Roles = await _unitOfWork.Users.GetUsersRoleClaims()
-            };
-            return Result;
-        }
-        
        
         /// <summary>
         /// Get all pages

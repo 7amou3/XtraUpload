@@ -11,12 +11,6 @@ namespace XtraUpload.Administration.Service.Common
     {
         
         /// <summary>
-        /// Get the users role
-        /// </summary>
-        Task<RolesResult> GetUsersRole();
-
-
-        /// <summary>
         /// Get all pages
         /// </summary>
         Task<PagesResult> GetPages();

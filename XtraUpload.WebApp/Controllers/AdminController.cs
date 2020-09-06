@@ -142,7 +142,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("groups")]
         public async Task<IActionResult> GetUsersRole()
         {
-            RolesResult result = await _administration.GetUsersRole();
+            RolesResult result = await _mediatr.Send(new GetUsersRoleQuery());
 
             return HandleResult(result, _mapper.Map<IEnumerable<RoleClaimsResultDto>>(result.Roles));
         }
