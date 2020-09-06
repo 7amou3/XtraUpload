@@ -36,11 +36,6 @@ namespace XtraUpload.Administration.Service.Common
 
 
         /// <summary>
-        /// Delete a role claim
-        /// </summary>
-        Task<OperationResult> DeleteRoleClaims(string roleId);
-
-        /// <summary>
         /// Get all pages
         /// </summary>
         Task<PagesResult> GetPages();

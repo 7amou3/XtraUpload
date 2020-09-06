@@ -119,30 +119,7 @@ namespace XtraUpload.Administration.Service
             return Result;
         }
         
-        /// <summary>
-        /// Delete a role claim
-        /// </summary>
-        public async Task<OperationResult> DeleteRoleClaims(string roleId)
-        {
-            OperationResult result = new OperationResult();
-            Role role = await _unitOfWork.Roles.FirstOrDefaultAsync(s => s.Id == roleId);
-            if (role == null)
-            {
-                result.ErrorContent = new ErrorContent("No role found with the provided id.", ErrorOrigin.Client);
-                return result;
-            }
-            // Default role can not be deleted
-            if (role.IsDefault)
-            {
-                result.ErrorContent = new ErrorContent("Default role can not be deleted.", ErrorOrigin.Client);
-                return result;
-            }
-
-            _unitOfWork.Roles.Remove(role);
-
-            // Save to db
-            return await _unitOfWork.CompleteAsync(result);
-        }
+       
         /// <summary>
         /// Get all pages
         /// </summary>

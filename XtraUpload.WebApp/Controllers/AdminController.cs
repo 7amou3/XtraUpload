@@ -166,7 +166,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("groups/{roleId:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> DeleteRoleClaims(string roleId)
         {
-            OperationResult result = await _administration.DeleteRoleClaims(roleId);
+            OperationResult result = await _mediatr.Send(new DeleteRoleClaimsCommand(roleId));
 
             return HandleResult(result);
         }
