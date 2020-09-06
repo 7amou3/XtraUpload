@@ -110,7 +110,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpDelete("files")]
         public async Task<IActionResult> DeleteFiles(IEnumerable<string> ids)
         {
-            DeleteFilesResult result = await _administration.DeleteFiles(ids);
+            DeleteFilesResult result = await _mediatr.Send(new DeleteFilesCommand(ids));
 
             return HandleResult(result, result.Files);
         }

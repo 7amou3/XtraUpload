@@ -108,42 +108,6 @@ namespace XtraUpload.Administration.Service
         }
 
         /// <summary>
-        /// Delete file(s) by id
-        /// </summary>
-        public async Task<DeleteFilesResult> DeleteFiles(IEnumerable<string> ids)
-        {
-            DeleteFilesResult result = new DeleteFilesResult();
-            IEnumerable<FileItem> files = await _unitOfWork.Files.FindAsync(s => ids.Contains(s.Id));
-            if (files != null && files.Any())
-            {
-                // Remove from collection
-                _unitOfWork.Files.RemoveRange(files);
-
-                // Save to db
-                result = await _unitOfWork.CompleteAsync(result);
-                if (result.State == OperationState.Success)
-                {
-                    // Delete from disk (no need to queue to background thread, because Directory.Delete does not block)
-                    foreach (FileItem file in files)
-                    {
-                        string folderPath = Path.Combine(_uploadOpts.UploadPath, file.UserId, file.Id);
-                        if (Directory.Exists(folderPath))
-                        {
-                            Directory.Delete(folderPath, true);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                result.ErrorContent = new ErrorContent($"Please check the provided id(s)", ErrorOrigin.Server);
-            }
-
-            result.Files = files;
-            return result;
-        }
-
-        /// <summary>
         /// Get the users role
         /// </summary>
         public async Task<RolesResult> GetUsersRole()
