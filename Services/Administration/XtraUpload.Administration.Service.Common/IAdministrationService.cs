@@ -11,11 +11,6 @@ namespace XtraUpload.Administration.Service.Common
     {
 
         /// <summary>
-        /// Update a page
-        /// </summary>
-        Task<PageResult> UpdatePage(Page page);
-
-        /// <summary>
         /// Delete a Page
         /// </summary>
         Task<OperationResult> DeletePage(string Id);
