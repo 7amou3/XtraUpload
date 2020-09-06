@@ -102,7 +102,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("searchusers")]
         public async Task<IActionResult> SearchUsers([FromQuery]SearchUserViewModel model)
         {
-            SearchUserResult Result = await _administration.SearchUsers(model.Name);
+            SearchUserResult Result = await _mediatr.Send(new SearchUsersQuery(model.Name));
 
             return HandleResult(Result, new { users = _mapper.Map<IEnumerable<SearchUserDto>>(Result.Users) });
         }

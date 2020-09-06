@@ -10,13 +10,6 @@ namespace XtraUpload.Administration.Service.Common
     public interface IAdministrationService
     {
         
-
-        /// <summary>
-        /// Search for users by name
-        /// </summary>
-        Task<SearchUserResult> SearchUsers(string name);
-
-
         /// <summary>
         /// Get the users role
         /// </summary>

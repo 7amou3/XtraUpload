@@ -31,19 +31,6 @@ namespace XtraUpload.Administration.Service
 
 
         /// <summary>
-        /// Search for users by name
-        /// </summary>
-        public async Task<SearchUserResult> SearchUsers(string name)
-        {
-            SearchUserResult result = new SearchUserResult()
-            {
-                Users = await _unitOfWork.Users.SearchUsersByName(name)
-            };
-
-            return result;
-        }
-
-        /// <summary>
         /// Get the users role
         /// </summary>
         public async Task<RolesResult> GetUsersRole()
