@@ -4,6 +4,4 @@ Cross platform file sharing application, powered by the .Net core 3.1 and Angula
   > Email : admin@admin.com  
   > Passowrd : admin01  
 
-For more information please check the [wiki](https://github.com/7amou3/XtraUpload/wiki).       
-
-Also if you want to contribute or see where the project is heading, check the [roadmap](https://github.com/users/7amou3/projects/1).
+For more information please check the [wiki](https://github.com/7amou3/XtraUpload/wiki), and the [roadmap](https://github.com/users/7amou3/projects/1).
