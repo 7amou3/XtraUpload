@@ -29,17 +29,6 @@ namespace XtraUpload.Administration.Service
             _unitOfWork = unitOfWork;
         }
 
-       
-        /// <summary>
-        /// Get all pages
-        /// </summary>
-        public async Task<PagesResult> GetPages()
-        {
-            return new PagesResult()
-            {
-                Pages = await _unitOfWork.Pages.GetAll()
-            };
-        }
         /// <summary>
         /// Add a new page
         /// </summary>

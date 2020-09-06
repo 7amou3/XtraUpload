@@ -224,7 +224,7 @@ namespace XtraUpload.WebApp.Controllers
         [HttpGet("pages")]
         public async Task<IActionResult> GetPages()
         {
-            var result = await _administration.GetPages();
+            var result = await _mediatr.Send(new GetPagesQuery());
 
             return HandleResult(result, result.Pages);
         }
