@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,7 +39,8 @@ namespace XtraUpload.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddCors();
+            // see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
+            services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
@@ -65,12 +65,6 @@ namespace XtraUpload.WebApp
 
             RegisterDto(services);
 
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-
             // Unhandled exception filter handler
             services.AddScoped<ApiExceptionFilter>();
         }
@@ -90,17 +84,8 @@ namespace XtraUpload.WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseSpaStaticFiles(new StaticFileOptions
-                {
-                    OnPrepareResponse = ctx =>
-                    {
-                        ctx.Context.Response.Headers.Add("Cache-Control", "max-age=86400");
-                    }
-                });
-            }
 
+            // setup api to work with proxy servers and load balancers
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -113,7 +98,14 @@ namespace XtraUpload.WebApp
             app.UseRouting();
 
             app.UseAuthorization();
-            
+
+            // Uncomment if you want to serve the angular app from other domain or to allow 3rd paries to query XtraUpload's API
+            app.UseCors(builder => builder
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .AllowAnyOrigin()
+                                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -141,22 +133,6 @@ namespace XtraUpload.WebApp
                 }
             });
 
-            // Uncomment if you want to serve the angular app from other domain or to allow 3rd paries to query XtraUpload's API
-            /*app.UseCors(builder => builder
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod()
-                                    .AllowAnyOrigin());*/
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
         }
 
         /// <summary>

@@ -59,6 +59,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Setting.Host", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Database.Host", "Database\XtraUpload.Database.Host\XtraUpload.Database.Host.csproj", "{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "XtraUpload.ClientApp", "XtraUpload.ClientApp\", "{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_53669"
+		Debug.AspNetCompiler.PhysicalPath = "XtraUpload.ClientApp\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53669\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_53669"
+		Release.AspNetCompiler.PhysicalPath = "XtraUpload.ClientApp\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53669\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "53669"
+		SlnRelativePath = "XtraUpload.ClientApp\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +170,10 @@ Global
 		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
