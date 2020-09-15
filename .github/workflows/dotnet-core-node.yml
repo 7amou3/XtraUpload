@@ -23,25 +23,25 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
       
-  job_2:
-     name: Build Client App
-     runs-on: ubuntu-latest
-     strategy:
-      matrix:
-        node-version: [12.x]
-     defaults: 
-          run: 
-            working-directory: "XtraUpload.WebApp/ClientApp/"
-     steps:
-      - uses: actions/checkout@v2
+  # job_2:
+     # name: Build Client App
+     # runs-on: ubuntu-latest
+     # strategy:
+     #  matrix:
+        # node-version: [12.x]
+     # defaults: 
+         #  run: 
+           #  working-directory: "XtraUpload.WebApp/ClientApp/"
+     # steps:
+      # - uses: actions/checkout@v2
       # cache node module if package-lock.json doesn't change
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Cache node modules
+        # uses: actions/cache@v2
+        # with:
+        #   path: ~/.npm
+         #  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          # restore-keys: |
+           #  ${{ runner.os }}-node-
       # Uncomment if you want to build ClientApp 
       #- name: Use Node.js ${{ matrix.node-version }}
       #  uses: actions/setup-node@v1
