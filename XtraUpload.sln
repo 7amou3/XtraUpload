@@ -80,6 +80,16 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "XtraUpload.ClientApp", "Xtr
 		SlnRelativePath = "XtraUpload.ClientApp\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.StorageServer", "XtraUpload.StorageServer\XtraUpload.StorageServer.csproj", "{EDEFD49E-2C64-4033-BA6D-80657B22E35C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StorageManager", "StorageManager", "{67A4B21F-3D72-4224-AC01-80CD4F60AB3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.StorageManager.Host", "Services\StorageManager\XtraUpload.StorageManager.Host\XtraUpload.StorageManager.Host.csproj", "{E4E3C71C-E30A-446B-8649-2012457A9761}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.StorageManager.Common", "Services\StorageManager\XtraUpload.StorageManager.Common\XtraUpload.StorageManager.Common.csproj", "{FE5732FC-8C36-4E5A-94E2-644E57267E62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.StorageManager.Service", "Services\StorageManager\XtraUpload.StorageManager.Service\XtraUpload.StorageManager.Service.csproj", "{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +182,22 @@ Global
 		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8BA325C5-EC48-4F8C-AA62-94E971FCE0E0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDEFD49E-2C64-4033-BA6D-80657B22E35C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDEFD49E-2C64-4033-BA6D-80657B22E35C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDEFD49E-2C64-4033-BA6D-80657B22E35C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDEFD49E-2C64-4033-BA6D-80657B22E35C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E3C71C-E30A-446B-8649-2012457A9761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E3C71C-E30A-446B-8649-2012457A9761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E3C71C-E30A-446B-8649-2012457A9761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E3C71C-E30A-446B-8649-2012457A9761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE5732FC-8C36-4E5A-94E2-644E57267E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE5732FC-8C36-4E5A-94E2-644E57267E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE5732FC-8C36-4E5A-94E2-644E57267E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE5732FC-8C36-4E5A-94E2-644E57267E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -201,6 +227,10 @@ Global
 		{516D4CD0-87EB-48B3-A286-759FA99F0FF3} = {29006F95-A24E-4946-913A-72375029795E}
 		{EEF62A8E-04F1-4532-9EEE-73EB17F81780} = {7CA6F3EE-4398-4AFD-960D-475600CB1ECB}
 		{A4A03FFE-78EA-401D-9EC9-F3408377CCF3} = {3726D6EF-D89F-4AEA-A678-CFBC89890180}
+		{67A4B21F-3D72-4224-AC01-80CD4F60AB3E} = {09655B89-9208-47C5-9167-DAC154BB94C3}
+		{E4E3C71C-E30A-446B-8649-2012457A9761} = {67A4B21F-3D72-4224-AC01-80CD4F60AB3E}
+		{FE5732FC-8C36-4E5A-94E2-644E57267E62} = {67A4B21F-3D72-4224-AC01-80CD4F60AB3E}
+		{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E} = {67A4B21F-3D72-4224-AC01-80CD4F60AB3E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2D11451-0DF7-4384-9CB9-F8C1B4777FCF}

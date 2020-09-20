@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Permissions" Version="4.7.0" />
+    <PackageReference Include="tusdotnet" Version="2.3.0" />
+    <PackageReference Include="SixLabors.ImageSharp.Web" Version="1.0.0-beta0009" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XtraUpload.StorageManager.Common\XtraUpload.StorageManager.Common.csproj" />
+    <ProjectReference Include="..\XtraUpload.StorageManager.Service\XtraUpload.StorageManager.Service.csproj" />
+  </ItemGroup>
+
+</Project>
