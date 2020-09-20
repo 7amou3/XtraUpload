@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using XtraUpload.Domain;
 
 namespace XtraUpload.Database.Data
@@ -16,6 +17,16 @@ namespace XtraUpload.Database.Data
             builder.HasIndex(u => u.IpAddress).HasName("IpAddress").IsUnique();
             // Each SS have one entry in the File join table
             builder.HasMany(s => s.Files).WithOne(e => e.StorageServer).HasForeignKey(ur => ur.StorageServerId).OnDelete(DeleteBehavior.Cascade);
+
+            StorageServer server = new StorageServer()
+            {
+                Id = Guid.NewGuid(),
+                IpAddress = "http://localhost:5123"
+            };
+            builder.HasData(server);
+
+            // Maps to the Users table
+            builder.ToTable("storageservers");
         }
     }
 }
