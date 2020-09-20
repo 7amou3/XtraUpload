@@ -35,8 +35,9 @@ namespace XtraUpload.Domain
         public long Size { get; set; }
 
         public virtual string FolderId { get; set; }
+        public virtual Guid StorageServerId { get; set; }
         public virtual FolderItem Folder { get; set; }
+        public virtual StorageServer StorageServer { get; set; }
         public virtual ICollection<Download> Downloads { get; set; }
-
     }
 }

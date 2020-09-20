@@ -4,6 +4,9 @@ using XtraUpload.Domain;
 
 namespace XtraUpload.Database.Data
 {
+    /// <summary>
+    /// FileExtensions table configuration
+    /// </summary>
     public class TFileExtensionConfiguration : IEntityTypeConfiguration<FileExtension>
     {
         public void Configure(EntityTypeBuilder<FileExtension> builder)

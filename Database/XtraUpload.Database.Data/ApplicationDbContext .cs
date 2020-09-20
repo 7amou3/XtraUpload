@@ -18,6 +18,7 @@ namespace XtraUpload.Database.Data
         public DbSet<ConfirmationKey> ConfirmationKeys { get; set; }
         public DbSet<FileExtension> FileExtensions { get; set; }
         public DbSet<Page> Pages { get; set; }
+        public DbSet<StorageServer> StorageServers { get; set; }
         // Identity models are inherited from the base class, no need to redefine them here..
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -32,8 +33,8 @@ namespace XtraUpload.Database.Data
             builder.ApplyConfiguration(new TUserConfiguration(builder.Entity<FolderItem>()));
             builder.ApplyConfiguration(new TFileExtensionConfiguration());
             builder.ApplyConfiguration(new TPageConfiguration());
-
-            builder.Entity<FileItem>().HasMany(d => d.Downloads).WithOne(f => f.File).OnDelete(DeleteBehavior.Cascade);
+            builder.ApplyConfiguration(new TFileConfiguration());
+            builder.ApplyConfiguration(new TStorageServerConfiguration());
         }
     }
 }
