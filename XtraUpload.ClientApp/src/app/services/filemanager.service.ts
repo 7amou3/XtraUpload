@@ -150,7 +150,7 @@ export class FileManagerService {
     );
   }
 
-  startUpload(file: File, folderId: string, chunkSize: number, urlPath?: string): Observable<UploadStatus> {
+  startUpload(file: File, uploadServer: string, urlPath: string, folderId: string, chunkSize: number): Observable<UploadStatus> {
     let upload: tus.Upload;
     const event = new Subject<UploadStatus>();
     const uploadStatus = new UploadStatus();
@@ -175,29 +175,29 @@ export class FileManagerService {
       uploadStatus.message = progress as Object;
       event.next(uploadStatus);
     };
-    // Defaut urlPath for tus is [fileupload] as configured in the server
-    const uri = this.baseUrl + urlPath;
-      upload = new tus.Upload(file,
-      {
-        endpoint: uri,
-        chunkSize: chunkSize,
-        onError: onTusError,
-        onProgress: onTusProgress,
-        onSuccess: onTusSuccess,
-        retryDelays: [0, 1000, 3000, 5000],
-        metadata: {
-          name: file.name,
-          contentType: file.type || 'application/octet-stream',
-          folderId: folderId
-        },
-        headers: {
-          'authorization': 'Bearer ' + this.storageService.getToken()
-        }
-      });
-      // Start the upload
-      upload.start();
+    // Defaut urlPath for tus is [fileupload or avatarupload] as configured in the server
+    const uri = uploadServer + urlPath;
+    upload = new tus.Upload(file,
+    {
+      endpoint: uri,
+      chunkSize: chunkSize,
+      onError: onTusError,
+      onProgress: onTusProgress,
+      onSuccess: onTusSuccess,
+      retryDelays: [0, 1000, 3000, 5000],
+      metadata: {
+        name: file.name,
+        contentType: file.type || 'application/octet-stream',
+        folderId: folderId
+      },
+      headers: {
+        'authorization': 'Bearer ' + this.storageService.getToken()
+      }
+    });
+    // Start the upload
+    upload.start();
 
-      return event;
+    return event;
   }
 
   updateFileAvailability(file: IItemOnlineAvailability) {

@@ -49,7 +49,7 @@ namespace XtraUpload.WebApp
             services.AddDatabase(Configuration);
             services.AddXtraUploadAuthentication(Configuration);
             services.AddXtraUploadSetting(Configuration);
-            services.AddFileManager(Configuration);
+            services.AddFileManager();
             services.AddEmail(Configuration);
             services.AddAdministration();
 
@@ -74,12 +74,6 @@ namespace XtraUpload.WebApp
         {
             loggerFactory.AddLog4Net();
 
-            app.Use((context, next) =>
-            {
-                context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null;
-                return next.Invoke();
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -99,19 +93,15 @@ namespace XtraUpload.WebApp
 
             app.UseAuthorization();
 
-            // Uncomment if you want to serve the angular app from other domain or to allow 3rd paries to query XtraUpload's API
             app.UseCors(builder => builder
                                     .AllowAnyHeader()
                                     .AllowAnyMethod()
-                                    .AllowAnyOrigin()
-                                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));
+                                    .AllowAnyOrigin());
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-            app.UseFileManager();
 
             app.UseHealthChecks("/health", new HealthCheckOptions
             {

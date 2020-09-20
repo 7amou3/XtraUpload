@@ -51,7 +51,14 @@ export class AvatarComponent extends ComponentBase implements OnInit {
   onUpdateAvatar() {
     this.isBusy = true;
     const file = this.urltoBlob(this.croppedImage, 'avatar.png', 'image/png');
-    this.fileMngService.startUpload(file, null, 1024 * 1024 * 2, 'avatarupload')
+    const setting$ = this.fileMngService.getUploadSetting()
+    .pipe(
+      takeUntil(this.onDestroy),
+      finalize(() => this.isBusy = false))
+    .toPromise();
+
+    setting$.then(s => {
+      this.fileMngService.startUpload(file, s.uploadServer, 'avatarupload', null, 1024 * 1024 * 2)
       .pipe(takeUntil(this.onDestroy),
         finalize(() => this.isBusy = false))
       .subscribe(result => {
@@ -62,6 +69,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
           this.headerService.notifyAvatarChanged();
         }
       });
+    });
   }
   urltoBlob(dataurl, fileName, mimeType): File {
     let arr = dataurl.split(','), bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);

@@ -18,7 +18,6 @@ namespace XtraUpload.Setting.Service
     public class UpdateConfigSectionCommandHandler : IRequestHandler<UpdateConfigSectionCommand, OperationResult>
     {
         readonly IWritableOptions<JwtIssuerOptions> _JwtOpts;
-        readonly IWritableOptions<UploadOptions> _uploadOpts;
         readonly IWritableOptions<EmailSettings> _emailSettings;
         readonly IWritableOptions<HardwareCheckOptions> _hdOpts;
         readonly IWritableOptions<WebAppSettings> _appSettings;
@@ -26,7 +25,6 @@ namespace XtraUpload.Setting.Service
        
         public UpdateConfigSectionCommandHandler(
             IWritableOptions<JwtIssuerOptions> jwtOpts,
-            IWritableOptions<UploadOptions> uploadOpts,
             IWritableOptions<EmailSettings> emailSettings,
             IWritableOptions<HardwareCheckOptions> hdOpts,
             IWritableOptions<WebAppSettings> appSettings, 
@@ -34,7 +32,6 @@ namespace XtraUpload.Setting.Service
         {
             _hdOpts = hdOpts;
             _JwtOpts = jwtOpts;
-            _uploadOpts = uploadOpts;
             _appSettings = appSettings;
             _emailSettings = emailSettings;
             _socialSettings = socialSettings;
@@ -46,13 +43,13 @@ namespace XtraUpload.Setting.Service
 
             if (request.ConfigSection is UploadOptions)
             {
-                await _uploadOpts.Update(s =>
-                {
-                    var opts = request.ConfigSection as UploadOptions;
-                    s.ChunkSize = opts.ChunkSize;
-                    s.Expiration = opts.Expiration;
-                    s.UploadPath = opts.UploadPath;
-                });
+                //await _uploadOpts.Update(s =>
+                //{
+                //    var opts = request.ConfigSection as UploadOptions;
+                //    s.ChunkSize = opts.ChunkSize;
+                //    s.Expiration = opts.Expiration;
+                //    s.UploadPath = opts.UploadPath;
+                //});
             }
             else if (request.ConfigSection is HardwareCheckOptions)
             {

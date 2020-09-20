@@ -96,7 +96,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
     }
     this.files.forEach(upload => {
       if (upload.file) {
-        this.fileMngService.startUpload(upload.file, currentFolderId, this.uploadSetting.chunkSize, 'fileupload')
+        this.fileMngService.startUpload(upload.file, this.uploadSetting.uploadServer, 'fileupload', currentFolderId, this.uploadSetting.chunkSize)
         .pipe(takeUntil(this.onDestroy))
         .subscribe(data => {
           const file = this.files.find(s => s.name === data.filename);

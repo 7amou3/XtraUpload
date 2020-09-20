@@ -13,7 +13,7 @@ namespace XtraUpload.StorageManager.Host
 {
     public static class StartUp
     {
-        public static void UseFileManager(this IApplicationBuilder app)
+        public static void UseStorageManager(this IApplicationBuilder app)
         {
             app.UseTus(httpContext =>
             {
@@ -28,7 +28,7 @@ namespace XtraUpload.StorageManager.Host
                 else return null;
             });
         }
-        public static void AddFileManager(this IServiceCollection services, IConfiguration config)
+        public static void AddStorageManager(this IServiceCollection services, IConfiguration config)
         {
             // Registre services
             services.AddSingleton<AvatarUploadService>();
