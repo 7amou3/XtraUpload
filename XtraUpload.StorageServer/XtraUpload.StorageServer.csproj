@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -26,6 +22,5 @@
     <ProjectReference Include="..\Services\StorageManager\XtraUpload.StorageManager.Host\XtraUpload.StorageManager.Host.csproj" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
   </ItemGroup>
-
 
 </Project>

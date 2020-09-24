@@ -24,6 +24,7 @@ using XtraUpload.Email.Host;
 using XtraUpload.Administration.Host;
 using XtraUpload.Setting.Host;
 using XtraUpload.Database.Host;
+using XtraUpload.gRPCServer;
 
 namespace XtraUpload.WebApp
 {
@@ -39,11 +40,15 @@ namespace XtraUpload.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
-            services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Add cors, see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
+            services.AddCors();
+
+            // Add grpc server
+            services.AddGrpc();
 
             // Load XtraUpload modules
             services.AddDatabase(Configuration);
@@ -63,6 +68,7 @@ namespace XtraUpload.WebApp
                 typeof(Setting.Host.Startup),
                 typeof(Authentication.Host.Startup));
 
+            
             RegisterDto(services);
 
             // Unhandled exception filter handler
@@ -78,7 +84,7 @@ namespace XtraUpload.WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             // setup api to work with proxy servers and load balancers
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -101,6 +107,7 @@ namespace XtraUpload.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<gFileStorageService>();
             });
 
             app.UseHealthChecks("/health", new HealthCheckOptions

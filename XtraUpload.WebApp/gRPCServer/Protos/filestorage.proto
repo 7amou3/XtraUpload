@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "XtraUpload.gRPCServer";
+
+
+package gfilestorage;
+
+// The file storage service definition.
+service gFileStorage {
+  // jwt should be passed in request header
+  rpc GetUser (gRequest) returns (gUser);
+}
+
+// The request messgae (null for now)
+message gRequest {
+	
+}
+// The response message containing the user.
+message gUser {
+  string id = 1;
+}

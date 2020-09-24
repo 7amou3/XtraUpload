@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <Content Remove="log4net.config" />
   </ItemGroup>
@@ -13,18 +13,24 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="MediatR" Version="8.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="gRPCServer\Protos\filestorage.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,5 +42,5 @@
     <ProjectReference Include="..\Services\Setting\XtraUpload.Setting.Host\XtraUpload.Setting.Host.csproj" />
     <ProjectReference Include="..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
   </ItemGroup>
-  
+
 </Project>

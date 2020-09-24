@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -13,9 +14,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using tusdotnet;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
+using XtraUpload.gRPCServer;
 using XtraUpload.StorageManager.Host;
+using XtraUpload.StorageManager.Service;
 
 namespace XtraUpload.StorageServer
 {
@@ -33,8 +37,8 @@ namespace XtraUpload.StorageServer
         {
             // see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
             services.AddCors();
-            services.AddStorageManager(Configuration);
             services.AddControllers();
+            services.AddStorageManager(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,13 +62,11 @@ namespace XtraUpload.StorageServer
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            
+
             app.UseStaticFiles();
 
-            app.UseAuthentication();
-
             app.UseRouting();
-            
+
             app.UseCors(builder => builder
                                     .AllowAnyHeader()
                                     .AllowAnyMethod()
@@ -72,9 +74,7 @@ namespace XtraUpload.StorageServer
                                     .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));
 
             app.UseStorageManager();
-
-            app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -99,6 +99,7 @@ namespace XtraUpload.StorageServer
                     await context.Response.WriteAsync(Helpers.JsonSerialize(response));
                 }
             });
+
         }
     }
 }

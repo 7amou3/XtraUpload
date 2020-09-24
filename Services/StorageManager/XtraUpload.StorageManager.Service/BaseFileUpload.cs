@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using XtraUpload.StorageManager.Common;
 using XtraUpload.Domain.Infra;
+using XtraUpload.gRPCServer;
 
 namespace XtraUpload.StorageManager.Service
 {
@@ -85,13 +86,17 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private Task OnAuthorize(AuthorizeContext ctx)
         {
-            string userId = ctx.HttpContext.User.GetUserId();
-            if (!ctx.HttpContext.User.Identity.IsAuthenticated || userId == null)
-            {
-                ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
-                ctx.FailRequest(HttpStatusCode.Unauthorized);
-                return Task.CompletedTask;
-            }
+            //var token = ctx.HttpContext.Request.Headers["Authorization"].ToString();
+            //var headers = new Grpc.Core.Metadata();
+            //headers.Add("Authorization", $"{token}");
+            //var _storageClient = _serviceProvider.GetService<gFileStorage.gFileStorageClient>();
+            //var user =  _storageClient.GetUser(new gRequest(), headers: headers);
+            //if (user == null || user.Id == null)
+            //{
+            //    ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
+            //    ctx.FailRequest(HttpStatusCode.Unauthorized);
+            //    return Task.CompletedTask;
+            //}
 
             switch (ctx.Intent)
             {

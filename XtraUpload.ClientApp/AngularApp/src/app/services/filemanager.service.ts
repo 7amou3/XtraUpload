@@ -184,7 +184,7 @@ export class FileManagerService {
       onError: onTusError,
       onProgress: onTusProgress,
       onSuccess: onTusSuccess,
-      retryDelays: [0, 1000, 3000, 5000],
+      retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
         name: file.name,
         contentType: file.type || 'application/octet-stream',

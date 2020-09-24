@@ -8,6 +8,7 @@ using tusdotnet;
 using XtraUpload.StorageManager.Service;
 using XtraUpload.StorageManager.Common;
 using XtraUpload.Domain.Infra;
+using XtraUpload.gRPCServer;
 
 namespace XtraUpload.StorageManager.Host
 {
@@ -35,7 +36,13 @@ namespace XtraUpload.StorageManager.Host
             services.AddSingleton<FileUploadService>();
             services.AddImageSharp();
 
-            
+            // Add grpc clients
+            services.AddGrpcClient<gFileStorage.gFileStorageClient>(o =>
+            {
+                o.Address = new Uri("https://localhost:5000");
+                // o.Interceptors.Add(new TokenInterceptor());
+            });
+
             // Background jobs
             services.AddHostedService<ExpiredFilesCleanupService>();
             

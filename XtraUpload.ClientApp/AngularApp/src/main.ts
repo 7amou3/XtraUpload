@@ -4,10 +4,10 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 export function getBaseUrl() {
-  return 'http://localhost:5000/'; //document.getElementsByTagName('base')[0].href;
+  return 'https://localhost:5000/'; //document.getElementsByTagName('base')[0].href;
 }
 export function getAPIUrl() {
-  return 'http://localhost:5000/api/'; //document.getElementsByTagName('base')[0].href + 'api/';
+  return 'https://localhost:5000/api/'; //document.getElementsByTagName('base')[0].href + 'api/';
 }
 const providers = [
   { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
