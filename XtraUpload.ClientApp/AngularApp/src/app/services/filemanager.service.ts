@@ -180,7 +180,7 @@ export class FileManagerService {
     upload = new tus.Upload(file,
     {
       endpoint: uri,
-      chunkSize: chunkSize,
+      chunkSize: chunkSize == 0 ? 25 * 1024 * 1024 : chunkSize,
       onError: onTusError,
       onProgress: onTusProgress,
       onSuccess: onTusSuccess,

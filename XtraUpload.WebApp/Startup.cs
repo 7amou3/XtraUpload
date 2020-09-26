@@ -42,7 +42,7 @@ namespace XtraUpload.WebApp
         {
             services.AddControllers();
             services.AddHttpClient();
-            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add cors, see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
             services.AddCors();

@@ -24,14 +24,16 @@ namespace XtraUpload.StorageManager.Service
         #region Fields
         protected readonly IServiceProvider _serviceProvider;
         protected readonly ILogger<FileUploadService> _logger;
+        protected readonly gFileStorage.gFileStorageClient _storageClient;
         private readonly string _urlPath;
         #endregion
 
         #region Constructor
-        public BaseFileUpload(IServiceProvider serviceProvider, string urlPath)
+        public BaseFileUpload(IServiceProvider serviceProvider, gFileStorage.gFileStorageClient storageClient, string urlPath)
         {
             _urlPath = urlPath;
             _serviceProvider = serviceProvider;
+            _storageClient = storageClient;
             _logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<FileUploadService>();
         }
         #endregion
@@ -84,19 +86,15 @@ namespace XtraUpload.StorageManager.Service
         /// <summary>
         /// Handle the upload authorization
         /// </summary>
-        private Task OnAuthorize(AuthorizeContext ctx)
+        private async Task OnAuthorize(AuthorizeContext ctx)
         {
-            //var token = ctx.HttpContext.Request.Headers["Authorization"].ToString();
-            //var headers = new Grpc.Core.Metadata();
-            //headers.Add("Authorization", $"{token}");
-            //var _storageClient = _serviceProvider.GetService<gFileStorage.gFileStorageClient>();
-            //var user =  _storageClient.GetUser(new gRequest(), headers: headers);
-            //if (user == null || user.Id == null)
-            //{
-            //    ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
-            //    ctx.FailRequest(HttpStatusCode.Unauthorized);
-            //    return Task.CompletedTask;
-            //}
+            var user = await _storageClient.GetUserAsync(new gRequest());
+            if (user == null || user.Id == null)
+            {
+                ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
+                ctx.FailRequest(HttpStatusCode.Unauthorized);
+                return;
+            }
 
             switch (ctx.Intent)
             {
@@ -116,7 +114,7 @@ namespace XtraUpload.StorageManager.Service
                     break;
             }
 
-            return Task.CompletedTask;
+            return;
         }
 
         /// <summary>

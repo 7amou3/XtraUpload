@@ -9,8 +9,8 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
-    <AssemblyName>XtraUpload.WebApp</AssemblyName>
-    <RootNamespace>XtraUpload.WebApp</RootNamespace>
+    <AssemblyName>XtraUpload.ClientApp</AssemblyName>
+    <RootNamespace>XtraUpload.ClientApp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

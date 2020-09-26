@@ -12,13 +12,14 @@ using System.Threading.Tasks;
 using tusdotnet.Models.Configuration;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
+using XtraUpload.gRPCServer;
 using XtraUpload.StorageManager.Common;
 
 namespace XtraUpload.StorageManager.Service
 {
     public class AvatarUploadService : BaseFileUpload
     {
-        public AvatarUploadService(IServiceProvider serviceProvider) : base(serviceProvider, "/avatarupload")
+        public AvatarUploadService(IServiceProvider serviceProvider, gFileStorage.gFileStorageClient storageClient) : base(serviceProvider, storageClient, "/avatarupload")
         {
         }
 

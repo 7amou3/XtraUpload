@@ -15,6 +15,7 @@ using System;
 using XtraUpload.StorageManager.Common;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using XtraUpload.gRPCServer;
 
 namespace XtraUpload.StorageManager.Service
 {
@@ -24,7 +25,7 @@ namespace XtraUpload.StorageManager.Service
     /// </summary>
     public class FileUploadService : BaseFileUpload
     {
-        public FileUploadService(IServiceProvider serviceProvider) : base(serviceProvider, "/fileupload")
+        public FileUploadService(IServiceProvider serviceProvider, gFileStorage.gFileStorageClient storageClient) : base(serviceProvider, storageClient, "/fileupload")
         {
         }
 

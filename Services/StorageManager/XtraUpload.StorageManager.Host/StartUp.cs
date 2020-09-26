@@ -32,16 +32,22 @@ namespace XtraUpload.StorageManager.Host
         public static void AddStorageManager(this IServiceCollection services, IConfiguration config)
         {
             // Registre services
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<AvatarUploadService>();
             services.AddSingleton<FileUploadService>();
+            services.AddSingleton<LoggerInterceptor>();
             services.AddImageSharp();
 
             // Add grpc clients
-            services.AddGrpcClient<gFileStorage.gFileStorageClient>(o =>
+            services.AddGrpcClient<gFileStorage.gFileStorageClient>(options =>
             {
-                o.Address = new Uri("https://localhost:5000");
-                // o.Interceptors.Add(new TokenInterceptor());
-            });
+                options.Address = new Uri("https://localhost:5000");
+            })
+            .ConfigureChannel((serviceProvider, channel) =>
+            {
+                channel.Credentials = new GrpcChannelHelper().CreateSecureChannel(serviceProvider);
+            })
+            .AddInterceptor<LoggerInterceptor>();
 
             // Background jobs
             services.AddHostedService<ExpiredFilesCleanupService>();
