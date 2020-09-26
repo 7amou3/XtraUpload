@@ -25,7 +25,11 @@ namespace XtraUpload.StorageManager.Service
     /// </summary>
     public class FileUploadService : BaseFileUpload
     {
-        public FileUploadService(IServiceProvider serviceProvider, gFileStorage.gFileStorageClient storageClient) : base(serviceProvider, storageClient, "/fileupload")
+        public FileUploadService(
+            gFileStorage.gFileStorageClient storageClient,
+            IOptionsMonitor<UploadOptions> uploadOpts,
+            ILogger<FileUploadService> logger
+            ) : base(storageClient, uploadOpts, logger, "/fileupload")
         {
         }
 
@@ -36,10 +40,8 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                UploadOptions uploadOpts = _serviceProvider.GetService<IOptionsMonitor<UploadOptions>>().CurrentValue;
-
-                FileItem file = await PersistMetaData(ctx, uploadOpts);
-                MoveFilesToFolder(ctx, file, uploadOpts);
+                FileItem file = await PersistMetaData(ctx, _uploadOpts);
+                MoveFilesToFolder(ctx, file, _uploadOpts);
             }
             catch (Exception _ex)
             {

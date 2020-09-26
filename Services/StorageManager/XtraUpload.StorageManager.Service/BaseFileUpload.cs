@@ -22,19 +22,23 @@ namespace XtraUpload.StorageManager.Service
     public abstract class BaseFileUpload
     {
         #region Fields
-        protected readonly IServiceProvider _serviceProvider;
+        private readonly string _urlPath;
+        protected readonly UploadOptions _uploadOpts;
         protected readonly ILogger<FileUploadService> _logger;
         protected readonly gFileStorage.gFileStorageClient _storageClient;
-        private readonly string _urlPath;
         #endregion
 
         #region Constructor
-        public BaseFileUpload(IServiceProvider serviceProvider, gFileStorage.gFileStorageClient storageClient, string urlPath)
+        public BaseFileUpload(
+            gFileStorage.gFileStorageClient storageClient,
+            IOptionsMonitor<UploadOptions> uploadOpts,
+            ILogger<FileUploadService> logger,
+            string urlPath)
         {
             _urlPath = urlPath;
-            _serviceProvider = serviceProvider;
             _storageClient = storageClient;
-            _logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<FileUploadService>();
+            _uploadOpts = uploadOpts.CurrentValue;
+            _logger = logger;
         }
         #endregion
 
@@ -43,15 +47,13 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         public DefaultTusConfiguration CreateTusConfiguration()
         {
-            UploadOptions uploadOpts = _serviceProvider.GetService<IOptionsMonitor<UploadOptions>>().CurrentValue;
-
             return new DefaultTusConfiguration
             {
                 UrlPath = _urlPath,
                 MaxAllowedUploadSizeInBytes = int.MaxValue,
                 MaxAllowedUploadSizeInBytesLong = int.MaxValue,
-                Store = new TusDiskStore(uploadOpts.UploadPath),
-                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(uploadOpts.Expiration)),
+                Store = new TusDiskStore(_uploadOpts.UploadPath),
+                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(_uploadOpts.Expiration)),
                 Events = new Events
                 {
                     OnAuthorizeAsync = OnAuthorize,
