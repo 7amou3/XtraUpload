@@ -41,7 +41,7 @@ namespace XtraUpload.StorageManager.Host
             // Add grpc clients
             services.AddGrpcClient<gFileStorage.gFileStorageClient>(options =>
             {
-                options.Address = new Uri("https://localhost:5000");
+                options.Address = new Uri(config["ApiUrl"]);
             })
             .ConfigureChannel((serviceProvider, channel) =>
             {

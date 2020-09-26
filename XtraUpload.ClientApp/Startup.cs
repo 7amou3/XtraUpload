@@ -50,7 +50,6 @@ namespace XtraUpload.ClientApp
                     OnPrepareResponse = ctx =>
                     {
                         ctx.Context.Response.Headers.Add("Cache-Control", "max-age=86400");
-                        ctx.Context.Response.Headers.Add("Sec-Fetch-Site", "cross-site");
                     }
                 });
             }
