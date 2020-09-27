@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Database.Migrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Database.Data.Common", "Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj", "{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApp", "XtraUpload.WebApp\XtraUpload.WebApp.csproj", "{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Administration", "Administration", "{29006F95-A24E-4946-913A-72375029795E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.Administration.Service", "Services\Administration\XtraUpload.Administration.Service\XtraUpload.Administration.Service.csproj", "{7D3024C4-5F5F-4190-B65D-28AE5487AA99}"
@@ -73,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.ClientApp", "Xtr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GrpcServices", "GrpcServices", "{411B2C01-6922-417E-A7D0-B10409E947AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.GrpcServices", "Services\GrpcServices\XtraUpload.GrpcServices\XtraUpload.GrpcServices.csproj", "{EFACF315-45F4-40C1-9934-F62D388D8360}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.GrpcServices", "Services\GrpcServices\XtraUpload.GrpcServices\XtraUpload.GrpcServices.csproj", "{EFACF315-45F4-40C1-9934-F62D388D8360}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{42E34075-8898-4753-BDC5-B89597654437}"
 	ProjectSection(SolutionItems) = preProject
@@ -84,6 +82,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{D4BC1E
 	ProjectSection(SolutionItems) = preProject
 		Services\GrpcServices\Protos\domain\gFileItem.proto = Services\GrpcServices\Protos\domain\gFileItem.proto
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApi", "XtraUpload.WebApi\XtraUpload.WebApi.csproj", "{A39B47B3-D218-4C61-92BF-ABE399C76B56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,10 +107,6 @@ Global
 		{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC361EAF-6F55-4A34-9731-AFFAA4EFE58B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CCEDCFF-1B6B-4A19-9A5E-532FDB2C91B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D3024C4-5F5F-4190-B65D-28AE5487AA99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D3024C4-5F5F-4190-B65D-28AE5487AA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D3024C4-5F5F-4190-B65D-28AE5487AA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -199,6 +195,10 @@ Global
 		{EFACF315-45F4-40C1-9934-F62D388D8360}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFACF315-45F4-40C1-9934-F62D388D8360}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFACF315-45F4-40C1-9934-F62D388D8360}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A39B47B3-D218-4C61-92BF-ABE399C76B56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39B47B3-D218-4C61-92BF-ABE399C76B56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39B47B3-D218-4C61-92BF-ABE399C76B56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39B47B3-D218-4C61-92BF-ABE399C76B56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

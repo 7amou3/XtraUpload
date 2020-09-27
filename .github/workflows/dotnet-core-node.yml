@@ -31,7 +31,7 @@ jobs:
         # node-version: [12.x]
      # defaults: 
          #  run: 
-           #  working-directory: "XtraUpload.WebApp/ClientApp/"
+           #  working-directory: "XtraUpload.WebApi/ClientApp/"
      # steps:
       # - uses: actions/checkout@v2
       # cache node module if package-lock.json doesn't change

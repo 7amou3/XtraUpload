@@ -13,7 +13,7 @@ Before you begin the install, there are a few things you need to have and do.
 ## Automatic Installation (shell script)
 1. Upload and unzip the XtraUpload package on your server.
 1. Create a MySQL database user who has all privileges for accessing and modifying it.
-1. In XtraUpload.WebApp folder edit `appsettings.json` and provide your database connection string (user, and password) [Database config](https://photos.app.goo.gl/fqz4A5WC5Yrhb1Z38).
+1. In XtraUpload.WebApi folder edit `appsettings.json` and provide your database connection string (user, and password) [Database config](https://photos.app.goo.gl/fqz4A5WC5Yrhb1Z38).
 1. In XtraUpload rootfolder give execution permission to `install.sh` script by running the command `chmod +x ./install.sh`
 1. Run the script, once the installation is done navigate to localhost:5000 to login to your admin panel.
 1. XtraUpload is running on Kestrel webserver at http://localhost:5000, Kestrel is great for serving .Net but it's not a full-blown webserver, we highly recommand putting a reverse proxy (Nginx or Apache) in front of Kestrel, follow this guide to setup a [reverse proxy](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1#configure-a-reverse-proxy-server)
@@ -31,13 +31,13 @@ Before you begin the install, there are a few things you need to have and do.
    1. First install EF core tools, open a terminal and type `dotnet  tool install --global dotnet-ef`
    1. In the publish folder edit *appsettings.json* by providing your db connection string (XtraUpload support both MySql and Sql databases) [Database config](https://photos.app.goo.gl/fqz4A5WC5Yrhb1Z38)
    1. Generate a Migration file: in a terminal navigate to the root folder XtraUpload-master and type 
- `dotnet ef migrations add MyMigrationName -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApp` you should get the following result:  [Migration folder](https://photos.app.goo.gl/4GoWuAocxoKHYVLw8)
-   1. Now that we have the migration folder we can generate the sql script, in the same terminal type: `dotnet ef migrations script -o ./Database/XtraUpload.Database.Migrations/script.sql -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApp`, you should get the following result: [Sql file](https://photos.app.goo.gl/cJgnnNq3nxwaLhvCA)
+ `dotnet ef migrations add MyMigrationName -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApi` you should get the following result:  [Migration folder](https://photos.app.goo.gl/4GoWuAocxoKHYVLw8)
+   1. Now that we have the migration folder we can generate the sql script, in the same terminal type: `dotnet ef migrations script -o ./Database/XtraUpload.Database.Migrations/script.sql -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApi`, you should get the following result: [Sql file](https://photos.app.goo.gl/cJgnnNq3nxwaLhvCA)
    1. Update your database with the generated sql script, you can either import the script.sql directly to your MySql server interface or run the following command 
- `dotnet ef database update MyMigrationName -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApp` you should see the newly generated  [database](https://photos.app.goo.gl/z5XZvwgKRb4KBzaW9).  
- *PS*: if you would like to run the command, you need to update the *ConnectionString* in *XtraUpload.WebApp/appsettings.json*
- if you got any error, please make sure you provide the correct database connection string in _XtraUpload.WebApp/appsettings.json_
-1. Run the application: the .NET runtime came with kestrel webserver, you can start  this http server by running the command`dotnet XtraUpload.WebApp.dll` navigate to localhost:5000/login you should get the following [login page](https://photos.app.goo.gl/TLerv4DRMrUU9tgZ8)  
+ `dotnet ef database update MyMigrationName -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApi` you should see the newly generated  [database](https://photos.app.goo.gl/z5XZvwgKRb4KBzaW9).  
+ *PS*: if you would like to run the command, you need to update the *ConnectionString* in *XtraUpload.WebApi/appsettings.json*
+ if you got any error, please make sure you provide the correct database connection string in _XtraUpload.WebApi/appsettings.json_
+1. Run the application: the .NET runtime came with kestrel webserver, you can start  this http server by running the command`dotnet XtraUpload.WebApi.dll` navigate to localhost:5000/login you should get the following [login page](https://photos.app.goo.gl/TLerv4DRMrUU9tgZ8)  
 PS: I moved the publish folder to desktop you can put it wherever you like on your server, `/var/www/` for instance.
 1. The default admin account credentials are:  
 	email: admin@admin.com  
