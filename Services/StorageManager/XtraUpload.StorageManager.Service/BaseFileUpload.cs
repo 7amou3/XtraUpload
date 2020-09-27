@@ -8,11 +8,9 @@ using tusdotnet.Models.Concatenation;
 using tusdotnet.Models.Configuration;
 using tusdotnet.Models.Expiration;
 using tusdotnet.Stores;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using XtraUpload.StorageManager.Common;
-using XtraUpload.Domain.Infra;
-using XtraUpload.gRPCServer;
+using XtraUpload.Protos;
 
 namespace XtraUpload.StorageManager.Service
 {

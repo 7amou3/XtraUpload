@@ -8,11 +8,11 @@ using tusdotnet;
 using XtraUpload.StorageManager.Service;
 using XtraUpload.StorageManager.Common;
 using XtraUpload.Domain.Infra;
-using XtraUpload.gRPCServer;
+using XtraUpload.Protos;
 
 namespace XtraUpload.StorageManager.Host
 {
-    public static class StartUp
+    public static class Startup
     {
         public static void UseStorageManager(this IApplicationBuilder app)
         {

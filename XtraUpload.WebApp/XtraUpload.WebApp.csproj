@@ -25,12 +25,7 @@
     
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />
     
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="gRPCServer\Protos\filestorage.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +34,7 @@
     <ProjectReference Include="..\Services\Authentication\XtraUpload.Authentication.Host\XtraUpload.Authentication.Host.csproj" />
     <ProjectReference Include="..\Services\Email\XtraUpload.Email.Host\XtraUpload.Email.Host.csproj" />
     <ProjectReference Include="..\Services\FileManager\XtraUpload.FileManager.Host\XtraUpload.FileManager.Host.csproj" />
+    <ProjectReference Include="..\Services\GrpcServices\XtraUpload.GrpcServices\XtraUpload.GrpcServices.csproj" />
     <ProjectReference Include="..\Services\Setting\XtraUpload.Setting.Host\XtraUpload.Setting.Host.csproj" />
     <ProjectReference Include="..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
   </ItemGroup>

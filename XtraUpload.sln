@@ -69,7 +69,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.StorageManager.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.StorageManager.Service", "Services\StorageManager\XtraUpload.StorageManager.Service\XtraUpload.StorageManager.Service.csproj", "{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.ClientApp", "XtraUpload.ClientApp\XtraUpload.ClientApp.csproj", "{EB7115DF-1018-4DFD-9CCF-BD6A191F1033}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.ClientApp", "XtraUpload.ClientApp\XtraUpload.ClientApp.csproj", "{EB7115DF-1018-4DFD-9CCF-BD6A191F1033}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GrpcServices", "GrpcServices", "{411B2C01-6922-417E-A7D0-B10409E947AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtraUpload.GrpcServices", "Services\GrpcServices\XtraUpload.GrpcServices\XtraUpload.GrpcServices.csproj", "{EFACF315-45F4-40C1-9934-F62D388D8360}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{42E34075-8898-4753-BDC5-B89597654437}"
+	ProjectSection(SolutionItems) = preProject
+		Services\GrpcServices\Protos\filestorage.proto = Services\GrpcServices\Protos\filestorage.proto
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{D4BC1E9B-2E0E-4CD7-A596-00E95B4F14DB}"
+	ProjectSection(SolutionItems) = preProject
+		Services\GrpcServices\Protos\domain\gFileItem.proto = Services\GrpcServices\Protos\domain\gFileItem.proto
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +195,10 @@ Global
 		{EB7115DF-1018-4DFD-9CCF-BD6A191F1033}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB7115DF-1018-4DFD-9CCF-BD6A191F1033}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB7115DF-1018-4DFD-9CCF-BD6A191F1033}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFACF315-45F4-40C1-9934-F62D388D8360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFACF315-45F4-40C1-9934-F62D388D8360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFACF315-45F4-40C1-9934-F62D388D8360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFACF315-45F4-40C1-9934-F62D388D8360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,6 +232,10 @@ Global
 		{E4E3C71C-E30A-446B-8649-2012457A9761} = {67A4B21F-3D72-4224-AC01-80CD4F60AB3E}
 		{FE5732FC-8C36-4E5A-94E2-644E57267E62} = {67A4B21F-3D72-4224-AC01-80CD4F60AB3E}
 		{D57BC465-E1EE-4B1C-94B7-DF3FD49FC71E} = {67A4B21F-3D72-4224-AC01-80CD4F60AB3E}
+		{411B2C01-6922-417E-A7D0-B10409E947AC} = {09655B89-9208-47C5-9167-DAC154BB94C3}
+		{EFACF315-45F4-40C1-9934-F62D388D8360} = {411B2C01-6922-417E-A7D0-B10409E947AC}
+		{42E34075-8898-4753-BDC5-B89597654437} = {411B2C01-6922-417E-A7D0-B10409E947AC}
+		{D4BC1E9B-2E0E-4CD7-A596-00E95B4F14DB} = {42E34075-8898-4753-BDC5-B89597654437}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2D11451-0DF7-4384-9CB9-F8C1B4777FCF}

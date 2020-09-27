@@ -24,7 +24,7 @@ using XtraUpload.Email.Host;
 using XtraUpload.Administration.Host;
 using XtraUpload.Setting.Host;
 using XtraUpload.Database.Host;
-using XtraUpload.gRPCServer;
+using XtraUpload.GrpcServices;
 
 namespace XtraUpload.WebApp
 {
@@ -47,9 +47,6 @@ namespace XtraUpload.WebApp
             // Add cors, see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
             services.AddCors();
 
-            // Add grpc server
-            services.AddGrpc();
-
             // Load XtraUpload modules
             services.AddDatabase(Configuration);
             services.AddXtraUploadAuthentication(Configuration);
@@ -57,6 +54,7 @@ namespace XtraUpload.WebApp
             services.AddFileManager();
             services.AddEmail(Configuration);
             services.AddAdministration();
+            services.AddGrpcServices();
 
             // Add background worker
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
@@ -107,8 +105,9 @@ namespace XtraUpload.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapGrpcService<gFileStorageService>();
             });
+
+            app.UseGrpcServices();
 
             app.UseHealthChecks("/health", new HealthCheckOptions
             {

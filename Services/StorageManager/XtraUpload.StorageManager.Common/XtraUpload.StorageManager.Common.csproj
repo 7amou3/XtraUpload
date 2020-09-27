@@ -14,9 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\..\XtraUpload.WebApp\gRPCServer\Protos\filestorage.proto" GrpcServices="Client">
+    <Protobuf Include="..\..\GrpcServices\Protos\filestorage.proto" GrpcServices="Client">
       <Link>Protos\filestorage.proto</Link>
     </Protobuf>
+    <Protobuf Include="..\..\GrpcServices\Protos\domain\*" GrpcServices="None"/>
   </ItemGroup>
 
 </Project>

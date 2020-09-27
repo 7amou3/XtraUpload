@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using tusdotnet.Models.Configuration;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.gRPCServer;
+using XtraUpload.Protos;
 using XtraUpload.StorageManager.Common;
 
 namespace XtraUpload.StorageManager.Service

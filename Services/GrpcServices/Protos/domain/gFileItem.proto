@@ -1,0 +1,19 @@
+syntax = "proto3";
+option csharp_namespace = "XtraUpload.Protos";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+// A file item
+message gFileItem {
+    string Id = 1;
+    string TusId = 2;
+    string UserId = 3;
+    uint32 Size = 4;
+    string Name = 5;
+    string MimeType = 6;
+    string Extension = 7;
+    google.protobuf.StringValue FolderId = 8;
+    google.protobuf.Timestamp CreatedAt = 9;
+    google.protobuf.Timestamp LastModified = 10;
+    bool IsAvailableOnline = 11;
+}

@@ -15,7 +15,8 @@ using System;
 using XtraUpload.StorageManager.Common;
 using System.Text;
 using Microsoft.Extensions.Logging;
-using XtraUpload.gRPCServer;
+using XtraUpload.Protos;
+using Google.Protobuf.WellKnownTypes;
 
 namespace XtraUpload.StorageManager.Service
 {
@@ -54,7 +55,7 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private async Task<FileItem> PersistMetaData(FileCompleteContext ctx, UploadOptions uploadOpts)
         {
-            string userId = ctx.HttpContext.User.GetUserId();
+            gUser user = await _storageClient.GetUserAsync(new gRequest());
             ITusFile file = await ((ITusReadableStore)ctx.Store).GetFileAsync(ctx.FileId, ctx.CancellationToken);
             var metadata = await file.GetMetadataAsync(ctx.CancellationToken);
 
@@ -62,7 +63,7 @@ namespace XtraUpload.StorageManager.Service
             {
                 Id = Helpers.GenerateUniqueId(),
                 TusId = ctx.FileId,
-                UserId = userId,
+                UserId = user.Id,
                 Size = new FileInfo(Path.Combine(uploadOpts.UploadPath, file.Id)).Length,
                 Name = metadata["name"].GetString(Encoding.UTF8),
                 MimeType = metadata["contentType"].GetString(Encoding.UTF8),
@@ -76,15 +77,23 @@ namespace XtraUpload.StorageManager.Service
                 IsAvailableOnline = true
             };
 
-            // Todo: send file info to the main app
-            // Add the uploaded file to db
-            //using IServiceScope scope = _serviceProvider.CreateScope();
-            //using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            //unitOfWork.Files.Add(fileitem);
-
-            // Try to save to db
-            //await unitOfWork.CompleteAsync();
-
+            gFileItem gFile = new gFileItem()
+            {
+                Id = fileitem.Id,
+                TusId = fileitem.TusId,
+                UserId = fileitem.UserId,
+                Name = fileitem.Name,
+                MimeType = fileitem.MimeType,
+                FolderId = fileitem.FolderId,
+                Size = uint.Parse(fileitem.Size.ToString()),
+                Extension = fileitem.Extension,
+                CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(fileitem.CreatedAt, DateTimeKind.Utc)),
+                LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(fileitem.LastModified, DateTimeKind.Utc)),
+                IsAvailableOnline = fileitem.IsAvailableOnline
+            };
+            // send the uploaded file info to the main app
+            await _storageClient.SaveFileAsync(new gFileItemRequest() { FileItem = gFile });
+            
             return fileitem;
         }
 

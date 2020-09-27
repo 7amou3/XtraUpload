@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using tusdotnet;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.gRPCServer;
 using XtraUpload.StorageManager.Host;
 using XtraUpload.StorageManager.Service;
 
