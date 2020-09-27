@@ -5,9 +5,9 @@ namespace XtraUpload.FileManager.Service.Common
     /// <summary>
     /// Get a file by it's id
     /// </summary>
-    public class GetFileByIdQuery : IRequest<GetFileResult>
+    public class GetFileServerInfoQuery : IRequest<GetFileResult>
     {
-        public GetFileByIdQuery(string fileid)
+        public GetFileServerInfoQuery(string fileid)
         {
             FileId = fileid;
         }

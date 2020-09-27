@@ -1,16 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using tusdotnet.Models.Configuration;
-using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 using XtraUpload.StorageManager.Common;

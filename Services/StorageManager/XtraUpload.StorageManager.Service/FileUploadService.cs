@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using tusdotnet.Models.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.IO;
 using tusdotnet.Interfaces;
@@ -9,7 +8,6 @@ using XtraUpload.Domain.Infra;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using Microsoft.Extensions.Options;
 using System;
 using XtraUpload.StorageManager.Common;

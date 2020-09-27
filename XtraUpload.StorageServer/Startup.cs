@@ -14,11 +14,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using tusdotnet;
+using MediatR;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.StorageManager.Host;
-using XtraUpload.StorageManager.Service;
 
 namespace XtraUpload.StorageServer
 {
@@ -38,6 +37,8 @@ namespace XtraUpload.StorageServer
             services.AddCors();
             services.AddControllers();
             services.AddStorageManager(Configuration);
+            // Add mediatr
+            services.AddMediatR(typeof(Startup), typeof(StorageManager.Host.Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

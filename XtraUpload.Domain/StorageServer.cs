@@ -17,9 +17,9 @@ namespace XtraUpload.Domain
         /// </summary>
         public Guid Id { get; set; }
         /// <summary>
-        /// Ip of the server
+        /// Ip/hostname of the server
         /// </summary>
-        public string IpAddress { get; set; }
+        public string Address { get; set; }
         /// <summary>
         /// Navigation property
         /// </summary>

@@ -175,8 +175,11 @@ export class FileManagerService {
       uploadStatus.message = progress as Object;
       event.next(uploadStatus);
     };
+    // add '/' at the end of the url if not exist
+    const address = uploadSettings.storageServer.address.replace(/\/?$/, '/');
     // Defaut urlPath for tus is [fileupload or avatarupload] as configured in the server
-    const uri = uploadSettings.uploadServer.url + urlPath;
+    const uri = address + urlPath;
+    
     upload = new tus.Upload(file,
     {
       endpoint: uri,
@@ -189,7 +192,7 @@ export class FileManagerService {
         name: file.name,
         contentType: file.type || 'application/octet-stream',
         folderId: folderId,
-        serverId: uploadSettings.uploadServer.serverId
+        serverId: uploadSettings.storageServer.id
       },
       headers: {
         'authorization': 'Bearer ' + this.storageService.getToken()

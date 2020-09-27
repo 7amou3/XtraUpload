@@ -14,14 +14,14 @@ namespace XtraUpload.Database.Data
         {
             builder.HasKey(s => s.Id);
             // Index
-            builder.HasIndex(u => u.IpAddress).HasName("IpAddress").IsUnique();
+            builder.HasIndex(u => u.Address).HasName("IpAddress").IsUnique();
             // Each SS have one entry in the File join table
             builder.HasMany(s => s.Files).WithOne(e => e.StorageServer).HasForeignKey(ur => ur.StorageServerId).OnDelete(DeleteBehavior.Cascade);
 
             StorageServer server = new StorageServer()
             {
                 Id = Guid.NewGuid(),
-                IpAddress = "http://localhost:5123"
+                Address = "https://localhost:5002"
             };
             builder.HasData(server);
 

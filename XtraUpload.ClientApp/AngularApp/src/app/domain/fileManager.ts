@@ -20,6 +20,7 @@ export interface IFileInfo extends IItemInfo {
   size: number;
   waitTime: number;
   userLoggedIn: boolean;
+  storageServer: IStorageServer;
 }
 
 export interface IFileInfoExtended extends IFileInfo {
@@ -150,11 +151,11 @@ export interface IUploadSettings {
   maxFileSize: number;
   chunkSize: number;
   fileExtensions: string;
-  uploadServer: IUploadServer;
+  storageServer: IStorageServer;
 }
-export interface IUploadServer {
-  url: string;
-  serverId: string;
+export interface IStorageServer {
+  id: string;
+  address: string;
 }
 export interface IFilteredUser {
   users: IProfile[];

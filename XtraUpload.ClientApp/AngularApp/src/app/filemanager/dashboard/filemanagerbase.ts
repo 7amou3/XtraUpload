@@ -117,7 +117,9 @@ export abstract class FilemanagerBase extends ComponentBase {
 
     if (isFile(item)) {
       if (item.mimeType.startsWith('image')) {
-        item.thumbnail = this.apiUrl + 'file/smallthumb/' + item.id;
+        // Add '/' at the end of url
+        const address = (item as IFileInfo).storageServer?.address?.replace(/\/?$/, '/');
+        item.thumbnail = address + 'api/file/smallthumb/' + item.id;
       }
       else {
         if (item.extension) {

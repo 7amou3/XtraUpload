@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,12 @@ namespace XtraUpload.WebApi.Controllers
     [Authorize(Policy = "User")]
     public class FolderController : BaseController
     {
+        readonly IMapper _mapper;
         readonly IMediator _mediatr;
 
-        public FolderController( IMediator mediatr)
+        public FolderController(IMapper mapper, IMediator mediatr)
         {
+            _mapper = mapper;
             _mediatr = mediatr;
         }
 
@@ -23,7 +27,7 @@ namespace XtraUpload.WebApi.Controllers
         {
             GetFolderContentResult result = await _mediatr.Send(new GetFolderContentQuery(folderid));
 
-            return HandleResult(result);
+            return HandleResult(result, _mapper.Map<FolderContentDto>(result));
         }
 
         [AllowAnonymous]

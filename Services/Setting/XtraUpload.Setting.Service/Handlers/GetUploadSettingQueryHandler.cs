@@ -52,7 +52,7 @@ namespace XtraUpload.Setting.Service
                 Result.MaxFileSize = int.Parse(_caller.Claims.Single(c => c.Type == "MaxFileSize").Value);
                 Result.ChunkSize = _uploadOpt.ChunkSize * 1024 * 1024;
                 Result.FileExtensions = string.Join(", ", extensions.Select(s => s.Name));
-                Result.UploadServer = await GetUploadServer();
+                Result.StorageServer = await GetStorageServer();
             }
             catch (Exception _ex)
             {
@@ -65,20 +65,15 @@ namespace XtraUpload.Setting.Service
             return Result;
         }
         /// <summary>
-        /// Get the least loaded upload server @, for now we pick a random server 
+        /// Get the least loaded server @, for now we pick a random server 
         /// Todo: Get the least loaded storage server based on the monitoring state 
         /// </summary>
         /// <returns></returns>
-        private async Task<UploadServer> GetUploadServer()
+        private async Task<StorageServer> GetStorageServer()
         {
             IEnumerable<StorageServer> servers = await _unitOfWork.StorageServer.GetAll();
             Random rand = new Random();
-            StorageServer randServer = servers.ElementAt(rand.Next(servers.Count()));
-            return new UploadServer()
-            {
-                ServerId = randServer.Id,
-                Url = randServer.IpAddress
-            };
+            return servers.ElementAt(rand.Next(servers.Count()));
         }
     }
 }

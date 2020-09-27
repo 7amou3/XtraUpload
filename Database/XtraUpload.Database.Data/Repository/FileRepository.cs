@@ -20,6 +20,16 @@ namespace XtraUpload.Database.Data
             _context = dbContext;
         }
 
+        public async Task<IEnumerable<FileItem>> GetFilesServerInfo(Expression<Func<FileItem, bool>> criteria)
+        {
+            var query = _context.Files
+                .Include(s => s.StorageServer)
+                .Where(criteria)
+                .ToListAsync();
+
+            return await query;
+        }
+
         public async Task<IEnumerable<ItemCountResult>> FilesCountByDateRange(DateTime start, DateTime end)
         {
             var query = _context.Files

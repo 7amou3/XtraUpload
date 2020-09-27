@@ -15,12 +15,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="tusdotnet" Version="2.3.0" />
+    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Services\FileManager\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
     <ProjectReference Include="..\Services\StorageManager\XtraUpload.StorageManager.Host\XtraUpload.StorageManager.Host.csproj" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.3" />
   </ItemGroup>
 
 </Project>

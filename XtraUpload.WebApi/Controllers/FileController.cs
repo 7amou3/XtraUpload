@@ -66,48 +66,6 @@ namespace XtraUpload.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("smallthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
-        public async Task<IActionResult> GetSmallThumb(string fileid)
-        {
-            AvatarUrlResult Result = await _mediator.Send(new GetThumbnailQuery(ThumbnailSize.Small, fileid));
-
-            if (Result.State != OperationState.Success)
-            {
-                if (Result.ErrorContent.ErrorType == ErrorOrigin.Client)
-                {
-                    return BadRequest(Result);
-                }
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-
-            // Do not close the stream, MVC will handle it
-            var stream = System.IO.File.OpenRead(Result.Url);
-
-            return File(stream, "image/png");
-        }
-
-        [AllowAnonymous]
-        [HttpGet("mediumthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
-        public async Task<IActionResult> GetMediumThumb(string fileid)
-        {
-            AvatarUrlResult Result = await _mediator.Send(new GetThumbnailQuery(ThumbnailSize.Medium, fileid));
-
-            if (Result.State != OperationState.Success)
-            {
-                if (Result.ErrorContent.ErrorType == ErrorOrigin.Client)
-                {
-                    return BadRequest(Result);
-                }
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-
-            // Do not close the stream, MVC will handle it
-            var stream = System.IO.File.OpenRead(Result.Url);
-
-            return new FileStreamResult(stream, "image/png");
-        }
-
-        [AllowAnonymous]
         [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
         public async Task<IActionResult> GetAvatar(string userid, string timespan = null)
         {

@@ -3,7 +3,7 @@ import { IProfile, IWebSetting } from 'app/domain';
 const PROFILE_DATA = 'XtraUpload';
 const WEBPAGE_DATA = 'Webpage';
 /**
- *  Store usefull user data to localstorage
+ *  Store user data to localstorage
  * */
 @Injectable()
 export class UserStorageService {

@@ -27,7 +27,7 @@ namespace XtraUpload.FileManager.Service
             AvatarUrlResult Result = new AvatarUrlResult();
 
             // Get the file
-            GetFileResult fileResult = await _mediator.Send(new GetFileByIdQuery(request.FileId));
+            GetFileResult fileResult = await _mediator.Send(new GetFileServerInfoQuery(request.FileId));
 
             if (Result.State != OperationState.Success)
             {

@@ -66,7 +66,6 @@ namespace XtraUpload.WebApi
                 typeof(Setting.Host.Startup),
                 typeof(Authentication.Host.Startup));
 
-            
             RegisterDto(services);
 
             // Unhandled exception filter handler
@@ -146,6 +145,8 @@ namespace XtraUpload.WebApi
                 cfg.CreateMap<RoleClaimsResult, RoleClaimsResultDto>();
                 cfg.CreateMap<RoleClaim, RoleClaimDto>();
                 cfg.CreateMap<FolderItem, FolderViewModel>();
+                cfg.CreateMap<FolderItem, FolderItemDto>();
+                cfg.CreateMap<StorageServer, StorageServerDto>();
                 cfg.CreateMap<FileItem, FileItemDto>();
                 cfg.CreateMap<FileItem, FileItemHeaderDto>();
                 cfg.CreateMap<UploadSettingResult, UploadSettingDto>();
@@ -157,6 +158,7 @@ namespace XtraUpload.WebApi
                 cfg.CreateMap<ReadAppSettingResult, ReadAppSettingResultDto>();
                 cfg.CreateMap<DeleteFolderResult, DeleteFolderResultDto>();
                 cfg.CreateMap<DeleteItemsResult, DeleteItemsResultDto>();
+                cfg.CreateMap<GetFolderContentResult, FolderContentDto>();
             },
             typeof(Startup));
         }
