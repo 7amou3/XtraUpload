@@ -16,4 +16,5 @@ message gFileItem {
     google.protobuf.Timestamp CreatedAt = 9;
     google.protobuf.Timestamp LastModified = 10;
     bool IsAvailableOnline = 11;
+    string StorageServerId = 12;
 }

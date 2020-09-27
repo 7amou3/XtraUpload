@@ -150,7 +150,7 @@ export class FileManagerService {
     );
   }
 
-  startUpload(file: File, uploadServer: string, urlPath: string, folderId: string, chunkSize: number): Observable<UploadStatus> {
+  startUpload(file: File, uploadSettings: IUploadSettings, urlPath: string, folderId: string): Observable<UploadStatus> {
     let upload: tus.Upload;
     const event = new Subject<UploadStatus>();
     const uploadStatus = new UploadStatus();
@@ -176,11 +176,11 @@ export class FileManagerService {
       event.next(uploadStatus);
     };
     // Defaut urlPath for tus is [fileupload or avatarupload] as configured in the server
-    const uri = uploadServer + urlPath;
+    const uri = uploadSettings.uploadServer.url + urlPath;
     upload = new tus.Upload(file,
     {
       endpoint: uri,
-      chunkSize: chunkSize == 0 ? 25 * 1024 * 1024 : chunkSize,
+      chunkSize: uploadSettings.chunkSize === 0 ? 25 * 1024 * 1024 : uploadSettings.chunkSize,
       onError: onTusError,
       onProgress: onTusProgress,
       onSuccess: onTusSuccess,
@@ -188,7 +188,8 @@ export class FileManagerService {
       metadata: {
         name: file.name,
         contentType: file.type || 'application/octet-stream',
-        folderId: folderId
+        folderId: folderId,
+        serverId: uploadSettings.uploadServer.serverId
       },
       headers: {
         'authorization': 'Bearer ' + this.storageService.getToken()

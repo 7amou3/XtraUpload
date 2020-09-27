@@ -58,7 +58,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     .toPromise();
 
     setting$.then(s => {
-      this.fileMngService.startUpload(file, s.uploadServer, 'avatarupload', null, 1024 * 1024 * 2)
+      this.fileMngService.startUpload(file, s, 'avatarupload', null)
       .pipe(takeUntil(this.onDestroy),
         finalize(() => this.isBusy = false))
       .subscribe(result => {

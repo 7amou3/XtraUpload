@@ -150,7 +150,11 @@ export interface IUploadSettings {
   maxFileSize: number;
   chunkSize: number;
   fileExtensions: string;
-  uploadServer: string;
+  uploadServer: IUploadServer;
+}
+export interface IUploadServer {
+  url: string;
+  serverId: string;
 }
 export interface IFilteredUser {
   users: IProfile[];

@@ -72,6 +72,7 @@ namespace XtraUpload.StorageManager.Service
                                                                                 ? null
                                                                                 : metadata["folderId"].GetString(Encoding.UTF8),
                 Extension = Helpers.GetFileExtension(metadata["contentType"].GetString(Encoding.UTF8)),
+                StorageServerId = Guid.Parse(metadata["serverId"].GetString(Encoding.UTF8)),
                 CreatedAt = DateTime.Now,
                 LastModified = DateTime.Now,
                 IsAvailableOnline = true
@@ -89,7 +90,8 @@ namespace XtraUpload.StorageManager.Service
                 Extension = fileitem.Extension,
                 CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(fileitem.CreatedAt, DateTimeKind.Utc)),
                 LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(fileitem.LastModified, DateTimeKind.Utc)),
-                IsAvailableOnline = fileitem.IsAvailableOnline
+                IsAvailableOnline = fileitem.IsAvailableOnline,
+                StorageServerId = fileitem.StorageServerId.ToString(),
             };
             // send the uploaded file info to the main app
             await _storageClient.SaveFileAsync(new gFileItemRequest() { FileItem = gFile });

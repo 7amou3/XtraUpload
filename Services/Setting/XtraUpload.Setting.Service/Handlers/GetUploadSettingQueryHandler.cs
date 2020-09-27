@@ -69,11 +69,16 @@ namespace XtraUpload.Setting.Service
         /// Todo: Get the least loaded storage server based on the monitoring state 
         /// </summary>
         /// <returns></returns>
-        private async Task<string> GetUploadServer()
+        private async Task<UploadServer> GetUploadServer()
         {
             IEnumerable<StorageServer> servers = await _unitOfWork.StorageServer.GetAll();
             Random rand = new Random();
-            return servers.ElementAt(rand.Next(servers.Count())).IpAddress;
+            StorageServer randServer = servers.ElementAt(rand.Next(servers.Count()));
+            return new UploadServer()
+            {
+                ServerId = randServer.Id,
+                Url = randServer.IpAddress
+            };
         }
     }
 }

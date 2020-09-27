@@ -1,4 +1,5 @@
-﻿using XtraUpload.Domain;
+﻿using System;
+using XtraUpload.Domain;
 
 namespace XtraUpload.Setting.Service.Common
 {
@@ -31,6 +32,18 @@ namespace XtraUpload.Setting.Service.Common
         /// <summary>
         /// The upload server @ ip (or domain name)
         /// </summary>
-        public string UploadServer { get; set; }
+        public UploadServer UploadServer { get; set; }
+    }
+
+    public class UploadServer
+    {
+        /// <summary>
+        /// The upload server @ ip (or domain name)
+        /// </summary>
+        public string Url { get; set; }
+        /// <summary>
+        /// The server id
+        /// </summary>
+        public Guid ServerId { get; set; }
     }
 }
