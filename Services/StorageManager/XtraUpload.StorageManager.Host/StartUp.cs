@@ -9,6 +9,7 @@ using XtraUpload.StorageManager.Service;
 using XtraUpload.StorageManager.Common;
 using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
+using MediatR;
 
 namespace XtraUpload.StorageManager.Host
 {
@@ -48,6 +49,9 @@ namespace XtraUpload.StorageManager.Host
                 channel.Credentials = new GrpcChannelHelper().CreateSecureChannel(serviceProvider);
             })
             .AddInterceptor<LoggerInterceptor>();
+
+            // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
+            services.AddMediatR(typeof(GetThumbnailQueryHandler));
 
             // Background jobs
             services.AddHostedService<ExpiredFilesCleanupService>();

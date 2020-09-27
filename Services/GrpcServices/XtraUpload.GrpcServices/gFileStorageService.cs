@@ -39,5 +39,12 @@ namespace XtraUpload.GrpcServices
 
             return new gFileItemResponse() { FileItem = result.File.Convert() };
         }
+
+        public async override Task<gFileItemResponse> GetFileById(gFileRequest request, ServerCallContext context)
+        {
+            var result = await _mediatr.Send(new GetFileServerInfoQuery(request.Fileid));
+
+            return new gFileItemResponse() { FileItem = result.File.Convert() };
+        }
     }
 }

@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Domain;
-using XtraUpload.FileManager.Service.Common;
+using XtraUpload.StorageManager.Common;
 
 namespace XtraUpload.StorageServer.Controllers
 {

@@ -19,7 +19,9 @@ namespace XtraUpload.StorageManager.Host
             var credentials = CallCredentials.FromInterceptor((context, metadata) =>
             {
                 var _httpContext = serviceProvider.GetService<IHttpContextAccessor>().HttpContext;
-                if (_httpContext != null && _httpContext.Request.Headers.Any())
+                if (_httpContext != null 
+                    && _httpContext.Request.Headers.Any()
+                    && !string.IsNullOrEmpty( _httpContext.Request.Headers["Authorization"]))
                 {
                     metadata.Add("Authorization", _httpContext.Request.Headers["Authorization"]);
                 }

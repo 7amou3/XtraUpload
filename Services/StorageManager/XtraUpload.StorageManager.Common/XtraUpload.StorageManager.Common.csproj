@@ -11,6 +11,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MediatR" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +19,11 @@
       <Link>Protos\filestorage.proto</Link>
     </Protobuf>
     <Protobuf Include="..\..\GrpcServices\Protos\domain\*" GrpcServices="None" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
+    <ProjectReference Include="..\..\FileManager\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
   </ItemGroup>
 
 </Project>

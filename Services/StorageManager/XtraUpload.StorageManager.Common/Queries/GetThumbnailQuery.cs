@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using XtraUpload.Domain;
 
-namespace XtraUpload.FileManager.Service.Common
+namespace XtraUpload.StorageManager.Common
 {
+    /// <summary>
+    /// Return the full path to a medium or small thumb 
+    /// </summary>
     public class GetThumbnailQuery : IRequest<AvatarUrlResult>
     {
         public GetThumbnailQuery(ThumbnailSize thumbSize, string fileid)
