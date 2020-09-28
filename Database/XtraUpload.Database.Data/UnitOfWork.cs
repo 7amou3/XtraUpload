@@ -11,8 +11,19 @@ namespace XtraUpload.Database.Data
         readonly ApplicationDbContext _context;
         readonly ILogger<UnitOfWork> _logger;
 
-        public UnitOfWork(ApplicationDbContext context, IUserRepository users, IRoleRepository roles, IRoleClaimsRepository roleClaims, IFileRepository files, IFolderRepository folders,
-            IDownloadRepository downloads, IConfirmationKeyRepository confirmationKeys, IFileExtensionRepository fileExtensions, IPageRepository pages, ILogger<UnitOfWork> logger)
+        public UnitOfWork(
+            ApplicationDbContext context, 
+            IUserRepository users,
+            IRoleRepository roles, 
+            IRoleClaimsRepository roleClaims, 
+            IFileRepository files, 
+            IFolderRepository folders,
+            IDownloadRepository downloads, 
+            IConfirmationKeyRepository confirmationKeys,
+            IFileExtensionRepository fileExtensions, 
+            IPageRepository pages,
+            IStorageServerRepository storageServer,
+            ILogger<UnitOfWork> logger)
         {
             _context = context;
             _logger = logger;
@@ -25,6 +36,7 @@ namespace XtraUpload.Database.Data
             ConfirmationKeys = confirmationKeys;
             FileExtensions = fileExtensions;
             Pages = pages;
+            StorageServer = storageServer;
         }
 
         public IUserRepository Users { get; private set; }
@@ -36,6 +48,7 @@ namespace XtraUpload.Database.Data
         public IConfirmationKeyRepository ConfirmationKeys { get; private set; }
         public IFileExtensionRepository FileExtensions { get; private set; }
         public IPageRepository Pages { get; private set; }
+        public IStorageServerRepository StorageServer { get; private set; }
 
         public async Task<int> CompleteAsync()
         {

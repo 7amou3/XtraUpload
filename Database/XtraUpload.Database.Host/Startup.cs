@@ -43,6 +43,7 @@ namespace XtraUpload.Database.Host
             services.AddScoped<IConfirmationKeyRepository, ConfirmationKeyRepository>();
             services.AddScoped<IFileExtensionRepository, FileExtensionRepository>();
             services.AddScoped<IPageRepository, PageRepository>();
+            services.AddScoped<IStorageServerRepository, StorageServerRepository>();
 
             // Register Health check
             services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>("Database Server");

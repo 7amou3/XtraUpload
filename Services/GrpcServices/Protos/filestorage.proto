@@ -1,0 +1,30 @@
+syntax = "proto3";
+option csharp_namespace = "XtraUpload.Protos";
+import "domain/gFileItem.proto";
+
+package gfilestorage;
+
+// The file storage service definition.
+service gFileStorage {
+  // jwt should be passed in request header
+  rpc GetUser (gRequest) returns (gUser);
+  // Get file info by id
+  rpc GetFileById (gFileRequest) returns (gFileItemResponse);
+  // Save the new uploaded file to db
+  rpc SaveFile (gFileItemRequest) returns (gFileItemResponse);
+}
+
+message gRequest {
+}
+message gUser {
+  string id = 1;
+}
+message gFileRequest {
+	string fileid = 1;
+}
+message gFileItemRequest {
+    gFileItem fileItem = 1;
+}
+message gFileItemResponse {
+	gFileItem fileItem = 1;
+}

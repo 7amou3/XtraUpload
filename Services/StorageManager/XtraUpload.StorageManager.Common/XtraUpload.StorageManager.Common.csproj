@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.31.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.32.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MediatR" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\GrpcServices\Protos\filestorage.proto" GrpcServices="Client">
+      <Link>Protos\filestorage.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\GrpcServices\Protos\domain\*" GrpcServices="None" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
+    <ProjectReference Include="..\..\FileManager\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
+  </ItemGroup>
+
+</Project>

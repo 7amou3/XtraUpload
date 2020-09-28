@@ -12,11 +12,11 @@ namespace XtraUpload.Database.Data
         {
             // Primary key
             builder.HasKey(p => p.Id);
-            // Indexe
+            // Index
             builder.HasIndex(u => u.Name).HasName("Name").IsUnique();
             // Fields length
             builder.Property(p => p.Id).HasMaxLength(20);
-            builder.Property(p => p.Name).HasMaxLength(250);
+            builder.Property(p => p.Name).HasMaxLength(255);
             // Seed
             builder.HasData(new Page()
             {

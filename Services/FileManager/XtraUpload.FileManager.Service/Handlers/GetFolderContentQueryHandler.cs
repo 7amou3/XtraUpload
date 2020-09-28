@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
+using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 
@@ -36,7 +39,7 @@ namespace XtraUpload.FileManager.Service
                 // Get folders
                 Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == parentid && s.UserId == userId),
                 // get Files, the root folder is represented by a null value in TFile table
-                Files = await _unitOfWork.Files.FindAsync(s => s.FolderId == request.FolderId && s.UserId == userId)
+                Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == request.FolderId && s.UserId == userId)
             };
 
             return Result;

@@ -10,6 +10,7 @@ namespace XtraUpload.Database.Data.Common
 {
     public interface IFileRepository : IRepository<FileItem>
     {
+        Task<IEnumerable<FileItem>> GetFilesServerInfo(Expression<Func<FileItem, bool>> criteria);
         Task<IEnumerable<ItemCountResult>> FilesCountByDateRange(DateTime start, DateTime end);
         Task<IEnumerable<FileTypesCountResult>> FileTypesByDateRange(DateTime start, DateTime end);
         Task<IEnumerable<FileItemExtended>> GetFiles(PageSearchModel model, Expression<Func<FileItem, bool>> searchCriteria);

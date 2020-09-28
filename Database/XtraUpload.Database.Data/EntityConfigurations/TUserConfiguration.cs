@@ -25,8 +25,8 @@ namespace XtraUpload.Database.Data
             builder.HasIndex(u => u.Email).HasName("Email").IsUnique();
 
             // Limit the size of columns to use efficient database types
-            builder.Property(u => u.UserName).HasMaxLength(120);
-            builder.Property(u => u.Email).HasMaxLength(256);
+            builder.Property(u => u.UserName).HasMaxLength(255);
+            builder.Property(u => u.Email).HasMaxLength(255);
 
             // Each User have one entry in the Role join table
             builder.HasOne(u => u.Role).WithMany(e => e.Users).HasForeignKey(ur => ur.RoleId).OnDelete(DeleteBehavior.Cascade);

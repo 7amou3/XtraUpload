@@ -15,6 +15,7 @@ namespace XtraUpload.Database.Data.Common
         IConfirmationKeyRepository ConfirmationKeys { get; }
         IFileExtensionRepository FileExtensions { get; }
         IPageRepository Pages { get; }
+        IStorageServerRepository StorageServer { get; }
 
         Task<int> CompleteAsync();
         Task<T> CompleteAsync<T>(T result) where T : OperationResult;

@@ -28,5 +28,10 @@ namespace XtraUpload.Setting.Service.Common
         /// The allowed file extensions to be uploaded (seperated by a ,)
         /// </summary>
         public string FileExtensions { get; set; }
+        /// <summary>
+        /// The upload server @ ip (or domain name)
+        /// </summary>
+        public StorageServer StorageServer { get; set; }
     }
+
 }

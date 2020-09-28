@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
+    <PackageReference Include="SixLabors.ImageSharp.Web" Version="1.0.0" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
+    <PackageReference Include="tusdotnet" Version="2.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
+    <ProjectReference Include="..\XtraUpload.StorageManager.Common\XtraUpload.StorageManager.Common.csproj" />
+  </ItemGroup>
+  
+</Project>
