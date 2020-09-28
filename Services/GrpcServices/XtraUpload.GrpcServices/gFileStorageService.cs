@@ -46,5 +46,26 @@ namespace XtraUpload.GrpcServices
 
             return new gFileItemResponse() { FileItem = result.File.Convert() };
         }
+
+        public async override Task<gDownloadFileResponse> GetDownloadFile(gDownloadFileRequest request, ServerCallContext context)
+        {
+            var response = new gDownloadFileResponse();
+
+            var result = await _mediatr.Send(new GetDownloadByIdQuery(request.DownloadId, request.RequesterAddress));
+            if (result.State != OperationState.Success)
+            {
+                response.Status = new gRequestStatus()
+                {
+                    Status = Protos.RequestStatus.Failed,
+                    Message = result.ErrorContent.Message
+                };
+            }
+            else
+            {
+                response.FileItem = result.File.Convert();
+                response.DownloadSpeed = result.DownloadSpeed;
+            }
+            return response;
+        }
     }
 }

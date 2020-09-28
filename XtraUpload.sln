@@ -81,6 +81,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{D4BC1E9B-2E0E-4CD7-A596-00E95B4F14DB}"
 	ProjectSection(SolutionItems) = preProject
 		Services\GrpcServices\Protos\domain\gFileItem.proto = Services\GrpcServices\Protos\domain\gFileItem.proto
+		Services\GrpcServices\Protos\domain\gRequestStatus.proto = Services\GrpcServices\Protos\domain\gRequestStatus.proto
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.WebApi", "XtraUpload.WebApi\XtraUpload.WebApi.csproj", "{A39B47B3-D218-4C61-92BF-ABE399C76B56}"

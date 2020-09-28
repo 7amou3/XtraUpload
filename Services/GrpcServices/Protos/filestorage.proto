@@ -1,6 +1,7 @@
 syntax = "proto3";
 option csharp_namespace = "XtraUpload.Protos";
 import "domain/gFileItem.proto";
+import "domain/gRequestStatus.proto";
 
 package gfilestorage;
 
@@ -12,6 +13,8 @@ service gFileStorage {
   rpc GetFileById (gFileRequest) returns (gFileItemResponse);
   // Save the new uploaded file to db
   rpc SaveFile (gFileItemRequest) returns (gFileItemResponse);
+  // Get the file to download
+  rpc GetDownloadFile (gDownloadFileRequest) returns (gDownloadFileResponse);
 }
 
 message gRequest {
@@ -27,4 +30,15 @@ message gFileItemRequest {
 }
 message gFileItemResponse {
 	gFileItem fileItem = 1;
+}
+
+message gDownloadFileRequest {
+	string downloadId = 1;
+	// ip address of the requester
+	string requesterAddress = 2;
+}
+message gDownloadFileResponse {
+	gFileItem fileItem = 1;
+	gRequestStatus status = 2;
+	double downloadSpeed = 3;
 }

@@ -8,5 +8,6 @@ namespace XtraUpload.FileManager.Service.Common
     public class TempLinkResult: OperationResult
     {
         public Download FileDownload { get; set; }
+        public string StorageServerAddress { get; set; }
     }
 }

@@ -116,14 +116,7 @@ namespace XtraUpload.WebApi.Controllers
         {
             TempLinkResult Result = await _mediator.Send(new GenerateTempLinkCommand(fileid));
 
-            return HandleResult(Result, new { downloadurl = BaseUrl + "/api/file/download/" + Result.FileDownload.Id });
-        }
-
-        [AllowAnonymous]
-        [HttpGet("download/{downloadid:regex(^[[a-zA-Z0-9]]*$)}")]
-        public async Task Download(string downloadid)
-        {
-            await _mediator.Send(new StartDownloadCommand(downloadid));
+            return HandleResult(Result, new { downloadurl = Result.StorageServerAddress + "/api/file/download/" + Result.FileDownload.Id });
         }
 
         [HttpPut("moveitems")]

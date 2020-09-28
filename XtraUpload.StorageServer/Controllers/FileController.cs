@@ -20,6 +20,12 @@ namespace XtraUpload.StorageServer.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("download/{downloadid:regex(^[[a-zA-Z0-9]]*$)}")]
+        public async Task Download(string downloadid)
+        {
+            await _mediator.Send(new StartDownloadCommand(downloadid));
+        }
+
         [HttpGet("smallthumb/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> GetSmallThumb(string fileid)
         {
