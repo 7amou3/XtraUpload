@@ -13,33 +13,30 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.FileManager.Service.Common;
+using XtraUpload.Protos;
+using XtraUpload.StorageManager.Common;
 
-namespace XtraUpload.FileManager.Service
+namespace XtraUpload.StorageManager.Service
 {
     /// <summary>
     /// Start download a file 
     /// </summary>
     public class StartDownloadCommandHandler : IRequestHandler<StartDownloadCommand, StartDownloadResult>
     {
-        readonly IMediator _mediatr;
-        readonly IUnitOfWork _unitOfWork;
         readonly HttpContext _httpContext;
         readonly UploadOptions _uploadOpt;
         readonly ILogger<StartDownloadCommandHandler> _logger;
+        readonly gFileStorage.gFileStorageClient _storageClient;
 
         public StartDownloadCommandHandler(
-            IUnitOfWork unitOfWork,
-            IMediator mediatr,
+            gFileStorage.gFileStorageClient storageClient,
             IHttpContextAccessor httpContextAccessor,
             IOptionsMonitor<UploadOptions> uploadOpt,
             ILogger<StartDownloadCommandHandler> logger)
         {
+            _storageClient = storageClient;
             _logger = logger;
-            _mediatr = mediatr;
-            _unitOfWork = unitOfWork;
             _uploadOpt = uploadOpt.CurrentValue;
             _httpContext = httpContextAccessor.HttpContext;
         }
@@ -48,62 +45,64 @@ namespace XtraUpload.FileManager.Service
         {
             StartDownloadResult Result = new StartDownloadResult();
 
-            DownloadedFileResult dResult = await _unitOfWork.Downloads.GetDownloadedFile(request.DownloadId);
-            // Check download exist
-            if (dResult.Download == null || dResult.File == null)
+            gDownloadFileRequest downloadRequest = new gDownloadFileRequest()
             {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
+                DownloadId = request.DownloadId,
+                RequesterAddress = _httpContext.Request.Host.Host
+            };
+            // query the api
+            gDownloadFileResponse dResponse = await _storageClient.GetDownloadFileAsync(downloadRequest);
+
+            if (dResponse.Status != null && dResponse.Status.Status != Protos.RequestStatus.Success)
+            {
+                Result.ErrorContent = new ErrorContent(dResponse.Status.Message, ErrorOrigin.None);
                 return Result;
             }
-            // Check if it's the same requester
-            if (_httpContext.Request.Host.Host != dResult.Download.IpAdress)
-            {
-                Result.ErrorContent = new ErrorContent("Hotlinking disabled by the administrator.", ErrorOrigin.Client);
-                return Result;
-            }
-
-            string filePath = Path.Combine(_uploadOpt.UploadPath, dResult.File.UserId, dResult.File.Id, dResult.File.Id);
-            await StartDownload(dResult.File, Result, filePath);
-
-            // Increment download counter
-            dResult.File.DownloadCount++;
-            dResult.File.LastModified = DateTime.Now;
-
-            // Try to save in db
-            return await _unitOfWork.CompleteAsync(Result);
-        }
-        private async Task StartDownload(FileItem file, StartDownloadResult result, string filePath)
-        {
+            string filePath = Path.Combine(_uploadOpt.UploadPath, dResponse.FileItem.UserId, dResponse.FileItem.Id, dResponse.FileItem.Id);
+            
+            // Check file exist on disk
             if (!IsFileExists(filePath))
             {
                 _httpContext.Response.StatusCode = 404;
-                result.ErrorContent = new ErrorContent("File not found!", ErrorOrigin.Client);
-                return;
+                Result.ErrorContent = new ErrorContent("File not found, it may have been moved or deleted!", ErrorOrigin.Server);
+                return Result;
             }
-
-            FileInfo fileInfo = new FileInfo(filePath);
-
-            if (fileInfo.Length > int.MaxValue)
+            
+            // Check file is not too large
+            if (dResponse.FileItem.Size > uint.MaxValue) // ~4Gb
             {
                 _httpContext.Response.StatusCode = 413;
-                result.ErrorContent = new ErrorContent("File is too large!", ErrorOrigin.Server);
-                return;
+                Result.ErrorContent = new ErrorContent("File is too large!", ErrorOrigin.Server);
+                return Result;
             }
 
-            // Get the response header information by the http request.
-            HttpResponseHeader responseHeader = GetResponseHeader(file);
+            // Get the response header information made by the current http request.
+            HttpResponseHeader responseHeader = GetResponseHeader(dResponse.FileItem);
 
             if (responseHeader == null)
             {
-                result.ErrorContent = new ErrorContent("Invalid response header!", ErrorOrigin.Server);
-                return;
+                Result.ErrorContent = new ErrorContent("Invalid response header!", ErrorOrigin.Server);
+                return Result;
             }
 
+            // All good, start download
+            await StartDownload(responseHeader, filePath, dResponse.DownloadSpeed);
+
+            //// Increment download counter
+            //dResult.FileItem.DownloadCount++;
+            //dResult.File.LastModified = DateTime.Now;
+
+            //// Try to save in db
+            //return await _unitOfWork.CompleteAsync(Result);
+            return null;
+        }
+        private async Task StartDownload(HttpResponseHeader responseHeader, string filePath, double speed)
+        {
             FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             try
             {
-                await SendDownloadFile(responseHeader, fileStream);
+                await SendDownloadFile(responseHeader, fileStream, speed);
             }
             catch (Exception ex)
             {
@@ -140,19 +139,15 @@ namespace XtraUpload.FileManager.Service
         }
 
         /// <summary>
-        /// Get the response header by the http request.
+        /// Get the response header made by the current http request.
+        /// download request can be resumed, so correct header must be set
         /// </summary>
         /// <param name="httpRequest"></param>
         /// <param name="fileInfo"></param>
         /// <returns></returns>
-        private HttpResponseHeader GetResponseHeader(FileItem file)
+        private HttpResponseHeader GetResponseHeader(gFileItem file)
         {
-            if (_httpContext.Request == null)
-            {
-                return null;
-            }
-
-            if (file == null)
+            if (_httpContext.Request == null || file == null)
             {
                 return null;
             }
@@ -211,23 +206,13 @@ namespace XtraUpload.FileManager.Service
         /// <summary>
         /// Send the download file to the client.
         /// </summary>
-        /// <param name="httpResponse"></param>
-        /// <param name="responseHeader"></param>
-        /// <param name="fileStream"></param>
-        private async Task SendDownloadFile(HttpResponseHeader responseHeader, Stream fileStream)
+        private async Task SendDownloadFile(HttpResponseHeader responseHeader, Stream fileStream, double speed)
         {
             if (_httpContext.Response == null || responseHeader == null)
             {
                 return;
             }
-            // Get download options
-            DownloadOptionsResult downloadOption = await _mediatr.Send(new GetDownloadOptionsQuery(_httpContext.User.Identity.IsAuthenticated));
-            if (downloadOption.State != OperationState.Success)
-            {
-                _logger.LogError("Error while reading download options", ErrorOrigin.Client);
-                return;
-            }
-
+            
             if (!string.IsNullOrEmpty(responseHeader.ContentRange))
             {
                 _httpContext.Response.StatusCode = 206;
@@ -268,7 +253,7 @@ namespace XtraUpload.FileManager.Service
                     fileLength -= length;
 
                     // Throttle write speed
-                    var sleep = Math.Ceiling((buffer.Length / (1000.0 * downloadOption.Speed)) * 1000.0);
+                    var sleep = Math.Ceiling((buffer.Length / (1000.0 * speed)) * 1000.0);
                     Thread.Sleep(int.Parse(sleep.ToString()));
                 }
                 else

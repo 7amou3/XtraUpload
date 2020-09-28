@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace XtraUpload.FileManager.Service.Common
+namespace XtraUpload.StorageManager.Common
 {
     /// <summary>
     /// Start download a file 

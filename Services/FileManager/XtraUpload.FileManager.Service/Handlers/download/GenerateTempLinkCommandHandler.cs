@@ -9,6 +9,7 @@ using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
+using System.Linq;
 
 namespace XtraUpload.FileManager.Service
 {
@@ -30,6 +31,13 @@ namespace XtraUpload.FileManager.Service
         {
             TempLinkResult Result = new TempLinkResult();
 
+            var files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Id == request.FileId);
+            // Check file exist
+            if (!files.Any())
+            {
+                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
+                return Result;
+            }
             // Generate the download data to store
             Download download = new Download()
             {
@@ -45,6 +53,7 @@ namespace XtraUpload.FileManager.Service
             if (Result.State == OperationState.Success)
             {
                 Result.FileDownload = download;
+                Result.StorageServerAddress = files.ElementAt(0).StorageServer.Address;
             }
 
             return Result;
