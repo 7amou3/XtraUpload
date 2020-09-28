@@ -52,7 +52,7 @@ namespace XtraUpload.FileManager.Service
             // Get folders
             Result.Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == folderId);
             // get Files, the root folder is represented by a null value in TFile table
-            Result.Files = await _unitOfWork.Files.FindAsync(s => s.FolderId == folderId);
+            Result.Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == folderId);
 
             return Result;
         }

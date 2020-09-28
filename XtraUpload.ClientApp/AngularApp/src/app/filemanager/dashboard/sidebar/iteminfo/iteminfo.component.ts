@@ -19,8 +19,7 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
   itemInfo: IItemInfo;
   isFile: boolean;
   constructor(
-    private fileMngService: FileManagerService,
-    @Inject('API_URL') private apiUrl: string) {
+    private fileMngService: FileManagerService) {
     super();
   }
 
@@ -33,7 +32,8 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
           this.isFile = isFile(item);
           if (this.isFile) {
             if ((item as IFileInfo).mimeType.startsWith('image')) {
-              item.thumbnail = this.apiUrl + 'file/mediumthumb/' + item.id;
+              const storageUrl = (item as IFileInfo).storageServer.address.replace(/\/?$/, '/');
+              item.thumbnail = storageUrl + 'api/file/mediumthumb/' + item.id;
             }
           } else {
             this.itemInfo.thumbnail = 'assets/images/folder128px.png';
@@ -53,6 +53,6 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
 
     serviceCall$
       .pipe(takeUntil(this.onDestroy))
-      .subscribe(/*Item info will be pulled from itemInfo$ input*/);    
+      .subscribe(/*Item info will be pulled from itemInfo$ input*/);
   }
 }

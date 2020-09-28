@@ -34,14 +34,12 @@ namespace XtraUpload.FileManager.Service
             // user can pass null as root folder
             string parentid = request.FolderId ?? "root";
 
-            Expression<Func<FileItem, bool>> criteria = s => s.FolderId == request.FolderId && s.UserId == userId;
-
             GetFolderContentResult Result = new GetFolderContentResult()
             {
                 // Get folders
                 Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == parentid && s.UserId == userId),
                 // get Files, the root folder is represented by a null value in TFile table
-                Files = await _unitOfWork.Files.GetFilesServerInfo(criteria)
+                Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == request.FolderId && s.UserId == userId)
             };
 
             return Result;

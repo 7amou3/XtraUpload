@@ -32,9 +32,7 @@ namespace XtraUpload.FileManager.Service
         {
             GetFileResult Result = new GetFileResult();
 
-            Expression<Func<FileItem, bool>> criteria = s => s.Id == request.FileId;
-
-            var files = await _unitOfWork.Files.GetFilesServerInfo(criteria);
+            var files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Id == request.FileId);
             if (files.Any())
             {
                 Result.File = files.ElementAt(0);

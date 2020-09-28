@@ -81,6 +81,7 @@ export class TableviewComponent extends FilemanagerBase  implements OnInit {
   }
   protected itemsReceived(itemsInfo: IItemInfo[]): void {
     itemsInfo.forEach(item => {
+      console.log(item)
       this.setitemThumbnail(item);
     });
     this.dataSource.data = itemsInfo;

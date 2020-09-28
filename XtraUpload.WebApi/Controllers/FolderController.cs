@@ -36,7 +36,7 @@ namespace XtraUpload.WebApi.Controllers
         {
             GetFolderContentResult result = await _mediatr.Send(new GetPublicFolderQuery(model.MainFolderId, model.ChildFolderId));
 
-            return HandleResult(result);
+            return HandleResult(result, _mapper.Map<FolderContentDto>(result));
         }
 
         [HttpGet("folders")]
