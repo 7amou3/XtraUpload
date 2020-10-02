@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,6 +10,14 @@
     <ProjectReference Include="..\..\Administration\XtraUpload.Administration.Service.Common\XtraUpload.Administration.Service.Common.csproj" />
     <ProjectReference Include="..\..\Email\XtraUpload.Email.Service.Common\XtraUpload.Email.Service.Common.csproj" />
     <ProjectReference Include="..\..\FileManager\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
