@@ -56,7 +56,6 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private async Task<gFileItem> PersistMetaData(FileCompleteContext ctx, UploadOptions uploadOpts)
         {
-            gUser user = await _storageClient.GetUserAsync(new gRequest());
             ITusFile file = await ((ITusReadableStore)ctx.Store).GetFileAsync(ctx.FileId, ctx.CancellationToken);
             var metadata = await file.GetMetadataAsync(ctx.CancellationToken);
 
@@ -64,7 +63,6 @@ namespace XtraUpload.StorageManager.Service
             {
                 Id = Helpers.GenerateUniqueId(),
                 TusId = ctx.FileId,
-                UserId = user.Id,
                 Size = uint.Parse(new FileInfo(Path.Combine(uploadOpts.UploadPath, file.Id)).Length.ToString()),
                 Name = metadata["name"].GetString(Encoding.UTF8),
                 MimeType = metadata["contentType"].GetString(Encoding.UTF8),
@@ -87,7 +85,7 @@ namespace XtraUpload.StorageManager.Service
                 _logger.LogError("An error has been returned from server call: " + response.Status.Message);
                 return null;
             }
-            return fileitem;
+            return response.FileItem;
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 syntax = "proto3";
 option csharp_namespace = "XtraUpload.Protos";
-import "google/protobuf/timestamp.proto";
 
 // Download info
 message gRequestStatus {

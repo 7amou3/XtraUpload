@@ -1,0 +1,11 @@
+syntax = "proto3";
+option csharp_namespace = "XtraUpload.Protos";
+import "google/protobuf/timestamp.proto";
+
+message gUser {
+    string Id = 1;
+    string UserName = 2;
+    string Email = 3;
+    google.protobuf.Timestamp CreatedAt = 4;
+    google.protobuf.Timestamp LastModified = 5;
+}

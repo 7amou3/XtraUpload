@@ -1,10 +1,12 @@
 ﻿using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.Protos;
@@ -20,20 +22,38 @@ namespace XtraUpload.GrpcServices
             _mediatr = mediatr;
         }
 
-        [Authorize]
-        public override Task<gUser> GetUser(gRequest request, ServerCallContext context)
+        public override Task<gIsAuthorizedResponse> IsAuthorized(gIsAuthorizedRequest request, ServerCallContext context)
         {
-            gUser user = new gUser()
+            var authorized = context.GetHttpContext().User.Identity.IsAuthenticated;
+            var response = new gIsAuthorizedResponse()
             {
-                Id = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id")?.Value
+                Status = new gRequestStatus()
+                {
+                    Status = authorized ? Protos.RequestStatus.Success : Protos.RequestStatus.Failed
+                }
             };
-            return Task.FromResult(user);
+            return Task.FromResult(response);
+        }
+
+        [Authorize]
+        public override async Task<gUserResponse> GetUser(gUserRequest request, ServerCallContext context)
+        {
+            var id = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            
+            var userResult = await _mediatr.Send(new GetUserByIdQuery(id));
+            
+            return new gUserResponse() 
+            {  
+                User = userResult.User.Convert(),
+                Status = userResult.Convert()
+            };
         }
 
         [Authorize]
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
-            FileItem file = request.FileItem.Convert();
+            var file = request.FileItem.Convert();
+            file.UserId = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id").Value;
 
             var saveResult = await _mediatr.Send(new SaveFileCommand(file));
 
