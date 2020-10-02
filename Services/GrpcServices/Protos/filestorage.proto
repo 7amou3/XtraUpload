@@ -30,6 +30,7 @@ message gFileItemRequest {
 }
 message gFileItemResponse {
 	gFileItem fileItem = 1;
+	gRequestStatus status = 2;
 }
 
 message gDownloadFileRequest {

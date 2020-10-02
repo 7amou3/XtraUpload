@@ -26,7 +26,7 @@ namespace XtraUpload.WebApi.Controllers
         {
             GetFileResult Result = await _mediator.Send(new GetFileByTusIdQuery(tusid));
 
-            return HandleResult(Result, Result.File);
+            return HandleResult(Result, _mapper.Map<FileItemDto>(Result.File));
         }
 
         [AllowAnonymous]

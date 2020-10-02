@@ -34,10 +34,14 @@ namespace XtraUpload.GrpcServices
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
             FileItem file = request.FileItem.Convert();
-            
-            var result = await _mediatr.Send(new SaveFileCommand(file));
 
-            return new gFileItemResponse() { FileItem = result.File.Convert() };
+            var saveResult = await _mediatr.Send(new SaveFileCommand(file));
+
+            return new gFileItemResponse() 
+            { 
+                FileItem = saveResult.File.Convert(),
+                Status = saveResult.Convert()
+            };
         }
 
         public async override Task<gFileItemResponse> GetFileById(gFileRequest request, ServerCallContext context)
@@ -49,23 +53,14 @@ namespace XtraUpload.GrpcServices
 
         public async override Task<gDownloadFileResponse> GetDownloadFile(gDownloadFileRequest request, ServerCallContext context)
         {
-            var response = new gDownloadFileResponse();
-
             var result = await _mediatr.Send(new GetDownloadByIdQuery(request.DownloadId, request.RequesterAddress));
-            if (result.State != OperationState.Success)
+           
+            return new gDownloadFileResponse()
             {
-                response.Status = new gRequestStatus()
-                {
-                    Status = Protos.RequestStatus.Failed,
-                    Message = result.ErrorContent.Message
-                };
-            }
-            else
-            {
-                response.FileItem = result.File.Convert();
-                response.DownloadSpeed = result.DownloadSpeed;
-            }
-            return response;
+                Status = result.Convert(),
+                FileItem = result.File.Convert(),
+                DownloadSpeed = result.DownloadSpeed,
+            };
         }
     }
 }
