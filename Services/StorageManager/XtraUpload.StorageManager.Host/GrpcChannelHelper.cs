@@ -14,7 +14,7 @@ namespace XtraUpload.StorageManager.Host
         /// <summary>
         /// Create a secure grpc channel by attaching the jwt auth token to any outgoing grpc request
         /// </summary>
-        public ChannelCredentials CreateSecureChannel(IServiceProvider serviceProvider)
+        public static ChannelCredentials CreateSecureChannel(IServiceProvider serviceProvider)
         {
             var credentials = CallCredentials.FromInterceptor((context, metadata) =>
             {

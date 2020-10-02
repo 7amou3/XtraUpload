@@ -88,8 +88,8 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private async Task OnAuthorize(AuthorizeContext ctx)
         {
-            var user = await _storageClient.GetUserAsync(new gRequest());
-            if (user == null || user.Id == null)
+            var authResponse = await _storageClient.IsAuthorizedAsync(new gIsAuthorizedRequest());
+            if (authResponse.Status.Status == RequestStatus.Failed)
             {
                 ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
                 ctx.FailRequest(HttpStatusCode.Unauthorized);

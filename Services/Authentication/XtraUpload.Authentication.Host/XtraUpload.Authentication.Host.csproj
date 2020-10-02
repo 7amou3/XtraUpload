@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,14 @@
   <ItemGroup>
     <ProjectReference Include="..\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Authentication.Service\XtraUpload.Authentication.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

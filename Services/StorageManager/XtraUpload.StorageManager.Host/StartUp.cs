@@ -46,7 +46,7 @@ namespace XtraUpload.StorageManager.Host
             })
             .ConfigureChannel((serviceProvider, channel) =>
             {
-                channel.Credentials = new GrpcChannelHelper().CreateSecureChannel(serviceProvider);
+                channel.Credentials = GrpcChannelHelper.CreateSecureChannel(serviceProvider);
             })
             .AddInterceptor<LoggerInterceptor>();
 

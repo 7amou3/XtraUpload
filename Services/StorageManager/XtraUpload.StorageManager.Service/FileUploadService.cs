@@ -39,8 +39,11 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                FileItem file = await PersistMetaData(ctx, _uploadOpts);
-                MoveFilesToFolder(ctx, file, _uploadOpts);
+                gFileItem file = await PersistMetaData(ctx, _uploadOpts);
+                if (file != null)
+                {
+                    MoveFilesToFolder(ctx, file, _uploadOpts);
+                }
             }
             catch (Exception _ex)
             {
@@ -51,18 +54,16 @@ namespace XtraUpload.StorageManager.Service
         /// <summary>
         /// Persist the uploaded file data to db
         /// </summary>
-        private async Task<FileItem> PersistMetaData(FileCompleteContext ctx, UploadOptions uploadOpts)
+        private async Task<gFileItem> PersistMetaData(FileCompleteContext ctx, UploadOptions uploadOpts)
         {
-            gUser user = await _storageClient.GetUserAsync(new gRequest());
             ITusFile file = await ((ITusReadableStore)ctx.Store).GetFileAsync(ctx.FileId, ctx.CancellationToken);
             var metadata = await file.GetMetadataAsync(ctx.CancellationToken);
 
-            FileItem fileitem = new FileItem()
+            gFileItem fileitem = new gFileItem()
             {
                 Id = Helpers.GenerateUniqueId(),
                 TusId = ctx.FileId,
-                UserId = user.Id,
-                Size = new FileInfo(Path.Combine(uploadOpts.UploadPath, file.Id)).Length,
+                Size = uint.Parse(new FileInfo(Path.Combine(uploadOpts.UploadPath, file.Id)).Length.ToString()),
                 Name = metadata["name"].GetString(Encoding.UTF8),
                 MimeType = metadata["contentType"].GetString(Encoding.UTF8),
                 // file with no folderid is placed in the virtual root folder
@@ -70,38 +71,28 @@ namespace XtraUpload.StorageManager.Service
                                                                                 ? null
                                                                                 : metadata["folderId"].GetString(Encoding.UTF8),
                 Extension = Helpers.GetFileExtension(metadata["contentType"].GetString(Encoding.UTF8)),
-                StorageServerId = Guid.Parse(metadata["serverId"].GetString(Encoding.UTF8)),
-                CreatedAt = DateTime.Now,
-                LastModified = DateTime.Now,
+                StorageServerId = metadata["serverId"].GetString(Encoding.UTF8),
+                CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
+                LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
                 IsAvailableOnline = true
             };
 
-            gFileItem gFile = new gFileItem()
-            {
-                Id = fileitem.Id,
-                TusId = fileitem.TusId,
-                UserId = fileitem.UserId,
-                Name = fileitem.Name,
-                MimeType = fileitem.MimeType,
-                FolderId = fileitem.FolderId,
-                Size = uint.Parse(fileitem.Size.ToString()),
-                Extension = fileitem.Extension,
-                CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(fileitem.CreatedAt, DateTimeKind.Utc)),
-                LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(fileitem.LastModified, DateTimeKind.Utc)),
-                IsAvailableOnline = fileitem.IsAvailableOnline,
-                StorageServerId = fileitem.StorageServerId.ToString(),
-            };
             // send the uploaded file info to the main app
-            await _storageClient.SaveFileAsync(new gFileItemRequest() { FileItem = gFile });
+            gFileItemResponse response = await _storageClient.SaveFileAsync(new gFileItemRequest() { FileItem = fileitem });
             
-            return fileitem;
+            if (response.Status.Status != Protos.RequestStatus.Success)
+            {
+                _logger.LogError("An error has been returned from server call: " + response.Status.Message);
+                return null;
+            }
+            return response.FileItem;
         }
 
         /// <summary>
-        /// Moves the uploaded files to the user folder
+        /// Moves the uploaded files (the actual file and it's metadata) to the user folder
         /// tus protocol puts the uploaded files into the store, XtraUpload move those files to the user directory
         /// </summary>
-        private void MoveFilesToFolder(FileCompleteContext ctx, FileItem fileItem, UploadOptions uploadOpts)
+        private void MoveFilesToFolder(FileCompleteContext ctx, gFileItem fileItem, UploadOptions uploadOpts)
         {
             string userFolder = Path.Combine(uploadOpts.UploadPath, fileItem.UserId);
             string destFolder = Path.Combine(userFolder, fileItem.Id);

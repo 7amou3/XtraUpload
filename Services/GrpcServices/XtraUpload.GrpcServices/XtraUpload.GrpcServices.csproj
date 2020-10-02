@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />
@@ -9,10 +10,18 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
+    <ProjectReference Include="..\..\Authentication\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
     <ProjectReference Include="..\..\FileManager\XtraUpload.FileManager.Service.Common\XtraUpload.FileManager.Service.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="..\Protos\filestorage.proto" GrpcServices="Server" />
     <Protobuf Include="..\Protos\domain\*" GrpcServices="None" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

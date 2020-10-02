@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.8" />
@@ -20,6 +25,10 @@
     <ProjectReference Include="..\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Database.Data\XtraUpload.Database.Data.csproj" />
     <ProjectReference Include="..\XtraUpload.Database.Migrations\XtraUpload.Database.Migrations.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   
 </Project>

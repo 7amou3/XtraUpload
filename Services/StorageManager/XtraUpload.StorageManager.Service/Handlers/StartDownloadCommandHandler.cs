@@ -5,10 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,8 +32,8 @@ namespace XtraUpload.StorageManager.Service
             IOptionsMonitor<UploadOptions> uploadOpt,
             ILogger<StartDownloadCommandHandler> logger)
         {
-            _storageClient = storageClient;
             _logger = logger;
+            _storageClient = storageClient;
             _uploadOpt = uploadOpt.CurrentValue;
             _httpContext = httpContextAccessor.HttpContext;
         }
@@ -88,7 +85,7 @@ namespace XtraUpload.StorageManager.Service
             // All good, start download
             await StartDownload(responseHeader, filePath, dResponse.DownloadSpeed);
 
-            //// Increment download counter
+            // Once download is completed we send request to increment download counter
             //dResult.FileItem.DownloadCount++;
             //dResult.File.LastModified = DateTime.Now;
 

@@ -7,6 +7,9 @@
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "EndpointDefaults": {
+        "Protocols": "Http2"
       }
     }
   }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,14 +32,16 @@ namespace XtraUpload.FileManager.Service.Handlers
         #region Handler
         public async Task<GetFileResult> Handle(GetFileByTusIdQuery request, CancellationToken cancellationToken)
         {
+            GetFileResult Result = new GetFileResult();
             string userId = _caller.GetUserId();
 
-            GetFileResult Result = new GetFileResult()
+            var filesResult = await _unitOfWork.Files.GetFilesServerInfo(s => s.UserId == userId && s.TusId == request.TusId);
+            if (filesResult.Any())
             {
-                File = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.UserId == userId && s.TusId == request.TusId)
-            };
+                Result.File = filesResult.ElementAt(0);
+            }
             // Check if file exist
-            if (Result.File == null)
+            else
             {
                 Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
             }

@@ -1,10 +1,12 @@
 ﻿using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.Protos;
@@ -20,24 +22,46 @@ namespace XtraUpload.GrpcServices
             _mediatr = mediatr;
         }
 
-        [Authorize]
-        public override Task<gUser> GetUser(gRequest request, ServerCallContext context)
+        public override Task<gIsAuthorizedResponse> IsAuthorized(gIsAuthorizedRequest request, ServerCallContext context)
         {
-            gUser user = new gUser()
+            var authorized = context.GetHttpContext().User.Identity.IsAuthenticated;
+            var response = new gIsAuthorizedResponse()
             {
-                Id = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id")?.Value
+                Status = new gRequestStatus()
+                {
+                    Status = authorized ? Protos.RequestStatus.Success : Protos.RequestStatus.Failed
+                }
             };
-            return Task.FromResult(user);
+            return Task.FromResult(response);
+        }
+
+        [Authorize]
+        public override async Task<gUserResponse> GetUser(gUserRequest request, ServerCallContext context)
+        {
+            var id = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            
+            var userResult = await _mediatr.Send(new GetUserByIdQuery(id));
+            
+            return new gUserResponse() 
+            {  
+                User = userResult.User.Convert(),
+                Status = userResult.Convert()
+            };
         }
 
         [Authorize]
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
-            FileItem file = request.FileItem.Convert();
-            
-            var result = await _mediatr.Send(new SaveFileCommand(file));
+            var file = request.FileItem.Convert();
+            file.UserId = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id").Value;
 
-            return new gFileItemResponse() { FileItem = result.File.Convert() };
+            var saveResult = await _mediatr.Send(new SaveFileCommand(file));
+
+            return new gFileItemResponse() 
+            { 
+                FileItem = saveResult.File.Convert(),
+                Status = saveResult.Convert()
+            };
         }
 
         public async override Task<gFileItemResponse> GetFileById(gFileRequest request, ServerCallContext context)
@@ -49,23 +73,14 @@ namespace XtraUpload.GrpcServices
 
         public async override Task<gDownloadFileResponse> GetDownloadFile(gDownloadFileRequest request, ServerCallContext context)
         {
-            var response = new gDownloadFileResponse();
-
             var result = await _mediatr.Send(new GetDownloadByIdQuery(request.DownloadId, request.RequesterAddress));
-            if (result.State != OperationState.Success)
+           
+            return new gDownloadFileResponse()
             {
-                response.Status = new gRequestStatus()
-                {
-                    Status = Protos.RequestStatus.Failed,
-                    Message = result.ErrorContent.Message
-                };
-            }
-            else
-            {
-                response.FileItem = result.File.Convert();
-                response.DownloadSpeed = result.DownloadSpeed;
-            }
-            return response;
+                Status = result.Convert(),
+                FileItem = result.File.Convert(),
+                DownloadSpeed = result.DownloadSpeed,
+            };
         }
     }
 }
