@@ -41,7 +41,7 @@ namespace XtraUpload.FileManager.Service
                 Id = Helpers.GenerateUniqueId(),
                 Name = request.FolderName,
                 CreatedAt = DateTime.Now,
-                IsAvailableOnline = true,
+                Status = ItemStatus.Visible,
                 LastModified = DateTime.Now,
                 Parentid = request.ParentFolderId,
                 UserId = userId

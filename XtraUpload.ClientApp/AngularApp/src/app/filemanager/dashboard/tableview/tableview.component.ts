@@ -143,7 +143,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
 
     const rfile = this.dataSource.data.find(s => s.id === file.id);
     if (rfile) {
-      rfile.isAvailableOnline = file.isAvailableOnline;
+      rfile.status = file.status;
       rfile.lastModified = file.lastModified;
       this.refreshTable();
       this.snackBar.open(`The online availability of ${rfile.name} has been changed successfully`, '', { duration: 3000 });
@@ -158,7 +158,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
 
     const rfolder = this.dataSource.data.find(s => s.id === folder.id);
     if (rfolder) {
-      rfolder.isAvailableOnline = folder.isAvailableOnline;
+      rfolder.status = folder.status;
       rfolder.lastModified = folder.lastModified;
       this.refreshTable();
       this.snackBar.open(`The online availability of ${rfolder.name} has been changed successfully`, '', { duration: 3000 });

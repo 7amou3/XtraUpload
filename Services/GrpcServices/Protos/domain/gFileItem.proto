@@ -15,6 +15,13 @@ message gFileItem {
     google.protobuf.StringValue FolderId = 8;
     google.protobuf.Timestamp CreatedAt = 9;
     google.protobuf.Timestamp LastModified = 10;
-    bool IsAvailableOnline = 11;
+    ItemStatus Status = 11;
     string StorageServerId = 12;
+}
+
+enum ItemStatus {
+    Item_Status_Visible = 0;
+    Item_Status_Hidden = 1;
+    Item_Status_To_Be_Processed = 2;
+    Item_Status_To_Be_Deleted = 3;
 }

@@ -21,24 +21,17 @@ namespace XtraUpload.FileManager.Service.Handlers
     /// </summary>
     public class DeleteFolderCommandHandler : IRequestHandler<DeleteFolderCommand, DeleteFolderResult>
     {
-        #region Fields
         readonly IMediator _mediatr;
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
-        readonly UploadOptions _uploadOpt;
-        #endregion
-
-        #region Constructor
+        
         public DeleteFolderCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, IOptionsMonitor<UploadOptions> uploadOpt, IHttpContextAccessor httpContextAccessor)
         {
             _mediatr = mediatr;
             _unitOfWork = unitOfWork;
-            _uploadOpt = uploadOpt.CurrentValue;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Handler
+        
         public async Task<DeleteFolderResult> Handle(DeleteFolderCommand request, CancellationToken cancellationToken)
         {
             DeleteFolderResult Result = new DeleteFolderResult();
@@ -61,33 +54,24 @@ namespace XtraUpload.FileManager.Service.Handlers
 
             // Get all files in those folders
             var files = await _unitOfWork.Files.FindAsync(s => s.UserId == userId && foldersId.Contains(s.FolderId));
-
-            // Delete files from db
+            // Mark files to be deleted
+            foreach (var file in files)
+            {
+                file.Status = ItemStatus.To_Be_Deleted;
+            }
+            // Delete folders from db
             _unitOfWork.Folders.Remove(folder);
             _unitOfWork.Folders.RemoveRange(folders);
-            _unitOfWork.Files.RemoveRange(files);
-
+            
             // Persist changes
             Result = await _unitOfWork.CompleteAsync(Result);
             if (Result.State == OperationState.Success)
             {
-                // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
-                foreach (var file in files)
-                {
-                    string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
-
-                    if (Directory.Exists(folderPath))
-                    {
-                        Directory.Delete(folderPath, true);
-                    }
-                }
-                // Append new data
                 Result.Folders = folders;
                 Result.Files = files;
             }
 
             return Result;
         }
-        #endregion
     }
 }

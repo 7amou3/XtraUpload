@@ -46,7 +46,7 @@ export class SidebarComponent extends TreeBase implements OnInit {
           createdAt: new Date(),
           lastModified: new Date(),
           hasPassword: false,
-          isAvailableOnline: true
+          status: true
         };
         // build the folders tree
         this.folders = [rootFolder, ...folders ?? []];

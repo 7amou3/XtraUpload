@@ -45,7 +45,7 @@ namespace XtraUpload.FileManager.Service
             }
 
             // Prepare data
-            file.IsAvailableOnline = request.IsOnline;
+            file.Status = request.IsOnline ? ItemStatus.Visible : ItemStatus.Hidden;
             file.LastModified = DateTime.Now;
 
             // Try to save in db

@@ -30,9 +30,9 @@ namespace XtraUpload.Domain
         /// </summary>
         public bool HasPassword { get; set; }
         /// <summary>
-        /// whether the item is available online or not
+        /// item status
         /// </summary>
-        public bool IsAvailableOnline { get; set; }
+        public ItemStatus Status { get; set; }
         /// <summary>
         /// Id of the user who own this item
         /// </summary>

@@ -74,7 +74,7 @@ namespace XtraUpload.StorageManager.Service
                 StorageServerId = metadata["serverId"].GetString(Encoding.UTF8),
                 CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
                 LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
-                IsAvailableOnline = true
+                Status = Protos.ItemStatus.Visible
             };
 
             // send the uploaded file info to the main app

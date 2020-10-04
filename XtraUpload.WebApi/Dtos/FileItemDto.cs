@@ -9,7 +9,7 @@ namespace XtraUpload.WebApi
         public string FolderId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModified { get; set; }
-        public bool IsAvailableOnline { get; set; }
+        public ItemStatus Status { get; set; }
         public int DownloadCount { get; set; }
         /// <summary>
         /// Time to wait before download link is generated

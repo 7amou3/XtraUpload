@@ -43,7 +43,7 @@ namespace XtraUpload.FileManager.Service
                 return Result;
             }
             // If anonymous user, check if folder is public
-            if (userId != folder.UserId && folder.IsAvailableOnline == false)
+            if (userId != folder.UserId && folder.Status != ItemStatus.Visible)
             {
                 Result.ErrorContent = new ErrorContent("This folder is not available for public downloads", ErrorOrigin.Client);
                 return Result;
@@ -52,7 +52,7 @@ namespace XtraUpload.FileManager.Service
             // Get folders
             Result.Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == folderId);
             // get Files, the root folder is represented by a null value in TFile table
-            Result.Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == folderId);
+            Result.Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == folderId && s.Status != ItemStatus.To_Be_Deleted);
 
             return Result;
         }

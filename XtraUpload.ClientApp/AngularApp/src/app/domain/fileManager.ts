@@ -8,7 +8,7 @@ export interface IItemInfo {
   createdAt: Date;
   lastModified: Date;
   hasPassword: boolean;
-  isAvailableOnline: boolean;
+  status: boolean;
 }
 
 export interface IFileInfo extends IItemInfo {
