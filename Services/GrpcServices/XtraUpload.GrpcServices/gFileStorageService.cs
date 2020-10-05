@@ -1,7 +1,6 @@
 ﻿using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,10 @@ namespace XtraUpload.GrpcServices
         {
             _mediatr = mediatr;
         }
-
+        /// <summary>
+        /// Check if the current grpc request is authorized
+        /// a jwt should be attached in order for the server to decode it
+        /// </summary>
         public override Task<gIsAuthorizedResponse> IsAuthorized(gIsAuthorizedRequest request, ServerCallContext context)
         {
             var authorized = context.GetHttpContext().User.Identity.IsAuthenticated;
@@ -49,6 +51,9 @@ namespace XtraUpload.GrpcServices
             };
         }
 
+        /// <summary>
+        /// Save the new uploaded file to db
+        /// </summary>
         [Authorize]
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
@@ -64,6 +69,9 @@ namespace XtraUpload.GrpcServices
             };
         }
 
+        /// <summary>
+        /// Get file info by id
+        /// </summary>
         public async override Task<gFileItemResponse> GetFileById(gFileRequest request, ServerCallContext context)
         {
             var result = await _mediatr.Send(new GetFileServerInfoQuery(request.Fileid));
@@ -71,6 +79,9 @@ namespace XtraUpload.GrpcServices
             return new gFileItemResponse() { FileItem = result.File.Convert() };
         }
 
+        /// <summary>
+        /// Get the file to download
+        /// </summary>
         public async override Task<gDownloadFileResponse> GetDownloadFile(gDownloadFileRequest request, ServerCallContext context)
         {
             var result = await _mediatr.Send(new GetDownloadByIdQuery(request.DownloadId, request.RequesterAddress));
@@ -81,6 +92,33 @@ namespace XtraUpload.GrpcServices
                 FileItem = result.File.Convert(),
                 DownloadSpeed = result.DownloadSpeed,
             };
+        }
+
+        /// <summary>
+        /// Returns a list of files in order to delete them from disk
+        /// </summary>
+        public override async Task<gFilesItemResponse> GetFilesToDelete(gGetFilesToDeleteRequest request, ServerCallContext context)
+        {
+            var response = new gFilesItemResponse();
+
+            var result = await _mediatr.Send(new GetFilesToDeleteQuery());
+            if (result.State == OperationState.Success)
+            {
+                response.FilesItem.Add(result.Files.Convert());
+            }
+            response.Status = result.Convert();
+
+            return response;
+        }
+
+        /// <summary>
+        /// Delete files from db
+        /// </summary>
+        public override async Task<gDeleteFilesResponse> DeleteFilesFromDb(gDeleteFilesRequest request, ServerCallContext context)
+        {
+            var result = await _mediatr.Send(new DeleteFileFromDbCommand(request.FilesId.ToList()));
+
+            return new gDeleteFilesResponse() { Status = result.Convert()};
         }
     }
 }

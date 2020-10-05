@@ -13,14 +13,14 @@ namespace XtraUpload.StorageManager.Host
     /// <summary>
     /// A background job used to remove expired non completed/aborted files from the store
     /// </summary>
-    public class ExpiredFilesCleanupService : IHostedService, IDisposable
+    public class ExpiredFilesCleanupJob : IHostedService, IDisposable
     {
         private Timer _timer;
         private readonly ITusExpirationStore _expirationStore;
         private readonly ExpirationBase _expiration;
-        private readonly ILogger<ExpiredFilesCleanupService> _logger;
+        private readonly ILogger<ExpiredFilesCleanupJob> _logger;
 
-        public ExpiredFilesCleanupService(FileUploadService fileUploadService, ILogger<ExpiredFilesCleanupService> logger)
+        public ExpiredFilesCleanupJob(FileUploadService fileUploadService, ILogger<ExpiredFilesCleanupJob> logger)
         {
             _logger = logger;
             DefaultTusConfiguration config = fileUploadService.CreateTusConfiguration();
@@ -28,16 +28,17 @@ namespace XtraUpload.StorageManager.Host
             _expiration = config.Expiration;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             if (_expiration == null)
             {
                 _logger.LogInformation("Not running cleanup job as no expiration has been set.");
-                return;
             }
-
-            // await RunCleanup(cancellationToken);
-            _timer = new Timer(RunCleanup, cancellationToken, int.Parse(_expiration.Timeout.TotalMilliseconds.ToString()), Timeout.Infinite);
+            else
+            {
+                _timer = new Timer(RunCleanup, cancellationToken, int.Parse(_expiration.Timeout.TotalMilliseconds.ToString()), Timeout.Infinite);
+            }    
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

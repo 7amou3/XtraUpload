@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using System;
+using System.Collections.Generic;
 using XtraUpload.Domain;
 using XtraUpload.Protos;
 
@@ -12,6 +13,14 @@ namespace XtraUpload.GrpcServices
         {
             if (file == null) return new FileItem();
 
+            var status = file.Status switch
+            {
+                Protos.ItemStatus.Visible => Domain.ItemStatus.Visible,
+                Protos.ItemStatus.Hidden => Domain.ItemStatus.Hidden,
+                Protos.ItemStatus.ToBeProcessed => Domain.ItemStatus.To_Be_Processed,
+                Protos.ItemStatus.ToBeDeleted => Domain.ItemStatus.To_Be_Deleted,
+                _ => Domain.ItemStatus.Visible,
+            };
             return new FileItem()
             {
                 Id = file.Id,
@@ -24,7 +33,7 @@ namespace XtraUpload.GrpcServices
                 Extension = file.Extension,
                 CreatedAt = file.CreatedAt.ToDateTime(),
                 LastModified = file.LastModified.ToDateTime(),
-                IsAvailableOnline = file.IsAvailableOnline,
+                Status = status,
                 StorageServerId = Guid.Parse(file.StorageServerId),
             };
         }
@@ -33,6 +42,14 @@ namespace XtraUpload.GrpcServices
         {
             if (file == null) return new gFileItem();
 
+            var status = file.Status switch
+            {
+                Domain.ItemStatus.Visible => Protos.ItemStatus.Visible,
+                Domain.ItemStatus.Hidden => Protos.ItemStatus.Hidden,
+                Domain.ItemStatus.To_Be_Processed => Protos.ItemStatus.ToBeProcessed,
+                Domain.ItemStatus.To_Be_Deleted => Protos.ItemStatus.ToBeDeleted,
+                _ => Protos.ItemStatus.Visible,
+            };
             return new gFileItem()
             {
                 Id = file.Id,
@@ -45,9 +62,19 @@ namespace XtraUpload.GrpcServices
                 Size = uint.Parse(file.Size.ToString()),
                 CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(file.CreatedAt, DateTimeKind.Utc)),
                 LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(file.LastModified, DateTimeKind.Utc)),
-                IsAvailableOnline = file.IsAvailableOnline,
+                Status = status,
                 StorageServerId = file.StorageServerId.ToString(),
             };
+        }
+
+        public static IEnumerable<gFileItem> Convert(this IEnumerable<FileItem> files)
+        {
+            HashSet<gFileItem> gFiles = new HashSet<gFileItem>();
+            foreach (var file in files)
+            {
+                gFiles.Add(file.Convert());
+            }
+            return gFiles;
         }
     }
 }

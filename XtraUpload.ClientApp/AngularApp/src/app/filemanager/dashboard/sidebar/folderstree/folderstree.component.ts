@@ -95,7 +95,7 @@ export class FoldersTreeComponent extends TreeBase implements OnInit {
     const rfolder = this.folders.find(s => s.id === model.id);
     if (rfolder) {
       rfolder.name = model.name;
-      rfolder.isAvailableOnline = model.isAvailableOnline;
+      rfolder.status = model.status;
     }
   }
   private folderRenamed(model: IFolderInfo): void {

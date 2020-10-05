@@ -1,4 +1,5 @@
 ﻿using System;
+using XtraUpload.Domain;
 
 namespace XtraUpload.WebApi
 {
@@ -9,7 +10,7 @@ namespace XtraUpload.WebApi
         public DateTime CreatedAt { get; set; }
         public DateTime LastModified { get; set; }
         public bool HasPassword { get; set; }
-        public bool IsAvailableOnline { get; set; }        
+        public ItemStatus Status { get; set; }        
         public string Parentid { get; set; }
     }
 }

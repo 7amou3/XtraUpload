@@ -50,13 +50,6 @@ namespace XtraUpload.WebApi.Controllers
             return HandleResult(Result);
         }
 
-        [HttpDelete("{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
-        public async Task<IActionResult> Delete(string fileid)
-        {
-            DeleteFileResult Result = await _mediator.Send(new DeleteFileCommand(fileid));
-           
-            return HandleResult(Result, _mapper.Map<FileItemHeaderDto>(Result.File));
-        }
         [HttpDelete("deleteitems")]
         public async Task<IActionResult> DeleteItems(DeleteItemsViewModel items)
         {

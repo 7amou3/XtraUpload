@@ -43,7 +43,7 @@ namespace XtraUpload.FileManager.Service
                 return Result;
             }
             // If anonymous user, check if folder is public
-            if (userId != folder.UserId && folder.IsAvailableOnline == false)
+            if (userId != folder.UserId && folder.Status != ItemStatus.Visible)
             {
                 Result.ErrorContent = new ErrorContent("This folder is not available for public downloads", ErrorOrigin.Client);
                 return Result;

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,34 +16,24 @@ using XtraUpload.FileManager.Service.Common;
 namespace XtraUpload.FileManager.Service
 {
     /// <summary>
-    /// Delete folders and files
+    /// Delete folders and mark files for deletion
     /// </summary>
     public class DeleteItemsCommandHandler : IRequestHandler<DeleteItemsCommand, DeleteItemsResult>
     {
-        #region Fields
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
-        readonly UploadOptions _uploadOpt;
-        #endregion
-
-        #region Constructor
+        
         public DeleteItemsCommandHandler(
             IUnitOfWork unitOfWork, 
             IMediator mediator,
-            IOptionsMonitor<UploadOptions> uploadOpt,
             IHttpContextAccessor httpContextAccessor)
         {
             _mediator = mediator;
             _unitOfWork = unitOfWork;
-            _uploadOpt = uploadOpt.CurrentValue;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        #endregion
-
-        #region Handler
-
-
+        
         public async Task<DeleteItemsResult> Handle(DeleteItemsCommand request, CancellationToken cancellationToken)
         {
             DeleteItemsResult result = new DeleteItemsResult();
@@ -57,7 +46,11 @@ namespace XtraUpload.FileManager.Service
             {
                 List<string> filesIds = request.SelectedFiles.Select(s => s.Id).ToList();
                 files = await _unitOfWork.Files.FindAsync(s => filesIds.Contains(s.Id) && s.UserId == userId);
-                _unitOfWork.Files.RemoveRange(files);
+                // mark files to be deleted
+                foreach (FileItem file in files)
+                {
+                    file.Status = ItemStatus.To_Be_Deleted;
+                }
             }
             // Delete folders
             if (request.SelectedFolders.Any())
@@ -72,23 +65,11 @@ namespace XtraUpload.FileManager.Service
             result = await _unitOfWork.CompleteAsync(result);
             if (result.State == OperationState.Success)
             {
-                // Remove the files from the drive (no need to queue to background thread, because Directory.Delete does not block)
-                foreach (var file in files)
-                {
-                    string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
-
-                    if (Directory.Exists(folderPath))
-                    {
-                        Directory.Delete(folderPath, true);
-                    }
-                }
-                // Append new data
                 result.Folders = folders;
                 result.Files = files;
             }
 
             return result;
         }
-        #endregion
     }
 }

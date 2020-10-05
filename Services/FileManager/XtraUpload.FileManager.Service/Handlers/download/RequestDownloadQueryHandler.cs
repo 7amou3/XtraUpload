@@ -45,7 +45,7 @@ namespace XtraUpload.FileManager.Service
                 return Result;
             }
             // Check file availablability
-            if (userId != Result.File.UserId && !Result.File.IsAvailableOnline)
+            if (userId != Result.File.UserId && Result.File.Status != ItemStatus.Visible)
             {
                 Result.ErrorContent = new ErrorContent("This file is not available for public downloads", ErrorOrigin.Client);
                 return Result;

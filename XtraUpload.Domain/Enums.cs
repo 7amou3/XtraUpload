@@ -117,4 +117,26 @@
         Medium,
         Avatar
     }
+    /// <summary>
+    /// Item (file or folder) status
+    /// </summary>
+    public enum ItemStatus
+    {
+        /// <summary>
+        /// The item is visible, users can view, download, share.. the item
+        /// </summary>
+        Visible,
+        /// <summary>
+        /// The item is hidden from other users, but visible for the owner
+        /// </summary>
+        Hidden,
+        /// <summary>
+        /// Marks an item to be processed (image resizing, video converting...)
+        /// </summary>
+        To_Be_Processed,
+        /// <summary>
+        /// Marks an item to be deleted
+        /// </summary>
+        To_Be_Deleted
+    }
 }

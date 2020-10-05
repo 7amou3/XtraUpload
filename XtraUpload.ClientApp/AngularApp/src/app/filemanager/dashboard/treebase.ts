@@ -17,7 +17,7 @@ export abstract class TreeBase extends ComponentBase {
     createdAt: new Date(),
     lastModified: new Date(),
     hasPassword: false,
-    isAvailableOnline: true
+    status: true
   };
   /** the current selected folder from the tree, used to apply css rules */
   selectedFolderId = this.ROOT_NODE_NAME;

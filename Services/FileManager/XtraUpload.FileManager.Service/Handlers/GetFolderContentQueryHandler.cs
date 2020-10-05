@@ -39,7 +39,9 @@ namespace XtraUpload.FileManager.Service
                 // Get folders
                 Folders = await _unitOfWork.Folders.FindAsync(s => s.Parentid == parentid && s.UserId == userId),
                 // get Files, the root folder is represented by a null value in TFile table
-                Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == request.FolderId && s.UserId == userId)
+                Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.FolderId == request.FolderId 
+                                                                        && s.UserId == userId 
+                                                                        && s.Status != ItemStatus.To_Be_Deleted)
             };
 
             return Result;
