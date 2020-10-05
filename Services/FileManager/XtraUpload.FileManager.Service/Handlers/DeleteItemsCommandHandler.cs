@@ -16,7 +16,7 @@ using XtraUpload.FileManager.Service.Common;
 namespace XtraUpload.FileManager.Service
 {
     /// <summary>
-    /// Delete folders and files
+    /// Delete folders and mark files for deletion
     /// </summary>
     public class DeleteItemsCommandHandler : IRequestHandler<DeleteItemsCommand, DeleteItemsResult>
     {

@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using System;
+using System.Collections.Generic;
 using XtraUpload.Domain;
 using XtraUpload.Protos;
 
@@ -64,6 +65,16 @@ namespace XtraUpload.GrpcServices
                 Status = status,
                 StorageServerId = file.StorageServerId.ToString(),
             };
+        }
+
+        public static IEnumerable<gFileItem> Convert(this IEnumerable<FileItem> files)
+        {
+            HashSet<gFileItem> gFiles = new HashSet<gFileItem>();
+            foreach (var file in files)
+            {
+                gFiles.Add(file.Convert());
+            }
+            return gFiles;
         }
     }
 }

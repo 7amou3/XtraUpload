@@ -7,7 +7,7 @@ using XtraUpload.Domain;
 namespace XtraUpload.FileManager.Service.Common
 {
     /// <summary>
-    /// Delete folders and files
+    /// Delete folders and mark files for deletion
     /// </summary>
     public class DeleteItemsCommand : IRequest<DeleteItemsResult>
     {

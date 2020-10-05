@@ -54,7 +54,8 @@ namespace XtraUpload.StorageManager.Host
             services.AddMediatR(typeof(GetThumbnailQueryHandler));
 
             // Background jobs
-            services.AddHostedService<ExpiredFilesCleanupService>();
+            services.AddHostedService<ExpiredFilesCleanupJob>();
+            services.AddHostedService<DeleteFilesJob>();
             
             // Health check
             services.AddHealthChecks().AddCheck<FileStoreHealthCheck>("Storage Permissions");

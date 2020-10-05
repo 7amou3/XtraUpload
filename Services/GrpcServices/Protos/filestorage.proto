@@ -8,7 +8,7 @@ package gfilestorage;
 
 // The file storage service definition.
 service gFileStorage {
-  // Check user request is authorized
+  // Check grpc request is authorized
   rpc IsAuthorized (gIsAuthorizedRequest) returns (gIsAuthorizedResponse);
   // jwt should be passed in request header
   rpc GetUser (gUserRequest) returns (gUserResponse);
@@ -18,6 +18,10 @@ service gFileStorage {
   rpc SaveFile (gFileItemRequest) returns (gFileItemResponse);
   // Get the file to download
   rpc GetDownloadFile (gDownloadFileRequest) returns (gDownloadFileResponse);
+  // Returns a list of files in order to delete them from disk
+  rpc GetFilesToDelete (gGetFilesToDeleteRequest) returns (gFilesItemResponse);
+  // Request to delete files from db
+  rpc DeleteFilesFromDb (gDeleteFilesRequest) returns (gDeleteFilesResponse);
 }
 message gIsAuthorizedRequest {
 
@@ -51,4 +55,17 @@ message gDownloadFileResponse {
 	gFileItem fileItem = 1;
 	gRequestStatus status = 2;
 	double downloadSpeed = 3;
+}
+message gDeleteFilesRequest {
+	repeated string filesId = 1;
+}
+message gDeleteFilesResponse {
+	gRequestStatus status = 1;
+}
+message gGetFilesToDeleteRequest {
+
+}
+message gFilesItemResponse {
+	repeated gFileItem filesItem = 1;
+	gRequestStatus status = 2;
 }
