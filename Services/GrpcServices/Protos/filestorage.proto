@@ -22,9 +22,10 @@ service gFileStorage {
   rpc GetFilesToDelete (gGetFilesToDeleteRequest) returns (gFilesItemResponse);
   // Request to delete files from db
   rpc DeleteFilesFromDb (gDeleteFilesRequest) returns (gDeleteFilesResponse);
+  // Notify the Api that the download is completed
+  rpc FileDownloadCompleted (gDownloadCompletedRequest) returns (gDownloadCompletedResponse);
 }
 message gIsAuthorizedRequest {
-
 }
 message gIsAuthorizedResponse {
 	gRequestStatus status = 1;
@@ -45,7 +46,6 @@ message gFileItemResponse {
 	gFileItem fileItem = 1;
 	gRequestStatus status = 2;
 }
-
 message gDownloadFileRequest {
 	string downloadId = 1;
 	// ip address of the requester
@@ -63,9 +63,15 @@ message gDeleteFilesResponse {
 	gRequestStatus status = 1;
 }
 message gGetFilesToDeleteRequest {
-
 }
 message gFilesItemResponse {
 	repeated gFileItem filesItem = 1;
 	gRequestStatus status = 2;
+}
+message gDownloadCompletedRequest {
+	string fileId = 1;
+	string requesterIp = 2;
+}
+message gDownloadCompletedResponse {
+
 }

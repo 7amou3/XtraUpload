@@ -37,7 +37,7 @@ namespace XtraUpload.FileManager.Service
                 return Result;
             }
             // Check if it's the same requester
-            if (request.RequesterAddress != dResult.Download.IpAdress)
+            if (!request.RequesterAddress.Contains(dResult.Download.IpAdress))
             {
                 Result.ErrorContent = new ErrorContent("Hotlinking disabled by the administrator.", ErrorOrigin.Client);
                 return Result;

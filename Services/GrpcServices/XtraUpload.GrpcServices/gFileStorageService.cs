@@ -76,7 +76,7 @@ namespace XtraUpload.GrpcServices
         {
             var result = await _mediatr.Send(new GetFileServerInfoQuery(request.Fileid));
 
-            return new gFileItemResponse() { FileItem = result.File.Convert() };
+            return new gFileItemResponse() { FileItem = result.File.Convert(), Status = result.Convert() };
         }
 
         /// <summary>
@@ -119,6 +119,15 @@ namespace XtraUpload.GrpcServices
             var result = await _mediatr.Send(new DeleteFileFromDbCommand(request.FilesId.ToList()));
 
             return new gDeleteFilesResponse() { Status = result.Convert()};
+        }
+        /// <summary>
+        /// Notification received when a file download has completed
+        /// </summary>
+        public override async Task<gDownloadCompletedResponse> FileDownloadCompleted(gDownloadCompletedRequest request, ServerCallContext context)
+        {
+            await _mediatr.Send(new IncrementDownloadCountCommand(request.FileId, request.RequesterIp));
+
+            return new gDownloadCompletedResponse();
         }
     }
 }

@@ -79,7 +79,11 @@ namespace XtraUpload.StorageManager.Service
 
             // send the uploaded file info to the main app
             gFileItemResponse response = await _storageClient.SaveFileAsync(new gFileItemRequest() { FileItem = fileitem });
-            
+            if (response == null)
+            {
+                _logger.LogError("No response has been received from the server.", ErrorOrigin.Server);
+                return null;
+            }
             if (response.Status.Status != Protos.RequestStatus.Success)
             {
                 _logger.LogError("An error has been returned from server call: " + response.Status.Message);
