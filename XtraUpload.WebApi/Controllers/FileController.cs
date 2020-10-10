@@ -21,14 +21,6 @@ namespace XtraUpload.WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{tusid:regex(^[[a-zA-Z0-9]]*$)}")]
-        public async Task<IActionResult> Get(string tusid)
-        {
-            GetFileResult Result = await _mediator.Send(new GetFileByTusIdQuery(tusid));
-
-            return HandleResult(Result, _mapper.Map<FileItemDto>(Result.File));
-        }
-
         [AllowAnonymous]
         [HttpGet("requestdownload/{fileid:regex(^[[a-zA-Z0-9]]*$)}")]
         public async Task<IActionResult> RequestDownload(string fileid)

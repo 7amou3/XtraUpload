@@ -64,6 +64,7 @@ namespace XtraUpload.GrpcServices
                 LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(file.LastModified, DateTimeKind.Utc)),
                 Status = status,
                 StorageServerId = file.StorageServerId.ToString(),
+                StorageServer = file.StorageServer.Convert()
             };
         }
 
@@ -75,6 +76,17 @@ namespace XtraUpload.GrpcServices
                 gFiles.Add(file.Convert());
             }
             return gFiles;
+        }
+
+        public static gStorageServer Convert(this StorageServer server)
+        {
+            if (server == null) return null;
+
+            return new gStorageServer()
+            {
+                Address = server.Address,
+                Id = server.Id.ToString()
+            };
         }
     }
 }

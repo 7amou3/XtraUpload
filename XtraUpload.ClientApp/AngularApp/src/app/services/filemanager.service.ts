@@ -24,7 +24,7 @@ export class FileManagerService {
   /** Emited when a folder has been renamed */
   folderRenamed$ = new Subject<IFolderInfo>();
   /** Emited when a file has been successfully uploaded */
-  fileUploaded$ = new Subject<UploadStatus>();
+  fileUploaded$ = new Subject<IFileInfo>();
   /** Emited when a file availability changed */
   fileAvailabilityChanged$ = new Subject<IFileInfo>();
   /** Emited when a folder availability changed */
@@ -119,9 +119,7 @@ export class FileManagerService {
       this.folderRenamed$.next(data);
     }));
   }
-  getFileInfo(tusFileId: string): Observable<IFileInfo> {
-    return this.http.get<IFileInfo>('file/' + tusFileId);
-  }
+
   getFile(fileId: string): Observable<IFileInfo> {
     return this.http.get<IFileInfo>('file/requestdownload/' + fileId);
   }
@@ -164,14 +162,19 @@ export class FileManagerService {
     };
     const onAfterResponse = (req, res: HttpResponse) => {
       if (res.getStatus() == 204) {
-        uploadStatus.uploadData = JSON.parse(res.getHeader("upload-data")) as IAvatarData;
+        uploadStatus.uploadData = JSON.parse(res.getHeader("upload-data"));
       }
     };
     const onTusSuccess = () => {
       uploadStatus.status = 'Success';
       uploadStatus.fileId = upload.url.split('/').pop();
       event.next(uploadStatus);
-      this.fileUploaded$.next(uploadStatus);
+      if (urlPath == 'fileupload') {
+        const file = uploadStatus.uploadData as IFileInfo;
+        file.createdAt = new Date();
+        file.lastModified = new Date();
+        this.fileUploaded$.next(uploadStatus.uploadData as IFileInfo);
+      }
     };
     const onTusProgress = (bytesUploaded: number, bytesTotal: number): void => {
       const progress = (bytesUploaded / bytesTotal * 100).toFixed(1);

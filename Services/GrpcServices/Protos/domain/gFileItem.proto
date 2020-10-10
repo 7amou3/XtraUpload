@@ -17,6 +17,12 @@ message gFileItem {
     google.protobuf.Timestamp LastModified = 10;
     ItemStatus Status = 11;
     string StorageServerId = 12;
+    gStorageServer StorageServer = 13;
+}
+
+message gStorageServer {
+    string Id = 1;
+    string Address = 2;
 }
 
 enum ItemStatus {

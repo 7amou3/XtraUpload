@@ -101,6 +101,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
     if (!file) {
       return;
     }
+
     this.setitemThumbnail(file);
     this.dataSource.data.push(file);
     this.refreshTable();

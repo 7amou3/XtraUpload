@@ -25,7 +25,15 @@
   <!--Droped elements-->
   <mat-list>
     <mat-list-item *ngFor="let file of files">
-      <p matLine style="font-size: 14px;">{{file.name | truncate:[25]}}</p>
+      <p matLine *ngIf="(file.uploadStatus$ | async)?.status != 'Success'; else elseBlock" style="font-size: 14px;">
+        {{file.name | truncate:[25]}}
+      </p>
+      <ng-template #elseBlock>
+        <a matLine style="font-size: 14px;" target="_blank" href="{{file.downloadUrl}}">
+          {{file.name | truncate:[25]}}
+        </a>
+      </ng-template>
+      
       <p matLine style="font-size: 13px;"> {{file.size | bytes:2}} </p>
       <mat-progress-bar *ngIf="(file.uploadStatus$ | async)?.status === 'InProgress'" mode="determinate"
         value="{{(file.uploadStatus$ | async)?.message}}"></mat-progress-bar>
@@ -50,6 +58,6 @@
     <mat-error *ngIf="storageLimitReached">You have reached you max storage space.</mat-error>
   </div>
 </section>
-<div *ngIf="isBusy" fxLayout="row wrap"  fxLayoutAlign="center center" class="loading-container">
+<div *ngIf="isBusy" fxLayout="row wrap" fxLayoutAlign="center center" class="loading-container">
   <mat-progress-bar mode="query" color="accent"></mat-progress-bar>
 </div>

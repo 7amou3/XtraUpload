@@ -4,7 +4,7 @@ import { FileManagerService } from 'app/services';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { UploadStatus, IUploadSettings } from 'app/domain';
+import { UploadStatus, IUploadSettings, IFileInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
@@ -69,7 +69,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       upstatus.status = 'ToDo';
       upstatus.message = 0 as Object;
       upstatus.size = upload.size;
-      const fileToUpload = {file: upload, uploadStatus$: new Subject<UploadStatus>(), name: upload.name, size: upload.size };
+      const fileToUpload = { file: upload, uploadStatus$: new Subject<UploadStatus>(), name: upload.name, size: upload.size, downloadUrl: null };
       this.files.push(fileToUpload);
       fileToUpload.uploadStatus$.next(upstatus);
     });
@@ -105,6 +105,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
           }
           file.uploadStatus$.next(data);
           if (data.status === 'Success') {
+            file.downloadUrl = 'file?id=' + (data.uploadData as IFileInfo).id;
             // delete the uploaded file from the collection so the user cannot re-upload it
             file.file = null;
           }
@@ -118,4 +119,5 @@ export class FileUpload {
   name: string;
   size: number;
   uploadStatus$: Subject<UploadStatus>;
+  downloadUrl: string;
 }
