@@ -65,5 +65,25 @@ namespace XtraUpload.StorageServer.Controllers
 
             return new FileStreamResult(stream, "image/png");
         }
+
+        [HttpGet("avatar/{userid:regex(^[[a-zA-Z0-9./-]]*$)}/{timespan?}")]
+        public async Task<IActionResult> GetAvatar(string userid, string timespan = null)
+        {
+            AvatarUrlResult Result = await _mediator.Send(new GetAvatarQuery(userid));
+
+            if (Result.State != OperationState.Success)
+            {
+                if (Result.ErrorContent.ErrorType == ErrorOrigin.Client)
+                {
+                    return BadRequest(Result);
+                }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+
+            // Do not close the stream, MVC will handle it
+            var stream = System.IO.File.OpenRead(Result.Url);
+
+            return new FileStreamResult(stream, "image/png");
+        }
     }
 }

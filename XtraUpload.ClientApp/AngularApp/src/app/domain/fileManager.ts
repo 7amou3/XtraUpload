@@ -121,10 +121,14 @@ export class UploadStatus {
   filename: string;
   fileId: string;
   message: object;
+  uploadData: IAvatarData | IFileInfo;
   size: number;
 }
 export interface IDownload {
   downloadurl: string;
+}
+export interface IAvatarData {
+  avatarUrl: string;
 }
 export interface IAccountOverview {
   uploadSetting: IUploadSettings;

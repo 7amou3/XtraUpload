@@ -71,7 +71,7 @@ namespace XtraUpload.StorageServer
                                     .AllowAnyHeader()
                                     .AllowAnyMethod()
                                     .AllowAnyOrigin()
-                                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders()));
+                                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders().Append("upload-data").ToArray()));
 
             app.UseStorageManager();
             

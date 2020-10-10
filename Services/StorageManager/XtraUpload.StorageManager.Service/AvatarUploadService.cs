@@ -34,8 +34,10 @@ namespace XtraUpload.StorageManager.Service
             try
             {
                 gUser user = await MoveFilesToFolder(ctx);
-                //update db
-                await RequestUpdateDb(ctx, user);
+                // Update db
+                string avatarUrl = await RequestUpdateDb(ctx, user);
+                // Attach avatar info to header, because tus send 204 (no response body is allowed)
+                ctx.HttpContext.Response.Headers.Add("upload-data", Helpers.JsonSerialize(new { AvatarUrl = avatarUrl }));
             }
             catch (Exception _ex)
             {
@@ -47,9 +49,9 @@ namespace XtraUpload.StorageManager.Service
         /// <summary>
         ///  Update db
         /// </summary>
-        private async Task RequestUpdateDb(FileCompleteContext ctx, gUser user)
+        private async Task<string> RequestUpdateDb(FileCompleteContext ctx, gUser user)
         {
-            var avatarUrl = ctx.HttpContext.Request.Host.Value + "/api/file/avatar/" + user.Id;
+            var avatarUrl = ctx.HttpContext.Request.Scheme + "://" + ctx.HttpContext.Request.Host.Value + "/api/file/avatar/" + user.Id;
             var response = await _storageClient.SaveAvatarAsync(new gSaveAvatarRequest() { AvatarUrl = avatarUrl });
             if (response == null)
             {
@@ -59,6 +61,7 @@ namespace XtraUpload.StorageManager.Service
             {
                 _logger.LogError(response.Status.Message);
             }
+            return avatarUrl;
         }
 
         /// <summary>

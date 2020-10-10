@@ -5,6 +5,7 @@ import { ComponentBase } from 'app/shared';
 import { FileManagerService, HeaderService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
+import { IAvatarData } from '../../domain';
 
 @Component({
   selector: 'app-avatar',
@@ -66,7 +67,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
           this.isBusy = false;
           this.selectedImg = null;
           this.message$.next({ successMessage: 'Your avatar has been updated successfully.' });
-          this.headerService.notifyAvatarChanged();
+          this.headerService.notifyAvatarChanged(result.uploadData as IAvatarData);
         }
       });
     });
