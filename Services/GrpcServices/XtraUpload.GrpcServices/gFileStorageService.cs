@@ -112,7 +112,7 @@ namespace XtraUpload.GrpcServices
         }
 
         /// <summary>
-        /// Delete files from db
+        /// Delete files from db, this request is triggred by a storage-client's job
         /// </summary>
         public override async Task<gDeleteFilesResponse> DeleteFilesFromDb(gDeleteFilesRequest request, ServerCallContext context)
         {
@@ -128,6 +128,17 @@ namespace XtraUpload.GrpcServices
             await _mediatr.Send(new IncrementDownloadCountCommand(request.FileId, request.RequesterIp));
 
             return new gDownloadCompletedResponse();
+        }
+
+        /// <summary>
+        /// Save the uploaded avatar to db
+        /// </summary>
+        [Authorize]
+        public override async Task<gSaveAvatarResponse> SaveAvatar(gSaveAvatarRequest request, ServerCallContext context)
+        {
+            var result = await _mediatr.Send(new SaveAvatarCommand(request.AvatarUrl));
+
+            return new gSaveAvatarResponse() { Status = result.Convert() };
         }
     }
 }

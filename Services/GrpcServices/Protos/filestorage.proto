@@ -24,6 +24,8 @@ service gFileStorage {
   rpc DeleteFilesFromDb (gDeleteFilesRequest) returns (gDeleteFilesResponse);
   // Notify the Api that the download is completed
   rpc FileDownloadCompleted (gDownloadCompletedRequest) returns (gDownloadCompletedResponse);
+  // Save the newly uploaded avatar to db
+  rpc SaveAvatar (gSaveAvatarRequest) returns (gSaveAvatarResponse);
 }
 message gIsAuthorizedRequest {
 }
@@ -73,5 +75,10 @@ message gDownloadCompletedRequest {
 	string requesterIp = 2;
 }
 message gDownloadCompletedResponse {
-
+}
+message gSaveAvatarRequest {
+	string avatarUrl = 1;
+}
+message gSaveAvatarResponse {
+	gRequestStatus status = 1;
 }
