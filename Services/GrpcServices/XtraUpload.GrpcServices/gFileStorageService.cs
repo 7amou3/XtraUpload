@@ -39,10 +39,8 @@ namespace XtraUpload.GrpcServices
 
         [Authorize]
         public override async Task<gUserResponse> GetUser(gUserRequest request, ServerCallContext context)
-        {
-            var id = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-            
-            var userResult = await _mediatr.Send(new GetUserByIdQuery(id));
+        {   
+            var userResult = await _mediatr.Send(new GetUserByIdQuery());
             
             return new gUserResponse() 
             {  
