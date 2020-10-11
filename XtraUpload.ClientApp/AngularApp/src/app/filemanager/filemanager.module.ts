@@ -22,6 +22,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { FileManagerRoutes } from './filemanager.routing';
 import { PipeModule } from 'app/shared/pipe-modules';
@@ -72,6 +73,7 @@ import { MoveItemComponent } from './dialogbox/moveitem/moveitem.component';
     DragDropModule,
     MatTooltipModule,
     FormsModule,
+    ClipboardModule,
     ReactiveFormsModule,
     NgxDropzoneModule
   ],

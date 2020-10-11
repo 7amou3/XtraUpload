@@ -3,7 +3,7 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { FileManagerService } from 'app/services';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { UploadStatus, IUploadSettings, IFileInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
@@ -70,7 +70,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       upstatus.status = 'ToDo';
       upstatus.message = 0 as Object;
       upstatus.size = upload.size;
-      const fileToUpload = { file: upload, uploadStatus$: new Subject<UploadStatus>(), name: upload.name, size: upload.size, downloadUrl: null };
+      const fileToUpload = { file: upload, uploadStatus$: new ReplaySubject<UploadStatus>(), name: upload.name, size: upload.size, downloadUrl: null };
       this.files.push(fileToUpload);
       fileToUpload.uploadStatus$.next(upstatus);
     });
@@ -126,7 +126,7 @@ export class FileUpload {
   file: File;
   name: string;
   size: number;
-  uploadStatus$: Subject<UploadStatus>;
+  uploadStatus$: ReplaySubject<UploadStatus>;
   downloadUrl: string;
 }
 export class UploadContext {
