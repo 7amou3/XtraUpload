@@ -169,7 +169,7 @@ export class FileManagerService {
       uploadStatus.status = 'Success';
       uploadStatus.fileId = upload.url.split('/').pop();
       event.next(uploadStatus);
-      if (urlPath == 'fileupload') {
+      if (urlPath === 'fileupload') {
         const file = uploadStatus.uploadData as IFileInfo;
         file.createdAt = new Date();
         file.lastModified = new Date();

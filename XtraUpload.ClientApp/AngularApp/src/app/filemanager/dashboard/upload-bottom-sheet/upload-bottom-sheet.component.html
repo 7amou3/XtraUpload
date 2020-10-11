@@ -37,12 +37,18 @@
       <p matLine style="font-size: 13px;"> {{file.size | bytes:2}} </p>
       <mat-progress-bar *ngIf="(file.uploadStatus$ | async)?.status === 'InProgress'" mode="determinate"
         value="{{(file.uploadStatus$ | async)?.message}}"></mat-progress-bar>
-      <a mat-icon-button mat-button *ngIf="(file.uploadStatus$ | async)?.status != 'Success'"
+      <a mat-icon-button mat-button *ngIf="(file.uploadStatus$ | async)?.status !== 'Success' && (file.uploadStatus$ | async)?.status !== 'Error'"
         (click)="onRemoveFile(file)" matTooltip="Remove from selection">
-        <mat-icon class="text-danger font-18">delete</mat-icon>
+        <mat-icon class="text-info font-18">delete</mat-icon>
       </a>
       <mat-icon matTooltip="Upload successful" *ngIf="(file.uploadStatus$ | async)?.status == 'Success'"
         class="text-success font-18">done</mat-icon>
+
+        <a mat-icon-button mat-button matTooltip="An Error has occurred while uploading the file." 
+        *ngIf="(file.uploadStatus$ | async)?.status == 'Error'" (click)="onRemoveFile(file)">
+        <mat-icon class="text-danger font-18">error</mat-icon>
+      </a>
+        
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
