@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Domain;
-using XtraUpload.FileManager.Service.Common;
+using XtraUpload.StorageManager.Common;
 
-namespace XtraUpload.FileManager.Service
+namespace XtraUpload.StorageManager.Service
 {
     /// <summary>
     /// Get avatar 

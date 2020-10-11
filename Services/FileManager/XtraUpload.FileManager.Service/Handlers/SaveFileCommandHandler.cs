@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
@@ -21,18 +23,24 @@ namespace XtraUpload.FileManager.Service
 
         public async Task<CreateFileResult> Handle(SaveFileCommand request, CancellationToken cancellationToken)
         {
-            CreateFileResult result = new CreateFileResult();
+            CreateFileResult Result = new CreateFileResult();
 
             // Add file to collection
             _unitOfWork.Files.Add(request.File);
             // Save to db
-            result = await _unitOfWork.CompleteAsync(result);
-            if (result.State == OperationState.Success)
+            Result = await _unitOfWork.CompleteAsync(Result);
+            var files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Id == request.File.Id);
+            if (!files.Any())
             {
-                result.File = request.File;
+                Result.ErrorContent = new ErrorContent("No file found with the provided id", ErrorOrigin.Server);
+                return Result;
+            }
+            if (Result.State == OperationState.Success)
+            {
+                Result.File = files.ElementAt(0);
             }
 
-            return result;
+            return Result;
         }
     }
 }

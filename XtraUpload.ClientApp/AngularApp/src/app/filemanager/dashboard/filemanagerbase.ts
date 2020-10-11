@@ -69,7 +69,7 @@ export abstract class FilemanagerBase extends ComponentBase {
     this.filemanagerService.fileUploaded$
       .pipe(takeUntil(this.onDestroy))
       .subscribe(file => {
-        this.handleSuccessfullUpload(file.fileId);
+        this.handleNewFile(file);
       });
     this.filemanagerService.fileAvailabilityChanged$
       .pipe(takeUntil(this.onDestroy))
@@ -222,9 +222,4 @@ export abstract class FilemanagerBase extends ComponentBase {
     this.ctxMenuService.handleMenuItemClick(items, action);
   }
 
-  private handleSuccessfullUpload(tusid: string) {
-    this.filemanagerService.getFileInfo(tusid)
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(file => this.handleNewFile(file));
-  }
 }

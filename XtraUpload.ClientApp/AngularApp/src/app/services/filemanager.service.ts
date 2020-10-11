@@ -7,8 +7,9 @@ import { UserStorageService } from './user.storage.service';
 import {
   IFolderModel, IItemInfo, IFolderInfo, UploadStatus,
   IFileInfo, MovedItemsModel, ICreateFolderModel, IRenameItemModel, IDownload, IUploadSettings,
-  IAccountOverview, IBulkDelete } from '../domain';
+  IAccountOverview, IBulkDelete, IAvatarData } from '../domain';
 import { isFile } from 'app/filemanager/dashboard/helpers';
+import { HttpResponse } from 'tus-js-client';
 
 @Injectable()
 export class FileManagerService {
@@ -23,7 +24,7 @@ export class FileManagerService {
   /** Emited when a folder has been renamed */
   folderRenamed$ = new Subject<IFolderInfo>();
   /** Emited when a file has been successfully uploaded */
-  fileUploaded$ = new Subject<UploadStatus>();
+  fileUploaded$ = new Subject<IFileInfo>();
   /** Emited when a file availability changed */
   fileAvailabilityChanged$ = new Subject<IFileInfo>();
   /** Emited when a folder availability changed */
@@ -34,8 +35,7 @@ export class FileManagerService {
   itemsMoved$ = new Subject<string[]>();
   constructor(
     private http: HttpClient,
-    private storageService: UserStorageService,
-    @Inject('BASE_URL') private baseUrl: string) { }
+    private storageService: UserStorageService) { }
 
   /** Get all folders */
   getAllFolders(): Observable<IFolderInfo[]> {
@@ -119,9 +119,7 @@ export class FileManagerService {
       this.folderRenamed$.next(data);
     }));
   }
-  getFileInfo(tusFileId: string): Observable<IFileInfo> {
-    return this.http.get<IFileInfo>('file/' + tusFileId);
-  }
+
   getFile(fileId: string): Observable<IFileInfo> {
     return this.http.get<IFileInfo>('file/requestdownload/' + fileId);
   }
@@ -162,11 +160,21 @@ export class FileManagerService {
       uploadStatus.message = error;
       event.next(uploadStatus);
     };
+    const onAfterResponse = (req, res: HttpResponse) => {
+      if (res.getStatus() == 204) {
+        uploadStatus.uploadData = JSON.parse(res.getHeader("upload-data"));
+      }
+    };
     const onTusSuccess = () => {
       uploadStatus.status = 'Success';
       uploadStatus.fileId = upload.url.split('/').pop();
       event.next(uploadStatus);
-      this.fileUploaded$.next(uploadStatus);
+      if (urlPath === 'fileupload') {
+        const file = uploadStatus.uploadData as IFileInfo;
+        file.createdAt = new Date();
+        file.lastModified = new Date();
+        this.fileUploaded$.next(uploadStatus.uploadData as IFileInfo);
+      }
     };
     const onTusProgress = (bytesUploaded: number, bytesTotal: number): void => {
       const progress = (bytesUploaded / bytesTotal * 100).toFixed(1);
@@ -187,6 +195,7 @@ export class FileManagerService {
       onError: onTusError,
       onProgress: onTusProgress,
       onSuccess: onTusSuccess,
+      onAfterResponse: onAfterResponse,
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
         name: file.name,

@@ -3,11 +3,12 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { FileManagerService } from 'app/services';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { UploadStatus, IUploadSettings } from 'app/domain';
+import { ReplaySubject, Subject } from 'rxjs';
+import { UploadStatus, IUploadSettings, IFileInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
+import { forEachPromise } from '../helpers';
 
 @Component({
   selector: 'app-upload-bottom-sheet',
@@ -69,7 +70,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       upstatus.status = 'ToDo';
       upstatus.message = 0 as Object;
       upstatus.size = upload.size;
-      const fileToUpload = {file: upload, uploadStatus$: new Subject<UploadStatus>(), name: upload.name, size: upload.size };
+      const fileToUpload = { file: upload, uploadStatus$: new ReplaySubject<UploadStatus>(), name: upload.name, size: upload.size, downloadUrl: null };
       this.files.push(fileToUpload);
       fileToUpload.uploadStatus$.next(upstatus);
     });
@@ -94,28 +95,56 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
     if (!currentFolderId) {
       currentFolderId = 'root';
     }
-    this.files.forEach(upload => {
-      if (upload.file) {
-        this.fileMngService.startUpload(upload.file, this.uploadSetting, 'fileupload', currentFolderId)
-        .pipe(takeUntil(this.onDestroy))
+    // Sequentialy process uploads
+    forEachPromise(this.files, this.uploadPromise, new UploadContext(this.fileMngService, this.files, this.uploadSetting, this.onDestroy, currentFolderId))
+    .then(() => {});
+  }
+  uploadPromise(upload: FileUpload, context: UploadContext) {
+    return new Promise((resolve, reject) => {
+      context.fileManagerService.startUpload(upload.file, context.uploadSettings, 'fileupload', context.currentFolderId)
+        .pipe(takeUntil(context.onDestroy))
         .subscribe(data => {
-          const file = this.files.find(s => s.name === data.filename);
+          const file = context.files.find(s => s.name === data.filename);
           if (!file) {
-            return;
+            reject();
           }
           file.uploadStatus$.next(data);
           if (data.status === 'Success') {
+            file.downloadUrl = 'file?id=' + (data.uploadData as IFileInfo).id;
             // delete the uploaded file from the collection so the user cannot re-upload it
             file.file = null;
+            resolve();
           }
+        },
+        error => {
+          reject();
         });
-      }
-    });
+    })
   }
 }
 export class FileUpload {
   file: File;
   name: string;
   size: number;
-  uploadStatus$: Subject<UploadStatus>;
+  uploadStatus$: ReplaySubject<UploadStatus>;
+  downloadUrl: string;
+}
+export class UploadContext {
+
+  constructor( fileManagerService: FileManagerService, 
+    files: FileUpload[], 
+    uploadSettings: IUploadSettings,
+    onDestroy: Subject<void>,
+    currentFolderId :string) {
+      this.fileManagerService = fileManagerService;
+      this.files = files;
+      this.uploadSettings = uploadSettings;
+      this.onDestroy = onDestroy;
+      this.currentFolderId = currentFolderId;
+  }
+  fileManagerService: FileManagerService;
+  uploadSettings: IUploadSettings;
+  files: FileUpload[];
+  onDestroy: Subject<void>;
+  currentFolderId :string;
 }

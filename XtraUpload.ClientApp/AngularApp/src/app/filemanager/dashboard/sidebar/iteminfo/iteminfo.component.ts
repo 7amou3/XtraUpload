@@ -18,12 +18,14 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
   simplePath: string;
   itemInfo: IItemInfo;
   isFile: boolean;
+  downloadUrl: string;
   constructor(
     private fileMngService: FileManagerService) {
     super();
   }
 
   ngOnInit(): void {
+    const baseurl = document.getElementsByTagName('base')[0].href;
     this.itemInfo$
       .pipe(takeUntil(this.onDestroy))
       .subscribe(
@@ -39,6 +41,7 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
             this.itemInfo.thumbnail = 'assets/images/folder128px.png';
           }
           this.simplePath = '';
+          this.downloadUrl = baseurl + (this.isFile ? 'file?id=' : 'folder?id=') + this.itemInfo.id
           for (let i = 0; i < this.folderPath.length; i++) {
             this.simplePath += this.folderPath[i].name + (i !== (this.folderPath.length - 1) ? ' > ' : '');
           }

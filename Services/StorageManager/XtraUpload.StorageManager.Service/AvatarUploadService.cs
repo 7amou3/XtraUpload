@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -16,6 +17,7 @@ namespace XtraUpload.StorageManager.Service
 {
     public class AvatarUploadService : BaseFileUpload
     {
+
         public AvatarUploadService(
             gFileStorage.gFileStorageClient storageClient,
             IOptionsMonitor<UploadOptions> uploadOpts,
@@ -31,9 +33,11 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                MoveFilesToFolder(ctx);
-                //update db
-                await UpdateDb(ctx);
+                gUser user = await MoveFilesToFolder(ctx);
+                // Update db
+                string avatarUrl = await RequestUpdateDb(ctx, user);
+                // Attach avatar info to header, because tus send 204 (no response body is allowed)
+                ctx.HttpContext.Response.Headers.Add("upload-data", Helpers.JsonSerialize(new { AvatarUrl = avatarUrl }));
             }
             catch (Exception _ex)
             {
@@ -45,30 +49,40 @@ namespace XtraUpload.StorageManager.Service
         /// <summary>
         ///  Update db
         /// </summary>
-        private async Task UpdateDb(FileCompleteContext ctx)
+        private async Task<string> RequestUpdateDb(FileCompleteContext ctx, gUser user)
         {
-            // Todo: send file info to the main app
-
-            //using IServiceScope scope = _serviceProvider.CreateScope();
-            //using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            //User user = await unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == ctx.HttpContext.User.GetUserId());
-            //if (user != null)
-            //{
-            //    var request = ctx.HttpContext.Request;
-            //    user.LastModified = DateTime.Now;
-            //    user.Avatar = request.Scheme + "://" + request.Host.ToString() + "/api/file/avatar/" + user.Id;
-            //    await unitOfWork.CompleteAsync();
-            //}
+            var avatarUrl = ctx.HttpContext.Request.Scheme + "://" + ctx.HttpContext.Request.Host.Value + "/api/file/avatar/" + user.Id;
+            var response = await _storageClient.SaveAvatarAsync(new gSaveAvatarRequest() { AvatarUrl = avatarUrl });
+            if (response == null)
+            {
+                _logger.LogError("Unknown error occured while requesting user info");
+            }
+            if (response.Status.Status != RequestStatus.Success)
+            {
+                _logger.LogError(response.Status.Message);
+            }
+            return avatarUrl;
         }
 
         /// <summary>
         /// Moves the uploaded files to the avatar folder
         /// tus protocol puts the uploaded files into the store, XtraUpload move those files to the user directory
         /// </summary>
-        private void MoveFilesToFolder(FileCompleteContext ctx)
+        private async Task<gUser> MoveFilesToFolder(FileCompleteContext ctx)
         {
-            string userid = ctx.HttpContext.User.GetUserId();
-            string userFolder = Path.Combine(_uploadOpts.UploadPath, userid);
+            var gUserResponse = await _storageClient.GetUserAsync(new gUserRequest());
+            if (gUserResponse == null)
+            {
+                _logger.LogError("Unknown error occured while requesting user info");
+                return null;
+            }
+            if (gUserResponse.Status.Status != RequestStatus.Success)
+            {
+                _logger.LogError(gUserResponse.Status.Message);
+                return null;
+            }
+
+            string userFolder = Path.Combine(_uploadOpts.UploadPath, gUserResponse.User.Id);
             string avatarFolder = Path.Combine(userFolder, "avatar");
             // Create user root directory
             if (!Directory.Exists(userFolder))
@@ -96,6 +110,8 @@ namespace XtraUpload.StorageManager.Service
 
             Image smallthumbnail = image.Clone(i => i.Resize(128, 128).Crop(new Rectangle(0, 0, 128, 128)));
             smallthumbnail.Save(smallavatar, format);
+
+            return gUserResponse.User;
         }
 
     }

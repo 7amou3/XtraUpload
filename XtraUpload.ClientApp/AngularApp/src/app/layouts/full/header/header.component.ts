@@ -29,20 +29,15 @@ export class HeaderComponent extends ComponentBase implements OnInit {
       // Listen to avatar change request
       this.headerService.subscribeAvatarChange()
      .pipe(takeUntil(this.onDestroy))
-     .subscribe(() => {
-       // get the avatar url
-       this.headerService.getAvatarUrl()
-       .pipe(takeUntil(this.onDestroy))
-       .subscribe(url => {
-        const user = this.storageService.getProfile();
+     .subscribe( avatarData => {
+       const user = this.storageService.getProfile();
 
-        if (user) {
-          this.avatar = null;
-            this.avatar = url + '/' + Date.now();
-            user.avatar = url;
-            this.storageService.saveUser(user);
-        }
-       });
+       if (user) {
+         this.avatar = null;
+         this.avatar = avatarData.avatarUrl + '/' + Date.now();
+         user.avatar = avatarData.avatarUrl;
+         this.storageService.saveUser(user);
+       }
      });
    }
   onLoggedIn(loggedIn: ILoggedin) {

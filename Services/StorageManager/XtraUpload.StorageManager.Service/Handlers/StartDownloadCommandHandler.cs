@@ -45,12 +45,16 @@ namespace XtraUpload.StorageManager.Service
             gDownloadFileRequest downloadRequest = new gDownloadFileRequest()
             {
                 DownloadId = request.DownloadId,
-                RequesterAddress = _httpContext.Request.Host.Host
+                RequesterAddress = _httpContext.Request.Host.Value
             };
             // query the api
             gDownloadFileResponse dResponse = await _storageClient.GetDownloadFileAsync(downloadRequest);
-
-            if (dResponse.Status != null && dResponse.Status.Status != Protos.RequestStatus.Success)
+            if (dResponse == null)
+            {
+                Result.ErrorContent = new ErrorContent("No response has been received from the server.", ErrorOrigin.Server);
+                return Result;
+            }
+            if (dResponse.Status.Status != Protos.RequestStatus.Success)
             {
                 Result.ErrorContent = new ErrorContent(dResponse.Status.Message, ErrorOrigin.None);
                 return Result;
@@ -85,12 +89,12 @@ namespace XtraUpload.StorageManager.Service
             // All good, start download
             await StartDownload(responseHeader, filePath, dResponse.DownloadSpeed);
 
-            // Once download is completed we send request to increment download counter
-            //dResult.FileItem.DownloadCount++;
-            //dResult.File.LastModified = DateTime.Now;
-
-            //// Try to save in db
-            //return await _unitOfWork.CompleteAsync(Result);
+            // Once download is completed we send request to increment download count
+            await _storageClient.FileDownloadCompletedAsync(new gDownloadCompletedRequest() 
+            {
+                 FileId = dResponse.FileItem.Id,
+                 RequesterIp = _httpContext.Request.Host.Value
+            });
             return null;
         }
         private async Task StartDownload(HttpResponseHeader responseHeader, string filePath, double speed)

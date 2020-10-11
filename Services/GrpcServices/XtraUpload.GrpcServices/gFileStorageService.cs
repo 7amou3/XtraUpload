@@ -39,10 +39,8 @@ namespace XtraUpload.GrpcServices
 
         [Authorize]
         public override async Task<gUserResponse> GetUser(gUserRequest request, ServerCallContext context)
-        {
-            var id = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-            
-            var userResult = await _mediatr.Send(new GetUserByIdQuery(id));
+        {   
+            var userResult = await _mediatr.Send(new GetUserByIdQuery());
             
             return new gUserResponse() 
             {  
@@ -76,7 +74,7 @@ namespace XtraUpload.GrpcServices
         {
             var result = await _mediatr.Send(new GetFileServerInfoQuery(request.Fileid));
 
-            return new gFileItemResponse() { FileItem = result.File.Convert() };
+            return new gFileItemResponse() { FileItem = result.File.Convert(), Status = result.Convert() };
         }
 
         /// <summary>
@@ -112,13 +110,33 @@ namespace XtraUpload.GrpcServices
         }
 
         /// <summary>
-        /// Delete files from db
+        /// Delete files from db, this request is triggred by a storage-client's job
         /// </summary>
         public override async Task<gDeleteFilesResponse> DeleteFilesFromDb(gDeleteFilesRequest request, ServerCallContext context)
         {
             var result = await _mediatr.Send(new DeleteFileFromDbCommand(request.FilesId.ToList()));
 
             return new gDeleteFilesResponse() { Status = result.Convert()};
+        }
+        /// <summary>
+        /// Notification received when a file download has completed
+        /// </summary>
+        public override async Task<gDownloadCompletedResponse> FileDownloadCompleted(gDownloadCompletedRequest request, ServerCallContext context)
+        {
+            await _mediatr.Send(new IncrementDownloadCountCommand(request.FileId, request.RequesterIp));
+
+            return new gDownloadCompletedResponse();
+        }
+
+        /// <summary>
+        /// Save the uploaded avatar to db
+        /// </summary>
+        [Authorize]
+        public override async Task<gSaveAvatarResponse> SaveAvatar(gSaveAvatarRequest request, ServerCallContext context)
+        {
+            var result = await _mediatr.Send(new SaveAvatarCommand(request.AvatarUrl));
+
+            return new gSaveAvatarResponse() { Status = result.Convert() };
         }
     }
 }

@@ -9,7 +9,7 @@
           <p class="font-12 font-medium">Name</p>
         </div>
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
-          <p class="font-12">{{itemInfo.name | truncate:[25]}}</p>
+          <p class="font-12" matTooltip="{{itemInfo.name}}">{{itemInfo.name | truncate:[25]}}</p>
         </div>
       </div>
       <!-- item location -->
@@ -40,6 +40,7 @@
           <p class="font-12">{{itemInfo.lastModified | date}}</p>
         </div>
       </div>
+      
       <!-- Downloads -->
       <div fxLayout="row wrap" class="p-l-10" *ngIf="isFile">
         <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
@@ -61,6 +62,19 @@
         </div>
         <div fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" fxLayoutAlign="center center">
           <mat-slide-toggle [checked]="itemInfo.status == 0" (change)="onAvailableItemChange($event)"></mat-slide-toggle>
+        </div>
+      </div>
+      <!--Download link-->
+      <div fxLayout="row wrap" class="p-l-10 p-r-10">
+        <div fxFlex.gt-lg="100" fxFlex.gt-md="100" fxFlex.gt-xs="100" fxFlex="100">
+          <mat-form-field class="example-form-field">
+            <mat-label class="font-12 font-medium">Download link</mat-label>
+            <input matInput type="text" #inputdUrl [(ngModel)]="downloadUrl" class="font-12 font-medium">
+            <button mat-button matSuffix mat-icon-button aria-label="Copy to clipboard" matTooltip="Copy to clipboard"
+            [cdkCopyToClipboard]="downloadUrl" (click)="inputdUrl.select()">
+              <mat-icon>content_paste</mat-icon>
+            </button>
+          </mat-form-field>
         </div>
       </div>
     </div>

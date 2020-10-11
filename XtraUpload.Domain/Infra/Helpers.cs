@@ -177,7 +177,6 @@ namespace XtraUpload.Domain.Infra
                 return new WritableOptions<T>(environment.ContentRootFileProvider, options, section.Key, file);
             });
         }
-
     }
 
     /// <summary>
@@ -203,4 +202,5 @@ namespace XtraUpload.Domain.Infra
             return parsedTimeSpan;
         }
     }
+
 }
