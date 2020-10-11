@@ -7,7 +7,7 @@ export function isFile(item: IItemInfo): item is IFileInfo {
   return (item as IFileInfo).folderId !== undefined;
 }
 /** function that accepts an item from the array and returns a promise. */
-export function forEachPromise<T>(items, fn, context?) {
+export function forEachPromise(items, fn, context?) {
   return items.reduce(function (promise, item) {
       return promise.then(function () {
           return fn(item, context);
