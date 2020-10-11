@@ -25,7 +25,7 @@ namespace XtraUpload.FileManager.Service.Handlers
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
         
-        public DeleteFolderCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, IOptionsMonitor<UploadOptions> uploadOpt, IHttpContextAccessor httpContextAccessor)
+        public DeleteFolderCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, IHttpContextAccessor httpContextAccessor)
         {
             _mediatr = mediatr;
             _unitOfWork = unitOfWork;

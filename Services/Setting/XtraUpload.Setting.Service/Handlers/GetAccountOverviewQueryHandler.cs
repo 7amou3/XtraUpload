@@ -56,7 +56,7 @@ namespace XtraUpload.Setting.Service
             Result.FilesStats = new FilesStatsResult()
             {
                 TotalDownloads = await _unitOfWork.Files.SumAsync(s => s.UserId == userId, s => s.DownloadCount),
-                TotalFiles = await _unitOfWork.Files.CountAsync(s => s.UserId == userId)
+                TotalFiles = await _unitOfWork.Files.CountAsync(s => s.UserId == userId && s.Status != ItemStatus.To_Be_Deleted)
             };
 
             // Get user info

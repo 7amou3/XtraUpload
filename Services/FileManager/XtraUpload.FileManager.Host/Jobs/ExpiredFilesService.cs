@@ -1,16 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Host
 {
@@ -23,19 +20,18 @@ namespace XtraUpload.FileManager.Host
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ExpiredFilesService> _logger;
         private readonly int _dueTime = 3600 * 1000; // 1 hour
-        readonly UploadOptions _uploadOpt;
         private Timer _timer;
 
-        public ExpiredFilesService(IServiceProvider serviceProvider, IOptionsMonitor<UploadOptions> uploadOpt, ILogger<ExpiredFilesService> logger)
+        public ExpiredFilesService(IServiceProvider serviceProvider, ILogger<ExpiredFilesService> logger)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
-            _uploadOpt = uploadOpt.CurrentValue;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _timer = new Timer(RunCleanup, cancellationToken, _dueTime, Timeout.Infinite);
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -54,22 +50,16 @@ namespace XtraUpload.FileManager.Host
                 using IUnitOfWork unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
                 IEnumerable<FileItem> files = await unitOfWork.Files.GetExpiredFiles((CancellationToken)state);
                 
-                // Remove the files from the drive
+                // Mark files for deletion
                 foreach (var file in files)
                 {
-                    string folderPath = Path.Combine(_uploadOpt.UploadPath, file.UserId, file.Id);
-
-                    if (Directory.Exists(folderPath))
-                    {
-                        Directory.Delete(folderPath, true);
-                    }
+                    file.Status = ItemStatus.To_Be_Deleted;
                 }
 
-                // Remove the files from Db
-                unitOfWork.Files.RemoveRange(files);
+                // save to Db
                 await unitOfWork.CompleteAsync();
 
-                _logger.LogInformation($"Removed {files.Count()} expired files. Scheduled to run again in {_dueTime / 1000 / 60} minutes");
+                _logger.LogInformation($"{files.Count()} expired files were taged for deletion. Scheduled to run again in {_dueTime / 1000 / 60} minutes");
             }
             catch (Exception ex)
             {
