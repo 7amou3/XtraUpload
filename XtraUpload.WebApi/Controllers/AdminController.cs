@@ -247,5 +247,12 @@ namespace XtraUpload.WebApi.Controllers
 
             return HandleResult(result);
         }
+        [HttpGet("storageservers")]
+        public async Task<IActionResult> StorageServers()
+        {
+            var Result = await _mediatr.Send(new GetStorageServersQuery());
+
+            return HandleResult(Result, Result.Servers);
+        }
     }
 }

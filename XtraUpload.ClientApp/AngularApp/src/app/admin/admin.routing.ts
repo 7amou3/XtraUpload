@@ -8,6 +8,7 @@ import { FilesComponent } from './files/files.component';
 import { ExtensionsComponent } from './files/extensions/extensions.component';
 import { SettingsComponent } from './settings/settings.component';
 import { PagesComponent } from './pages/pages.component';
+import { ServersComponent } from './servers/servers.component';
 
 export const AdminRoutes: Routes = [
   {
@@ -22,7 +23,8 @@ export const AdminRoutes: Routes = [
       { path: 'files', component: FilesComponent },
       { path: 'extensions', component: ExtensionsComponent },
       { path: 'settings', component: SettingsComponent },
-      { path: 'pages', component: PagesComponent }
+      { path: 'pages', component: PagesComponent },
+      { path: 'servers', component: ServersComponent }
     ]
   }
 ];

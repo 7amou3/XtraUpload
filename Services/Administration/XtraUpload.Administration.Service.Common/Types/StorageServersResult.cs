@@ -3,8 +3,8 @@ using XtraUpload.Domain;
 
 namespace XtraUpload.Administration.Service.Common
 {
-    public class PagesResult: OperationResult
+    public class StorageServersResult : OperationResult
     {
-        public IEnumerable<Page> Pages { get; set; }
+        public IEnumerable<StorageServer> Servers { get; set; }
     }
 }

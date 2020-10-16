@@ -76,6 +76,8 @@ export class DashboardComponent extends ComponentBase implements OnInit {
         this.subTitle = 'Extensions'; break;
       case '/administration/pages':
         this.subTitle = 'Pages'; break;
+      case '/administration/servers':
+          this.subTitle = 'Storage Servers'; break;
       default:
         this.subTitle = 'Dashboard'; break;
     }

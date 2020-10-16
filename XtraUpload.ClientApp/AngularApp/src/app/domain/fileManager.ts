@@ -160,6 +160,13 @@ export interface IUploadSettings {
 export interface IStorageServer {
   id: string;
   address: string;
+  state: serverState;
+}
+export enum serverState {
+  Unknow = 0,
+  Active,
+  Passive,
+  Disabled
 }
 export interface IFilteredUser {
   users: IProfile[];

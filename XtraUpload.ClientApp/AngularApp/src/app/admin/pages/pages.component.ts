@@ -18,7 +18,7 @@ import { DeletepageComponent } from './dialogs/deletepage/deletepage.component';
   animations: [rowAnimation]
 })
 export class PagesComponent extends ComponentBase implements OnInit {
-  selectedPage: IPage;
+  private selectedPage: IPage;
   displayedColumns: string[] = ['name', 'createdAt', 'updatedAt', 'actions'];
   dataSource = new MatTableDataSource<IPage>();
   @ViewChild('itemstable', { static: true }) itemstable: MatTable<IPage>;

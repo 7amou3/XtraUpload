@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Observable, Subject } from 'rxjs';
 import { IAdminOverView, IDateRange, IItemCount, IFileTypeCount,
     IHealthCheck, IPaging, IFileExtension, IFilteredUser, ISearchFile, IEditExtension, IFileInfo,
-    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage } from 'app/domain';
+    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer } from 'app/domain';
 
 @Injectable()
 export class AdminService {
@@ -181,5 +181,9 @@ export class AdminService {
     }
     deletePage(deletePage: IPage) {
         return this.http.delete('admin/page/' + deletePage.id);
+    }
+
+    getStorageServers(): Observable<IStorageServer[]> {
+        return this.http.get<IStorageServer[]>('admin/storageservers');
     }
 }

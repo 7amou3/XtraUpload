@@ -59,6 +59,7 @@ import { EditpageComponent } from './pages/dialogs/editpage/editpage.component';
 import { DeletepageComponent } from './pages/dialogs/deletepage/deletepage.component';
 import {NgxWigModule} from 'ngx-wig';
 import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
+import { ServersComponent } from './servers/servers.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
     PagesComponent,
     EditpageComponent,
     DeletepageComponent,
-    AddpageComponent
+    AddpageComponent,
+    ServersComponent
   ],
   imports: [
     CommonModule,
