@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.Web.DependencyInjection;
 using System;
 using tusdotnet;
 using XtraUpload.StorageManager.Service;
-using XtraUpload.StorageManager.Common;
+using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 using MediatR;
@@ -15,7 +15,7 @@ namespace XtraUpload.StorageManager.Host
 {
     public static class Startup
     {
-        public static void UseStorageManager(this IApplicationBuilder app)
+        public async static void UseStorageManager(this IApplicationBuilder app)
         {
             app.UseTus(httpContext =>
             {
@@ -29,6 +29,7 @@ namespace XtraUpload.StorageManager.Host
                 }
                 else return null;
             });
+            await app.ApplicationServices.GetService<StartDuplexClient>().Start();
         }
         public static void AddStorageManager(this IServiceCollection services, IConfiguration config)
         {
@@ -37,10 +38,22 @@ namespace XtraUpload.StorageManager.Host
             services.AddSingleton<AvatarUploadService>();
             services.AddSingleton<FileUploadService>();
             services.AddSingleton<LoggerInterceptor>();
+            
+            services.AddSingleton<StartDuplexClient>();
             services.AddImageSharp();
 
             // Add grpc clients
             services.AddGrpcClient<gFileStorage.gFileStorageClient>(options =>
+            {
+                options.Address = new Uri(config["ApiUrl"]);
+            })
+            .ConfigureChannel((serviceProvider, channel) =>
+            {
+                channel.Credentials = GrpcChannelHelper.CreateSecureChannel(serviceProvider);
+            })
+            .AddInterceptor<LoggerInterceptor>();
+
+            services.AddGrpcClient<gStorageManager.gStorageManagerClient>(options =>
             {
                 options.Address = new Uri(config["ApiUrl"]);
             })
@@ -58,7 +71,9 @@ namespace XtraUpload.StorageManager.Host
             services.AddHostedService<DeleteFilesJob>();
             
             // Health check
-            services.AddHealthChecks().AddCheck<FileStoreHealthCheck>("Storage Permissions");
+            services.AddHealthChecks()
+                .AddCheck<FileStoreHealthCheck>("Storage Permissions")
+                .AddCheck<StorageHealthCheck>("Storage Space");
 
             // Upload Options
             IConfigurationSection uploadSection = config.GetSection(nameof(UploadOptions));

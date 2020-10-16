@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using XtraUpload.Domain;
 using XtraUpload.Protos;
 using XtraUpload.StorageManager.Common;
 
@@ -35,12 +36,12 @@ namespace XtraUpload.StorageManager.Service
 
             if (response == null)
             {
-                result.ErrorContent = new Domain.ErrorContent("Unknown error occured while waiting for files list", Domain.ErrorOrigin.Server);
+                result.ErrorContent = new ErrorContent("Unknown error occured while waiting for files list", ErrorOrigin.Server);
                 return result;
             }
-            if (response.Status.Status != RequestStatus.Success)
+            if (response.Status.Status != Protos.RequestStatus.Success)
             {
-                result.ErrorContent = new Domain.ErrorContent(response.Status.Message, Domain.ErrorOrigin.Server);
+                result.ErrorContent = new ErrorContent(response.Status.Message, ErrorOrigin.Server);
                 return result;
             }
 
@@ -62,12 +63,12 @@ namespace XtraUpload.StorageManager.Service
 
             if (deleteResponse == null)
             {
-                result.ErrorContent = new Domain.ErrorContent("Error occured while removing files from db", Domain.ErrorOrigin.Server);
+                result.ErrorContent = new ErrorContent("Error occured while removing files from db", ErrorOrigin.Server);
                 return result;
             }
-            if (deleteResponse.Status.Status != RequestStatus.Success)
+            if (deleteResponse.Status.Status != Protos.RequestStatus.Success)
             {
-                result.ErrorContent = new Domain.ErrorContent(deleteResponse.Status.Message, Domain.ErrorOrigin.Server);
+                result.ErrorContent = new ErrorContent(deleteResponse.Status.Message, ErrorOrigin.Server);
                 return result;
             }
 

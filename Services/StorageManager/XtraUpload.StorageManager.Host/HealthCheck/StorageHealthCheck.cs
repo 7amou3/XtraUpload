@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.FileManager.Service.Common;
+using XtraUpload.Domain;
 using XtraUpload.Setting.Service.Common;
 
-namespace XtraUpload.Setting.Host
+namespace XtraUpload.StorageManager.Host
 {
     public class StorageHealthCheck : IHealthCheck
     {

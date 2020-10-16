@@ -139,4 +139,24 @@
         /// </summary>
         To_Be_Deleted
     }
+
+    public enum ServerState
+    {
+        /// <summary>
+        /// Server is down/unreachable
+        /// </summary>
+        Unknown,
+        /// <summary>
+        /// Uploads and downloads are enabled
+        /// </summary>
+        Active,
+        /// <summary>
+        /// Downloads are available, uploads are disabled
+        /// </summary>
+        Passive,
+        /// <summary>
+        /// Server is reachable, but no uploads/downloads are allowed
+        /// </summary>
+        Disabled,
+    }
 }

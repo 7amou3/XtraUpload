@@ -13,9 +13,7 @@ namespace XtraUpload.Setting.Host
         public static void AddXtraUploadSetting(this IServiceCollection services, IConfiguration config)
         {
             // Health check
-            services.AddHealthChecks()
-                .AddCheck<MemoryHealthCheck>("Memory")
-                .AddCheck<StorageHealthCheck>("Storage Space");
+            services.AddHealthChecks().AddCheck<MemoryHealthCheck>("Memory");
 
             // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
             services.AddMediatR(typeof(RequestConfirmationEmailCommandHandler));

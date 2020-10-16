@@ -1,0 +1,8 @@
+syntax = "proto3";
+option csharp_namespace = "XtraUpload.Protos";
+
+message gUploadOptions {
+	string uploadPath = 1;
+    int32 chunkSize = 2;
+    int32 expiration = 3;
+}

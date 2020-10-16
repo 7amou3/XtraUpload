@@ -15,6 +15,8 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using XtraUpload.Protos;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Mvc;
+using Grpc.Core;
 
 namespace XtraUpload.StorageManager.Service
 {
@@ -25,10 +27,10 @@ namespace XtraUpload.StorageManager.Service
     public class FileUploadService : BaseFileUpload
     {
         public FileUploadService(
-            gFileStorage.gFileStorageClient storageClient,
+            gFileStorage.gFileStorageClient fileClient,
             IOptionsMonitor<UploadOptions> uploadOpts,
             ILogger<FileUploadService> logger
-            ) : base(storageClient, uploadOpts, logger, "/fileupload")
+            ) : base(fileClient, uploadOpts, logger, "/fileupload")
         {
         }
 
@@ -147,6 +149,43 @@ namespace XtraUpload.StorageManager.Service
 
                 Image smallthumbnail = image.Clone(i => i.Resize(128, 128).Crop(new Rectangle(0, 0, 128, 128)));
                 smallthumbnail.Save(smallThumboutStream, format);
+            }
+        }
+    }
+
+    public class StartDuplexClient
+    {
+
+        readonly gStorageManager.gStorageManagerClient _storageClient;
+        public StartDuplexClient(gStorageManager.gStorageManagerClient storageClient)
+        {
+            _storageClient = storageClient;
+        }
+
+        public async Task Start()
+        {
+            try
+            {
+                using (var call = _storageClient.GetUploadOptions())
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                        await call.RequestStream.WriteAsync(new UploadOptsResponse() { UploadOptions = new gUploadOptions() { ChunkSize = 25, Expiration = 180, UploadPath = "some/path" } });
+                    }
+                    Console.WriteLine("Disconnecting");
+                    await call.RequestStream.CompleteAsync();
+                }
+            }
+            catch (Exception _ex)
+            {
+                Console.WriteLine(_ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Retry new connexion...");
+                await Task.Delay(10000);
+                // Retry new connection
+                await Start();
             }
         }
     }

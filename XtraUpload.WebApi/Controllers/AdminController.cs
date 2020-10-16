@@ -185,7 +185,7 @@ namespace XtraUpload.WebApi.Controllers
         }
 
         [HttpPatch("uploadOptions")]
-        public async Task<IActionResult> UpdateUploadOptions(UploadOptions model)
+        public async Task<IActionResult> UpdateUploadOptions(Domain.UploadOptions model)
         {
             OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 

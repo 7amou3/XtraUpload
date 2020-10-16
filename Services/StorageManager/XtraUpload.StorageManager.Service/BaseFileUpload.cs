@@ -11,6 +11,7 @@ using tusdotnet.Stores;
 using Microsoft.Extensions.Options;
 using XtraUpload.StorageManager.Common;
 using XtraUpload.Protos;
+using XtraUpload.Domain;
 
 namespace XtraUpload.StorageManager.Service
 {
@@ -94,7 +95,7 @@ namespace XtraUpload.StorageManager.Service
                 ctx.FailRequest(HttpStatusCode.RequestTimeout);
                 return;
             }
-            if (authResponse.Status.Status == RequestStatus.Failed)
+            if (authResponse.Status.Status == Protos.RequestStatus.Failed)
             {
                 ctx.HttpContext.Response.Headers.Add("WWW-Authenticate", new StringValues("Basic realm=XtraUpload"));
                 ctx.FailRequest(HttpStatusCode.Unauthorized);

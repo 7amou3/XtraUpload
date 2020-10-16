@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using XtraUpload.GrpcServices.Common;
 
 namespace XtraUpload.GrpcServices
 {
@@ -13,12 +14,15 @@ namespace XtraUpload.GrpcServices
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<gFileStorageService>();
+                endpoints.MapGrpcService<gStorageManagerService>();
             });
         }
         public static void AddGrpcServices(this IServiceCollection services)
         {
             // Add grpc server
             services.AddGrpc();
+            // Register services
+            services.AddSingleton<IStorageClientProxy, StorageClientProxy>();
         }
     }
 }

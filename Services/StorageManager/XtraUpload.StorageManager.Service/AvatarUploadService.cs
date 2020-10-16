@@ -9,9 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using tusdotnet.Models.Configuration;
+using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
-using XtraUpload.StorageManager.Common;
 
 namespace XtraUpload.StorageManager.Service
 {
@@ -57,7 +57,7 @@ namespace XtraUpload.StorageManager.Service
             {
                 _logger.LogError("Unknown error occured while requesting user info");
             }
-            if (response.Status.Status != RequestStatus.Success)
+            if (response.Status.Status != Protos.RequestStatus.Success)
             {
                 _logger.LogError(response.Status.Message);
             }
@@ -76,7 +76,7 @@ namespace XtraUpload.StorageManager.Service
                 _logger.LogError("Unknown error occured while requesting user info");
                 return null;
             }
-            if (gUserResponse.Status.Status != RequestStatus.Success)
+            if (gUserResponse.Status.Status != Protos.RequestStatus.Success)
             {
                 _logger.LogError(gUserResponse.Status.Message);
                 return null;
