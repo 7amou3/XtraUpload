@@ -9,7 +9,7 @@ using XtraUpload.StorageManager.Common;
 namespace XtraUpload.StorageManager.Service
 {
     /// <summary>
-    /// Starts and maintain a duplex connexion with the main server in order to retrive live configuration, check connectivity..
+    /// Starts and maintain a duplex connexion with the main server in order to retrieve live configuration, check connectivity..
     /// </summary>
     public class StartableService
     {
@@ -30,7 +30,7 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         public void Start()
         {
-            // Quey tasks to run on background thread, and to free the caller
+            // Queu this task to run on background thread, and to free the caller
             Task.Run(() =>
             {
                 Task.WaitAll(StartStorageServerCheck(), StartStorageServerConfigRetrieval());
