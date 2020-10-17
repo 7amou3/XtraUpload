@@ -19,7 +19,7 @@ export class AddpageComponent extends ComponentBase implements OnInit {
     private dialogRef: MatDialogRef<AddpageComponent>,
     private fb: FormBuilder,
     private adminService: AdminService,
-    @Inject(MAT_DIALOG_DATA) public fullPageList: IPage[]
+    @Inject(MAT_DIALOG_DATA) private fullPageList: IPage[]
   ) {
     super();
   }
@@ -46,5 +46,4 @@ export class AddpageComponent extends ComponentBase implements OnInit {
         }, (error) => this.handleError(error)
       );
   }
-
 }

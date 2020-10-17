@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using XtraUpload.Domain;
 
 namespace XtraUpload.GrpcServices.Common
@@ -19,6 +20,6 @@ namespace XtraUpload.GrpcServices.Common
         /// <summary>
         /// Gets the <see cref="UploadOptions"/> for the given server
         /// </summary>
-        UploadOptionsResult GetUploadOptions(string serverAddress);
+        Task<UploadOptionsResult> GetUploadOptions(string serverAddress);
     }
 }

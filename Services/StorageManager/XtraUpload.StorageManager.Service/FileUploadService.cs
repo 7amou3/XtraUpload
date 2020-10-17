@@ -153,40 +153,4 @@ namespace XtraUpload.StorageManager.Service
         }
     }
 
-    public class StartDuplexClient
-    {
-
-        readonly gStorageManager.gStorageManagerClient _storageClient;
-        public StartDuplexClient(gStorageManager.gStorageManagerClient storageClient)
-        {
-            _storageClient = storageClient;
-        }
-
-        public async Task Start()
-        {
-            try
-            {
-                using (var call = _storageClient.GetUploadOptions())
-                {
-                    while (await call.ResponseStream.MoveNext())
-                    {
-                        await call.RequestStream.WriteAsync(new UploadOptsResponse() { UploadOptions = new gUploadOptions() { ChunkSize = 25, Expiration = 180, UploadPath = "some/path" } });
-                    }
-                    Console.WriteLine("Disconnecting");
-                    await call.RequestStream.CompleteAsync();
-                }
-            }
-            catch (Exception _ex)
-            {
-                Console.WriteLine(_ex.Message);
-            }
-            finally
-            {
-                Console.WriteLine("Retry new connexion...");
-                await Task.Delay(10000);
-                // Retry new connection
-                await Start();
-            }
-        }
-    }
 }

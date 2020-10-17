@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using XtraUpload.Domain;
 using XtraUpload.GrpcServices.Common;
 
@@ -20,7 +21,7 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Thread sync 
         /// </summary>
-        private readonly ManualResetEventSlim _sync = new ManualResetEventSlim();
+        private readonly SemaphoreSlim _signal = new SemaphoreSlim(0, 1);
         /// <summary>
         /// This dictionay contains server address as key associated to it's upload config
         /// </summary>
@@ -58,18 +59,18 @@ namespace XtraUpload.GrpcServices
                 // create new entry
                 _serversConfig.TryAdd(callerAddress, options);
             }
-            _sync.Set();
+            _signal.Release();
         }
 
         /// <summary>
         /// Gets the <see cref="UploadOptions"/> for the given server
         /// </summary>
-        public UploadOptionsResult GetUploadOptions(string serverAddress)
+        public async Task<UploadOptionsResult> GetUploadOptions(string serverAddress)
         {
             UploadOptionsResult Result = new UploadOptionsResult();
             // Raise event to call client storage server
             UploadOptsRequested?.Invoke(this, new UploadOptsRequestedEventArgs(serverAddress));
-            if(_sync.Wait(WAIT_TIME))
+            if(await _signal.WaitAsync(WAIT_TIME))
             {
                 if (_serversConfig.TryGetValue(serverAddress, out UploadOptions options))
                 {
@@ -84,7 +85,7 @@ namespace XtraUpload.GrpcServices
             else
             {
                 _logger.LogError("Response timed out for server: " + serverAddress);
-                Result.ErrorContent = new ErrorContent("Timeout: Response not received, check that the server is up and running.", ErrorOrigin.Server);
+                Result.ErrorContent = new ErrorContent("Timeout: Response not received, try again later.", ErrorOrigin.Server);
             }
 
             return Result;

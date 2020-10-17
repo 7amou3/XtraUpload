@@ -37,6 +37,7 @@ namespace XtraUpload.StorageServer
             services.AddCors();
             services.AddControllers();
             services.AddStorageManager(Configuration);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // Add mediatr
             services.AddMediatR(typeof(Startup), typeof(StorageManager.Host.Startup));
         }

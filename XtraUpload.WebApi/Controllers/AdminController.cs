@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
-using XtraUpload.FileManager.Service.Common;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 
@@ -246,6 +245,13 @@ namespace XtraUpload.WebApi.Controllers
             OperationResult result = await _mediatr.Send(new DeletePageCommand(id));
 
             return HandleResult(result);
+        }
+        [HttpGet("checkstorageconnectivity")]
+        public async Task<IActionResult> CheckConnectivity(string address)
+        {
+            var Result = await _mediatr.Send(new CheckStorageServerConnectivityQuery(address));
+
+            return Ok(Result);
         }
         [HttpGet("storageservers")]
         public async Task<IActionResult> StorageServers()

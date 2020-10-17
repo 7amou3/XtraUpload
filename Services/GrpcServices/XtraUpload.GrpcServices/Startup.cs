@@ -23,6 +23,7 @@ namespace XtraUpload.GrpcServices
             services.AddGrpc();
             // Register services
             services.AddSingleton<IStorageClientProxy, StorageClientProxy>();
+            services.AddSingleton<ICheckClientProxy, CheckClientProxy>();
         }
     }
 }

@@ -186,4 +186,9 @@ export class AdminService {
     getStorageServers(): Observable<IStorageServer[]> {
         return this.http.get<IStorageServer[]>('admin/storageservers');
     }
+    checkstorageconnectivity(address: string) {
+        const params = new HttpParams()
+            .set('address', address);
+        return this.http.get('admin/checkstorageconnectivity', {params: params});
+    }
 }

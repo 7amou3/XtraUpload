@@ -7,6 +7,7 @@ import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { AddserverComponent } from './dialogs/addserver/addserver.component';
 
 @Component({
   selector: 'app-servers',
@@ -33,7 +34,6 @@ export class ServersComponent extends ComponentBase implements OnInit {
         finalize(() => this.adminService.notifyBusy(false)))
       .subscribe(
         (servers) => {
-          console.log(servers)
           this.dataSource.data = servers;
         }
       );
@@ -50,7 +50,22 @@ export class ServersComponent extends ComponentBase implements OnInit {
   onItemClick(item: IStorageServer) {
     this.selectedServer = item;
   }
-  onAdd() {}
+  onAdd() {
+    const dialogRef = this.dialog.open(AddserverComponent, {
+      width: '560px',
+      data: this.dataSource.data
+    });
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((result: IStorageServer) => {
+        if (!result) {
+          return;
+        }
+        this.dataSource.data.push(result);
+        this.refreshTable();
+        this.snackBar.open(`The server ${result.address} has been added successfully`, '', { duration: 3000 });
+      });
+  }
   onEdit() {}
   onDelete() {}
 }

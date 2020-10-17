@@ -1,12 +1,14 @@
 syntax = "proto3";
 option csharp_namespace = "XtraUpload.Protos";
 import "domain/gUploadOptions.proto";
+import "domain/gRequestStatus.proto";
 
 package gstoragemanager;
 
 // The server storage service definition.
 service gStorageManager {
 	rpc GetUploadOptions (stream UploadOptsResponse) returns (stream UploadOptsRequest);
+	rpc CheckConnectivity (stream ConnectivityResponse) returns (stream ConnectivityRequest);
 }
 
 message UploadOptsResponse {
@@ -15,4 +17,12 @@ message UploadOptsResponse {
 
 message UploadOptsRequest {
   string serverAddress = 1;
+}
+
+message ConnectivityRequest {
+  string serverAddress = 1;
+}
+
+message ConnectivityResponse {
+	gRequestStatus status = 1;
 }
