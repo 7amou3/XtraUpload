@@ -194,6 +194,15 @@ export interface IUploadOptions {
   expiration: number;
   uploadPath: string;
 }
+export interface IHardwareOptions {
+  memoryThreshold: number;
+  storageThreshold: number;
+}
+export interface IAddStorageServer {
+  storageInfo: IStorageServer;
+  uploadOpts: IUploadOptions;
+  hardwareOpts: IHardwareOptions;
+}
 export enum itemAction {
   info = 0,
   rename,

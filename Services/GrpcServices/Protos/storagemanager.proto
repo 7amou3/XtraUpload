@@ -2,6 +2,7 @@ syntax = "proto3";
 option csharp_namespace = "XtraUpload.Protos";
 import "domain/gUploadOptions.proto";
 import "domain/gRequestStatus.proto";
+import "domain/gHardwareOptions.proto";
 
 package gstoragemanager;
 
@@ -9,6 +10,7 @@ package gstoragemanager;
 service gStorageManager {
 	rpc GetUploadOptions (stream UploadOptsResponse) returns (stream UploadOptsRequest);
 	rpc CheckConnectivity (stream ConnectivityResponse) returns (stream ConnectivityRequest);
+	rpc GetHardwareOptions (stream HardwareOptsResponse) returns (stream HardwareOptsRequest);
 }
 
 message UploadOptsResponse {
@@ -26,4 +28,12 @@ message ConnectivityRequest {
 
 message ConnectivityResponse {
 	gRequestStatus status = 1;
+}
+
+message HardwareOptsResponse {
+	gHardwareOptions hardwareOptions = 1;
+	string serverAddress = 2;
+}
+message HardwareOptsRequest {
+	string serverAddress = 1;
 }

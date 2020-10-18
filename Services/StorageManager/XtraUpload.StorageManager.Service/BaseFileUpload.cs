@@ -22,7 +22,7 @@ namespace XtraUpload.StorageManager.Service
     {
         #region Fields
         private readonly string _urlPath;
-        protected readonly UploadOptions _uploadOpts;
+        protected readonly IOptionsMonitor<UploadOptions> _uploadOpts;
         protected readonly ILogger<FileUploadService> _logger;
         protected readonly gFileStorage.gFileStorageClient _storageClient;
         #endregion
@@ -36,7 +36,7 @@ namespace XtraUpload.StorageManager.Service
         {
             _urlPath = urlPath;
             _storageClient = storageClient;
-            _uploadOpts = uploadOpts.CurrentValue;
+            _uploadOpts = uploadOpts;
             _logger = logger;
         }
         #endregion
@@ -51,8 +51,8 @@ namespace XtraUpload.StorageManager.Service
                 UrlPath = _urlPath,
                 MaxAllowedUploadSizeInBytes = int.MaxValue,
                 MaxAllowedUploadSizeInBytesLong = int.MaxValue,
-                Store = new TusDiskStore(_uploadOpts.UploadPath),
-                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(_uploadOpts.Expiration)),
+                Store = new TusDiskStore(_uploadOpts.CurrentValue.UploadPath),
+                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(_uploadOpts.CurrentValue.Expiration)),
                 Events = new Events
                 {
                     OnAuthorizeAsync = OnAuthorize,

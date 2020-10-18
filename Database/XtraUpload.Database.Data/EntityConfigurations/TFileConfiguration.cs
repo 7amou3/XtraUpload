@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using XtraUpload.Domain;
 
 namespace XtraUpload.Database.Data
@@ -15,6 +12,7 @@ namespace XtraUpload.Database.Data
         public void Configure(EntityTypeBuilder<FileItem> builder)
         {
             builder.HasKey(s => s.Id);
+            builder.Property(s => s.Id).ValueGeneratedNever();
             // Limit the size of columns to use efficient database types
             builder.Property(u => u.Extension).HasMaxLength(6);
             builder.Property(u => u.Extension).HasMaxLength(8);

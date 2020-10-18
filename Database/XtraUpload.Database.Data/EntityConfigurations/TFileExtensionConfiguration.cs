@@ -12,6 +12,7 @@ namespace XtraUpload.Database.Data
         public void Configure(EntityTypeBuilder<FileExtension> builder)
         {
             builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).ValueGeneratedNever();
             // Add index
             builder.HasIndex(u => u.Name).HasName("Name").IsUnique();
             // Limit the size of columns to use efficient database types

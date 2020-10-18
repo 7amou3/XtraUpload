@@ -82,6 +82,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{D4BC1E9B-2E0E-4CD7-A596-00E95B4F14DB}"
 	ProjectSection(SolutionItems) = preProject
 		Services\GrpcServices\Protos\domain\gFileItem.proto = Services\GrpcServices\Protos\domain\gFileItem.proto
+		Services\GrpcServices\Protos\domain\gHardwareOptions.proto = Services\GrpcServices\Protos\domain\gHardwareOptions.proto
 		Services\GrpcServices\Protos\domain\gRequestStatus.proto = Services\GrpcServices\Protos\domain\gRequestStatus.proto
 		Services\GrpcServices\Protos\domain\gUploadOptions.proto = Services\GrpcServices\Protos\domain\gUploadOptions.proto
 		Services\GrpcServices\Protos\domain\gUser.proto = Services\GrpcServices\Protos\domain\gUser.proto

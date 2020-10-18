@@ -15,12 +15,12 @@ namespace XtraUpload.Authentication.Service
     /// </summary>
     public class JwtFactory : IJwtFactory
     {
-        private readonly JwtIssuerOptions _jwtOptions;
+        private readonly IOptionsMonitor<JwtIssuerOptions> _jwtOptions;
 
-        public JwtFactory(IOptions<JwtIssuerOptions> jwtOptions)
+        public JwtFactory(IOptionsMonitor<JwtIssuerOptions> jwtOptions)
         {
-            _jwtOptions = jwtOptions.Value;
-            ThrowIfInvalidOptions(_jwtOptions);
+            _jwtOptions = jwtOptions;
+            ThrowIfInvalidOptions(_jwtOptions.CurrentValue);
         }
 
         public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity)
@@ -28,19 +28,19 @@ namespace XtraUpload.Authentication.Service
             var claims = new List<Claim>
             {
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
-                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64)
+                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.CurrentValue.JtiGenerator()),
+                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.CurrentValue.IssuedAt).ToString(), ClaimValueTypes.Integer64)
             };
             claims.AddRange(identity.Claims);
 
             // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
-                issuer: _jwtOptions.Issuer,
-                audience: _jwtOptions.Audience,
+                issuer: _jwtOptions.CurrentValue.Issuer,
+                audience: _jwtOptions.CurrentValue.Audience,
                 claims: claims,
-                notBefore: _jwtOptions.NotBefore,
-                expires: _jwtOptions.Expiration,
-                signingCredentials: _jwtOptions.SigningCredentials);
+                notBefore: _jwtOptions.CurrentValue.NotBefore,
+                expires: _jwtOptions.CurrentValue.Expiration,
+                signingCredentials: _jwtOptions.CurrentValue.SigningCredentials);
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 

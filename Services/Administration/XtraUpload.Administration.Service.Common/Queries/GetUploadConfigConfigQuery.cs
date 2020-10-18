@@ -4,11 +4,11 @@ using XtraUpload.GrpcServices.Common;
 namespace XtraUpload.Administration.Service.Common
 {
     /// <summary>
-    /// Get the remote storage server config
+    /// Get the upload config of the remote storage server
     /// </summary>
-    public class GetStorageServerConfigQuery : IRequest<UploadOptionsResult>
+    public class GetUploadConfigConfigQuery : IRequest<UploadOptionsResult>
     {
-        public GetStorageServerConfigQuery(string serverAddress)
+        public GetUploadConfigConfigQuery(string serverAddress)
         {
             ServerAddress = serverAddress;
         }

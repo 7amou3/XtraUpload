@@ -14,13 +14,19 @@ namespace XtraUpload.GrpcServices
     /// </summary>
     public class gStorageManagerService : gStorageManager.gStorageManagerBase
     {
-        readonly IStorageClientProxy _storageProxy;
         readonly ICheckClientProxy _checkClientProxy;
+        readonly IUploadOptsClientProxy _uploadOptsProxy;
+        readonly IHardwareOptsClientProxy _hardwareProxy;
         readonly ILogger<gStorageManagerService> _logger;
-        public gStorageManagerService(IStorageClientProxy storageProxy, ICheckClientProxy checkClientProxy, ILogger<gStorageManagerService> logger)
+        public gStorageManagerService(
+            ICheckClientProxy checkClientProxy,
+            IUploadOptsClientProxy uploadOptsProxy,
+            IHardwareOptsClientProxy hardwareProxy,
+            ILogger<gStorageManagerService> logger)
         {
             _logger = logger;
-            _storageProxy = storageProxy;
+            _hardwareProxy = hardwareProxy;
+            _uploadOptsProxy = uploadOptsProxy;
             _checkClientProxy = checkClientProxy;
         }
         
@@ -53,7 +59,7 @@ namespace XtraUpload.GrpcServices
 
         public override async Task GetUploadOptions(IAsyncStreamReader<UploadOptsResponse> requestStream, IServerStreamWriter<UploadOptsRequest> responseStream, ServerCallContext context)
         {
-            _storageProxy.UploadOptsRequested += uploadOptionsRequested;
+            _uploadOptsProxy.UploadOptsRequested += uploadOptionsRequested;
             try
             {
                 
@@ -61,14 +67,14 @@ namespace XtraUpload.GrpcServices
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
 
-                    _storageProxy.SetUploadOptions(message.UploadOptions.Convert(), message.ServerAddress);
+                    _uploadOptsProxy.SetUploadOptions(message.UploadOptions.Convert(), message.ServerAddress);
                 }
                 
             }
             finally
             {
                 _logger.LogError("Connection lost with the remote storage server");
-                _storageProxy.UploadOptsRequested -= uploadOptionsRequested;
+                _uploadOptsProxy.UploadOptsRequested -= uploadOptionsRequested;
             }
 
             async void uploadOptionsRequested(object sender, UploadOptsRequestedEventArgs e)
@@ -79,5 +85,32 @@ namespace XtraUpload.GrpcServices
             }
         }
 
+        public override async Task GetHardwareOptions(IAsyncStreamReader<HardwareOptsResponse> requestStream, IServerStreamWriter<HardwareOptsRequest> responseStream, ServerCallContext context)
+        {
+            _hardwareProxy.HardwareOptionsRequested += hardwareOptionsRequested;
+            try
+            {
+
+                await foreach (var message in requestStream.ReadAllAsync())
+                {
+                    _logger.LogDebug("Request received from " + message.ServerAddress);
+
+                    _hardwareProxy.SetHardwareOptions(message.HardwareOptions.Convert(), message.ServerAddress);
+                }
+
+            }
+            finally
+            {
+                _logger.LogError("Connection lost with the remote storage server");
+                _hardwareProxy.HardwareOptionsRequested -= hardwareOptionsRequested;
+            }
+
+            async void hardwareOptionsRequested(object sender, HardwareOptsRequestedEventArgs e)
+            {
+                _logger.LogDebug("Sending request to " + e.ServerAddress);
+
+                await responseStream.WriteAsync(new HardwareOptsRequest() { ServerAddress = e.ServerAddress });
+            }
+        }
     }
 }

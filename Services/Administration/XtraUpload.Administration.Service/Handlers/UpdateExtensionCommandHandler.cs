@@ -5,7 +5,7 @@ using XtraUpload.Administration.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 
-namespace XtraUpload.Administration.Service.Handlers
+namespace XtraUpload.Administration.Service
 {
     public class UpdateExtensionCommandHandler : IRequestHandler<UpdateExtensionCommand, FileExtensionResult>
     {

@@ -9,10 +9,9 @@ using XtraUpload.GrpcServices.Common;
 namespace XtraUpload.GrpcServices
 {
     /// <summary>
-    /// Singleton class used to interact with the connected storage clients, retrieve configuration,...
-    /// Connexion type for a storage client is duplex
+    /// Singleton class used to interact with the connected storage clients to retrive upload configuration
     /// </summary>
-    public class StorageClientProxy : IStorageClientProxy
+    public class UploadOptsClientProxy : IUploadOptsClientProxy
     {
         /// <summary>
         /// Max time to wait before request timed out (in miliseconds)
@@ -29,18 +28,18 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Logger instance
         /// </summary>
-        private readonly ILogger<StorageClientProxy> _logger;
+        private readonly ILogger<UploadOptsClientProxy> _logger;
 
         /// <summary>
-        /// Create new instance of <see cref="StorageClientProxy"/>
+        /// Create new instance of <see cref="UploadOptsClientProxy"/>
         /// </summary>
-        public StorageClientProxy(ILogger<StorageClientProxy> logger)
+        public UploadOptsClientProxy(ILogger<UploadOptsClientProxy> logger)
         {
             _logger = logger;
         }
 
         /// <summary>
-        /// Event raised to make a request to the designated client storage
+        /// Event raised to read upload options of designated client storage
         /// </summary>
         public event EventHandler<UploadOptsRequestedEventArgs> UploadOptsRequested;
 
@@ -90,6 +89,7 @@ namespace XtraUpload.GrpcServices
 
             return Result;
         }
+
 
     }
 }

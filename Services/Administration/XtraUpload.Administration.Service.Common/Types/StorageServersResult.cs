@@ -7,4 +7,9 @@ namespace XtraUpload.Administration.Service.Common
     {
         public IEnumerable<StorageServer> Servers { get; set; }
     }
+
+    public class StorageServerResult : OperationResult
+    {
+        public StorageServer Server { get; set; }
+    }
 }

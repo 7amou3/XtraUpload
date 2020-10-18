@@ -11,6 +11,7 @@ using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 using MediatR;
 using XtraUpload.StorageManager.Common;
+using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.StorageManager.Host
 {
@@ -30,7 +31,7 @@ namespace XtraUpload.StorageManager.Host
                 }
                 else return null;
             });
-            app.ApplicationServices.GetService<StartableService>().Start();
+            app.ApplicationServices.GetService<StartableServices>().Start();
         }
         public static void AddStorageManager(this IServiceCollection services, IConfiguration config)
         {
@@ -38,7 +39,7 @@ namespace XtraUpload.StorageManager.Host
             services.AddSingleton<AvatarUploadService>();
             services.AddSingleton<FileUploadService>();
             services.AddSingleton<LoggerInterceptor>();
-            services.AddSingleton<StartableService>();
+            services.AddSingleton<StartableServices>();
             services.AddImageSharp();
 
             // Add grpc clients
@@ -79,6 +80,12 @@ namespace XtraUpload.StorageManager.Host
             services.Configure<UploadOptions>(uploadSection);
             services.ConfigureWritable<UploadOptions>(uploadSection);
 
+            // Available hardware
+            IConfigurationSection hardwareSection = config.GetSection(nameof(HardwareCheckOptions));
+            services.Configure<HardwareCheckOptions>(hardwareSection);
+            services.ConfigureWritable<HardwareCheckOptions>(hardwareSection);
+
+            // Urls config
             IConfigurationSection urlsSection = config.GetSection(nameof(UrlsConfig));
             services.Configure<UrlsConfig>(urlsSection);
             services.ConfigureWritable<UrlsConfig>(urlsSection);

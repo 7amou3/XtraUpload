@@ -262,12 +262,28 @@ namespace XtraUpload.WebApi.Controllers
             return HandleResult(Result, Result.Servers);
         }
 
-        [HttpGet("storageserverconfig")]
-        public async Task<IActionResult> StorageServerConfig(string address)
+        [HttpGet("uploadconfig")]
+        public async Task<IActionResult> UploadConfig(string address)
         {
-            var Result = await _mediatr.Send(new GetStorageServerConfigQuery(address));
+            var Result = await _mediatr.Send(new GetUploadConfigConfigQuery(address));
 
             return Ok(Result);
+        }
+
+        [HttpGet("hardwareconfig")]
+        public async Task<IActionResult> HardwareOptsConfig(string address)
+        {
+            var Result = await _mediatr.Send(new GetHardwareConfigQuery(address));
+
+            return Ok(Result);
+        }
+
+        [HttpPost("storageserver")]
+        public async Task<IActionResult> AddStorageServer(AddStorageServerCommand storageServer)
+        {
+            StorageServerResult Result = await _mediatr.Send(storageServer);
+
+            return HandleResult(Result, _mapper.Map<StorageServerDto>(Result.Server));
         }
     }
 }

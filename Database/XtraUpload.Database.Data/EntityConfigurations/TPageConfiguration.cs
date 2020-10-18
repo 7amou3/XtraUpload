@@ -12,6 +12,7 @@ namespace XtraUpload.Database.Data
         {
             // Primary key
             builder.HasKey(p => p.Id);
+            builder.Property(p => p.Id).ValueGeneratedNever();
             // Index
             builder.HasIndex(u => u.Name).HasName("Name").IsUnique();
             // Fields length

@@ -1,4 +1,5 @@
 ﻿using XtraUpload.Authentication.Service.Common;
+using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
 

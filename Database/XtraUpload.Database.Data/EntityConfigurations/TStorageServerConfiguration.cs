@@ -13,6 +13,8 @@ namespace XtraUpload.Database.Data
         public void Configure(EntityTypeBuilder<StorageServer> builder)
         {
             builder.HasKey(s => s.Id);
+            // Let Ef generate ids
+            builder.Property(s => s.Id).ValueGeneratedOnAdd();
             // Index
             builder.HasIndex(u => u.Address).HasName("IpAddress").IsUnique();
             // Each SS has many entries in the Files table

@@ -34,7 +34,7 @@ export abstract class ComponentBase implements OnDestroy {
  }
  handleError(error) {
   if (error?.error?.errorContent) {
-    throw new Error(error?.error?.errorContent?.message);
+    throw new Error('Error 400: ' + error?.error?.errorContent?.message);
   } else {
     throw error;
   }

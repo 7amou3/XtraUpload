@@ -12,24 +12,27 @@ namespace XtraUpload.StorageManager.Service
     /// <summary>
     /// Starts and maintain a duplex connexion with the main server in order to retrieve live configuration, check connectivity..
     /// </summary>
-    public class StartableService
+    public class StartableServices
     {
         const short RETRY_DELAY = 10000;
         readonly UrlsConfig _urls;
-        readonly UploadOptions _uploadOpts;
-        readonly ILogger<StartableService> _logger;
+        readonly IOptionsMonitor<UploadOptions> _uploadOpts;
+        readonly IOptionsMonitor<HardwareCheckOptions> _hardwareOpts;
         readonly gStorageManager.gStorageManagerClient _storageClient;
+        readonly ILogger<StartableServices> _logger;
 
-        public StartableService(
+        public StartableServices(
             gStorageManager.gStorageManagerClient storageClient,
+            IOptionsMonitor<HardwareCheckOptions> hardwareOpts,
             IOptionsMonitor<UploadOptions> uploadOpts,
             IOptions<UrlsConfig> urls,
-            ILogger<StartableService> logger)
+            ILogger<StartableServices> logger)
         {
             _logger = logger;
             _urls = urls.Value;
-            _uploadOpts = uploadOpts.CurrentValue;
             _storageClient = storageClient;
+            _uploadOpts = uploadOpts;
+            _hardwareOpts = hardwareOpts;
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace XtraUpload.StorageManager.Service
             // Queu this task to run on background thread, and to free the caller
             Task.Run(() =>
             {
-                Task.WaitAll(StartStorageServerCheck(), StartStorageServerConfigRetrieval());
+                Task.WaitAll(StartStorageServerCheck(), StartUploadConfigRetrieval(), StartHardwareConfigRetrieval());
             });
         }
         private async Task StartStorageServerCheck()
@@ -73,7 +76,7 @@ namespace XtraUpload.StorageManager.Service
                 await StartStorageServerCheck();
             }
         }
-        private async Task StartStorageServerConfigRetrieval()
+        private async Task StartUploadConfigRetrieval()
         {
             try
             {
@@ -90,9 +93,9 @@ namespace XtraUpload.StorageManager.Service
                                 ServerAddress = _urls.ServerUrl,
                                 UploadOptions = new gUploadOptions() 
                                 {
-                                    ChunkSize = _uploadOpts.ChunkSize,
-                                    Expiration = _uploadOpts.Expiration,
-                                    UploadPath = _uploadOpts.UploadPath 
+                                    ChunkSize = _uploadOpts.CurrentValue.ChunkSize,
+                                    Expiration = _uploadOpts.CurrentValue.Expiration,
+                                    UploadPath = _uploadOpts.CurrentValue.UploadPath 
                                 }
                             });
                         }
@@ -111,9 +114,48 @@ namespace XtraUpload.StorageManager.Service
                 _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
-                await StartStorageServerConfigRetrieval();
+                await StartUploadConfigRetrieval();
             }
         }
+        private async Task StartHardwareConfigRetrieval()
+        {
+            try
+            {
+                using (var call = _storageClient.GetHardwareOptions())
+                {
+                    _logger.LogDebug("Start connection");
 
+                    await foreach (var message in call.ResponseStream.ReadAllAsync())
+                    {
+                        if (_urls.ServerUrl == message.ServerAddress)
+                        {
+                            await call.RequestStream.WriteAsync(new HardwareOptsResponse()
+                            {
+                                ServerAddress = _urls.ServerUrl,
+                                HardwareOptions = new gHardwareOptions()
+                                {
+                                    MemoryThreshold = _hardwareOpts.CurrentValue.MemoryThreshold,
+                                    StorageThreshold = _hardwareOpts.CurrentValue.StorageThreshold
+                                }
+                            });
+                        }
+                    }
+
+                    _logger.LogDebug("Disconnecting");
+                    await call.RequestStream.CompleteAsync();
+                }
+            }
+            catch (Exception _ex)
+            {
+                _logger.LogError(_ex.Message);
+            }
+            finally
+            {
+                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                await Task.Delay(RETRY_DELAY);
+                // Retry new connection
+                await StartHardwareConfigRetrieval();
+            }
+        }
     }
 }

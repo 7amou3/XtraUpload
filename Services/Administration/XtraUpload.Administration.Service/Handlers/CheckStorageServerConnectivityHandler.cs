@@ -8,7 +8,7 @@ using XtraUpload.Administration.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.GrpcServices.Common;
 
-namespace XtraUpload.Administration.Service.Handlers
+namespace XtraUpload.Administration.Service
 {
     public class CheckStorageServerConnectivityHandler : IRequestHandler<CheckStorageServerConnectivityQuery, OperationResult>
     {

@@ -5,12 +5,12 @@ using XtraUpload.Domain;
 namespace XtraUpload.GrpcServices.Common
 {
     /// <summary>
-    /// Singleton instance used to interact with the connected storage clients, retrieve configuration,...
+    /// Singleton instance used to interact with the connected storage clients to retrieve upload configuration
     /// </summary>
-    public interface IStorageClientProxy
+    public interface IUploadOptsClientProxy
     {
         /// <summary>
-        /// Event raised to make a request to the designated client storage (must be called only in the GrpcServices project)
+        /// Event raised to read upload options of designated client storage
         /// </summary>
         event EventHandler<UploadOptsRequestedEventArgs> UploadOptsRequested;
         /// <summary>

@@ -22,8 +22,9 @@ namespace XtraUpload.GrpcServices
             // Add grpc server
             services.AddGrpc();
             // Register services
-            services.AddSingleton<IStorageClientProxy, StorageClientProxy>();
             services.AddSingleton<ICheckClientProxy, CheckClientProxy>();
+            services.AddSingleton<IUploadOptsClientProxy, UploadOptsClientProxy>();
+            services.AddSingleton<IHardwareOptsClientProxy, HardwareOptsClientProxy>();
         }
     }
 }
