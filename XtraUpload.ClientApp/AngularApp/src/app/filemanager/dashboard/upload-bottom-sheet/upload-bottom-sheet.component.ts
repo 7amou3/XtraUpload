@@ -72,6 +72,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       upstatus.size = upload.size;
       const fileToUpload = { file: upload, uploadStatus$: new ReplaySubject<UploadStatus>(), name: upload.name, size: upload.size, downloadUrl: null };
       this.files.push(fileToUpload);
+      console.log(this.files)
       fileToUpload.uploadStatus$.next(upstatus);
     });
     const numFilesToUpload = this.files.filter(s => s.file).length;
@@ -96,7 +97,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       currentFolderId = 'root';
     }
     // Sequentialy process uploads
-    forEachPromise(this.files, this.uploadPromise, new UploadContext(this.fileMngService, this.files, this.uploadSetting, this.onDestroy, currentFolderId))
+    forEachPromise(this.files.filter(s => s.file != null), this.uploadPromise, new UploadContext(this.fileMngService, this.files, this.uploadSetting, this.onDestroy, currentFolderId))
     .then(() => {});
   }
   uploadPromise(upload: FileUpload, context: UploadContext) {

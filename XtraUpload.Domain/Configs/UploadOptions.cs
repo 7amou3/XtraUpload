@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace XtraUpload.StorageManager.Common
+namespace XtraUpload.Domain
 {
     /// <summary>
     /// Upload configuration options

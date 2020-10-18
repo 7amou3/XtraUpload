@@ -19,6 +19,9 @@
     <Protobuf Include="..\..\GrpcServices\Protos\filestorage.proto" GrpcServices="Client">
       <Link>Protos\filestorage.proto</Link>
     </Protobuf>
+    <Protobuf Include="..\..\GrpcServices\Protos\storagemanager.proto" GrpcServices="Client">
+      <Link>Protos\storagemanager.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\..\GrpcServices\Protos\domain\*" GrpcServices="None" />
   </ItemGroup>
 

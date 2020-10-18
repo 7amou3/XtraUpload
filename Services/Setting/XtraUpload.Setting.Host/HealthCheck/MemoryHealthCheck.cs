@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.Setting.Service.Common;
+using XtraUpload.Domain;
 
 namespace XtraUpload.Setting.Host
 {

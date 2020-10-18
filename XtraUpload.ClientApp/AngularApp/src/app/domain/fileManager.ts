@@ -160,6 +160,13 @@ export interface IUploadSettings {
 export interface IStorageServer {
   id: string;
   address: string;
+  state: serverState;
+}
+export enum serverState {
+  Unknow = 0,
+  Active,
+  Passive,
+  Disabled
 }
 export interface IFilteredUser {
   users: IProfile[];
@@ -181,6 +188,20 @@ export interface IEditExtension {
 export interface IBulkDelete {
   files: IFileInfo [];
   folders: [{files: IFileInfo[], folders: IFolderInfo[]}];
+}
+export interface IUploadOptions {
+  chunkSize: number;
+  expiration: number;
+  uploadPath: string;
+}
+export interface IHardwareOptions {
+  memoryThreshold: number;
+  storageThreshold: number;
+}
+export interface IAddStorageServer {
+  storageInfo: IStorageServer;
+  uploadOpts: IUploadOptions;
+  hardwareOpts: IHardwareOptions;
 }
 export enum itemAction {
   info = 0,

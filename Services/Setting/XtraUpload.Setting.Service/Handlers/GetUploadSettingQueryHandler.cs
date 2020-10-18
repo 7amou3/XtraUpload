@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
-using XtraUpload.FileManager.Service.Common;
 using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.Setting.Service
@@ -46,7 +45,7 @@ namespace XtraUpload.Setting.Service
             try
             {
                 var extensions = await _unitOfWork.FileExtensions.GetAll();
-                Result.UsedSpace = await _unitOfWork.Files.SumAsync(s => s.UserId == userId, s => s.Size);
+                Result.UsedSpace = await _unitOfWork.Files.SumAsync(s => (s.UserId == userId && s.Status != ItemStatus.To_Be_Deleted), s => s.Size);
                 Result.StorageSpace = double.Parse(_caller.Claims.Single(c => c.Type == "StorageSpace").Value);
                 Result.ConcurrentUpload = int.Parse(_caller.Claims.Single(c => c.Type == "ConcurrentUpload").Value);
                 Result.MaxFileSize = int.Parse(_caller.Claims.Single(c => c.Type == "MaxFileSize").Value);

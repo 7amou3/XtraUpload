@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Security.Permissions;
 using System.Security;
-using XtraUpload.StorageManager.Common;
+using XtraUpload.Domain;
 
 namespace XtraUpload.StorageManager.Host
 {

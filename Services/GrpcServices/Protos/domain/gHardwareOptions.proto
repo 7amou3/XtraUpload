@@ -1,0 +1,7 @@
+syntax = "proto3";
+option csharp_namespace = "XtraUpload.Protos";
+
+message gHardwareOptions {
+    uint32 MemoryThreshold = 1;
+    uint32 storageThreshold = 2;
+}

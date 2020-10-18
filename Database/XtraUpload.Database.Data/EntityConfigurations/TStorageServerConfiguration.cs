@@ -13,14 +13,17 @@ namespace XtraUpload.Database.Data
         public void Configure(EntityTypeBuilder<StorageServer> builder)
         {
             builder.HasKey(s => s.Id);
+            // Let Ef generate ids
+            builder.Property(s => s.Id).ValueGeneratedOnAdd();
             // Index
             builder.HasIndex(u => u.Address).HasName("IpAddress").IsUnique();
-            // Each SS have one entry in the File join table
+            // Each SS has many entries in the Files table
             builder.HasMany(s => s.Files).WithOne(e => e.StorageServer).HasForeignKey(ur => ur.StorageServerId).OnDelete(DeleteBehavior.Cascade);
 
             StorageServer server = new StorageServer()
             {
                 Id = Guid.NewGuid(),
+                State = ServerState.Active,
                 Address = "https://localhost:5002"
             };
             builder.HasData(server);

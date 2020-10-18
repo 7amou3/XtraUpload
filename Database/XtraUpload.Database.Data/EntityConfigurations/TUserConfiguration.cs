@@ -31,7 +31,7 @@ namespace XtraUpload.Database.Data
             // Each User have one entry in the Role join table
             builder.HasOne(u => u.Role).WithMany(e => e.Users).HasForeignKey(ur => ur.RoleId).OnDelete(DeleteBehavior.Cascade);
             // Each user can have many Files
-            builder.HasMany(u => u.Files).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(u => u.Files).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.SetNull);
             // Each user can have many Folders
             builder.HasMany(u => u.Folders).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Cascade);
             // Each user can have many confirmationtokens

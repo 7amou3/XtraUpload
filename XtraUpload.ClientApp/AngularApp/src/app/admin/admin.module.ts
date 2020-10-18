@@ -22,9 +22,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { CdkAccordionModule} from '@angular/cdk/accordion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'app/shared';
@@ -59,6 +60,8 @@ import { EditpageComponent } from './pages/dialogs/editpage/editpage.component';
 import { DeletepageComponent } from './pages/dialogs/deletepage/deletepage.component';
 import {NgxWigModule} from 'ngx-wig';
 import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
+import { ServersComponent } from './servers/servers.component';
+import { AddserverComponent } from './servers/dialogs/addserver/addserver.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +89,9 @@ import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
     PagesComponent,
     EditpageComponent,
     DeletepageComponent,
-    AddpageComponent
+    AddpageComponent,
+    ServersComponent,
+    AddserverComponent
   ],
   imports: [
     CommonModule,
@@ -115,6 +120,7 @@ import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
     CdkAccordionModule,
     MatAutocompleteModule,
     MatCheckboxModule,
+    MatStepperModule,
     MatPaginatorModule,
     ChartsModule,
     PipeModule,

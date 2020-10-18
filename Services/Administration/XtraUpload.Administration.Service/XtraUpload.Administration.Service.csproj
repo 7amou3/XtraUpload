@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Database\XtraUpload.Database.Data.Common\XtraUpload.Database.Data.Common.csproj" />
+    <ProjectReference Include="..\..\GrpcServices\XtraUpload.GrpcServices.Common\XtraUpload.GrpcServices.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.Administration.Service.Common\XtraUpload.Administration.Service.Common.csproj" />
   </ItemGroup>
 

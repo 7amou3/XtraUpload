@@ -41,7 +41,7 @@ namespace XtraUpload.Setting.Service
         {
             OperationResult result = new OperationResult();
 
-            if (request.ConfigSection is UploadOptions)
+            if (request.ConfigSection is Domain.UploadOptions)
             {
                 //await _uploadOpts.Update(s =>
                 //{

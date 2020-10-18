@@ -1,4 +1,5 @@
 ﻿using System;
+using XtraUpload.Domain;
 
 namespace XtraUpload.WebApi
 {
@@ -6,5 +7,6 @@ namespace XtraUpload.WebApi
     {
         public Guid Id { get; set; }
         public string Address { get; set; }
+        public ServerState State { get; set; }
     }
 }

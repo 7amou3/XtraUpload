@@ -27,6 +27,11 @@ const TREE_DATA: IMenuNode[] = [
     ]
   },
   {
+    name: 'Storage Servers',
+    iconname: 'storage',
+    url: '/administration/servers'
+  },
+  {
     name: 'Settings',
     iconname: 'settings',
     url: '/administration/settings'

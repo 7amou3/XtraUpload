@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Observable, Subject } from 'rxjs';
 import { IAdminOverView, IDateRange, IItemCount, IFileTypeCount,
     IHealthCheck, IPaging, IFileExtension, IFilteredUser, ISearchFile, IEditExtension, IFileInfo,
-    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage } from 'app/domain';
+    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer, IUploadOptions, IHardwareOptions, IAddStorageServer } from 'app/domain';
 
 @Injectable()
 export class AdminService {
@@ -181,5 +181,28 @@ export class AdminService {
     }
     deletePage(deletePage: IPage) {
         return this.http.delete('admin/page/' + deletePage.id);
+    }
+
+    getStorageServers(): Observable<IStorageServer[]> {
+        return this.http.get<IStorageServer[]>('admin/storageservers');
+    }
+    checkstorageconnectivity(address: string) {
+        const params = new HttpParams()
+            .set('address', address);
+        return this.http.get('admin/checkstorageconnectivity', {params: params});
+    }
+    getUploadConfigrConfig(address: string) {
+        const params = new HttpParams()
+            .set('address', address);
+        return this.http.get('admin/uploadconfig', {params: params});
+    }
+    getHardwareConfig(address: string) {
+        const params = new HttpParams()
+            .set('address', address);
+        return this.http.get('admin/hardwareconfig', {params: params});
+    }
+
+    addStorageServer(addserver: IAddStorageServer): Observable<IStorageServer> {
+        return this.http.post<IStorageServer>('admin/storageserver', addserver);
     }
 }

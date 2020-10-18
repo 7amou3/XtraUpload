@@ -24,7 +24,7 @@ namespace XtraUpload.Administration.Service
         {
             PagingResult<FileItemExtended> Result = new PagingResult<FileItemExtended>();
 
-            Expression<Func<FileItem, bool>> criteria = s => true;
+            Expression<Func<FileItem, bool>> criteria = s => s.Status != ItemStatus.To_Be_Deleted;
 
             if (request.PageSearch.Start != null && request.PageSearch.End != null)
             {

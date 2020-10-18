@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
-using XtraUpload.FileManager.Service.Common;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 
@@ -185,7 +184,7 @@ namespace XtraUpload.WebApi.Controllers
         }
 
         [HttpPatch("uploadOptions")]
-        public async Task<IActionResult> UpdateUploadOptions(UploadOptions model)
+        public async Task<IActionResult> UpdateUploadOptions(Domain.UploadOptions model)
         {
             OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
@@ -246,6 +245,45 @@ namespace XtraUpload.WebApi.Controllers
             OperationResult result = await _mediatr.Send(new DeletePageCommand(id));
 
             return HandleResult(result);
+        }
+        [HttpGet("checkstorageconnectivity")]
+        public async Task<IActionResult> CheckConnectivity(string address)
+        {
+            var Result = await _mediatr.Send(new CheckStorageServerConnectivityQuery(address));
+
+            return Ok(Result);
+        }
+
+        [HttpGet("storageservers")]
+        public async Task<IActionResult> StorageServers()
+        {
+            var Result = await _mediatr.Send(new GetStorageServersQuery());
+
+            return HandleResult(Result, Result.Servers);
+        }
+
+        [HttpGet("uploadconfig")]
+        public async Task<IActionResult> UploadConfig(string address)
+        {
+            var Result = await _mediatr.Send(new GetUploadConfigConfigQuery(address));
+
+            return Ok(Result);
+        }
+
+        [HttpGet("hardwareconfig")]
+        public async Task<IActionResult> HardwareOptsConfig(string address)
+        {
+            var Result = await _mediatr.Send(new GetHardwareConfigQuery(address));
+
+            return Ok(Result);
+        }
+
+        [HttpPost("storageserver")]
+        public async Task<IActionResult> AddStorageServer(AddStorageServerCommand storageServer)
+        {
+            StorageServerResult Result = await _mediatr.Send(storageServer);
+
+            return HandleResult(Result, _mapper.Map<StorageServerDto>(Result.Server));
         }
     }
 }

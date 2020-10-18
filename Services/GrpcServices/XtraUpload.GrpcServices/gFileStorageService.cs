@@ -12,6 +12,9 @@ using XtraUpload.Protos;
 
 namespace XtraUpload.GrpcServices
 {
+    /// <summary>
+    /// Service definition for file storage server, the client may request to update/delete, whatever operation on a file
+    /// </summary>
     public class gFileStorageService : gFileStorage.gFileStorageBase
     {
         readonly IMediator _mediatr;

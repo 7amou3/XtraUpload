@@ -21,6 +21,10 @@ namespace XtraUpload.Domain
         /// </summary>
         public string Address { get; set; }
         /// <summary>
+        /// Server state
+        /// </summary>
+        public ServerState State { get; set; }
+        /// <summary>
         /// Navigation property
         /// </summary>
         public virtual ICollection<FileItem> Files { get; set; }

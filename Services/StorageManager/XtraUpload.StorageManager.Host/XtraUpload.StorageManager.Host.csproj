@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Setting\XtraUpload.Setting.Service.Common\XtraUpload.Setting.Service.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.StorageManager.Common\XtraUpload.StorageManager.Common.csproj" />
     <ProjectReference Include="..\XtraUpload.StorageManager.Service\XtraUpload.StorageManager.Service.csproj" />
   </ItemGroup>

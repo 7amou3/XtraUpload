@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.Administration.Service
 {

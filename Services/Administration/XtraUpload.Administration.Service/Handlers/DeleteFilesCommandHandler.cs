@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.Administration.Service
 {
@@ -20,37 +18,26 @@ namespace XtraUpload.Administration.Service
     public class DeleteFilesCommandHandler : IRequestHandler<DeleteFilesCommand, DeleteFilesResult>
     {
         readonly IUnitOfWork _unitOfWork;
-        readonly UploadOptions _uploadOpts;
 
-        public DeleteFilesCommandHandler(IUnitOfWork unitOfWork, IOptionsMonitor<UploadOptions> uploadsOpts)
+        public DeleteFilesCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _uploadOpts = uploadsOpts.CurrentValue;
         }
 
         public async Task<DeleteFilesResult> Handle(DeleteFilesCommand request, CancellationToken cancellationToken)
         {
             DeleteFilesResult result = new DeleteFilesResult();
             IEnumerable<FileItem> files = await _unitOfWork.Files.FindAsync(s => request.FilesId.Contains(s.Id));
-            if (files != null && files.Any())
+            if (files.Any())
             {
-                // Remove from collection
-                _unitOfWork.Files.RemoveRange(files);
+                // Mark files for deletion
+                foreach (var file in files)
+                {
+                    file.Status = ItemStatus.To_Be_Deleted;
+                }
 
                 // Save to db
                 result = await _unitOfWork.CompleteAsync(result);
-                if (result.State == OperationState.Success)
-                {
-                    // Delete from disk (no need to queue to background thread, because Directory.Delete does not block)
-                    foreach (FileItem file in files)
-                    {
-                        string folderPath = Path.Combine(_uploadOpts.UploadPath, file.UserId, file.Id);
-                        if (Directory.Exists(folderPath))
-                        {
-                            Directory.Delete(folderPath, true);
-                        }
-                    }
-                }
             }
             else
             {
