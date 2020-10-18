@@ -22,9 +22,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { CdkAccordionModule} from '@angular/cdk/accordion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'app/shared';
@@ -119,6 +120,7 @@ import { AddserverComponent } from './servers/dialogs/addserver/addserver.compon
     CdkAccordionModule,
     MatAutocompleteModule,
     MatCheckboxModule,
+    MatStepperModule,
     MatPaginatorModule,
     ChartsModule,
     PipeModule,

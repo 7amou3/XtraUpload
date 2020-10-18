@@ -191,4 +191,9 @@ export class AdminService {
             .set('address', address);
         return this.http.get('admin/checkstorageconnectivity', {params: params});
     }
+    GetStorageServerConfig(address: string) {
+        const params = new HttpParams()
+            .set('address', address);
+        return this.http.get('admin/storageserverconfig', {params: params});
+    }
 }

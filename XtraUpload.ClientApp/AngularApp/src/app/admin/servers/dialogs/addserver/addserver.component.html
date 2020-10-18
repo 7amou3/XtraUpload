@@ -1,41 +1,76 @@
 <h2 mat-dialog-title>Add Storage Server</h2>
 <app-message [message$]="message$"></app-message>
-<form [formGroup]="addFormGroup" (ngSubmit)="onSubmit(addFormGroup.value)">
-    <mat-dialog-content>
+<mat-vertical-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="serverInfoFormGroup">
+      <form [formGroup]="serverInfoFormGroup" (ngSubmit)="onSubmit(serverInfoFormGroup.value)" class="font-14">
+        <ng-template matStepLabel>Server Info</ng-template>
         <mat-form-field>
             <mat-label>Server Address (Ip or Hostname)</mat-label>
             <input matInput type="text" formControlName="address">
-            <a mat-button *ngIf="!address.invalid" matSuffix 
-            mat-icon-button
-            matTooltip="Check Connectivity"
-            aria-label="Check Connectivity"
-            [disabled]="checkingConnectivity"
-            (click)="onConnectivityCheck()">
+            <a mat-button *ngIf="!address.invalid" matSuffix mat-icon-button matTooltip="Check Connectivity"
+                aria-label="Check Connectivity" [disabled]="checkingConnectivity" (click)="onConnectivityCheck()">
                 <mat-icon>network_check</mat-icon>
             </a>
-            <mat-error *ngIf="address.invalid && !address.hasError('itemExists')">The server address must be a valid and secure (https) Ip or host name</mat-error>
+            <mat-error *ngIf="address.invalid && !address.hasError('itemExists')">The server address must be a valid and
+                secure (https) Ip or host name</mat-error>
             <mat-error *ngIf="address.hasError('itemExists')">A server with the same address already exists.</mat-error>
         </mat-form-field>
         <div *ngIf="checkingConnectivity" fxLayout="row wrap" fxLayoutAlign="center center">
             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
+        <!-- Server state -->
         <mat-form-field appearance="fill">
             <mat-label>Select server state</mat-label>
-            <mat-select [formControl]="optionControl" [disabled]="!addressReachable" required>
+            <mat-select [formControl]="optionControl" required>
                 <mat-option *ngFor="let option of serverOptions" [value]="option">
                     {{option.name}}
                 </mat-option>
             </mat-select>
             <mat-hint>{{optionControl.value.hint}}</mat-hint>
-          </mat-form-field>
+        </mat-form-field>
+        <div>
+          <button type="button" [disabled]="!addressReachable || !serverInfoFormGroup.valid" mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="uploadOptsFormGroup">
+      <form [formGroup]="uploadOptsFormGroup" class="font-14">
+        <ng-template matStepLabel>Upload Options</ng-template>
+        <!--Upload path -->
+        <mat-form-field>
+            <mat-label>Upload Path</mat-label>
+            <input matInput type="text" formControlName="uploadPath" required>
+            <mat-hint>The full path to the upload folder (must be writable)</mat-hint>
+            <mat-error *ngIf="uploadPath.invalid">{{getErrorMessage(uploadPath)}}</mat-error>
+        </mat-form-field>
+        <!--ChunkSize-->
+        <mat-form-field>
+            <mat-label>Chunk Size (Mb)</mat-label>
+            <input matInput type="number" formControlName="chunkSize" required>
+            <mat-hint>The size of the uploaded file's chunk must be less than the limit of your server
+                request body size</mat-hint>
+            <mat-error *ngIf="chunkSize.invalid">{{getErrorMessage(chunkSize)}}</mat-error>
+        </mat-form-field>
+        <!--Expiration-->
+        <mat-form-field>
+            <mat-label>File Expiration (minutes)</mat-label>
+            <input matInput type="number" formControlName="expiration" required>
+            <mat-hint>Expiration time where incomplete files can no longer be updated </mat-hint>
+            <mat-error *ngIf="expiration.invalid">{{getErrorMessage(expiration)}}</mat-error>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
 
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button
-            mat-button color="accent"
-            [disabled]="!addFormGroup.valid || isBusy" type="submit"
-            >Add Server
-        </button>
-    </mat-dialog-actions>
-</form>

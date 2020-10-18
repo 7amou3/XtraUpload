@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using XtraUpload.Domain;
 using XtraUpload.Protos;
 using XtraUpload.StorageManager.Common;
 
@@ -15,13 +16,19 @@ namespace XtraUpload.StorageManager.Service
     {
         const short RETRY_DELAY = 10000;
         readonly UrlsConfig _urls;
+        readonly UploadOptions _uploadOpts;
         readonly ILogger<StartableService> _logger;
         readonly gStorageManager.gStorageManagerClient _storageClient;
 
-        public StartableService(gStorageManager.gStorageManagerClient storageClient, IOptions<UrlsConfig> urls, ILogger<StartableService> logger)
+        public StartableService(
+            gStorageManager.gStorageManagerClient storageClient,
+            IOptionsMonitor<UploadOptions> uploadOpts,
+            IOptions<UrlsConfig> urls,
+            ILogger<StartableService> logger)
         {
             _logger = logger;
             _urls = urls.Value;
+            _uploadOpts = uploadOpts.CurrentValue;
             _storageClient = storageClient;
         }
 
@@ -43,14 +50,11 @@ namespace XtraUpload.StorageManager.Service
                 using (var call = _storageClient.CheckConnectivity())
                 {
                     _logger.LogDebug("Start connection");
-                    while (await call.ResponseStream.MoveNext())
+                    await foreach (var message in call.ResponseStream.ReadAllAsync())
                     {
-                        await foreach (var message in call.ResponseStream.ReadAllAsync())
+                        if (_urls.ServerUrl == message.ServerAddress)
                         {
-                            if (_urls.ServerUrl == message.ServerAddress)
-                            {
-                                await call.RequestStream.WriteAsync(new ConnectivityResponse() { Status = new gRequestStatus() });
-                            }
+                            await call.RequestStream.WriteAsync(new ConnectivityResponse() { Status = new gRequestStatus() });
                         }
                     }
                     _logger.LogDebug("Disconnecting");
@@ -76,16 +80,24 @@ namespace XtraUpload.StorageManager.Service
                 using (var call = _storageClient.GetUploadOptions())
                 {
                     _logger.LogDebug("Start connection");
-                    while (await call.ResponseStream.MoveNext())
+
+                    await foreach (var message in call.ResponseStream.ReadAllAsync())
                     {
-                        await foreach (var message in call.ResponseStream.ReadAllAsync())
+                        if (_urls.ServerUrl == message.ServerAddress)
                         {
-                            if (_urls.ServerUrl == message.ServerAddress)
+                            await call.RequestStream.WriteAsync(new UploadOptsResponse() 
                             {
-                                await call.RequestStream.WriteAsync(new UploadOptsResponse() { UploadOptions = new gUploadOptions() { ChunkSize = 25, Expiration = 180, UploadPath = "some/path" } });
-                            }
+                                ServerAddress = _urls.ServerUrl,
+                                UploadOptions = new gUploadOptions() 
+                                {
+                                    ChunkSize = _uploadOpts.ChunkSize,
+                                    Expiration = _uploadOpts.Expiration,
+                                    UploadPath = _uploadOpts.UploadPath 
+                                }
+                            });
                         }
                     }
+
                     _logger.LogDebug("Disconnecting");
                     await call.RequestStream.CompleteAsync();
                 }

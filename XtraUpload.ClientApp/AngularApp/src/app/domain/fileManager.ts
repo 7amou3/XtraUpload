@@ -189,6 +189,11 @@ export interface IBulkDelete {
   files: IFileInfo [];
   folders: [{files: IFileInfo[], folders: IFolderInfo[]}];
 }
+export interface IUploadOptions {
+  chunkSize: number;
+  expiration: number;
+  uploadPath: string;
+}
 export enum itemAction {
   info = 0,
   rename,

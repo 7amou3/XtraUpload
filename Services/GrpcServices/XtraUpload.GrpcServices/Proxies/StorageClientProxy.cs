@@ -85,7 +85,7 @@ namespace XtraUpload.GrpcServices
             else
             {
                 _logger.LogError("Response timed out for server: " + serverAddress);
-                Result.ErrorContent = new ErrorContent("Timeout: Response not received, try again later.", ErrorOrigin.Server);
+                Result.ErrorContent = new ErrorContent("Timeout: Response not received, please check that the server is up and running.", ErrorOrigin.Server);
             }
 
             return Result;

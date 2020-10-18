@@ -21,7 +21,7 @@ namespace XtraUpload.Database.Data
             StorageServer server = new StorageServer()
             {
                 Id = Guid.NewGuid(),
-                State = ServerState.Unknown,
+                State = ServerState.Active,
                 Address = "https://localhost:5002"
             };
             builder.HasData(server);

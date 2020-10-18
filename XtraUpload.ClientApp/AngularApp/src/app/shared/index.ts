@@ -5,3 +5,4 @@ export * from './bytes.pipe';
 export * from './counter.pipe';
 export * from './loggedin.directive';
 export * from './message/message.module';
+export * from './storage.state.pipe';

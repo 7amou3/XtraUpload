@@ -13,6 +13,7 @@ service gStorageManager {
 
 message UploadOptsResponse {
 	gUploadOptions uploadOptions = 1;
+	string serverAddress = 2;
 }
 
 message UploadOptsRequest {

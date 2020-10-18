@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />
     <ProjectReference Include="..\..\Authentication\XtraUpload.Authentication.Service.Common\XtraUpload.Authentication.Service.Common.csproj" />
+    <ProjectReference Include="..\..\GrpcServices\XtraUpload.GrpcServices.Common\XtraUpload.GrpcServices.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
