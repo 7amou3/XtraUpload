@@ -25,6 +25,7 @@ namespace XtraUpload.Database.Data
             var query = _context.Files
                 .Include(s => s.StorageServer)
                 .Where(criteria)
+                .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
 
             return await query;

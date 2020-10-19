@@ -11,7 +11,6 @@ using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 using MediatR;
 using XtraUpload.StorageManager.Common;
-using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.StorageManager.Host
 {
