@@ -4,10 +4,10 @@ import "domain/gUser.proto";
 import "domain/gFileItem.proto";
 import "domain/gRequestStatus.proto";
 
-package gfilestorage;
+package gfilemanager;
 
 // The file storage service definition.
-service gFileStorage {
+service gFileManager {
   // Check grpc request is authorized
   rpc IsAuthorized (gIsAuthorizedRequest) returns (gIsAuthorizedResponse);
   // jwt should be passed in request header

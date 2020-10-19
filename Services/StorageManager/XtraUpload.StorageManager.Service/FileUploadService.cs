@@ -24,10 +24,10 @@ namespace XtraUpload.StorageManager.Service
     public class FileUploadService : BaseFileUpload
     {
         public FileUploadService(
-            gFileStorage.gFileStorageClient fileClient,
+            gFileManager.gFileManagerClient fileMngClient,
             IOptionsMonitor<UploadOptions> uploadOpts,
             ILogger<FileUploadService> logger
-            ) : base(fileClient, uploadOpts, logger, "/fileupload")
+            ) : base(fileMngClient, uploadOpts, logger, "/fileupload")
         {
         }
 
@@ -80,7 +80,7 @@ namespace XtraUpload.StorageManager.Service
             };
 
             // send the uploaded file info to the main app
-            gFileItemResponse response = await _storageClient.SaveFileAsync(new gFileItemRequest() { FileItem = fileitem });
+            gFileItemResponse response = await _fileMngClient.SaveFileAsync(new gFileItemRequest() { FileItem = fileitem });
             if (response == null)
             {
                 _logger.LogError("No response has been received from the server.", ErrorOrigin.Server);

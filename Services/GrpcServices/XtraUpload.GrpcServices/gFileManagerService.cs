@@ -15,11 +15,11 @@ namespace XtraUpload.GrpcServices
     /// <summary>
     /// Service definition for file storage server, the client may request to update/delete, whatever operation on a file
     /// </summary>
-    public class gFileStorageService : gFileStorage.gFileStorageBase
+    public class gFileManagerService : gFileManager.gFileManagerBase
     {
         readonly IMediator _mediatr;
 
-        public gFileStorageService(IMediator mediatr)
+        public gFileManagerService(IMediator mediatr)
         {
             _mediatr = mediatr;
         }

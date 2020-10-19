@@ -13,7 +13,7 @@ namespace XtraUpload.GrpcServices
         {
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<gFileStorageService>();
+                endpoints.MapGrpcService<gFileManagerService>();
                 endpoints.MapGrpcService<gStorageManagerService>();
             });
         }

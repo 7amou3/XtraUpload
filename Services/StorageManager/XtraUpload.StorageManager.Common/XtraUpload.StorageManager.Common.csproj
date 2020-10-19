@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\GrpcServices\Protos\filestorage.proto" GrpcServices="Client">
-      <Link>Protos\filestorage.proto</Link>
+    <Protobuf Include="..\..\GrpcServices\Protos\filemanager.proto" GrpcServices="Client">
+      <Link>Protos\filemanager.proto</Link>
     </Protobuf>
     <Protobuf Include="..\..\GrpcServices\Protos\storagemanager.proto" GrpcServices="Client">
       <Link>Protos\storagemanager.proto</Link>

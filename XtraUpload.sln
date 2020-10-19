@@ -75,7 +75,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XtraUpload.GrpcServices", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{42E34075-8898-4753-BDC5-B89597654437}"
 	ProjectSection(SolutionItems) = preProject
-		Services\GrpcServices\Protos\filestorage.proto = Services\GrpcServices\Protos\filestorage.proto
+		Services\GrpcServices\Protos\filemanager.proto = Services\GrpcServices\Protos\filemanager.proto
 		Services\GrpcServices\Protos\storagemanager.proto = Services\GrpcServices\Protos\storagemanager.proto
 	EndProjectSection
 EndProject

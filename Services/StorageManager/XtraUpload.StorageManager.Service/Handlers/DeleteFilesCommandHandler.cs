@@ -20,19 +20,19 @@ namespace XtraUpload.StorageManager.Service
     public class DeleteFilesCommandHandler : IRequestHandler<DeleteFilesCommand, DeleteFilesResult>
     {
         readonly UploadOptions _uploadOpt;
-        readonly gFileStorage.gFileStorageClient _storageClient;
+        readonly gFileManager.gFileManagerClient _fileMngClient;
 
-        public DeleteFilesCommandHandler(IOptionsMonitor<UploadOptions> uploadOpt, gFileStorage.gFileStorageClient storageClient)
+        public DeleteFilesCommandHandler(IOptionsMonitor<UploadOptions> uploadOpt, gFileManager.gFileManagerClient fileMngClient)
         {
             _uploadOpt = uploadOpt.CurrentValue;
-            _storageClient = storageClient;
+            _fileMngClient = fileMngClient;
         }
 
         public async Task<DeleteFilesResult> Handle(DeleteFilesCommand request, CancellationToken cancellationToken)
         {
             DeleteFilesResult result = new DeleteFilesResult();
 
-            var response = await _storageClient.GetFilesToDeleteAsync(new gGetFilesToDeleteRequest());
+            var response = await _fileMngClient.GetFilesToDeleteAsync(new gGetFilesToDeleteRequest());
 
             if (response == null)
             {
@@ -59,7 +59,7 @@ namespace XtraUpload.StorageManager.Service
             // Request to delete files from db
             gDeleteFilesRequest delRequest = new gDeleteFilesRequest();
             delRequest.FilesId.Add(response.FilesItem.Select(s => s.Id));
-            var deleteResponse = await _storageClient.DeleteFilesFromDbAsync(delRequest);
+            var deleteResponse = await _fileMngClient.DeleteFilesFromDbAsync(delRequest);
 
             if (deleteResponse == null)
             {

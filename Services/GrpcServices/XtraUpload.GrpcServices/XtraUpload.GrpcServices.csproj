@@ -15,7 +15,7 @@
     <ProjectReference Include="..\XtraUpload.GrpcServices.Common\XtraUpload.GrpcServices.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="..\Protos\filestorage.proto" GrpcServices="Server" />
+    <Protobuf Include="..\Protos\filemanager.proto" GrpcServices="Server" />
     <Protobuf Include="..\Protos\storagemanager.proto" GrpcServices="Server" />
     <Protobuf Include="..\Protos\domain\*" GrpcServices="None" />
   </ItemGroup>

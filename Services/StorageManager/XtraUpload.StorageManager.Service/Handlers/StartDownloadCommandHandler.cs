@@ -24,16 +24,16 @@ namespace XtraUpload.StorageManager.Service
         readonly HttpContext _httpContext;
         readonly UploadOptions _uploadOpt;
         readonly ILogger<StartDownloadCommandHandler> _logger;
-        readonly gFileStorage.gFileStorageClient _storageClient;
+        readonly gFileManager.gFileManagerClient _fileMngClient;
 
         public StartDownloadCommandHandler(
-            gFileStorage.gFileStorageClient storageClient,
+            gFileManager.gFileManagerClient fileMngClient,
             IHttpContextAccessor httpContextAccessor,
             IOptionsMonitor<UploadOptions> uploadOpt,
             ILogger<StartDownloadCommandHandler> logger)
         {
             _logger = logger;
-            _storageClient = storageClient;
+            _fileMngClient = fileMngClient;
             _uploadOpt = uploadOpt.CurrentValue;
             _httpContext = httpContextAccessor.HttpContext;
         }
@@ -48,7 +48,7 @@ namespace XtraUpload.StorageManager.Service
                 RequesterAddress = _httpContext.Request.Host.Value
             };
             // query the api
-            gDownloadFileResponse dResponse = await _storageClient.GetDownloadFileAsync(downloadRequest);
+            gDownloadFileResponse dResponse = await _fileMngClient.GetDownloadFileAsync(downloadRequest);
             if (dResponse == null)
             {
                 Result.ErrorContent = new ErrorContent("No response has been received from the server.", ErrorOrigin.Server);
@@ -90,7 +90,7 @@ namespace XtraUpload.StorageManager.Service
             await StartDownload(responseHeader, filePath, dResponse.DownloadSpeed);
 
             // Once download is completed we send request to increment download count
-            await _storageClient.FileDownloadCompletedAsync(new gDownloadCompletedRequest() 
+            await _fileMngClient.FileDownloadCompletedAsync(new gDownloadCompletedRequest() 
             {
                  FileId = dResponse.FileItem.Id,
                  RequesterIp = _httpContext.Request.Host.Value

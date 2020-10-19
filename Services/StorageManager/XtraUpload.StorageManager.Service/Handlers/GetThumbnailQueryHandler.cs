@@ -18,11 +18,11 @@ namespace XtraUpload.StorageManager.Service
     public class GetThumbnailQueryHandler : IRequestHandler<GetThumbnailQuery, AvatarUrlResult>
     {
         readonly UploadOptions _uploadOpt;
-        readonly gFileStorage.gFileStorageClient _storageClient;
+        readonly gFileManager.gFileManagerClient _fileMngClient;
 
-        public GetThumbnailQueryHandler(gFileStorage.gFileStorageClient storageClient, IOptionsMonitor<UploadOptions> uploadOpt)
+        public GetThumbnailQueryHandler(gFileManager.gFileManagerClient fileMngClient, IOptionsMonitor<UploadOptions> uploadOpt)
         {
-            _storageClient = storageClient;
+            _fileMngClient = fileMngClient;
             _uploadOpt = uploadOpt.CurrentValue;
         }
         public async Task<AvatarUrlResult> Handle(GetThumbnailQuery request, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ namespace XtraUpload.StorageManager.Service
             AvatarUrlResult Result = new AvatarUrlResult();
 
             // Get the file
-            var fileResponse = await _storageClient.GetFileByIdAsync(new gFileRequest() { Fileid = request.FileId });
+            var fileResponse = await _fileMngClient.GetFileByIdAsync(new gFileRequest() { Fileid = request.FileId });
             if (fileResponse == null)
             {
                 Result.ErrorContent = new ErrorContent("No response has been received from the server.", ErrorOrigin.Server);
