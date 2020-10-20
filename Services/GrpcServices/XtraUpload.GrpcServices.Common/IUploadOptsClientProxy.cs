@@ -10,16 +10,30 @@ namespace XtraUpload.GrpcServices.Common
     public interface IUploadOptsClientProxy
     {
         /// <summary>
+        /// Gets the <see cref="UploadOptions"/> for the given server
+        /// </summary>
+        Task<UploadOptionsResult> ReadUploadOptions(string serverAddress);
+        /// <summary>
+        /// Sets the <see cref="UploadOptions"/> for the given server
+        /// </summary>
+        Task<OperationResult> WriteUploadOptions(UploadOptions uploadOpts, string serverAddress);
+    }
+    /// <summary>
+    /// Interface used to expose command to the grpc service
+    /// </summary>
+    public interface IUploadOptsClientCommand
+    {
+        /// <summary>
         /// Event raised to read upload options of designated client storage
         /// </summary>
-        event EventHandler<UploadOptsRequestedEventArgs> UploadOptsRequested;
+        event EventHandler<ReadUploadOptsRequestedEventArgs> ReadUploadOptsRequested;
+        /// <summary>
+        /// Event raised to write upload options to designated client storage
+        /// </summary>
+        event EventHandler<WriteUploadOptsRequestedEventArgs> WriteUploadOptsRequested;
         /// <summary>
         /// Sets the upload options for a given server (must be called only in the GrpcServices project)
         /// </summary>
         void SetUploadOptions(UploadOptions response, string callerAddress);
-        /// <summary>
-        /// Gets the <see cref="UploadOptions"/> for the given server
-        /// </summary>
-        Task<UploadOptionsResult> GetUploadOptions(string serverAddress);
     }
 }

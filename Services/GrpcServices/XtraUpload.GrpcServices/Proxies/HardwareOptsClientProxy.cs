@@ -12,7 +12,7 @@ namespace XtraUpload.GrpcServices
     /// <summary>
     /// Singleton class used to interact with the connected storage clients to retrieve hardware configuration
     /// </summary>
-    public class HardwareOptsClientProxy : IHardwareOptsClientProxy
+    public class HardwareOptsClientProxy : IHardwareOptsClientProxy, IHardwareOptsClientCommand
     {
         /// <summary>
         /// Max time to wait before request timed out (in miliseconds)
@@ -38,10 +38,16 @@ namespace XtraUpload.GrpcServices
         {
             _logger = logger;
         }
+        #region IHardwareOptsClientCommand members
+
         /// <summary>
         /// Event raised to read hardware options configuration of the designated client storage
         /// </summary>
-        public event EventHandler<HardwareOptsRequestedEventArgs> HardwareOptionsRequested;
+        public event EventHandler<ReadHardwareOptsRequestedEventArgs> ReadHardwareOptionsRequested;
+        /// <summary>
+        /// Event raised to write hardware options configuration of the designated client storage
+        /// </summary>
+        public event EventHandler<WriteHardwareOptsRequestedEventArgs> WriteHardwareOptionsRequested;
 
         /// <summary>
         /// Sets the hardware options for a given server (must be called only in the GrpcServices project)
@@ -60,15 +66,18 @@ namespace XtraUpload.GrpcServices
             }
             _signal.Release();
         }
+        #endregion
+
+        #region IHardwareOptsClientProxy members
 
         /// <summary>
         /// Gets the <see cref="HardwareCheckOptions"/> for the given server
         /// </summary>
-        public async Task<HardwareCheckOptionsResult> GetHardwareOptions(string serverAddress)
+        public async Task<HardwareCheckOptionsResult> ReadHardwareOptions(string serverAddress)
         {
             HardwareCheckOptionsResult Result = new HardwareCheckOptionsResult();
 
-            HardwareOptionsRequested?.Invoke(this, new HardwareOptsRequestedEventArgs(serverAddress));
+            ReadHardwareOptionsRequested?.Invoke(this, new ReadHardwareOptsRequestedEventArgs(serverAddress));
             if (await _signal.WaitAsync(WAIT_TIME))
             {
                 if (_serversConfig.TryGetValue(serverAddress, out HardwareCheckOptions options))
@@ -89,5 +98,29 @@ namespace XtraUpload.GrpcServices
 
             return Result;
         }
+        /// <summary>
+        /// Sets the <see cref="HardwareCheckOptions"/> for the given server
+        /// </summary>
+        public async Task<OperationResult> WriteHardwareOptions(HardwareCheckOptions hardwareOpts, string serverAddress)
+        {
+            OperationResult Result = new OperationResult();
+            WriteHardwareOptionsRequested?.Invoke(this, new WriteHardwareOptsRequestedEventArgs(hardwareOpts, serverAddress));
+            if (await _signal.WaitAsync(WAIT_TIME))
+            {
+                if (!_serversConfig.TryGetValue(serverAddress, out HardwareCheckOptions options))
+                {
+                    _logger.LogError("No record found for the server: " + serverAddress);
+                    Result.ErrorContent = new ErrorContent("No record found, please try again.", ErrorOrigin.Server);
+                }
+            }
+            else
+            {
+                _logger.LogError("Response timed out for server: " + serverAddress);
+                Result.ErrorContent = new ErrorContent("Timeout: Response not received, please check that the server is up and running.", ErrorOrigin.Server);
+            }
+            return Result;
+        }
+
+        #endregion
     }
 }

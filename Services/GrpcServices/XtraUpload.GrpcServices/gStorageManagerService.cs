@@ -15,8 +15,8 @@ namespace XtraUpload.GrpcServices
     public class gStorageManagerService : gStorageManager.gStorageManagerBase
     {
         readonly ICheckClientProxy _checkClientProxy;
-        readonly IUploadOptsClientProxy _uploadOptsProxy;
-        readonly IHardwareOptsClientProxy _hardwareProxy;
+        readonly IHardwareOptsClientCommand _hardwareOptsCmd;
+        readonly IUploadOptsClientCommand _uploadOptsCommand;
         readonly ILogger<gStorageManagerService> _logger;
         public gStorageManagerService(
             ICheckClientProxy checkClientProxy,
@@ -25,11 +25,12 @@ namespace XtraUpload.GrpcServices
             ILogger<gStorageManagerService> logger)
         {
             _logger = logger;
-            _hardwareProxy = hardwareProxy;
-            _uploadOptsProxy = uploadOptsProxy;
             _checkClientProxy = checkClientProxy;
+            _hardwareOptsCmd = hardwareProxy as IHardwareOptsClientCommand;
+            _uploadOptsCommand = uploadOptsProxy as IUploadOptsClientCommand;
+
         }
-        
+
         public override async Task CheckConnectivity(IAsyncStreamReader<ConnectivityResponse> requestStream, IServerStreamWriter<ConnectivityRequest> responseStream, ServerCallContext context)
         {
             _checkClientProxy.StorageServerConnectivityRequested += ConnectivityRequested;
@@ -59,57 +60,105 @@ namespace XtraUpload.GrpcServices
 
         public override async Task GetUploadOptions(IAsyncStreamReader<UploadOptsResponse> requestStream, IServerStreamWriter<UploadOptsRequest> responseStream, ServerCallContext context)
         {
-            _uploadOptsProxy.UploadOptsRequested += uploadOptionsRequested;
+            _uploadOptsCommand.ReadUploadOptsRequested += uploadOptionsRequested;
             try
             {
-                
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
 
-                    _uploadOptsProxy.SetUploadOptions(message.UploadOptions.Convert(), message.ServerAddress);
+                    _uploadOptsCommand.SetUploadOptions(message.UploadOptions.Convert(), message.ServerAddress);
                 }
                 
             }
             finally
             {
                 _logger.LogError("Connection lost with the remote storage server");
-                _uploadOptsProxy.UploadOptsRequested -= uploadOptionsRequested;
+                _uploadOptsCommand.ReadUploadOptsRequested -= uploadOptionsRequested;
             }
 
-            async void uploadOptionsRequested(object sender, UploadOptsRequestedEventArgs e)
+            async void uploadOptionsRequested(object sender, ReadUploadOptsRequestedEventArgs e)
             {
                 _logger.LogDebug("Sending request to " + e.ServerAddress);
 
                 await responseStream.WriteAsync(new UploadOptsRequest() { ServerAddress = e.ServerAddress });
             }
         }
-
-        public override async Task GetHardwareOptions(IAsyncStreamReader<HardwareOptsResponse> requestStream, IServerStreamWriter<HardwareOptsRequest> responseStream, ServerCallContext context)
+        public override async Task SetUploadOptions(IAsyncStreamReader<UploadOptsResponse> requestStream, IServerStreamWriter<UploadOptsResponse> responseStream, ServerCallContext context)
         {
-            _hardwareProxy.HardwareOptionsRequested += hardwareOptionsRequested;
+            _uploadOptsCommand.WriteUploadOptsRequested += uploadOptionsRequested;
             try
             {
-
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
 
-                    _hardwareProxy.SetHardwareOptions(message.HardwareOptions.Convert(), message.ServerAddress);
+                    _uploadOptsCommand.SetUploadOptions(message.UploadOptions.Convert(), message.ServerAddress);
+                }
+            }
+            finally
+            {
+                _logger.LogError("Connection lost with the remote storage server");
+                _uploadOptsCommand.WriteUploadOptsRequested -= uploadOptionsRequested;
+            }
+
+            async void uploadOptionsRequested(object sender, WriteUploadOptsRequestedEventArgs e)
+            {
+                _logger.LogDebug("Sending request to " + e.ServerAddress);
+
+                await responseStream.WriteAsync(new UploadOptsResponse() { UploadOptions= e.UploadOptions.Convert(), ServerAddress = e.ServerAddress });
+            }
+        }
+        public override async Task GetHardwareOptions(IAsyncStreamReader<HardwareOptsResponse> requestStream, IServerStreamWriter<HardwareOptsRequest> responseStream, ServerCallContext context)
+        {
+            _hardwareOptsCmd.ReadHardwareOptionsRequested += hardwareOptionsRequested;
+            try
+            {
+                await foreach (var message in requestStream.ReadAllAsync())
+                {
+                    _logger.LogDebug("Request received from " + message.ServerAddress);
+
+                    _hardwareOptsCmd.SetHardwareOptions(message.HardwareOptions.Convert(), message.ServerAddress);
                 }
 
             }
             finally
             {
                 _logger.LogError("Connection lost with the remote storage server");
-                _hardwareProxy.HardwareOptionsRequested -= hardwareOptionsRequested;
+                _hardwareOptsCmd.ReadHardwareOptionsRequested -= hardwareOptionsRequested;
             }
 
-            async void hardwareOptionsRequested(object sender, HardwareOptsRequestedEventArgs e)
+            async void hardwareOptionsRequested(object sender, ReadHardwareOptsRequestedEventArgs e)
             {
                 _logger.LogDebug("Sending request to " + e.ServerAddress);
 
                 await responseStream.WriteAsync(new HardwareOptsRequest() { ServerAddress = e.ServerAddress });
+            }
+        }
+
+        public override async Task SetHardwareOptions(IAsyncStreamReader<HardwareOptsResponse> requestStream, IServerStreamWriter<HardwareOptsResponse> responseStream, ServerCallContext context)
+        {
+            _hardwareOptsCmd.WriteHardwareOptionsRequested += hardwareOptsRequested;
+            try
+            {
+                await foreach (var message in requestStream.ReadAllAsync())
+                {
+                    _logger.LogDebug("Request received from " + message.ServerAddress);
+
+                    _hardwareOptsCmd.SetHardwareOptions(message.HardwareOptions.Convert(), message.ServerAddress);
+                }
+            }
+            finally
+            {
+                _logger.LogError("Connection lost with the remote storage server");
+                _hardwareOptsCmd.WriteHardwareOptionsRequested += hardwareOptsRequested;
+            }
+
+            async void hardwareOptsRequested(object sender, WriteHardwareOptsRequestedEventArgs e)
+            {
+                _logger.LogDebug("Sending request to " + e.ServerAddress);
+
+                await responseStream.WriteAsync(new HardwareOptsResponse() { HardwareOptions = e.HardwareOpts.Convert(), ServerAddress = e.ServerAddress });
             }
         }
     }

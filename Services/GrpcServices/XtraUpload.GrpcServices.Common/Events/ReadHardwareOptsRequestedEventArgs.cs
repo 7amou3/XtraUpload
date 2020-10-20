@@ -2,9 +2,9 @@
 
 namespace XtraUpload.GrpcServices.Common
 {
-    public class UploadOptsRequestedEventArgs : EventArgs
+    public class ReadHardwareOptsRequestedEventArgs : EventArgs
     {
-        public UploadOptsRequestedEventArgs(string serverAddress)
+        public ReadHardwareOptsRequestedEventArgs(string serverAddress)
         {
             ServerAddress = serverAddress;
         }

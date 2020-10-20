@@ -70,9 +70,17 @@ namespace XtraUpload.Setting.Service
         /// <returns></returns>
         private async Task<StorageServer> GetStorageServer()
         {
-            IEnumerable<StorageServer> servers = await _unitOfWork.StorageServer.GetAll();
-            Random rand = new Random();
-            return servers.ElementAt(rand.Next(servers.Count()));
+            IEnumerable<StorageServer> servers = await _unitOfWork.StorageServer.FindAsync(s => s.State == ServerState.Active);
+            if (servers.Any())
+            {
+                Random rand = new Random();
+                return servers.ElementAt(rand.Next(servers.Count()));
+            }
+            else
+            {
+                _logger.LogWarning("No storage server found to serve user: " + _caller.GetUserId());
+                return null;
+            }
         }
     }
 }

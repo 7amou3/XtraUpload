@@ -18,7 +18,7 @@ namespace XtraUpload.Administration.Service
         }
         public async Task<HardwareCheckOptionsResult> Handle(GetHardwareConfigQuery request, CancellationToken cancellationToken)
         {
-            return await _hardwareOptsProxy.GetHardwareOptions(request.ServerAddress);
+            return await _hardwareOptsProxy.ReadHardwareOptions(request.ServerAddress);
         }
     }
 }
