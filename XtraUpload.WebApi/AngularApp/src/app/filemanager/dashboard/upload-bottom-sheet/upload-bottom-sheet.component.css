@@ -7,6 +7,9 @@
 .sheet-header .mat-icon-button {
     margin-left: auto;
 }
+.sheet-header .mat-icon {
+    font-size: 18px;
+}
 .dropzone {
     background: transparent; 
     margin-top: 20px;
