@@ -7,8 +7,7 @@ import { IPage } from 'app/domain';
 
 @Component({
   selector: 'app-page',
-  templateUrl: './page.component.html',
-  styleUrls: ['./page.component.css']
+  templateUrl: './page.component.html'
 })
 export class PageComponent extends ComponentBase implements OnInit {
   page: IPage;

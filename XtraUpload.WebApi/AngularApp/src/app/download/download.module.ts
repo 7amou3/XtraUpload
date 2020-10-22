@@ -18,7 +18,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MessageModule } from '../shared';
+import { MessageModule, FooterModule } from '../shared';
 import { PipeModule } from '../shared/pipe-modules';
 import { DownloadRoutes } from './download.routing';
 import { FileManagerService } from 'app/services';
@@ -40,6 +40,7 @@ import { FileMngContextMenuService, SnavContextMenuService } from 'app/services/
     RouterModule.forChild(DownloadRoutes),
     FlexLayoutModule,
     MessageModule,
+    FooterModule,
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,

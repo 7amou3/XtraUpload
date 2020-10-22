@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MessageModule } from '../shared';
+import { MessageModule, FooterModule } from '../shared';
 import { PipeModule } from '../shared/pipe-modules';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, UserStorageService, AuthUnGuardService } from '../services';
@@ -42,6 +42,7 @@ export function socialLoginFactory(authService: AuthService): Promise<SocialAuth
     RouterModule.forChild(AuthRoutes),
     FlexLayoutModule,
     MessageModule,
+    FooterModule,
     MatButtonModule,
     PipeModule,
     MatFormFieldModule,

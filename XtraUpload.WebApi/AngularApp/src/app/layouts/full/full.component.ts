@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, } from '@angular/router';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ComponentBase } from 'app/shared';

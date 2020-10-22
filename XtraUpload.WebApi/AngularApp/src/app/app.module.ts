@@ -18,7 +18,7 @@ import { IsLoggedInDirective } from './shared/loggedin.directive';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Angulartics2Module } from 'angulartics2';
 import { AppComponent } from './app.component';
-import { FullComponent, HeaderComponent, FooterComponent, PageNotFoundComponent } from './layouts';
+import { FullComponent, HeaderComponent, PageNotFoundComponent } from './layouts';
 
 import {
   UrlForwarderHandler,
@@ -42,7 +42,6 @@ export function loadIcons(iconService: CustomIconService) {
     SpinnerComponent,
     HeaderComponent,
     FullComponent,
-    FooterComponent,
     ProgressComponent,
     PageNotFoundComponent,
     IsLoggedInDirective

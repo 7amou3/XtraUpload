@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FooterModule } from 'app/shared/footer/footer.module';
 import { StaticPageService } from '../services';
 import { PageComponent } from './page/page.component';
 
@@ -16,6 +17,7 @@ import { PageComponent } from './page/page.component';
   ],
   imports: [
     CommonModule,
+    FooterModule,
     RouterModule.forChild(StaticPageRoutes),
     FlexLayoutModule,
     MatIconModule,
