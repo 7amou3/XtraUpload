@@ -23,14 +23,14 @@ namespace XtraUpload.StorageManager.Service
             _uploadOpt = uploadOpt.CurrentValue;
         }
         
-        public async Task<AvatarUrlResult> Handle(GetAvatarQuery request, CancellationToken cancellationToken)
+        public Task<AvatarUrlResult> Handle(GetAvatarQuery request, CancellationToken cancellationToken)
         {
             AvatarUrlResult Result = new AvatarUrlResult();
             // Check guid valid
             if (!Guid.TryParse(request.UserId, out _))
             {
                 Result.ErrorContent = new ErrorContent("Invalid user id.", ErrorOrigin.Client);
-                return Result;
+                return Task.FromResult(Result);
             }
             // Get file path
             string filePath = Path.Combine(_uploadOpt.UploadPath, request.UserId, "avatar", "avatar.png");
@@ -38,12 +38,12 @@ namespace XtraUpload.StorageManager.Service
             if (!File.Exists(filePath))
             {
                 Result.ErrorContent = new ErrorContent("File does not exist on the server, it may be moved or deleted.", ErrorOrigin.Client);
-                return Result;
+                return Task.FromResult(Result);
             }
 
             Result.Url = filePath;
 
-            return Result;
+            return Task.FromResult(Result);
         }
     }
 }
