@@ -1,0 +1,29 @@
+.mat-divider {
+    margin: -0px -15px 0px -15px;
+}
+.sheet-header {
+    display: flex;
+}
+.sheet-header .mat-icon-button {
+    margin-left: auto;
+}
+.dropzone {
+    background: transparent; 
+    margin-top: 20px;
+}
+
+.icon-add-files {
+    font-size: 80px; 
+    margin-left: -50px;
+}
+
+.mat-list-item:hover {
+    background: rgba(180,180,180,0.3);
+}
+.drop-visibility{
+    display: none;
+}
+
+.loading-container {
+    height: 100px;
+}

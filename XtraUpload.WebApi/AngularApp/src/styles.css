@@ -1,0 +1,7 @@
+/* You can add global styles to this file, and also import other style files */
+.custom-bottom-sheet .file-name {
+    font-size: 13px !important;
+}
+.custom-bottom-sheet .file-size {
+    font-size: 11px !important;
+}

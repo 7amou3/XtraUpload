@@ -1,0 +1,81 @@
+<mat-sidenav-container class="page-wrapper">
+  <!-- Sidebar -->
+  <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
+      <app-sidebar 
+       [uploadSetting$]="uploadSetting$"
+       (folderPathChanged$)="onfolderPathChanged($event)"></app-sidebar>
+  </mat-sidenav>
+  <!-- Page container -->
+  <mat-sidenav-content>
+    <div class="page-content">
+      <mat-sidenav-container (backdropClick)="sidenav.close()" >
+        <mat-sidenav #sidenav (keydown.escape)="sidenav.close()" disableClose position="end">
+          <app-iteminfo [itemInfo$]="itemInfo$" [folderPath]="pathSelectedFolder" ></app-iteminfo>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+              <!-- Header section-->
+              <mat-card class="m-0">
+                  <div class="p-20">
+                    <h4 class="card-title m-0">My Files & Folders</h4>
+                      <div fxLayout="row">
+                        <div *ngFor="let folder of pathSelectedFolder; last as isLast">
+                          <div fxLayoutAlign="center center">
+                            <p class="card-subtitle m-0 can-activate-link" *ngIf="!isLast" (click)="onBreadCrumbClick(folder)">
+                              {{folder.name}}
+                            </p>
+                            <p class="card-subtitle m-0 op-5" *ngIf="isLast">{{folder.name}}</p>
+                            <mat-icon class="card-subtitle m-0 op-5" *ngIf="!isLast">keyboard_arrow_right</mat-icon>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    <button type="button" [matMenuTriggerFor]="addFilesMenu" mat-mini-fab color="accent" class="add-files">+</button>
+                    <mat-menu #addFilesMenu="matMenu">
+                      <button mat-menu-item (click)="openUploadSheet()">
+                        <mat-icon>cloud_upload</mat-icon>
+                        <span>File Upload</span>
+                      </button>
+                      <button mat-menu-item (click)="openCreateFolder()">
+                        <mat-icon>create_new_folder</mat-icon>
+                        <span>New Folder</span>
+                      </button>
+                      <!-- for now, only table view is supported, grid view will be available once cdk support it
+                        see issue: https://github.com/angular/components/issues/13372
+                      <mat-divider></mat-divider>
+                      <button mat-menu-item (click)="changeDisplay('list')" [disabled]="displayMode === 'list'">
+                        <mat-icon>view_headline</mat-icon>
+                        <span>List View</span>
+                      </button>
+                      <button mat-menu-item (click)="changeDisplay('grid')" [disabled]="displayMode === 'grid'">
+                        <mat-icon>view_module</mat-icon>
+                        <span>Grid View</span>
+                      </button>
+                      -->
+                    </mat-menu>
+                  </div>
+                <mat-divider></mat-divider>
+                <mat-card-content style="min-height: 530px">
+                  <app-tableview *ngIf="displayMode == 'list'" [folderContent$]="folderContent$"></app-tableview>
+                  <app-gridview *ngIf="displayMode == 'grid'" [folderContent$]="folderContent$"></app-gridview>
+                  <!--Query in progress-->
+                  <div *ngIf="isBusy" fxLayout="row wrap" fxLayoutAlign="center center">
+                    <mat-spinner color="accent" style="margin-top: 80px;"></mat-spinner>
+                  </div>
+                  <!--Empty folder-->
+                  <div *ngIf="(folderContent$ | async)?.length == 0" 
+                        fxlayoutalign="center center">
+                    <div class="text-center no-records">
+                      <mat-icon svgIcon="xu-folder"></mat-icon>
+                      <p>No files in here</p>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+              
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

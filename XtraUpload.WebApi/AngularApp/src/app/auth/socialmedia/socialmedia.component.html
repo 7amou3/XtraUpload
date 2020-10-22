@@ -1,0 +1,14 @@
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <a (click)="signInWithFB()">
+    <!--Facebook button-->
+    <mat-icon svgIcon="facebook" style="margin-right: 10px;"></mat-icon>
+  </a>
+  <!--Google button-->
+  <a (click)="signInWithGoogle()">
+    <mat-icon svgIcon="google"></mat-icon>
+  </a>
+
+</div>
+<div fxLayout="row wrap" fxLayoutAlign="center" *ngIf="isBusy">
+  Please wait...
+</div>

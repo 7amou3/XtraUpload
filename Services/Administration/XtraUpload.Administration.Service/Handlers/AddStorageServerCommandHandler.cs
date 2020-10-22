@@ -34,12 +34,12 @@ namespace XtraUpload.Administration.Service
         public async Task<StorageServerResult> Handle(AddStorageServerCommand request, CancellationToken cancellationToken)
         {
             StorageServerResult Result = new StorageServerResult();
-            //StorageServer server = await _unitOfWork.StorageServer.FirstOrDefaultAsync(s => s.Address == request.StorageInfo.Address);
-            //if (server != null)
-            //{
-            //    Result.ErrorContent = new ErrorContent("A server with the same address already exists.", ErrorOrigin.Client);
-            //    return Result;
-            //}
+            StorageServer server = await _unitOfWork.StorageServer.FirstOrDefaultAsync(s => s.Address == request.StorageInfo.Address);
+            if (server != null)
+            {
+                Result.ErrorContent = new ErrorContent("A server with the same address already exists.", ErrorOrigin.Client);
+                return Result;
+            }
             // Add the server to db
             StorageServer newServer = new StorageServer() 
             {

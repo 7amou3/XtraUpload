@@ -1,0 +1,22 @@
+table {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .mat-row:hover {
+    background: rgba(180,180,180,0.3);
+  }
+  .align-right{
+    display: flex;
+    padding: 21px 0;
+    justify-content: flex-end;
+  }
+  .add-group {
+    position: absolute;
+    right: 17px;
+    top: 48px;
+  }
+  td > span {
+    display:flex;
+    justify-content:center;
+  }
