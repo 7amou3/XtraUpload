@@ -1,0 +1,71 @@
+<div class="page-wrapper mat-app-background">
+  <div fxLayout="row wrap" fxLayoutAlign="center center" class="page-content">
+    <!-- column -->
+   <div fxFlex.sm="70" fxFlex.md="40" fxFlex.lg="30" class="signup-container">
+       <mat-card>
+         <mat-card-header>
+           <mat-card-title>SIGN UP</mat-card-title>
+         </mat-card-header>
+         <mat-card-content>
+           <form [formGroup]="signupFormGroup" (ngSubmit)="onSubmit(signupFormGroup.value)" class="font-14">
+             <app-message [message$]="message$"></app-message>
+             <mat-form-field>
+               <mat-label>User name</mat-label>
+               <input matInput formControlName="userName" required>
+               <mat-error *ngIf="userName.invalid">{{getErrorMessage(userName)}}</mat-error>
+             </mat-form-field>
+             <mat-form-field>
+               <mat-label>Email</mat-label>
+               <input matInput formControlName="email" required>
+               <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+             </mat-form-field>
+             <!-- Password-->
+             <mat-form-field>
+              <mat-label>Password</mat-label>
+               <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+               <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+               </button>
+               <mat-error *ngIf="password.invalid">{{getErrorMessage(password)}}</mat-error>
+             </mat-form-field>
+             <!--Terms-->
+             <div fxLayout="row wrap" class="tos">
+               <mat-checkbox color="primary" checked="true" id="signup-checkbox" formControlName="termsOfService" required>
+                 <label class="mat-checkbox-layout" for="signup-checkbox-input" >
+                   I have read and agree to the&nbsp;
+                 <a [routerLink]="['/page/tos']" class="text-info link">Terms</a>.
+                 </label>
+               </mat-checkbox>
+             </div>
+             <!-- Submit button-->
+             <div fxLayout="row wrap">
+               <div fxFlex.gt-lg="100" fxFlex.gt-md="100" fxFlex.gt-xs="100" fxFlex="100">
+                 <mat-card-actions>
+                   <button mat-raised-button color="primary" class="btn-block btn-lg m-t-20 m-b-20 mat-raised-button mat-primary" [disabled]="!signupFormGroup.valid || isBusy" type="submit">
+                     <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
+                     <span>CREATE ACCOUNT</span>
+                   </button>
+                 </mat-card-actions>
+               </div>
+             </div>
+           </form>
+           <mat-divider class="m-t-10"></mat-divider>
+           <!--Login with social media-->
+           <div fxLayout="row wrap" fxLayoutAlign="center">
+            <h6 class="text-muted">Or sign up using</h6>
+           </div>
+            <app-socialmedia></app-socialmedia>
+           <!--Already have account-->
+            <div class="text-center">
+              <p>
+                Already have an account? <a [routerLink]="['/login']" class="text-info link">Log in</a>.
+              </p>
+            </div>
+         </mat-card-content>
+       </mat-card>
+   </div>
+ </div>
+ 
+<!--Footer-->
+<app-footer></app-footer>
+</div>

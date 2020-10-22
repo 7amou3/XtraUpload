@@ -11,7 +11,6 @@ using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 using MediatR;
 using XtraUpload.StorageManager.Common;
-using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.StorageManager.Host
 {
@@ -43,7 +42,7 @@ namespace XtraUpload.StorageManager.Host
             services.AddImageSharp();
 
             // Add grpc clients
-            services.AddGrpcClient<gFileStorage.gFileStorageClient>(options =>
+            services.AddGrpcClient<gFileManager.gFileManagerClient>(options =>
             {
                 options.Address = new Uri(config["UrlsConfig:RemoteApiUrl"]);
             })

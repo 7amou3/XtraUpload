@@ -1,0 +1,13 @@
+
+<footer class="mat-app-background">
+  <div fxLayout="row wrap" fxLayoutAlign="center center">
+    <div >
+      <a class="text-info p-10 font-14" [routerLink]="['/page/tos']">Terms</a>
+      <a class="text-info p-10 font-14" [routerLink]="['/page/privacy_policy']">Privacy Policy</a>
+      <a class="text-info p-10 font-14" [routerLink]="['/page/copyright']">Copyright</a>
+    </div> 
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="center center">
+    <span class="font-14">&copy;{{currentYear| date:'yyyy'}} {{pageName}}</span>
+  </div>
+</footer>

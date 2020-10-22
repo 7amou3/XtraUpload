@@ -7,17 +7,17 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.13.0" />
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.31.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.32.0">
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.32.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.33.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\GrpcServices\Protos\filestorage.proto" GrpcServices="Client">
-      <Link>Protos\filestorage.proto</Link>
+    <Protobuf Include="..\..\GrpcServices\Protos\filemanager.proto" GrpcServices="Client">
+      <Link>Protos\filemanager.proto</Link>
     </Protobuf>
     <Protobuf Include="..\..\GrpcServices\Protos\storagemanager.proto" GrpcServices="Client">
       <Link>Protos\storagemanager.proto</Link>

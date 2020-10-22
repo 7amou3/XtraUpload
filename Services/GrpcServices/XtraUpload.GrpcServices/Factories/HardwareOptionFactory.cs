@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using XtraUpload.Domain;
+﻿using XtraUpload.Domain;
 using XtraUpload.Protos;
 
 namespace XtraUpload.GrpcServices
@@ -16,6 +13,17 @@ namespace XtraUpload.GrpcServices
             {
                 MemoryThreshold = (ushort) opts.MemoryThreshold,
                 StorageThreshold = (ushort) opts.StorageThreshold
+            };
+        }
+
+        public static gHardwareOptions Convert(this HardwareCheckOptions opts)
+        {
+            if (opts == null) return null;
+
+            return new gHardwareOptions()
+            {
+                MemoryThreshold = opts.MemoryThreshold,
+                StorageThreshold = opts.StorageThreshold
             };
         }
     }

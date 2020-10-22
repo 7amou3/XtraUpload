@@ -1,0 +1,84 @@
+syntax = "proto3";
+option csharp_namespace = "XtraUpload.Protos";
+import "domain/gUser.proto";
+import "domain/gFileItem.proto";
+import "domain/gRequestStatus.proto";
+
+package gfilemanager;
+
+// The file storage service definition.
+service gFileManager {
+  // Check grpc request is authorized
+  rpc IsAuthorized (gIsAuthorizedRequest) returns (gIsAuthorizedResponse);
+  // jwt should be passed in request header
+  rpc GetUser (gUserRequest) returns (gUserResponse);
+  // Get file info by id
+  rpc GetFileById (gFileRequest) returns (gFileItemResponse);
+  // Save the new uploaded file to db
+  rpc SaveFile (gFileItemRequest) returns (gFileItemResponse);
+  // Get the file to download
+  rpc GetDownloadFile (gDownloadFileRequest) returns (gDownloadFileResponse);
+  // Returns a list of files in order to delete them from disk
+  rpc GetFilesToDelete (gGetFilesToDeleteRequest) returns (gFilesItemResponse);
+  // Request to delete files from db
+  rpc DeleteFilesFromDb (gDeleteFilesRequest) returns (gDeleteFilesResponse);
+  // Notify the Api that the download is completed
+  rpc FileDownloadCompleted (gDownloadCompletedRequest) returns (gDownloadCompletedResponse);
+  // Save the newly uploaded avatar to db
+  rpc SaveAvatar (gSaveAvatarRequest) returns (gSaveAvatarResponse);
+}
+message gIsAuthorizedRequest {
+}
+message gIsAuthorizedResponse {
+	gRequestStatus status = 1;
+}
+message gUserRequest {
+}
+message gUserResponse {
+	gUser User = 1;
+	gRequestStatus status = 2;
+}
+message gFileRequest {
+	string fileid = 1;
+}
+message gFileItemRequest {
+    gFileItem fileItem = 1;
+}
+message gFileItemResponse {
+	gFileItem fileItem = 1;
+	gRequestStatus status = 2;
+}
+message gDownloadFileRequest {
+	string downloadId = 1;
+	// ip address of the requester
+	string requesterAddress = 2;
+}
+message gDownloadFileResponse {
+	gFileItem fileItem = 1;
+	gRequestStatus status = 2;
+	double downloadSpeed = 3;
+}
+message gDeleteFilesRequest {
+	repeated string filesId = 1;
+}
+message gDeleteFilesResponse {
+	gRequestStatus status = 1;
+}
+message gGetFilesToDeleteRequest {
+}
+message gFilesItemResponse {
+	repeated gFileItem filesItem = 1;
+	gRequestStatus status = 2;
+}
+message gDownloadCompletedRequest {
+	string fileId = 1;
+	string requesterIp = 2;
+}
+message gDownloadCompletedResponse {
+}
+message gSaveAvatarRequest {
+	string avatarUrl = 1;
+}
+message gSaveAvatarResponse {
+	gRequestStatus status = 1;
+}

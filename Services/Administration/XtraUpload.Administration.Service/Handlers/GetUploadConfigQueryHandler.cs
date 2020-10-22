@@ -19,7 +19,7 @@ namespace XtraUpload.Administration.Service
         }
         public async Task<UploadOptionsResult> Handle(GetUploadConfigConfigQuery request, CancellationToken cancellationToken)
         {
-            return await _uploadOptsProxy.GetUploadOptions(request.ServerAddress);
+            return await _uploadOptsProxy.ReadUploadOptions(request.ServerAddress);
         }
     }
 }

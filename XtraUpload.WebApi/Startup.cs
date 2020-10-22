@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,11 +24,15 @@ using XtraUpload.Administration.Host;
 using XtraUpload.Setting.Host;
 using XtraUpload.Database.Host;
 using XtraUpload.GrpcServices;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace XtraUpload.WebApi
 {
     public class Startup
     {
+        /// <summary> Client application directory </summary>
+        private readonly string _clientAppDir = "AngularApp";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -70,6 +73,12 @@ namespace XtraUpload.WebApi
 
             // Unhandled exception filter handler
             services.AddScoped<ApiExceptionFilter>();
+
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = _clientAppDir;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +90,16 @@ namespace XtraUpload.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+            else
+            {
+                app.UseSpaStaticFiles(new StaticFileOptions
+                {
+                    OnPrepareResponse = ctx =>
+                    {
+                        ctx.Context.Response.Headers.Add("Cache-Control", "max-age=86400");
+                    }
+                });
+            }
             // setup api to work with proxy servers and load balancers
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -107,6 +125,18 @@ namespace XtraUpload.WebApi
             });
 
             app.UseGrpcServices();
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = _clientAppDir;
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
 
             app.UseHealthChecks("/health", new HealthCheckOptions
             {

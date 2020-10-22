@@ -1,0 +1,12 @@
+.message-content {
+    display: flex;
+    margin-bottom: 5px;
+}
+.message-content .mat-icon-button {
+    margin-left: auto;
+    margin-top: 6px;
+}
+.message-content .mat-icon {
+    font-size: 16px;
+    color: #fff;
+}

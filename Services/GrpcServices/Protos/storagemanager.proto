@@ -8,9 +8,11 @@ package gstoragemanager;
 
 // The server storage service definition.
 service gStorageManager {
-	rpc GetUploadOptions (stream UploadOptsResponse) returns (stream UploadOptsRequest);
 	rpc CheckConnectivity (stream ConnectivityResponse) returns (stream ConnectivityRequest);
+	rpc SetUploadOptions (stream UploadOptsResponse) returns (stream UploadOptsResponse);
+	rpc GetUploadOptions (stream UploadOptsResponse) returns (stream UploadOptsRequest);
 	rpc GetHardwareOptions (stream HardwareOptsResponse) returns (stream HardwareOptsRequest);
+	rpc SetHardwareOptions (stream HardwareOptsResponse) returns (stream HardwareOptsResponse);
 }
 
 message UploadOptsResponse {

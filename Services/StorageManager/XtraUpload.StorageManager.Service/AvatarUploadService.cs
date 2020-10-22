@@ -19,10 +19,10 @@ namespace XtraUpload.StorageManager.Service
     {
 
         public AvatarUploadService(
-            gFileStorage.gFileStorageClient storageClient,
+            gFileManager.gFileManagerClient managerClient,
             IOptionsMonitor<UploadOptions> uploadOpts,
             ILogger<FileUploadService> logger
-            ) : base(storageClient, uploadOpts, logger, "/avatarupload")
+            ) : base(managerClient, uploadOpts, logger, "/avatarupload")
         {
         }
 
@@ -52,7 +52,7 @@ namespace XtraUpload.StorageManager.Service
         private async Task<string> RequestUpdateDb(FileCompleteContext ctx, gUser user)
         {
             var avatarUrl = ctx.HttpContext.Request.Scheme + "://" + ctx.HttpContext.Request.Host.Value + "/api/file/avatar/" + user.Id;
-            var response = await _storageClient.SaveAvatarAsync(new gSaveAvatarRequest() { AvatarUrl = avatarUrl });
+            var response = await _fileMngClient.SaveAvatarAsync(new gSaveAvatarRequest() { AvatarUrl = avatarUrl });
             if (response == null)
             {
                 _logger.LogError("Unknown error occured while requesting user info");
@@ -70,7 +70,7 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private async Task<gUser> MoveFilesToFolder(FileCompleteContext ctx)
         {
-            var gUserResponse = await _storageClient.GetUserAsync(new gUserRequest());
+            var gUserResponse = await _fileMngClient.GetUserAsync(new gUserRequest());
             if (gUserResponse == null)
             {
                 _logger.LogError("Unknown error occured while requesting user info");

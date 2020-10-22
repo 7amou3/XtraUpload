@@ -10,16 +10,30 @@ namespace XtraUpload.GrpcServices.Common
     public interface IHardwareOptsClientProxy
     {
         /// <summary>
+        /// Gets the <see cref="HardwareCheckOptions"/> for the given server
+        /// </summary>
+        Task<HardwareCheckOptionsResult> ReadHardwareOptions(string serverAddress);
+        /// <summary>
+        /// Sets the <see cref="HardwareCheckOptions"/> for the given server
+        /// </summary>
+        Task<OperationResult> WriteHardwareOptions(HardwareCheckOptions hardwareOpts, string serverAddress);
+    }
+    /// <summary>
+    /// Interface used to expose command to the grpc service
+    /// </summary>
+    public interface IHardwareOptsClientCommand
+    {
+        /// <summary>
         /// Event raised to read hardware options configuration of the designated client storage
         /// </summary>
-        event EventHandler<HardwareOptsRequestedEventArgs> HardwareOptionsRequested;
+        event EventHandler<ReadHardwareOptsRequestedEventArgs> ReadHardwareOptionsRequested;
+        /// <summary>
+        /// Event raised to write hardware options configuration of the designated client storage
+        /// </summary>
+        event EventHandler<WriteHardwareOptsRequestedEventArgs> WriteHardwareOptionsRequested;
         /// <summary>
         /// Sets the hardware options for a given server (must be called only in the GrpcServices project)
         /// </summary>
         void SetHardwareOptions(HardwareCheckOptions options, string callerAddress);
-        /// <summary>
-        /// Gets the <see cref="HardwareCheckOptions"/> for the given server
-        /// </summary>
-        Task<HardwareCheckOptionsResult> GetHardwareOptions(string serverAddress);
     }
 }

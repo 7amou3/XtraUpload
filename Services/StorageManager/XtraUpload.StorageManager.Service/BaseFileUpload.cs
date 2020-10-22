@@ -9,7 +9,6 @@ using tusdotnet.Models.Configuration;
 using tusdotnet.Models.Expiration;
 using tusdotnet.Stores;
 using Microsoft.Extensions.Options;
-using XtraUpload.StorageManager.Common;
 using XtraUpload.Protos;
 using XtraUpload.Domain;
 
@@ -22,20 +21,20 @@ namespace XtraUpload.StorageManager.Service
     {
         #region Fields
         private readonly string _urlPath;
-        protected readonly IOptionsMonitor<UploadOptions> _uploadOpts;
         protected readonly ILogger<FileUploadService> _logger;
-        protected readonly gFileStorage.gFileStorageClient _storageClient;
+        protected readonly IOptionsMonitor<UploadOptions> _uploadOpts;
+        protected readonly gFileManager.gFileManagerClient _fileMngClient;
         #endregion
 
         #region Constructor
         public BaseFileUpload(
-            gFileStorage.gFileStorageClient storageClient,
+            gFileManager.gFileManagerClient storageClient,
             IOptionsMonitor<UploadOptions> uploadOpts,
             ILogger<FileUploadService> logger,
             string urlPath)
         {
             _urlPath = urlPath;
-            _storageClient = storageClient;
+            _fileMngClient = storageClient;
             _uploadOpts = uploadOpts;
             _logger = logger;
         }
@@ -89,7 +88,7 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private async Task OnAuthorize(AuthorizeContext ctx)
         {
-            var authResponse = await _storageClient.IsAuthorizedAsync(new gIsAuthorizedRequest());
+            var authResponse = await _fileMngClient.IsAuthorizedAsync(new gIsAuthorizedRequest());
             if (authResponse == null)
             {
                 ctx.FailRequest(HttpStatusCode.RequestTimeout);
