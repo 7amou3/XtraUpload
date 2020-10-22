@@ -2,9 +2,9 @@
 name: Build pipelines
 on:
   push:
-    branches: [ dev ]
+    branches: [ master, dev ]
   pull_request:
-    branches: [ dev ]
+    branches: [ master, dev ]
 
 jobs:
   job_1:
@@ -15,23 +15,22 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.9
     - name: Install .Net dependencies
       run: dotnet restore
     - name: Build Release
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-      
   # job_2:
-     # name: Build Client App
+     # name: Build Client App (Angular)
      # runs-on: ubuntu-latest
      # strategy:
      #  matrix:
         # node-version: [12.x]
      # defaults: 
          #  run: 
-           #  working-directory: "XtraUpload.WebApi/ClientApp/"
+           #  working-directory: "XtraUpload.WebApi/AngularApp/"
      # steps:
       # - uses: actions/checkout@v2
       # cache node module if package-lock.json doesn't change
