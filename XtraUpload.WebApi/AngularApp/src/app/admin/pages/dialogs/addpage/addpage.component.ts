@@ -15,6 +15,11 @@ export class AddpageComponent extends ComponentBase implements OnInit {
   addFormGroup: FormGroup;
   name = new FormControl('', [Validators.required, Validators.minLength(3)]);
   content = new FormControl('', [Validators.required]);
+  editorOptions = {
+    toolbar: ["heading-1", "heading-2", "heading-3", "|", "bold", "italic", "heading", "|", "unordered-list", "ordered-list", "quote", "|", "link", "image", "table","|", "preview", "side-by-side", "fullscreen"],
+    toolbarTips: false,
+    status: false
+  };
   constructor(
     private dialogRef: MatDialogRef<AddpageComponent>,
     private fb: FormBuilder,

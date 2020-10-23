@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Add page</h2>
-<form [formGroup]="addFormGroup" (ngSubmit)="onSubmit(addFormGroup.value)">
+<form [formGroup]="addFormGroup" (ngSubmit)="onSubmit(addFormGroup.value)" class="font-14">
     <mat-dialog-content>
         <mat-form-field>
             <mat-label>Page Title</mat-label>
@@ -7,9 +7,9 @@
             <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
             <mat-error *ngIf="name.hasError('itemExists')">A page with the same name already exists.</mat-error>
         </mat-form-field>
-        <ngx-wig formControlName="content"></ngx-wig>
+        <simplemde formControlName="content" [options]="editorOptions" ></simplemde>
     </mat-dialog-content>
-    <mat-dialog-actions align="end">
+    <mat-dialog-actions fxLayoutAlign="flex-end">
         <button mat-button mat-dialog-close>Cancel</button>
         <button
             mat-button color="accent"

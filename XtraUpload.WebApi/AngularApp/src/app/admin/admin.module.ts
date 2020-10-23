@@ -58,7 +58,7 @@ import { DeleteuserComponent } from './users/dialogs/deleteuser/deleteuser.compo
 import { PagesComponent } from './pages/pages.component';
 import { EditpageComponent } from './pages/dialogs/editpage/editpage.component';
 import { DeletepageComponent } from './pages/dialogs/deletepage/deletepage.component';
-import {NgxWigModule} from 'ngx-wig';
+import { SimplemdeModule } from 'ngx-simplemde'
 import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
 import { ServersComponent } from './servers/servers.component';
 import { AddserverComponent } from './servers/dialogs/addserver/addserver.component';
@@ -127,7 +127,7 @@ import { AddserverComponent } from './servers/dialogs/addserver/addserver.compon
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxWigModule
+    SimplemdeModule.forRoot({})
   ],
   providers: [
     AuthService,
