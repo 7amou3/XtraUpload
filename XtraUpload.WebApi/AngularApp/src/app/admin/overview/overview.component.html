@@ -1,7 +1,7 @@
 
 <div>
     <section fxLayout="row wrap" fxLayoutAlign="center">
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-warning">
                 <mat-list>
                     <mat-list-item>
@@ -12,7 +12,7 @@
                 </mat-list>
             </mat-card>
         </div>
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-danger">
                 <mat-list>
                     <mat-list-item>
@@ -24,7 +24,7 @@
             </mat-card>
         </div>
         <!--Available disc space-->
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-success">
                 <mat-list>
                     <mat-list-item>
@@ -36,7 +36,7 @@
             </mat-card>
         </div>
         <!--Drive size-->
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-info">
                 <mat-list>
                     <mat-list-item>
@@ -51,8 +51,8 @@
 
     <!--File Chart-->
     <div fxLayout="row wrap">  
-        <app-fileuploads [filesCount$]="filesCount$" fxFlex.gt-sm="70" fxFlex.gt-xs="70" fxFlex="100"></app-fileuploads>
-        <app-piechart [fileTypesCount$]="fileTypesCount$" fxFlex.gt-sm="30" fxFlex.gt-xs="30" fxFlex="100"></app-piechart>
+        <app-fileuploads [filesCount$]="filesCount$" fxFlex.md="70" fxFlex.lg="70" fxFlex="100"></app-fileuploads>
+        <app-piechart [fileTypesCount$]="fileTypesCount$" fxFlex.md="30" fxFlex.lg="30" fxFlex="100"></app-piechart>
         <app-users [usersCount$]="usersCount$" fxFlex="100"></app-users>
         <app-healthchek fxFlex="100" ></app-healthchek>
     </div>
