@@ -31,9 +31,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/assets/styles/style.scss"
+              "src/assets/styles/style.scss",
+              "src/assets/styles/simplemde-editor.less"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/simplemde-antd/dist/simplemde.min.js",
+              "node_modules/marked/lib/marked.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -85,9 +89,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js"
-            ],
+            "scripts": [],
             "styles": [
               "src/styles.css",
               "src/assets/styles/style.scss"

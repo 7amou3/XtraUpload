@@ -10,6 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FooterModule } from 'app/shared/footer/footer.module';
 import { StaticPageService } from '../services';
 import { PageComponent } from './page/page.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PageComponent } from './page/page.component';
     CommonModule,
     FooterModule,
     RouterModule.forChild(StaticPageRoutes),
+    MarkdownModule.forRoot(),
     FlexLayoutModule,
     MatIconModule,
     MatCardModule,

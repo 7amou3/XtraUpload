@@ -90,7 +90,7 @@
   </mat-step>
 </mat-vertical-stepper>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions fxLayoutAlign="flex-end">
   <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button color="accent" [disabled]="!(addressReachable && serverInfoFormGroup.valid && hdOptsFormGroup.valid && uploadOptsFormGroup.valid && !isBusy)" (click)="onSubmit()">Add Server</button>
 </mat-dialog-actions>
