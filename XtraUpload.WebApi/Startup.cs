@@ -126,18 +126,6 @@ namespace XtraUpload.WebApi
 
             app.UseGrpcServices();
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = _clientAppDir;
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
-
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
                 ResponseWriter = async (context, report) =>
@@ -155,6 +143,18 @@ namespace XtraUpload.WebApi
                         Duration = report.TotalDuration
                     };
                     await context.Response.WriteAsync(Helpers.JsonSerialize(response));
+                }
+            });
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = _clientAppDir;
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
                 }
             });
 
