@@ -6,8 +6,7 @@ import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-confirmemail',
-  templateUrl: './confirmemail.component.html',
-  styleUrls: ['./confirmemail.component.css']
+  templateUrl: './confirmemail.component.html'
 })
 export class ConfirmemailComponent extends ComponentBase implements OnInit {
   private readonly pageTitle = 'Email Confirmation';

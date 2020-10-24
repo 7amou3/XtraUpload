@@ -22,8 +22,8 @@
                 <!--Empty folder-->
                 <div *ngIf="(folderContent$ | async)?.length == 0" fxlayoutalign="center center">
                     <div class="text-center no-records">
-                        <img src="assets/images/folder-icon.png" role="img" style="margin-top: 80px;">
-                        <h5 class="text-muted m-t-10">Empty Folder</h5>
+                        <mat-icon svgIcon="xu-folder"></mat-icon>
+                        <p>No files in here</p>
                     </div>
                 </div>
             </mat-card-content>

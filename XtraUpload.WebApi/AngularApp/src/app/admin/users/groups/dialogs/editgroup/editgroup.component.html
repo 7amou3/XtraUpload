@@ -45,7 +45,7 @@
         <mat-form-field>
             <mat-label>File Expiration (Day)</mat-label>
             <input type="number" matInput formControlName="fileExpiration" required>
-            <mat-hint align="end">Set to '0' to keep files forever</mat-hint>
+            <mat-hint fxLayoutAlign="flex-end">Set to '0' to keep files forever</mat-hint>
             <mat-error *ngIf="fileExpiration.invalid">{{getErrorMessage(fileExpiration)}}</mat-error>
         </mat-form-field>
         <!--concurrentUpload-->
@@ -74,7 +74,7 @@
             </div>
         </div>
     </mat-dialog-content>
-    <mat-dialog-actions align="end">
+    <mat-dialog-actions fxLayoutAlign="flex-end">
         <button mat-button mat-dialog-close>Cancel</button>
         <button mat-button color="accent" [disabled]="!editFormGroup.valid || isBusy" type="submit">Edit
         </button>

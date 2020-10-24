@@ -37,8 +37,6 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
               const storageUrl = (item as IFileInfo).storageServer.address.replace(/\/?$/, '/');
               item.thumbnail = storageUrl + 'api/file/mediumthumb/' + item.id;
             }
-          } else {
-            this.itemInfo.thumbnail = 'assets/images/folder128px.png';
           }
           this.simplePath = '';
           this.downloadUrl = baseurl + (this.isFile ? 'file?id=' : 'folder?id=') + this.itemInfo.id

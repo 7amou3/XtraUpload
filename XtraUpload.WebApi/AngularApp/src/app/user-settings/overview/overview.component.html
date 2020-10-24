@@ -1,6 +1,6 @@
 <div *ngIf="!isBusy; else elseBlock">
     <section fxLayout="row wrap" fxLayoutAlign="center">
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-info">
                 <mat-list>
                     <mat-list-item>
@@ -11,7 +11,7 @@
                 </mat-list>
             </mat-card>
         </div>
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-warning">
                 <mat-list>
                     <mat-list-item>
@@ -22,7 +22,7 @@
                 </mat-list>
             </mat-card>
         </div>
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-success">
                 <mat-list>
                     <mat-list-item>
@@ -33,7 +33,7 @@
                 </mat-list>
             </mat-card>
         </div>
-        <div fxFlex.gt-sm="25" fxFlex.gt-xs="25" fxFlex="100">
+        <div fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25" fxFlex="100">
             <mat-card class="bg-danger">
                 <mat-list>
                     <mat-list-item>
@@ -49,7 +49,7 @@
         <app-message [message$]="message$"></app-message>
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="center">
-        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+        <div fxFlex.md="50" fxFlex.lg="50" fxFlex="100">
             <mat-card>
                 <mat-list role="list">
                     <div mat-subheader class="bg-purple text-white">Profile</div>
@@ -81,7 +81,7 @@
                 </mat-list>
             </mat-card>
         </div>
-        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+        <div fxFlex.md="50" fxFlex.lg="50" fxFlex="100">
             <mat-card>
                 <mat-list role="list">
                     <div mat-subheader class="bg-success text-white">Download</div>
@@ -108,7 +108,7 @@
     </div>
 
     <div fxLayout="row wrap">
-        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex="100">
+        <div fxFlex.md="50" fxFlex.lg="50" fxFlex="100">
             <mat-card>
                 <mat-list role="list">
                     <div mat-subheader class="bg-info text-white">Upload</div>

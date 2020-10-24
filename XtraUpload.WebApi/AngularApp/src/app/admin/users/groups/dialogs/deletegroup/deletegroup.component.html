@@ -5,7 +5,7 @@
             Are you sure you want to delete <b>{{item.selectedGroup.role.name}}</b> ?
         </p>
     </mat-dialog-content>
-    <mat-dialog-actions align="end">
+    <mat-dialog-actions fxLayoutAlign="flex-end">
         <button mat-button mat-dialog-close>Cancel</button>
         <button mat-button (click)="onDelete()" color="warn" [disabled]="isBusy">Delete</button>
     </mat-dialog-actions>

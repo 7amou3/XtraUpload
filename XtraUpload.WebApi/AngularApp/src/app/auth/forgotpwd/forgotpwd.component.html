@@ -1,14 +1,13 @@
 <div class="page-wrapper mat-app-background">
-    <div fxLayout="row wrap" fxLayoutAlign="center" class="page-content">
-        <div fxFlex.sm="80" fxFlex.md="60" fxFlex.lg="50" fxFlex="100">
+    <div fxLayout="row wrap" fxLayoutAlign="center baseline" class="page-content">
+        <div fxFlex.sm="70" fxFlex.md="50" fxFlex.lg="40" fxFlex="100">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Reset Your Password</mat-card-title>
                 </mat-card-header>
                 <mat-divider></mat-divider>
-                <form [formGroup]="forgotPassFormGroup" class="font-14" #formDirective="ngForm"
-                    (ngSubmit)="onSubmit(forgotPassFormGroup.value)">
-                    <mat-card-content>
+                <mat-card-content>
+                    <form [formGroup]="forgotPassFormGroup" class="font-14" (ngSubmit)="onSubmit(forgotPassFormGroup.value)">
                         <app-message [message$]="message$"></app-message>
                         <!-- Current Password -->
                         <p>Enter the email address you used to create your account:</p>
@@ -27,14 +26,16 @@
                             </button>
                         </mat-card-actions>
                         <p class="text-muted">
-                            After clicking the button above, an email will be sent to you with a link to reset your password.
+                            After clicking the button above, an email will be sent to you with a link to reset your
+                            password.
                         </p>
-                    </mat-card-content>
-                </form>
+
+                    </form>
+                </mat-card-content>
             </mat-card>
         </div>
     </div>
-    
-<!--Footer-->
-<app-footer></app-footer>
+
+    <!--Footer-->
+    <app-footer></app-footer>
 </div>

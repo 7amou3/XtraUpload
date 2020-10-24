@@ -18,6 +18,7 @@ import { IsLoggedInDirective } from './shared/loggedin.directive';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Angulartics2Module } from 'angulartics2';
 import { AppComponent } from './app.component';
+import { FooterModule } from './shared';
 import { FullComponent, HeaderComponent, PageNotFoundComponent } from './layouts';
 
 import {
@@ -61,7 +62,8 @@ export function loadIcons(iconService: CustomIconService) {
     HttpClientModule,
     RouterModule.forRoot(AppRoutes, {scrollPositionRestoration: 'enabled'}),
     Angulartics2Module.forRoot(),
-    PipeModule
+    PipeModule,
+    FooterModule
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },

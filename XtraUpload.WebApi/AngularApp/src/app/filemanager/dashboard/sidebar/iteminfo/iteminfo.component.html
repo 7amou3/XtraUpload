@@ -1,7 +1,12 @@
 <div fxLayout="row wrap" *ngIf="itemInfo">
-    <div fxFlex.gt-lg="100" fxFlex.gt-md="100" fxFlex.gt-xs="100" fxFlex="100" >
-      <div class="position-relative" fxLayoutAlign="center center">        
-        <img style="max-height: 200px; max-width: 240px;" src="{{itemInfo.thumbnail}}">
+    <div fxFlex="100" >
+      <div class="position-relative" fxLayoutAlign="center center">
+        <ng-container *ngIf="isFile; else folderIcon">
+          <img style="max-height: 200px; max-width: 240px;" src="{{itemInfo.thumbnail}}">
+        </ng-container>
+        <ng-template #folderIcon>
+          <mat-icon class="xu-folder" svgIcon="xu-folder"></mat-icon>
+        </ng-template>   
       </div>
       <!-- item name -->
       <div fxLayout="row wrap" class="p-l-10">

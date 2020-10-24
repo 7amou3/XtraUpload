@@ -146,7 +146,7 @@
                                     <input matInput [type]="hideSecretKey ? 'password' : 'text'" formControlName="secretKey"
                                         required>
                                     <mat-hint>A secret key to signing token key</mat-hint>
-                                    <mat-hint align="end">{{secretKey.value.length}} / 32</mat-hint>
+                                    <mat-hint fxLayoutAlign="flex-end">{{secretKey.value.length}} / 32</mat-hint>
                                     <button type="button" mat-icon-button matSuffix (click)="hideSecretKey = !hideSecretKey"
                                         [attr.aria-label]="'Hide secret key'" [attr.aria-pressed]="hideSecretKey">
                                         <mat-icon>{{hideSecretKey ? 'visibility_off' : 'visibility'}}</mat-icon>

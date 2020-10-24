@@ -1,0 +1,11 @@
+.no-records .mat-icon {
+    width: 100px;
+    height: 100px;
+    margin-top: 100px;
+  }
+.no-records > p {
+    font-weight: bold;
+    line-height: 24px;
+    font-size: 16px;
+    margin-top: 10px;
+}
