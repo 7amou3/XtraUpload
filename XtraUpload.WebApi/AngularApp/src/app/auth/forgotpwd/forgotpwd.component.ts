@@ -6,8 +6,7 @@ import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-forgotpwd',
-  templateUrl: './forgotpwd.component.html',
-  styleUrls: ['./forgotpwd.component.css']
+  templateUrl: './forgotpwd.component.html'
 })
 export class ForgotpwdComponent extends ComponentBase implements OnInit {
   private readonly pageTitle = 'Forgot Password';

@@ -1,24 +1,27 @@
 <div class="page-wrapper mat-app-background">
-    <div fxLayout="row wrap" fxLayoutAlign="center" class="page-content">
-        <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100">
+    <div fxLayout="row wrap" fxLayoutAlign="center baseline" class="page-content">
+        <div fxFlex.sm="70" fxFlex.md="50" fxFlex.lg="40" fxFlex="100">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Enter Your New Password</mat-card-title>
                 </mat-card-header>
                 <mat-divider></mat-divider>
-                <form [formGroup]="recoverPassFormGroup" style="width: 100%;" #formDirective="ngForm"
-                    (ngSubmit)="onSubmit(recoverPassFormGroup.value)">
-                    <mat-card-content>
+                <mat-card-content>
+                    <form [formGroup]="recoverPassFormGroup" style="width: 100%;"
+                        (ngSubmit)="onSubmit(recoverPassFormGroup.value)" class="font-14">
+
                         <app-message [message$]="message$"></app-message>
                         <!-- Current Password -->
                         <p>To recover your password, enter a new one bellow:</p>
                         <mat-form-field>
-                            <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
-                            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-                              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'"
+                                formControlName="password" required>
+                            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                             <mat-error *ngIf="password.invalid">{{getErrorMessage(password)}}</mat-error>
-                          </mat-form-field>
+                        </mat-form-field>
                         <!-- Submit button-->
                         <mat-card-actions>
                             <button mat-flat-button class="btn-block btn-lg mat-primary"
@@ -30,12 +33,12 @@
                         <p class="text-muted">
                             After clicking the button above, your password will be updated.
                         </p>
-                    </mat-card-content>
-                </form>
+                    </form>
+                </mat-card-content>
             </mat-card>
         </div>
     </div>
-    
-<!--Footer-->
-<app-footer></app-footer>
+
+    <!--Footer-->
+    <app-footer></app-footer>
 </div>

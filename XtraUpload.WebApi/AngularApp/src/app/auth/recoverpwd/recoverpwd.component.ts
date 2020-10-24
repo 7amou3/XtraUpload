@@ -8,8 +8,7 @@ import { RecoverPassword } from 'app/domain';
 
 @Component({
   selector: 'app-recoverpwd',
-  templateUrl: './recoverpwd.component.html',
-  styleUrls: ['./recoverpwd.component.css']
+  templateUrl: './recoverpwd.component.html'
 })
 export class RecoverpwdComponent extends ComponentBase implements OnInit {
   private readonly pageTitle = 'Recover Password';

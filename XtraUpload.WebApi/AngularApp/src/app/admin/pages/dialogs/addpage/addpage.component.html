@@ -7,7 +7,7 @@
             <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
             <mat-error *ngIf="name.hasError('itemExists')">A page with the same name already exists.</mat-error>
         </mat-form-field>
-        <simplemde formControlName="content" [options]="editorOptions" ></simplemde>
+        <simplemde formControlName="content" [options]="editorOptions"></simplemde>
     </mat-dialog-content>
     <mat-dialog-actions fxLayoutAlign="flex-end">
         <button mat-button mat-dialog-close>Cancel</button>
