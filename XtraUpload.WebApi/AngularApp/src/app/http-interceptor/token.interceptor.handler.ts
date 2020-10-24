@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { UserStorageService } from '../services/user.storage.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 @Injectable()
 
 /** Intercept ongoing http request and attach a jwt token as a bearer */
