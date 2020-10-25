@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserStorageService } from './user.storage.service';
 import { Title, Meta } from '@angular/platform-browser';
-import { IWebSetting } from 'app/domain';
+import { IWebAppInfo } from 'app/domain';
 
 @Injectable({providedIn: 'root'})
 export class SeoService {
@@ -16,7 +16,8 @@ export class SeoService {
         }
         this.titleService.setTitle(title);
     }
-    setMetaPage(webSetting: IWebSetting) {
+    setMetaPage(webSetting: IWebAppInfo) {
+        if (!webSetting) return;
         this.meta.addTag({name: 'description', content: webSetting.description});
         this.meta.addTag({name: 'keywords', content: webSetting.keywords});
     }

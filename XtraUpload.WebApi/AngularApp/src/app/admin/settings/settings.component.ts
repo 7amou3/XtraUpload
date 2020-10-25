@@ -275,7 +275,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   }
   onPageSettingsSubmit(pageSettingParams) {
     this.appSettingBusy = true;
-    this.adminService.updateAppSettings(pageSettingParams)
+    this.adminService.updateAppInfo(pageSettingParams)
     .pipe(takeUntil(this.onDestroy),
       finalize(() => this.appSettingBusy = false))
     .subscribe(

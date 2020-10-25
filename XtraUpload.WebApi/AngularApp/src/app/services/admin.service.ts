@@ -160,8 +160,8 @@ export class AdminService {
     updateHardwareOpts(hardwareParams) {
         return this.http.patch('admin/hardwareOptions/', hardwareParams);
     }
-    updateAppSettings(appSettingsParams) {
-        return this.http.patch('admin/appSettings/', appSettingsParams);
+    updateAppInfo(appInfoParams) {
+        return this.http.patch('admin/appinfo/', appInfoParams);
     }
     updateSocialAuthSettings(socialAuthParams) {
         const params = {
@@ -204,5 +204,8 @@ export class AdminService {
 
     addStorageServer(addserver: IAddStorageServer): Observable<IStorageServer> {
         return this.http.post<IStorageServer>('admin/storageserver', addserver);
+    }
+    getPage(url: string): Observable<IPage> {
+        return this.http.get<IPage>('setting/page/' + url);
     }
 }

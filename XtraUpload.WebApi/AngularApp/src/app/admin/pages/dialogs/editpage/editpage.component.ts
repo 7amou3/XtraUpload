@@ -1,41 +1,42 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
 import { IPage } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { PageCommon } from '../page.common';
 import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-editpage',
   templateUrl: './editpage.component.html'
 })
-export class EditpageComponent extends ComponentBase  implements OnInit {
-  editFormGroup: FormGroup;
-  name = new FormControl('', [Validators.required, Validators.minLength(3)]);
-  content = new FormControl('', [Validators.required]);
-  editorOptions = {
-    toolbar: ["heading-1", "heading-2", "heading-3", "|", "bold", "italic", "heading", "|", "unordered-list", "ordered-list", "quote", "|", "link", "image", "table","|", "preview", "side-by-side", "fullscreen"],
-    toolbarTips: false,
-    status: false
-  };
+export class EditpageComponent extends PageCommon {
+  
   constructor(
     private dialogRef: MatDialogRef<EditpageComponent>,
-    private fb: FormBuilder,
     private adminService: AdminService,
-    @Inject(MAT_DIALOG_DATA) public item: { selectedPage: IPage, fullPageList: IPage[] }
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) private item: { selectedPage: IPage, fullPageList: IPage[] }
   ) {
     super();
   }
 
-  ngOnInit(): void {
-    this.editFormGroup = this.fb.group({
-      id:  this.item.selectedPage.id,
+  Init(): void {
+    this.pageFormGroup = this.fb.group({
+      id: this.item.selectedPage.id,
       name: this.name,
-      content: this.content
+      content: this.content,
+      visibleInFooter: this.visibleInFooter
     });
-    this.name.setValue(this.item.selectedPage.name);
-    this.content.setValue(this.item.selectedPage.content);
+    this.isBusy = true;
+    this.adminService.getPage(this.item.selectedPage.url)
+    .pipe(takeUntil(this.onDestroy), finalize(() => this.isBusy = false))
+    .subscribe(page => {
+      this.name.setValue(page.name);
+      this.content.setValue(page.content);
+      this.content.setValue(page.content);
+      this.visibleInFooter.setValue(page.visibleInFooter)
+    })
   }
   onSubmit(formParams: IPage) {
     if (this.item.fullPageList.filter(s => s.name === formParams.name && s.id !== formParams.id).length > 0) {

@@ -24,7 +24,7 @@ export class PageComponent extends ComponentBase implements OnInit {
     this.route.paramMap
     .pipe(takeUntil(this.onDestroy))
     .subscribe(r => {
-       this.pageService.getPage(r.get('name'))
+       this.pageService.getPage(r.get('url'))
        .pipe(
          takeUntil(this.onDestroy),
          finalize(() => this.isBusy = false))

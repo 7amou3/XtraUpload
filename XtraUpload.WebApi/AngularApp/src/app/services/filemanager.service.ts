@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { UserStorageService } from './user.storage.service';
 import {
   IFolderModel, IItemInfo, IFolderInfo, UploadStatus,
   IFileInfo, MovedItemsModel, ICreateFolderModel, IRenameItemModel, IDownload, IUploadSettings,
-  IAccountOverview, IBulkDelete, IAvatarData } from '../domain';
+  IAccountOverview, IBulkDelete } from '../domain';
 import { isFile } from 'app/filemanager/dashboard/helpers';
 import { HttpResponse } from 'tus-js-client';
 

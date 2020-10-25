@@ -22,9 +22,10 @@ namespace XtraUpload.Database.Data
             builder.HasData(new Page()
             {
                 Id = Helpers.GenerateUniqueId(),
-                Name = "TOS",
-                Url = "tos",
-                Content = "Term of services content here",
+                Name = "Terms of service",
+                Url = "terms_of_service",
+                Content = "Terms of service content here",
+                VisibleInFooter = true,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             },
@@ -34,6 +35,7 @@ namespace XtraUpload.Database.Data
                 Name = "Privacy Policy",
                 Content = "Privacy Policy content here",
                 Url = "privacy_policy",
+                VisibleInFooter = true,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             },
@@ -42,6 +44,7 @@ namespace XtraUpload.Database.Data
                 Id = Helpers.GenerateUniqueId(),
                 Name = "Copyright",
                 Url = "copyright",
+                VisibleInFooter = true,
                 Content = "Copyright content here",
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now

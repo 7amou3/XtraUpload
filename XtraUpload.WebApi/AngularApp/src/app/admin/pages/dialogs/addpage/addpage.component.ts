@@ -1,25 +1,17 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
 import { IPage } from 'app/domain';
-import { ComponentBase } from 'app/shared';
 import { takeUntil, finalize } from 'rxjs/operators';
+import { PageCommon } from '../page.common';
 
 @Component({
   selector: 'app-addpage',
   templateUrl: './addpage.component.html'
 })
-export class AddpageComponent extends ComponentBase implements OnInit {
+export class AddpageComponent extends PageCommon {
 
-  addFormGroup: FormGroup;
-  name = new FormControl('', [Validators.required, Validators.minLength(3)]);
-  content = new FormControl('', [Validators.required]);
-  editorOptions = {
-    toolbar: ["heading-1", "heading-2", "heading-3", "|", "bold", "italic", "heading", "|", "unordered-list", "ordered-list", "quote", "|", "link", "image", "table","|", "preview", "side-by-side", "fullscreen"],
-    toolbarTips: false,
-    status: false
-  };
   constructor(
     private dialogRef: MatDialogRef<AddpageComponent>,
     private fb: FormBuilder,
@@ -29,11 +21,13 @@ export class AddpageComponent extends ComponentBase implements OnInit {
     super();
   }
 
-  ngOnInit(): void {
-    this.addFormGroup = this.fb.group({
+  Init(): void {
+    this.pageFormGroup = this.fb.group({
       name: this.name,
-      content: this.content
+      content: this.content,
+      visibleInFooter: this.visibleInFooter
     });
+    this.visibleInFooter.setValue(true)
   }
   onSubmit(formParams: IPage) {
     if (this.fullPageList.filter(s => s.name === formParams.name).length > 0) {

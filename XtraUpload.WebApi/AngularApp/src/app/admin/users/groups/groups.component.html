@@ -14,13 +14,11 @@
   <ng-container matColumnDef="AdminAreaAccess">
     <th mat-header-cell *matHeaderCellDef>Admin Area Access</th>
     <td mat-cell *matCellDef="let element">
-      <span *ngIf="getClaim(element.claims, 'AdminAreaAccess'), else elseBlock" class="content-center">
+      <span *ngIf="getClaim(element.claims, 'AdminAreaAccess'), else elseBlock">
         <mat-icon class="font-18" color="primary">done</mat-icon>
       </span>
       <ng-template #elseBlock>
-        <span>
           <mat-icon class="font-18" color="primary" color="warn">close</mat-icon>
-        </span>
       </ng-template>
     </td>
   </ng-container>
@@ -28,13 +26,11 @@
   <ng-container matColumnDef="FileManagerAccess">
     <th mat-header-cell *matHeaderCellDef>File Manager Access</th>
     <td mat-cell *matCellDef="let element">
-      <span *ngIf="getClaim(element.claims, 'FileManagerAccess'), else elseBlock" class="content-center">
+      <span *ngIf="getClaim(element.claims, 'FileManagerAccess'), else elseBlock">
         <mat-icon class="font-18" color="primary">done</mat-icon>
       </span>
       <ng-template #elseBlock>
-        <span>
-          <mat-icon class="font-18" color="primary" color="warn">close</mat-icon>
-        </span>
+        <mat-icon class="font-18" color="primary" color="warn">close</mat-icon>
       </ng-template>
     </td>
   </ng-container>

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { IPageHeader } from 'app/domain';
 import { UserStorageService } from 'app/services';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
@@ -9,11 +12,15 @@ import { UserStorageService } from 'app/services';
 
 export class FooterComponent implements OnInit {
   pageName: string;
-  constructor(private storageService: UserStorageService) {
+  footerLinks: IPageHeader[];
+  constructor(
+    private router: Router,
+    private storageService: UserStorageService) {
    }
   currentYear = new Date();
   ngOnInit(): void {
     this.pageName = this.storageService.getPageSetting().title;
+    this.footerLinks = this.storageService.getPageLinks();
   }
 
 }

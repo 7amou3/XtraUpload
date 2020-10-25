@@ -1,8 +1,11 @@
-export interface IWebSetting {
+export interface IAppInitializerConfig {
+  appInfo: IWebAppInfo;
+  pagesHeader: IPageHeader[];
+}
+export interface IWebAppInfo {
   title: string;
   description: string;
   keywords: string;
-  expire: Date;
 }
 export interface IChangePassword {
   oldPassword: string;
@@ -51,11 +54,14 @@ export interface IEmailSettings {
   username: string;
   senderName: string;
 }
-export interface IPage {
+export interface IPageHeader {
   id: string;
   name: string;
   url: string;
-  content: string;
+  visibleInFooter: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+export interface IPage extends IPageHeader {
+  content: string;
 }

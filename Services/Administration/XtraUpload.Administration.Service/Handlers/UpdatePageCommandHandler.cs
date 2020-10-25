@@ -43,6 +43,7 @@ namespace XtraUpload.Administration.Service
             page.Content = request.Page.Content;
             page.Name = request.Page.Name;
             page.Url = Regex.Replace(request.Page.Name.ToLower(), @"\s+", "_");
+            page.VisibleInFooter = request.Page.VisibleInFooter;
 
             // Save to db
             result = await _unitOfWork.CompleteAsync(result);

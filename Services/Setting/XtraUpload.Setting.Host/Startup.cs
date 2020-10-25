@@ -29,9 +29,9 @@ namespace XtraUpload.Setting.Host
         private static void RegisterOptions(IServiceCollection services, IConfiguration config)
         {
             // WebApp settings
-            IConfigurationSection webAppSection = config.GetSection(nameof(WebAppSettings));
-            services.Configure<WebAppSettings>(webAppSection);
-            services.ConfigureWritable<WebAppSettings>(webAppSection);
+            IConfigurationSection webAppInfoSection = config.GetSection(nameof(WebAppInfo));
+            services.Configure<WebAppInfo>(webAppInfoSection);
+            services.ConfigureWritable<WebAppInfo>(webAppInfoSection);
 
             // Hardware Options
             IConfigurationSection hardwareSection = config.GetSection(nameof(HardwareCheckOptions));

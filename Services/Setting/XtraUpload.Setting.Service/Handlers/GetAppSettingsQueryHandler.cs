@@ -17,19 +17,19 @@ namespace XtraUpload.Setting.Service
         readonly IOptionsMonitor<JwtIssuerOptions> _JwtOpts;
         readonly IOptionsMonitor<EmailSettings> _emailSettings;
         readonly IOptionsMonitor<HardwareCheckOptions> _hdOpts;
-        readonly IOptionsMonitor<WebAppSettings> _appSettings;
+        readonly IOptionsMonitor<WebAppInfo> _appInfo;
         readonly IOptionsMonitor<SocialAuthSettings> _socialSettings;
 
         public GetAppSettingsQueryHandler(
             IOptionsMonitor<JwtIssuerOptions> jwtOpts,
             IOptionsMonitor<EmailSettings> emailSettings,
             IOptionsMonitor<HardwareCheckOptions> hdOpts,
-            IOptionsMonitor<WebAppSettings> appSettings, 
+            IOptionsMonitor<WebAppInfo> appInfo, 
             IOptionsMonitor<SocialAuthSettings> socialSettings)
         {
             _hdOpts = hdOpts;
             _JwtOpts = jwtOpts;
-            _appSettings = appSettings;
+            _appInfo = appInfo;
             _emailSettings = emailSettings;
             _socialSettings = socialSettings;
         }
@@ -38,7 +38,7 @@ namespace XtraUpload.Setting.Service
         {
             ReadAppSettingResult settings = new ReadAppSettingResult()
             {
-                AppSettings = _appSettings.CurrentValue,
+                AppInfo = _appInfo.CurrentValue,
                 EmailSettings = _emailSettings.CurrentValue,
                 HardwareCheckOptions = _hdOpts.CurrentValue,
                 JwtIssuerOptions = _JwtOpts.CurrentValue,

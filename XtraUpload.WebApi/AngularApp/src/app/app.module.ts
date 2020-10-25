@@ -32,7 +32,7 @@ import { UserStorageService, AuthService, SettingsService, HeaderService, Sidena
 import { SpinnerComponent } from './shared';
 import { PipeModule } from './shared/pipe-modules';
 export function webSettingFactory(settings: SettingsService) {
-  return () => settings.webappconfig().toPromise();
+  return () => settings.appInitializerConfig().toPromise();
 }
 export function loadIcons(iconService: CustomIconService) {
   return () => iconService.init();
