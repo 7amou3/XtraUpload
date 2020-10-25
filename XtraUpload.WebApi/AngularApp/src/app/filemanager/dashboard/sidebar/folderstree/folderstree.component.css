@@ -9,7 +9,7 @@
     background: rgba(180,180,180,0.3);
 }
 .folderOptions {
-    margin-left: 80px;
+    margin-left: auto;
 }
 .active-node{
     background: rgba(180,180,180,0.3);

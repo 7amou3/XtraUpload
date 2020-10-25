@@ -4,8 +4,7 @@
  cdkDropList
  (cdkDropListDropped)="onDrop($event)"
  [class.dragging]="dragging"
- [class.isMobile]="isMobile"
->
+ [class.isMobile]="isMobile">
 
   <!-- Thumbnail Column -->
   <ng-container matColumnDef="thumbnail">
@@ -42,15 +41,13 @@
 
   <!-- options Column -->
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
     <td mat-cell *matCellDef="let item" >
       <a mat-icon-button mat-button
-      (click)="onContextMenu($event)"
-      >
+      (click)="onContextMenu($event)">
         <mat-icon>more_vert</mat-icon>
       </a>
-
-     </td>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

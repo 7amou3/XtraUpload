@@ -16,17 +16,19 @@
         <mat-sidenav-content>
               <!-- Header section-->
               <mat-card class="m-0">
-                  <div class="p-20">
+                  <div class="p-l-20 p-t-20 p-b-5">
                     <h4 class="card-title m-0">My Files & Folders</h4>
                       <div fxLayout="row">
-                        <div *ngFor="let folder of pathSelectedFolder; last as isLast">
-                          <div fxLayoutAlign="center center">
-                            <p class="card-subtitle m-0 can-activate-link" *ngIf="!isLast" (click)="onBreadCrumbClick(folder)">
-                              {{folder.name}}
-                            </p>
-                            <p class="card-subtitle m-0 op-5" *ngIf="isLast">{{folder.name}}</p>
-                            <mat-icon class="card-subtitle m-0 op-5" *ngIf="!isLast">keyboard_arrow_right</mat-icon>
-                          </div>
+                        <div *ngFor="let folder of pathSelectedFolder; last as isLast" class="font-12 bread-crumb">
+                            <div fxLayout="row" *ngIf="!isLast; else elseBlock">
+                              <div class="active-link" (click)="onBreadCrumbClick(folder)">
+                                {{folder.name}}  
+                              </div>
+                              <mat-icon class="op-5">keyboard_arrow_right</mat-icon>
+                            </div>
+                            <ng-template #elseBlock>
+                              <span class="op-5">{{folder.name}}</span>
+                            </ng-template>
                         </div>
                       </div>
                       

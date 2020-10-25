@@ -6,6 +6,7 @@
      [matTreeNodePaddingIndent]="10"
      (click)="onMenuItemClick(node, 7)"
      (contextmenu)="onContextMenu($event, node)"
+     class="font-13"
      [class.active-node]="selectedFolderId == node.id"
      [class.context-menu-on]="contextMenuFolderId == node.id">
       <!-- use a disabled button to provide padding for tree leaf -->
@@ -18,12 +19,13 @@
      matTreeNodePadding
      [matTreeNodePaddingIndent]="10"
      (contextmenu)="onContextMenu($event, node)"
+     class="font-13"
      (click)="onMenuItemClick(node, 7)"
      [class.context-menu-on]="contextMenuFolderId == node.id"
      [class.active-node]="selectedFolderId == node.id">
       <button mat-icon-button matTreeNodeToggle
               [attr.aria-label]="'toggle ' + node.name">
-        <mat-icon class="mat-icon-rtl-mirror">
+        <mat-icon style="font-size: 18px;" class="mat-icon-rtl-mirror">
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
       </button>

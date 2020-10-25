@@ -1,10 +1,10 @@
 .add-files {
 	position: absolute;
   right: 17px;
-  top: 67px;
+  top: 52px;
 }
 
-.can-activate-link {
+.active-link {
   opacity: 0.8;
   cursor: pointer;
 }
@@ -18,4 +18,10 @@
     line-height: 24px;
     font-size: 16px;
     margin-top: 10px;
+}
+.bread-crumb {
+  min-height: 24px;
+}
+.bread-crumb .mat-icon {
+  font-size: 18px;
 }
