@@ -7,7 +7,7 @@ namespace XtraUpload.WebApi
 {
     internal class ReadAppSettingResultDto
     {
-        public WebAppSettings AppSettings { get; set; }
+        public WebAppInfo AppSettings { get; set; }
         public SocialAuthSettings SocialAuthSettings { get; set; }
         public JwtIssuerOptionsDto JwtIssuerOptions { get; set; }
         public HardwareCheckOptions HardwareCheckOptions { get; set; }

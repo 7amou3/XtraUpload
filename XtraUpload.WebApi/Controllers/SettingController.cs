@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Domain;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.Administration.Service.Common;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace XtraUpload.WebApi.Controllers
 {
@@ -70,21 +72,21 @@ namespace XtraUpload.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("page/{name:regex(^[[a-zA-Z0-9_]]*$)}")]
-        public async Task<IActionResult> GetPage(string name)
+        [HttpGet("page/{url:regex(^[[a-zA-Z0-9_]]*$)}")]
+        public async Task<IActionResult> GetPage(string url)
         {
-            PageResult result = await _mediatr.Send(new GetPageQuery(name));
+            PageResult result = await _mediatr.Send(new GetPageQuery(url));
 
             return HandleResult(result, result.Page);
         }
 
         [AllowAnonymous]
-        [HttpGet("webappconfig")]
-        public async Task<IActionResult> GetWebAppConfig()
+        [HttpGet("appinitializerconfig")]
+        public async Task<IActionResult> GetAppInitializerConfig()
         {
-            ReadAppSettingResult result = await _mediatr.Send(new GetAppSettingsQuery());
+            AppInitializerConfigResult result = await _mediatr.Send(new GetAppInitializerConfigQuery());
 
-            return Ok(result.AppSettings);
+            return HandleResult(result, new { AppInfo = result.AppInfo, pagesHeader = _mapper.Map<IEnumerable<PageHeaderDto>>(result.Pages) });
         }
 
         [AllowAnonymous]

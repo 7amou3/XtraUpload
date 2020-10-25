@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IChangePassword, IWebSetting } from 'app/domain';
+import { IAppInitializerConfig, IChangePassword, IWebAppInfo } from 'app/domain';
 import { map } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
 import { of, Observable } from 'rxjs';
@@ -13,21 +13,16 @@ export class SettingsService {
     private userStorage: UserStorageService,
     private seoService: SeoService) { }
 
-  webappconfig(): Observable<IWebSetting> {
-    const pagesetting = this.userStorage.getPageSetting();
-    // make request to server only if cache expires (cache is valid for 5 min)
-    if (!pagesetting || new Date().getTime() > new Date(pagesetting?.expire).getTime()) {
-      return this.http.get<IWebSetting>('setting/webappconfig')
+  appInitializerConfig(): Observable<IAppInitializerConfig> {
+    return this.http.get<IAppInitializerConfig>('setting/appinitializerconfig')
       .pipe(
         map(result => {
-          result.expire = new Date();
-          result.expire.setMinutes(result.expire.getMinutes() + 5);
-          this.userStorage.savePageSetting(result);
-          this.seoService.setMetaPage(result);
+          this.userStorage.saveAppSettings(result);
+          this.seoService.setMetaPage(result.appInfo);
           return result;
         })
       );
-    } else { return of(pagesetting); }
+
   }
   changePassword(changePassword: IChangePassword) {
     return this.http.patch('setting/password', changePassword);
@@ -37,6 +32,6 @@ export class SettingsService {
     if (theme === 'light') {
       themeId = 1;
     }
-    return this.http.patch('setting/theme', {theme : themeId});
+    return this.http.patch('setting/theme', { theme: themeId });
   }
 }

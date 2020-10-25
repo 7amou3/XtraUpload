@@ -5,10 +5,10 @@ namespace XtraUpload.Setting.Service.Common
 {
     public class GetPageQuery : IRequest<PageResult>
     {
-        public GetPageQuery(string pageName)
+        public GetPageQuery(string pageUrl)
         {
-            PageName = pageName;
+            PageUrl = pageUrl;
         }
-        public string PageName { get; }
+        public string PageUrl { get; }
     }
 }

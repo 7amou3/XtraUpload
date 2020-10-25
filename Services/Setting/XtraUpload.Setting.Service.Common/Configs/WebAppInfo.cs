@@ -1,6 +1,6 @@
 ﻿namespace XtraUpload.Setting.Service.Common
 {
-    public class WebAppSettings
+    public class WebAppInfo
     {
         /// <summary>
         /// Application title

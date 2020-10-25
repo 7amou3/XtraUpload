@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
-using XtraUpload.FileManager.Service.Common;
 using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.Setting.Service
@@ -20,19 +19,19 @@ namespace XtraUpload.Setting.Service
         readonly IWritableOptions<JwtIssuerOptions> _JwtOpts;
         readonly IWritableOptions<EmailSettings> _emailSettings;
         readonly IWritableOptions<HardwareCheckOptions> _hdOpts;
-        readonly IWritableOptions<WebAppSettings> _appSettings;
+        readonly IWritableOptions<WebAppInfo> _appInfo;
         readonly IWritableOptions<SocialAuthSettings> _socialSettings;
        
         public UpdateConfigSectionCommandHandler(
             IWritableOptions<JwtIssuerOptions> jwtOpts,
             IWritableOptions<EmailSettings> emailSettings,
             IWritableOptions<HardwareCheckOptions> hdOpts,
-            IWritableOptions<WebAppSettings> appSettings, 
+            IWritableOptions<WebAppInfo> appInfo, 
             IWritableOptions<SocialAuthSettings> socialSettings)
         {
             _hdOpts = hdOpts;
             _JwtOpts = jwtOpts;
-            _appSettings = appSettings;
+            _appInfo = appInfo;
             _emailSettings = emailSettings;
             _socialSettings = socialSettings;
         }
@@ -85,11 +84,11 @@ namespace XtraUpload.Setting.Service
                     s.ValidFor = opts.ValidFor;
                 });
             }
-            else if (request.ConfigSection is WebAppSettings)
+            else if (request.ConfigSection is WebAppInfo)
             {
-                await _appSettings.Update(s =>
+                await _appInfo.Update(s =>
                 {
-                    var settings = request.ConfigSection as WebAppSettings;
+                    var settings = request.ConfigSection as WebAppInfo;
                     s.Title = settings.Title;
                     s.Description = settings.Description;
                     s.Keywords = settings.Keywords;

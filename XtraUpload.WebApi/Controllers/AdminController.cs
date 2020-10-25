@@ -204,8 +204,8 @@ namespace XtraUpload.WebApi.Controllers
 
             return HandleResult(result);
         }
-        [HttpPatch("appSettings")]
-        public async Task<IActionResult> UpdateAppSettings(WebAppSettings model)
+        [HttpPatch("appinfo")]
+        public async Task<IActionResult> UpdateAppSettings(WebAppInfo model)
         {
             OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
 
@@ -221,9 +221,9 @@ namespace XtraUpload.WebApi.Controllers
         [HttpGet("pages")]
         public async Task<IActionResult> GetPages()
         {
-            var result = await _mediatr.Send(new GetPagesQuery());
+            var result = await _mediatr.Send(new GetPagesHeaderQuery());
 
-            return HandleResult(result, result.Pages);
+            return HandleResult(result, result.PagesHeader);
         }
         [HttpPost("page")]
         public async Task<IActionResult> AddPage(Page page)

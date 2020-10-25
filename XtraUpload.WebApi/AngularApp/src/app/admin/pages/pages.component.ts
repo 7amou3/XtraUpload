@@ -19,7 +19,7 @@ import { DeletepageComponent } from './dialogs/deletepage/deletepage.component';
 })
 export class PagesComponent extends ComponentBase implements OnInit {
   private selectedPage: IPage;
-  displayedColumns: string[] = ['name', 'createdAt', 'updatedAt', 'actions'];
+  displayedColumns: string[] = ['name', 'footerVisible', 'createdAt', 'updatedAt', 'actions'];
   dataSource = new MatTableDataSource<IPage>();
   @ViewChild('itemstable', { static: true }) itemstable: MatTable<IPage>;
   constructor( private adminService: AdminService,
@@ -87,6 +87,7 @@ export class PagesComponent extends ComponentBase implements OnInit {
           page.content = result.content;
           page.updatedAt = new Date();
           page.url = result.url;
+          page.visibleInFooter = result.visibleInFooter;
           this.refreshTable();
           this.snackBar.open(`The page ${page.name} has been updated successfully`, '', { duration: 3000 });
         }

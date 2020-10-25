@@ -1,5 +1,6 @@
+<mat-progress-bar *ngIf="isBusy" style="top: -24px" mode="query"></mat-progress-bar>
 <h2 mat-dialog-title>Edit page</h2>
-<form [formGroup]="editFormGroup" (ngSubmit)="onSubmit(editFormGroup.value)" class="font-14">
+<form [formGroup]="pageFormGroup" (ngSubmit)="onSubmit(pageFormGroup.value)" class="font-14">
     <mat-dialog-content>
         <mat-form-field>
             <mat-label>Page Title</mat-label>
@@ -7,14 +8,15 @@
             <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
             <mat-error *ngIf="name.hasError('itemExists')">A page with the same name already exists.</mat-error>
         </mat-form-field>
-        <simplemde formControlName="content" [options]="editorOptions" ></simplemde>
+        <simplemde formControlName="content" [options]="editorOptions"></simplemde>
     </mat-dialog-content>
     <mat-dialog-actions fxLayoutAlign="flex-end">
+        <div style="margin-right: auto;">
+            <mat-slide-toggle formControlName="visibleInFooter"></mat-slide-toggle>
+            <mat-icon class="font-12 m-l-10" matTooltip="{{tooltipInfo}}">help</mat-icon>
+        </div>
         <button mat-button mat-dialog-close>Cancel</button>
-        <button
-            mat-button color="accent"
-            [disabled]="!editFormGroup.valid || isBusy" type="submit"
-            >Save changes
+        <button mat-button color="accent" [disabled]="!pageFormGroup.valid || isBusy" type="submit">Save changes
         </button>
     </mat-dialog-actions>
 </form>

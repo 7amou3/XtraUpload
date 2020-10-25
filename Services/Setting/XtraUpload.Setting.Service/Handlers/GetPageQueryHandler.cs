@@ -23,7 +23,7 @@ namespace XtraUpload.Setting.Service
         public async Task<PageResult> Handle(GetPageQuery request, CancellationToken cancellationToken)
         {
             PageResult result = new PageResult();
-            Page page = await _unitOfWork.Pages.FirstOrDefaultAsync(s => s.Url.ToLower() == request.PageName);
+            Page page = await _unitOfWork.Pages.FirstOrDefaultAsync(s => s.Url.ToLower() == request.PageUrl);
             if (page == null)
             {
                 result.ErrorContent = new ErrorContent("Page not found.", ErrorOrigin.Client);

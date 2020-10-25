@@ -4,26 +4,24 @@
         <!-- Logo -->
         <div class="navbar-header">
             <span class="navbar-brand">
-                <mat-icon 
-                *ngIf="!mobileQuery.matches"
-                class="text-white m-r-10"
-                (click)="onOpenCloseNav()">menu</mat-icon>
+                <mat-icon *ngIf="!mobileQuery.matches" class="text-white m-r-10" (click)="onOpenCloseNav()">menu
+                </mat-icon>
                 <!-- Logo icon -->
-                    <b [routerLink]="['/login']"> 
-                        <img src="assets/images/logo-icon.png" alt="homepage" class="logo">
-                    </b>
-                    <!-- Logo text -->
-                    <span [routerLink]="['/login']" fxShow="false" fxShow.gt-xs>
-                        <!-- Logo -->
-                        <img src="assets/images/logo.png" alt="homepagelogo">
-                    </span>
+                <b [routerLink]="['/login']">
+                    <img src="assets/images/logo-icon.png" alt="homepage" class="logo">
+                </b>
+                <!-- Logo text -->
+                <span [routerLink]="['/login']" fxShow="false" fxShow.gt-xs>
+                    <!-- Logo -->
+                    <img src="assets/images/logo.png" alt="homepagelogo">
+                </span>
             </span>
         </div>
         <span fxFlex></span>
         <!-- app header component -->
         <app-header [currentTheme]="currentTheme" (selectedTheme)="onSelectedTheme($event)"></app-header>
     </mat-toolbar>
-    
+    <!-- Content -->
     <router-outlet>
         <app-spinner></app-spinner>
     </router-outlet>

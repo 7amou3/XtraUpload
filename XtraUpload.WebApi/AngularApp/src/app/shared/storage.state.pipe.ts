@@ -7,7 +7,7 @@ import { isNumeric } from 'rxjs/internal-compatibility';
 
 export class StorageStatePipe implements PipeTransform {
 
-    transform(state: number,): string {
+    transform(state: number): string {
         var result = 'Unknown';
         if (!isNumeric(state)) {
             return result;
