@@ -57,7 +57,7 @@ namespace XtraUpload.WebApi
             services.AddFileManager();
             services.AddEmail(Configuration);
             services.AddAdministration();
-            services.AddGrpcServices();
+            services.AddGrpcServices(Configuration);
 
             // Add background worker
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
