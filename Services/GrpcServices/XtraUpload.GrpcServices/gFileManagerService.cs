@@ -1,9 +1,8 @@
 ﻿using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
@@ -29,6 +28,7 @@ namespace XtraUpload.GrpcServices
         /// Check if the current grpc request is authorized
         /// a jwt should be attached in order for the server to decode it
         /// </summary>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override Task<gIsAuthorizedResponse> IsAuthorized(gIsAuthorizedRequest request, ServerCallContext context)
         {
             var authorized = context.GetHttpContext().User.Identity.IsAuthenticated;
@@ -42,7 +42,7 @@ namespace XtraUpload.GrpcServices
             return Task.FromResult(response);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override async Task<gUserResponse> GetUser(gUserRequest request, ServerCallContext context)
         {   
             var userResult = await _mediatr.Send(new GetUserByIdQuery());
@@ -57,20 +57,28 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Save the new uploaded file to db
         /// </summary>
-        [Authorize("bearer", Policy = "User")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
             var file = request.FileItem.Convert();
-            var t = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id");
-            file.UserId = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id").Value;
-
-            var saveResult = await _mediatr.Send(new SaveFileCommand(file));
-
-            return new gFileItemResponse() 
-            { 
-                FileItem = saveResult.File.Convert(),
-                Status = saveResult.Convert()
-            };
+            var claim = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id");
+            if (claim != null)
+            {
+                file.UserId = claim.Value;
+                var saveResult = await _mediatr.Send(new SaveFileCommand(file));
+                return new gFileItemResponse()
+                {
+                    FileItem = saveResult.File.Convert(),
+                    Status = saveResult.Convert()
+                };
+            }
+            else
+            {
+                return new gFileItemResponse()
+                {
+                    Status = new gRequestStatus(new gRequestStatus() { Status = Protos.RequestStatus.Failed, Message = "Invalid jwt token." })
+                };
+            }
         }
 
         /// <summary>
@@ -137,7 +145,7 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Save the uploaded avatar to db
         /// </summary>
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override async Task<gSaveAvatarResponse> SaveAvatar(gSaveAvatarRequest request, ServerCallContext context)
         {
             var result = await _mediatr.Send(new SaveAvatarCommand(request.AvatarUrl));

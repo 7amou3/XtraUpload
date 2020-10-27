@@ -27,6 +27,7 @@ namespace XtraUpload.GrpcServices
                     // The server is using a self-signed certificate, no need to check revocationMode.
                     options.RevocationMode = X509RevocationMode.NoCheck;
                     options.AllowedCertificateTypes = CertificateTypes.All;
+                    
                     options.Events = new CertificateAuthenticationEvents()
                     {
                         OnCertificateValidated = context =>

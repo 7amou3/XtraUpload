@@ -17,10 +17,21 @@ namespace XtraUpload.WebApi
                 {
                     webBuilder.ConfigureKestrel(kestrelOptions =>
                     {
-                        kestrelOptions.ConfigureHttpsDefaults(httpsOptions =>
+                        // 5000 is the port for the web API
+                        kestrelOptions.ListenLocalhost(5000, listenOptions =>
                         {
-                            httpsOptions.ClientCertificateMode = ClientCertificateMode.AllowCertificate;
+                            listenOptions.UseHttps();
                         });
+                        // 5001 is the port for grpc service
+                        kestrelOptions.ListenLocalhost(5001,
+                        listenOptions =>
+                        {
+                            listenOptions.UseHttps(options => 
+                            {
+                                options.ClientCertificateMode = ClientCertificateMode.RequireCertificate; 
+                            });
+                        });
+
                     });
                     webBuilder.UseStartup<Startup>();
                 });

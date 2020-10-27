@@ -8,6 +8,7 @@
     <PackageReference Include="Grpc.AspNetCore" Version="2.32.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\XtraUpload.Domain\XtraUpload.Domain.csproj" />

@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using XtraUpload.GrpcServices.Common;
 using XtraUpload.Protos;
