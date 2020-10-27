@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using XtraUpload.GrpcServices.Common;
 
@@ -21,6 +23,13 @@ namespace XtraUpload.GrpcServices
         {
             // Add grpc server
             services.AddGrpc();
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate(options =>
+                {
+                    // The server is using a self-signed certificate, no need to check revocationMode.
+                    options.RevocationMode = X509RevocationMode.NoCheck;
+                    options.AllowedCertificateTypes = CertificateTypes.All;
+                });
             // Register services
             services.AddSingleton<ICheckClientProxy, CheckClientProxy>();
             services.AddSingleton<IUploadOptsClientProxy, UploadOptsClientProxy>();

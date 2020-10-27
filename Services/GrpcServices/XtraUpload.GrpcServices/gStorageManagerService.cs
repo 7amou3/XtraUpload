@@ -1,4 +1,6 @@
 ﻿using Grpc.Core;
+using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace XtraUpload.GrpcServices
     /// <summary>
     /// Service definition for storage service, server config, monitoring state...
     /// </summary>
+    [Authorize(AuthenticationSchemes = CertificateAuthenticationDefaults.AuthenticationScheme)]
     public class gStorageManagerService : gStorageManager.gStorageManagerBase
     {
         readonly ICheckClientProxy _checkClientProxy;
@@ -30,7 +33,7 @@ namespace XtraUpload.GrpcServices
             _uploadOptsCommand = uploadOptsProxy as IUploadOptsClientCommand;
 
         }
-
+        
         public override async Task CheckConnectivity(IAsyncStreamReader<ConnectivityResponse> requestStream, IServerStreamWriter<ConnectivityRequest> responseStream, ServerCallContext context)
         {
             _checkClientProxy.StorageServerConnectivityRequested += ConnectivityRequested;

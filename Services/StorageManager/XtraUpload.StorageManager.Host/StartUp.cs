@@ -50,6 +50,8 @@ namespace XtraUpload.StorageManager.Host
             {
                 channel.Credentials = GrpcChannelHelper.CreateSecureChannel(serviceProvider);
             })
+            // Configure client cert 
+            .ConfigurePrimaryHttpMessageHandler((s) => GrpcChannelHelper.CreateHttpHandler(s))
             .AddInterceptor<LoggerInterceptor>();
 
             services.AddGrpcClient<gStorageManager.gStorageManagerClient>(options =>
@@ -60,6 +62,7 @@ namespace XtraUpload.StorageManager.Host
             {
                 channel.Credentials = GrpcChannelHelper.CreateSecureChannel(serviceProvider);
             })
+            .ConfigurePrimaryHttpMessageHandler((s) => GrpcChannelHelper.CreateHttpHandler(s))
             .AddInterceptor<LoggerInterceptor>();
 
             // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
@@ -73,6 +76,10 @@ namespace XtraUpload.StorageManager.Host
             services.AddHealthChecks()
                 .AddCheck<FileStoreHealthCheck>("Storage Permissions")
                 .AddCheck<StorageHealthCheck>("Storage Space");
+
+            // Certificate config
+            IConfigurationSection certSection = config.GetSection(nameof(CertificateConfig));
+            services.Configure<CertificateConfig>(certSection);
 
             // Upload Options
             IConfigurationSection uploadSection = config.GetSection(nameof(UploadOptions));

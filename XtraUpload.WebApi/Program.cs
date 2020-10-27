@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Hosting;
 
 namespace XtraUpload.WebApi
@@ -14,6 +15,13 @@ namespace XtraUpload.WebApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel(kestrelOptions =>
+                    {
+                        kestrelOptions.ConfigureHttpsDefaults(httpsOptions =>
+                        {
+                            httpsOptions.ClientCertificateMode = ClientCertificateMode.AllowCertificate;
+                        });
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }

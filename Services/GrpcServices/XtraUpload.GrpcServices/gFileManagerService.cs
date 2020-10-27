@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace XtraUpload.GrpcServices
     /// <summary>
     /// Service definition for file storage server, the client may request to update/delete, whatever operation on a file
     /// </summary>
+    [Authorize(AuthenticationSchemes = CertificateAuthenticationDefaults.AuthenticationScheme)]
     public class gFileManagerService : gFileManager.gFileManagerBase
     {
         readonly IMediator _mediatr;
@@ -55,10 +57,11 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Save the new uploaded file to db
         /// </summary>
-        [Authorize]
+        [Authorize("bearer", Policy = "User")]
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
             var file = request.FileItem.Convert();
+            var t = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id");
             file.UserId = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id").Value;
 
             var saveResult = await _mediatr.Send(new SaveFileCommand(file));
