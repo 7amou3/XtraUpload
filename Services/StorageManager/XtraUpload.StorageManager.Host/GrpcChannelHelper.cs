@@ -59,7 +59,7 @@ namespace XtraUpload.StorageManager.Host
             X509Certificate2 clientCertificate = null;
             try
             {
-                var certConfig = config.GetSection(nameof(CertificateConfig)).Get<CertificateConfig>();
+                var certConfig = config.GetSection(nameof(ClientCertificateConfig)).Get<ClientCertificateConfig>();
                 if (File.Exists(certConfig.PfxPath))
                 {
                     clientCertificate = new X509Certificate2(certConfig.PfxPath, certConfig.Password);

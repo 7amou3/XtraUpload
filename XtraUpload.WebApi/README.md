@@ -8,7 +8,14 @@ the first step is to designate a private CA (certificate authority) server, in o
 **PS:** this is the key used to sign the certificate requests, anyone holding this can sign certificates on your behalf. So keep it in a safe place!
 2. Create and self sign the Root Certificate
 `openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt`
-3. Host this certificate on your server's trusted root certificate store, for windows follow this [steps](https://www.thesslstore.com/knowledgebase/ssl-install/how-to-import-intermediate-root-certificates-using-mmc/). The server is ready to validate incoming http requests
+3. Host this certificate on your server's trusted root certificate store, for windows follow this [steps](https://www.thesslstore.com/knowledgebase/ssl-install/how-to-import-intermediate-root-certificates-using-mmc/). 
+4. Open `appsettings.json` and put the full path to your public root certificate 
+   ```
+    "RootCertificateConfig": {
+     "CrtPath": "/path/to/cert/rootCA.crt"
+   }
+   ```
+The server is ready to validate incoming client certificates
 ### Create a client certificate (must be done for each storage server)
 This procedure needs to be followed for each storage server that needs a trusted certificate from our CA (the XtraUpload API server), we will assume that the storage server is hosted on https://localhost:5002/
 1. On the same terminal, create a certificate key

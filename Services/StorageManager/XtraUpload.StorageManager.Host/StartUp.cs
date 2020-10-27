@@ -77,9 +77,9 @@ namespace XtraUpload.StorageManager.Host
                 .AddCheck<FileStoreHealthCheck>("Storage Permissions")
                 .AddCheck<StorageHealthCheck>("Storage Space");
 
-            // Certificate config
-            IConfigurationSection certSection = config.GetSection(nameof(CertificateConfig));
-            services.Configure<CertificateConfig>(certSection);
+            // Client certificate config
+            IConfigurationSection certSection = config.GetSection(nameof(ClientCertificateConfig));
+            services.Configure<ClientCertificateConfig>(certSection);
 
             // Upload Options
             IConfigurationSection uploadSection = config.GetSection(nameof(UploadOptions));
