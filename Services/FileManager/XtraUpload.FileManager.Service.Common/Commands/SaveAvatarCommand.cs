@@ -8,10 +8,12 @@ namespace XtraUpload.FileManager.Service.Common
     /// </summary>
     public class SaveAvatarCommand : IRequest<OperationResult>
     {
-        public SaveAvatarCommand(string avatarUrl)
+        public SaveAvatarCommand(string userId, string avatarUrl)
         {
+            UserId = userId;
             AvatarUrl = avatarUrl;
         }
+        public string UserId { get; }
         public string AvatarUrl { get; }
     }
 }

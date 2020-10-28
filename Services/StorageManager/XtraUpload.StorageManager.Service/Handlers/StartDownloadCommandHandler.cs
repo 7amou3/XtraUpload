@@ -62,7 +62,7 @@ namespace XtraUpload.StorageManager.Service
             string filePath = Path.Combine(_uploadOpt.UploadPath, dResponse.FileItem.UserId, dResponse.FileItem.Id, dResponse.FileItem.Id);
             
             // Check file exist on disk
-            if (!IsFileExists(filePath))
+            if (!File.Exists(filePath))
             {
                 _httpContext.Response.StatusCode = 404;
                 Result.ErrorContent = new ErrorContent("File not found, it may have been moved or deleted!", ErrorOrigin.Server);
@@ -87,23 +87,31 @@ namespace XtraUpload.StorageManager.Service
             }
 
             // All good, start download
-            await StartDownload(responseHeader, filePath, dResponse.DownloadSpeed);
+            var dStatus = await StartDownload(responseHeader, filePath, dResponse.DownloadSpeed);
 
             // Once download is completed we send request to increment download count
-            await _fileMngClient.FileDownloadCompletedAsync(new gDownloadCompletedRequest() 
+            if (dStatus == DownloadStatus.COMPLETED)
             {
-                 FileId = dResponse.FileItem.Id,
-                 RequesterIp = _httpContext.Request.Host.Value
-            });
+                await _fileMngClient.FileDownloadCompletedAsync(new gDownloadCompletedRequest()
+                {
+                    FileId = dResponse.FileItem.Id,
+                    RequesterIp = _httpContext.Request.Host.Value
+                });
+            }
+            else
+            {
+                _logger.LogInformation("Download request status: " + dStatus);
+            }
             return null;
         }
-        private async Task StartDownload(HttpResponseHeader responseHeader, string filePath, double speed)
+        private async Task<DownloadStatus> StartDownload(HttpResponseHeader responseHeader, string filePath, double speed)
         {
+            DownloadStatus status = DownloadStatus.UNKNOWN;
             FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             try
             {
-                await SendDownloadFile(responseHeader, fileStream, speed);
+                status = await SendDownloadFile(responseHeader, fileStream, speed);
             }
             catch (Exception ex)
             {
@@ -117,26 +125,7 @@ namespace XtraUpload.StorageManager.Service
                 fileStream.Close();
                 fileStream?.Dispose();
             }
-        }
-
-        /// <summary>
-        /// Check whether the file exists.
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        private bool IsFileExists(string filePath)
-        {
-            bool fileExists = false;
-
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                if (File.Exists(filePath))
-                {
-                    fileExists = true;
-                }
-            }
-
-            return fileExists;
+            return status;
         }
 
         /// <summary>
@@ -207,11 +196,12 @@ namespace XtraUpload.StorageManager.Service
         /// <summary>
         /// Send the download file to the client.
         /// </summary>
-        private async Task SendDownloadFile(HttpResponseHeader responseHeader, Stream fileStream, double speed)
+        private async Task<DownloadStatus> SendDownloadFile(HttpResponseHeader responseHeader, Stream fileStream, double speed)
         {
+            DownloadStatus dStatus = DownloadStatus.UNKNOWN;
             if (_httpContext.Response == null || responseHeader == null)
             {
-                return;
+                return dStatus;
             }
             
             if (!string.IsNullOrEmpty(responseHeader.ContentRange))
@@ -236,8 +226,8 @@ namespace XtraUpload.StorageManager.Service
             _httpContext.Response.ContentType = responseHeader.ContentType;
             _httpContext.Response.Headers.Add("Etag", "\"" + responseHeader.Etag + "\"");
             _httpContext.Response.Headers.Add("Last-Modified", responseHeader.LastModified);
-
-            byte[] buffer = new byte[10240];
+            // 8Kb buffer size
+            byte[] buffer = new byte[8192]; 
             long fileLength = Convert.ToInt64(responseHeader.ContentLength);
 
             // Send file to client.
@@ -245,30 +235,39 @@ namespace XtraUpload.StorageManager.Service
             {
                 if (!_httpContext.RequestAborted.IsCancellationRequested)
                 {
-                    int length = fileStream.Read(buffer, 0, 10240);
+                    dStatus = DownloadStatus.INPROGRESS;
+                    int length = fileStream.Read(buffer, 0, 8192);
 
                     await _httpContext.Response.Body.WriteAsync(buffer, 0, length);
 
                     await _httpContext.Response.Body.FlushAsync();
 
                     fileLength -= length;
-
                     // Throttle write speed
-                    var sleep = Math.Ceiling((buffer.Length / (1000.0 * speed)) * 1000.0);
-                    Thread.Sleep(int.Parse(sleep.ToString()));
+                    if (fileLength > 0)
+                    {
+                        var sleep = Math.Ceiling(buffer.Length / (1000.0 * speed) * 1000.0);
+                        Thread.Sleep(int.Parse(sleep.ToString()));
+                    }
+                    // Download is done
+                    else
+                    {
+                        dStatus = DownloadStatus.COMPLETED;
+                    }
                 }
                 else
                 {
                     fileLength = -1;
+                    dStatus = DownloadStatus.ABORTED;
                 }
             }
+            return dStatus;
         }
-
     }
     /// <summary>
     /// Respresent the HttpResponse header information.
     /// </summary>
-    internal class HttpResponseHeader
+    class HttpResponseHeader
     {
         public string AcceptRanges { get; set; }
         public string Connection { get; set; }
@@ -280,5 +279,12 @@ namespace XtraUpload.StorageManager.Service
         public string Etag { get; set; }
         public string LastModified { get; set; }
     }
-
+    enum DownloadStatus 
+    {
+        UNKNOWN = 0,
+        STARTED,
+        INPROGRESS,
+        ABORTED,
+        COMPLETED
+    }
 }

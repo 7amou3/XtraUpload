@@ -25,8 +25,7 @@ namespace XtraUpload.GrpcServices
             _mediatr = mediatr;
         }
         /// <summary>
-        /// Check if the current grpc request is authorized
-        /// a jwt should be attached in order for the server to decode it
+        /// Check if the jwt is valid thus the user is authenticated
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override Task<gIsAuthorizedResponse> IsAuthorized(gIsAuthorizedRequest request, ServerCallContext context)
@@ -57,28 +56,15 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Save the new uploaded file to db
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
             var file = request.FileItem.Convert();
-            var claim = context.GetHttpContext().User.Claims.FirstOrDefault(c => c.Type == "id");
-            if (claim != null)
+            var saveResult = await _mediatr.Send(new SaveFileCommand(file));
+            return new gFileItemResponse()
             {
-                file.UserId = claim.Value;
-                var saveResult = await _mediatr.Send(new SaveFileCommand(file));
-                return new gFileItemResponse()
-                {
-                    FileItem = saveResult.File.Convert(),
-                    Status = saveResult.Convert()
-                };
-            }
-            else
-            {
-                return new gFileItemResponse()
-                {
-                    Status = new gRequestStatus(new gRequestStatus() { Status = Protos.RequestStatus.Failed, Message = "Invalid jwt token." })
-                };
-            }
+                FileItem = saveResult.File.Convert(),
+                Status = saveResult.Convert()
+            };
         }
 
         /// <summary>
@@ -94,6 +80,7 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Get the file to download
         /// </summary>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public async override Task<gDownloadFileResponse> GetDownloadFile(gDownloadFileRequest request, ServerCallContext context)
         {
             var result = await _mediatr.Send(new GetDownloadByIdQuery(request.DownloadId, request.RequesterAddress));
@@ -145,10 +132,9 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Save the uploaded avatar to db
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override async Task<gSaveAvatarResponse> SaveAvatar(gSaveAvatarRequest request, ServerCallContext context)
         {
-            var result = await _mediatr.Send(new SaveAvatarCommand(request.AvatarUrl));
+            var result = await _mediatr.Send(new SaveAvatarCommand(request.AvatarUrl, request.UserId));
 
             return new gSaveAvatarResponse() { Status = result.Convert() };
         }
