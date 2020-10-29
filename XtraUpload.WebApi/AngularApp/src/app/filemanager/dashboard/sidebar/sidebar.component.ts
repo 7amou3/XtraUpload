@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.scss']
 })
 export class AppSidebarComponent extends ComponentBase implements OnInit {
   @Input() uploadSetting$: Subject<IUploadSettings>;
@@ -24,13 +24,14 @@ export class AppSidebarComponent extends ComponentBase implements OnInit {
   }
   ngOnInit() {
     const profile = this.storageService.getProfile();
-      if (!profile?.avatar) {
-          this.avatar = 'assets/images/users/profile-icon.png';
-      }
-      else {
-        this.avatar = profile.avatar;
-        this.username = profile.userName;
-      }
+    if (profile) {
+      this.avatar = profile.avatar;
+      this.username = profile.userName;
+      if (!profile.avatar) {
+        this.avatar = 'assets/images/users/profile-icon.png';
+    }
+    }
+
     // subscribe to successful upload to update progressbar size status
     this.fileMngService.fileUploaded$
     .pipe(takeUntil(this.onDestroy))

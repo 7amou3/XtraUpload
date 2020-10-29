@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -33,15 +32,31 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                gUser user = await MoveFilesToFolder(ctx);
+                // Get the connected client
+                var gUserResponse = await _fileMngClient.GetUserAsync(new gUserRequest());
+                if (gUserResponse == null)
+                {
+                    _logger.LogError("Unknown error occured while requesting user info");
+                    ctx.HttpContext.Response.StatusCode = 400;
+                    return;
+                }
+                if (gUserResponse.Status.Status != Protos.RequestStatus.Success)
+                {
+                    _logger.LogError(gUserResponse.Status.Message);
+                    ctx.HttpContext.Response.StatusCode = 400;
+                    return;
+                }
+                // Move files to user's folder
+                MoveFilesToFolder(ctx, gUserResponse.User);
                 // Update db
-                string avatarUrl = await RequestUpdateDb(ctx, user);
+                string avatarUrl = await RequestUpdateDb(ctx, gUserResponse.User);
                 // Attach avatar info to header, because tus send 204 (no response body is allowed)
                 ctx.HttpContext.Response.Headers.Add("upload-data", Helpers.JsonSerialize(new { AvatarUrl = avatarUrl }));
             }
             catch (Exception _ex)
             {
                 _logger.LogError(_ex.Message);
+                ctx.HttpContext.Response.StatusCode = 500;
                 throw _ex;
             }
         }
@@ -52,7 +67,7 @@ namespace XtraUpload.StorageManager.Service
         private async Task<string> RequestUpdateDb(FileCompleteContext ctx, gUser user)
         {
             var avatarUrl = ctx.HttpContext.Request.Scheme + "://" + ctx.HttpContext.Request.Host.Value + "/api/file/avatar/" + user.Id;
-            var response = await _fileMngClient.SaveAvatarAsync(new gSaveAvatarRequest() { AvatarUrl = avatarUrl });
+            var response = await _fileMngClient.SaveAvatarAsync(new gSaveAvatarRequest() { AvatarUrl = avatarUrl, UserId = user.Id });
             if (response == null)
             {
                 _logger.LogError("Unknown error occured while requesting user info");
@@ -60,6 +75,7 @@ namespace XtraUpload.StorageManager.Service
             if (response.Status.Status != Protos.RequestStatus.Success)
             {
                 _logger.LogError(response.Status.Message);
+                ctx.HttpContext.Response.StatusCode = 400;
             }
             return avatarUrl;
         }
@@ -68,21 +84,9 @@ namespace XtraUpload.StorageManager.Service
         /// Moves the uploaded files to the avatar folder
         /// tus protocol puts the uploaded files into the store, XtraUpload move those files to the user directory
         /// </summary>
-        private async Task<gUser> MoveFilesToFolder(FileCompleteContext ctx)
+        private void MoveFilesToFolder(FileCompleteContext ctx, gUser user)
         {
-            var gUserResponse = await _fileMngClient.GetUserAsync(new gUserRequest());
-            if (gUserResponse == null)
-            {
-                _logger.LogError("Unknown error occured while requesting user info");
-                return null;
-            }
-            if (gUserResponse.Status.Status != Protos.RequestStatus.Success)
-            {
-                _logger.LogError(gUserResponse.Status.Message);
-                return null;
-            }
-
-            string userFolder = Path.Combine(_uploadOpts.CurrentValue.UploadPath, gUserResponse.User.Id);
+            string userFolder = Path.Combine(_uploadOpts.CurrentValue.UploadPath, user.Id);
             string avatarFolder = Path.Combine(userFolder, "avatar");
             // Create user root directory
             if (!Directory.Exists(userFolder))
@@ -108,10 +112,10 @@ namespace XtraUpload.StorageManager.Service
             using FileStream smallavatar = new FileStream(Path.Combine(avatarFolder, "avatar.png"), FileMode.Create);
             using Image image = Image.Load(File.ReadAllBytes(avatarPath), out IImageFormat format);
 
-            Image smallthumbnail = image.Clone(i => i.Resize(128, 128).Crop(new Rectangle(0, 0, 128, 128)));
+            using Image smallthumbnail = image.Clone(i => i.Resize(128, 128).Crop(new Rectangle(0, 0, 128, 128)));
             smallthumbnail.Save(smallavatar, format);
 
-            return gUserResponse.User;
+            return;
         }
 
     }

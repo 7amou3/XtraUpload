@@ -78,6 +78,7 @@ message gDownloadCompletedResponse {
 }
 message gSaveAvatarRequest {
 	string avatarUrl = 1;
+	string userId = 2;
 }
 message gSaveAvatarResponse {
 	gRequestStatus status = 1;

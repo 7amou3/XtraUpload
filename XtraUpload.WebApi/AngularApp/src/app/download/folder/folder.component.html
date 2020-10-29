@@ -1,4 +1,5 @@
-<mat-sidenav-container class="page-wrapper">
+<div class="page-wrapper">
+<mat-sidenav-container class="download-content">
     <!-- Side bar -->
     <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'"
         fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
@@ -12,7 +13,7 @@
                 <h4 class="card-title m-l-15">Folder content</h4>
             </div>
             <mat-divider></mat-divider>
-            <mat-card-content style="min-height: 530px;">
+            <mat-card-content style="min-height: 500px;">
                 <app-message [message$]="message$"></app-message>
                 <app-tableview [folderContent$]="folderContent$"></app-tableview>
                 <!--Query in progress-->
@@ -28,7 +29,7 @@
                 </div>
             </mat-card-content>
         </mat-card>
-        <!--Footer-->
-        <app-footer></app-footer>
-    </mat-sidenav-content>
+    </mat-sidenav-content>    
 </mat-sidenav-container>
+<app-footer></app-footer>
+</div>

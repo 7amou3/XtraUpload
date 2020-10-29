@@ -50,6 +50,7 @@ namespace XtraUpload.StorageManager.Service
             catch (Exception _ex)
             {
                 _logger.LogError(_ex.Message);
+                ctx.HttpContext.Response.StatusCode = 500;
                 throw _ex;
             }
         }
@@ -58,6 +59,20 @@ namespace XtraUpload.StorageManager.Service
         /// </summary>
         private async Task<gFileItem> PersistMetaData(FileCompleteContext ctx)
         {
+            var gUserResponse = await _fileMngClient.GetUserAsync(new gUserRequest());
+            if (gUserResponse == null)
+            {
+                _logger.LogError("Unknown error occured while requesting user info");
+                ctx.HttpContext.Response.StatusCode = 400;
+                return null;
+            }
+            if (gUserResponse.Status.Status != Protos.RequestStatus.Success)
+            {
+                _logger.LogError(gUserResponse.Status.Message);
+                ctx.HttpContext.Response.StatusCode = 400;
+                return null;
+            }
+
             ITusFile file = await ((ITusReadableStore)ctx.Store).GetFileAsync(ctx.FileId, ctx.CancellationToken);
             var metadata = await file.GetMetadataAsync(ctx.CancellationToken);
 
@@ -65,6 +80,7 @@ namespace XtraUpload.StorageManager.Service
             {
                 Id = Helpers.GenerateUniqueId(),
                 TusId = ctx.FileId,
+                UserId = gUserResponse.User.Id,
                 Size = uint.Parse(new FileInfo(Path.Combine(_uploadOpts.CurrentValue.UploadPath, file.Id)).Length.ToString()),
                 Name = metadata["name"].GetString(Encoding.UTF8),
                 MimeType = metadata["contentType"].GetString(Encoding.UTF8),
@@ -140,11 +156,11 @@ namespace XtraUpload.StorageManager.Service
                         width = 640;
                     }
                     using FileStream mediumThumboutStream = new FileStream(newFileFullPath + ".mediumthumb.png", FileMode.Create);
-                    Image mediumthumbnail = image.Clone(i => i.Resize(width, height).Crop(new Rectangle(0, 0, width, height)));
+                    using Image mediumthumbnail = image.Clone(i => i.Resize(width, height).Crop(new Rectangle(0, 0, width, height)));
                     mediumthumbnail.Save(mediumThumboutStream, format);
                 }
 
-                Image smallthumbnail = image.Clone(i => i.Resize(128, 128).Crop(new Rectangle(0, 0, 128, 128)));
+                using Image smallthumbnail = image.Clone(i => i.Resize(128, 128).Crop(new Rectangle(0, 0, 128, 128)));
                 smallthumbnail.Save(smallThumboutStream, format);
             }
         }
