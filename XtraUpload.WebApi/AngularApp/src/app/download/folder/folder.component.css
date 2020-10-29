@@ -1,3 +1,6 @@
+.download-content {
+  min-height: calc(100vh - 120px);
+}
 .no-records .mat-icon {
     width: 100px;
     height: 100px;
