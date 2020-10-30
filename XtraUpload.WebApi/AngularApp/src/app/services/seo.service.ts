@@ -10,7 +10,7 @@ export class SeoService {
         private meta: Meta,
         private userStorage: UserStorageService) {}
     setPageTitle(title: string) {
-        const pageSetting = this.userStorage.getPageSetting();
+        const pageSetting = this.userStorage.getAppInfo();
         if (pageSetting) {
             title += ' - ' + pageSetting.title;
         }

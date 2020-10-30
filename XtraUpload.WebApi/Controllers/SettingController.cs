@@ -8,6 +8,7 @@ using XtraUpload.Setting.Service.Common;
 using XtraUpload.Administration.Service.Common;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace XtraUpload.WebApi.Controllers
 {
@@ -85,8 +86,11 @@ namespace XtraUpload.WebApi.Controllers
         public async Task<IActionResult> GetAppInitializerConfig()
         {
             AppInitializerConfigResult result = await _mediatr.Send(new GetAppInitializerConfigQuery());
-
-            return HandleResult(result, new { AppInfo = result.AppInfo, pagesHeader = _mapper.Map<IEnumerable<PageHeaderDto>>(result.Pages) });
+            return HandleResult(result, new {
+                AppInfo = result.AppInfo, 
+                Version = result.Version,
+                PagesHeader = _mapper.Map<IEnumerable<PageHeaderDto>>(result.Pages)
+            });
         }
 
         [AllowAnonymous]

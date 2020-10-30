@@ -1,0 +1,38 @@
+.mat-tree {
+    min-height: calc(100vh - 150px);
+    .mat-tree-node {
+        min-height: 3em;
+        height: 3em;
+        font-size: 13px;
+        div {
+            cursor: pointer;
+        }
+        &.active-node{
+            background: rgba(180,180,180,0.3);
+        }
+        &:hover {
+            background: rgba(180,180,180,0.3);
+        }
+        .side-icon {
+            margin-top: 7px;
+            font-size: 18px;
+            color: rgb(112, 112, 112);
+        }
+        .leaf-icon {
+            font-size: 18px;
+            color: rgb(112, 112, 112);
+        }
+        .mat-icon {
+            font-size: 18px;
+        }
+    }
+}
+.copyright {
+    padding: 10px;
+    .version {
+        margin-left: auto;
+    }
+    p {
+        font-size: 12px;
+    }
+}

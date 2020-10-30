@@ -1,0 +1,24 @@
+.mat-tree-node {
+    min-height: 3em;
+    height: 3em;
+    font-size: 13px;
+    p {
+        cursor: pointer;
+    }
+    &:hover {
+        background: rgba(180,180,180,0.3);
+    }
+    &.active-node{
+        background: rgba(180,180,180,0.3);
+    }
+    &.context-menu-on {
+        background: rgba(255, 255, 99, 0.6);
+    }
+    .mat-icon {
+        font-size: 18px;
+    }
+    .options-icon {
+        margin-left: auto;
+    }
+}
+

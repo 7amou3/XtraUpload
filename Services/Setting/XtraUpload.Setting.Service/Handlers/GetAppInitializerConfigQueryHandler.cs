@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +42,10 @@ namespace XtraUpload.Setting.Service
                 _logger.LogError("Error occured while reading application static pages. " + pagesResult.ErrorContent);
                 Result = Domain.OperationResult.CopyResult<AppInitializerConfigResult>(pagesResult);
             }
-            
+            var Version = Assembly.GetEntryAssembly().GetName().Version;
+            // XtraUpload use semantic versioning
+            Result.Version = $"{Version.Major}.{Version.Minor}.{Version.Build}";
+
             return Result;
         }
     }

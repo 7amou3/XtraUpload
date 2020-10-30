@@ -19,7 +19,7 @@ export class FooterComponent implements OnInit {
    }
   currentYear = new Date();
   ngOnInit(): void {
-    this.pageName = this.storageService.getPageSetting().title;
+    this.pageName = this.storageService.getAppInfo().title;
     this.footerLinks = this.storageService.getPageLinks();
   }
 

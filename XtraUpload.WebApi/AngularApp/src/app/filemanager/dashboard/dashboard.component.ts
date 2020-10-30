@@ -15,7 +15,7 @@ import { SidenavService } from 'app/services/sidenav.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends ComponentBase implements OnInit {
   private readonly pageTitle = 'My Files & Folders';

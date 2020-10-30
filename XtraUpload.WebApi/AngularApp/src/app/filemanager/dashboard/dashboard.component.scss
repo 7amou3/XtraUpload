@@ -1,0 +1,30 @@
+.add-files {
+	position: absolute;
+  right: 17px;
+  top: 52px;
+}
+
+.bread-crumb {
+  min-height: 24px;
+  .mat-icon {
+    font-size: 18px;
+  }
+  .active-link {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+}
+
+.no-records {
+  .mat-icon {
+    width: 100px;
+    height: 100px;
+    margin-top: 100px;
+  }
+  > p {
+    font-weight: bold;
+    line-height: 24px;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+}

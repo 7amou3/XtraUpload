@@ -14,6 +14,6 @@ using System.Reflection;
 //      Build Number
 //
 // You can specify all the values or you can default the Build and Numbers 
-[assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyVersion("1.2.0")]
+[assembly: AssemblyInformationalVersion("1.2.0")]
+[assembly: AssemblyFileVersion("1.2.0")]
