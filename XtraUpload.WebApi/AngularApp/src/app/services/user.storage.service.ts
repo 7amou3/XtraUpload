@@ -9,7 +9,7 @@ const STATICPAGE_LINKS = 'xu-PageLinks';
 @Injectable()
 export class UserStorageService {
   constructor() { }
-  getPageSetting(): IWebAppInfo {
+  getAppInfo(): IWebAppInfo {
     const pageSetting = localStorage.getItem(APP_INFO);
     if (!pageSetting) {
       return null;
@@ -25,6 +25,7 @@ export class UserStorageService {
   }
   saveAppSettings(pageSettings: IAppInitializerConfig) {
     if (!pageSettings) return;
+    pageSettings.appInfo.version = pageSettings.version;
     window.localStorage.removeItem(APP_INFO);
     window.localStorage.removeItem(STATICPAGE_LINKS);
     window.localStorage.setItem(APP_INFO, JSON.stringify(pageSettings.appInfo));

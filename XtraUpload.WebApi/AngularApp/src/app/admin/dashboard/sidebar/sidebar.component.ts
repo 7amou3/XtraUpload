@@ -3,6 +3,7 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ComponentBase } from 'app/shared';
+import { UserStorageService } from 'app/services';
 
 const TREE_DATA: IMenuNode[] = [
   {
@@ -46,10 +47,11 @@ const TREE_DATA: IMenuNode[] = [
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent extends ComponentBase implements OnInit {
   selectedUrl: string;
+  softVersion: string;
   treeControl = new FlatTreeControl<IFlatNode>(node => node.level, node => node.expandable);
   private _transformer = (node: IMenuNode, level: number) => {
     return {
@@ -66,7 +68,8 @@ export class SidebarComponent extends ComponentBase implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private userstorgae: UserStorageService) {
     super();
     this.dataSource.data = TREE_DATA;
   }
@@ -74,6 +77,10 @@ export class SidebarComponent extends ComponentBase implements OnInit {
   hasChild = (_: number, node: IFlatNode) => node.expandable;
   ngOnInit() {
     this.selectedUrl = this.router.url;
+    const appInfo = this.userstorgae.getAppInfo();
+    if (appInfo) {
+      this.softVersion = appInfo.version;
+    }
   }
   onMenuItemClick(node: IFlatNode) {
     this.selectedUrl = node.url;

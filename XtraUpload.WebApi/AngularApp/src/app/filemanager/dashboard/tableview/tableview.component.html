@@ -56,14 +56,14 @@
       [@rowAnimation]=""
       (click)="onItemClick(row)"
       (mousedown)="onItemMouseDown(row)"
-      [class.selectedRowOnClick]="selections.includes(row)"
-      [class.selectedRowsOnDrag]="selections.includes(row)"
-      [class.droppableRow]="isdroppableArea(row)"
+      [class.row-click]="selections.includes(row)"
+      [class.dragged-row]="selections.includes(row)"
+      [class.droppable-row]="isdroppableArea(row)"
       cdkDrag
       (cdkDragStarted)="onDragStart(row)"
       (contextmenu)="onContextMenu($event)"
       >
-      <div class="layout-item-drag-preview" *cdkDragPreview>
+      <div class="drag-preview" *cdkDragPreview>
         {{ getDragDesc() }}
       </div>
   </tr>

@@ -15,7 +15,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   selector: 'app-tableview',
   templateUrl: './tableview.component.html',
-  styleUrls: ['./tableview.component.css'],
+  styleUrls: ['./tableview.component.scss'],
   animations: [rowAnimation],
 })
 export class TableviewComponent extends FilemanagerBase implements OnInit {

@@ -12,7 +12,7 @@ import { TreeBase } from '../../treebase';
 @Component({
   selector: 'app-folderstree',
   templateUrl: './folderstree.component.html',
-  styleUrls: ['./folderstree.component.css']
+  styleUrls: ['./folderstree.component.scss']
 })
 export class FoldersTreeComponent extends TreeBase implements OnInit {
   @Output() folderPathChanged$ = new EventEmitter<IFolderInfo[]>();

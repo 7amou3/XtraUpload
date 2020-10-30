@@ -1,11 +1,13 @@
 export interface IAppInitializerConfig {
   appInfo: IWebAppInfo;
   pagesHeader: IPageHeader[];
+  version: string;
 }
 export interface IWebAppInfo {
   title: string;
   description: string;
   keywords: string;
+  version: string;
 }
 export interface IChangePassword {
   oldPassword: string;
