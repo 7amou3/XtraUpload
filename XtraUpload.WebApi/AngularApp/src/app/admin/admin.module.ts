@@ -63,6 +63,7 @@ import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
 import { ServersComponent } from './servers/servers.component';
 import { AddserverComponent } from './servers/dialogs/addserver/addserver.component';
 import { ServershealthComponent } from './servers/servershealth/servershealth.component';
+import { EditserverComponent } from './servers/dialogs/editserver/editserver.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { ServershealthComponent } from './servers/servershealth/servershealth.co
     AddpageComponent,
     ServersComponent,
     AddserverComponent,
-    ServershealthComponent
+    ServershealthComponent,
+    EditserverComponent
   ],
   imports: [
     CommonModule,

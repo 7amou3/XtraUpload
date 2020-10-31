@@ -45,9 +45,10 @@ namespace XtraUpload.GrpcServices
         }
         public override async Task CheckConnectivity(IAsyncStreamReader<ConnectivityResponse> requestStream, IServerStreamWriter<ConnectivityRequest> responseStream, ServerCallContext context)
         {
-            _checkClientProxy.StorageServerConnectivityRequested += ConnectivityRequested;
             try
             {
+                _checkClientProxy.StorageServerConnectivityRequested += ConnectivityRequested;
+
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     string server = context.Host;
@@ -72,9 +73,10 @@ namespace XtraUpload.GrpcServices
 
         public override async Task GetUploadOptions(IAsyncStreamReader<UploadOptsResponse> requestStream, IServerStreamWriter<UploadOptsRequest> responseStream, ServerCallContext context)
         {
-            _uploadOptsCommand.ReadUploadOptsRequested += uploadOptionsRequested;
             try
             {
+                _uploadOptsCommand.ReadUploadOptsRequested += uploadOptionsRequested;
+
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
@@ -98,9 +100,10 @@ namespace XtraUpload.GrpcServices
         }
         public override async Task SetUploadOptions(IAsyncStreamReader<UploadOptsResponse> requestStream, IServerStreamWriter<UploadOptsResponse> responseStream, ServerCallContext context)
         {
-            _uploadOptsCommand.WriteUploadOptsRequested += uploadOptionsRequested;
             try
             {
+                _uploadOptsCommand.WriteUploadOptsRequested += uploadOptionsRequested;
+
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
@@ -123,9 +126,10 @@ namespace XtraUpload.GrpcServices
         }
         public override async Task GetHardwareOptions(IAsyncStreamReader<HardwareOptsResponse> requestStream, IServerStreamWriter<HardwareOptsRequest> responseStream, ServerCallContext context)
         {
-            _hardwareOptsCmd.ReadHardwareOptionsRequested += hardwareOptionsRequested;
             try
             {
+                _hardwareOptsCmd.ReadHardwareOptionsRequested += hardwareOptionsRequested;
+
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
@@ -150,9 +154,10 @@ namespace XtraUpload.GrpcServices
 
         public override async Task SetHardwareOptions(IAsyncStreamReader<HardwareOptsResponse> requestStream, IServerStreamWriter<HardwareOptsResponse> responseStream, ServerCallContext context)
         {
-            _hardwareOptsCmd.WriteHardwareOptionsRequested += hardwareOptsRequested;
             try
             {
+                _hardwareOptsCmd.WriteHardwareOptionsRequested += hardwareOptsRequested;
+
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     _logger.LogDebug("Request received from " + message.ServerAddress);
@@ -163,7 +168,7 @@ namespace XtraUpload.GrpcServices
             finally
             {
                 _logger.LogError("Connection lost with the remote storage server");
-                _hardwareOptsCmd.WriteHardwareOptionsRequested += hardwareOptsRequested;
+                _hardwareOptsCmd.WriteHardwareOptionsRequested -= hardwareOptsRequested;
             }
 
             async void hardwareOptsRequested(object sender, WriteHardwareOptsRequestedEventArgs e)

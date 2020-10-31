@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Observable, Subject } from 'rxjs';
 import { IAdminOverView, IDateRange, IItemCount, IFileTypeCount,
     IHealthCheck, IPaging, IFileExtension, IFilteredUser, ISearchFile, IEditExtension, IFileInfo,
-    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer, IUploadOptions, IHardwareOptions, IAddStorageServer } from 'app/domain';
+    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer, IUploadOptions, IHardwareOptions, IAddStorageServer, IUpdateStorageServer } from 'app/domain';
 
 @Injectable()
 export class AdminService {
@@ -202,6 +202,10 @@ export class AdminService {
 
     addStorageServer(addserver: IAddStorageServer): Observable<IStorageServer> {
         return this.http.post<IStorageServer>('admin/storageserver', addserver);
+    }
+    updateStorageServer(updateServer: IUpdateStorageServer) {
+        console.log(updateServer);
+        return this.http.patch<IStorageServer>('admin/storageserver', updateServer);
     }
     getPage(url: string): Observable<IPage> {
         return this.http.get<IPage>('setting/page/' + url);

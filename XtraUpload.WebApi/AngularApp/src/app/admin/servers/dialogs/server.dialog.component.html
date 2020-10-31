@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Add Storage Server</h2>
+<h2 mat-dialog-title>{{dialogTitle}}</h2>
 <app-message [message$]="message$"></app-message>
 <mat-vertical-stepper [linear]="true" #stepper>
   <mat-step [stepControl]="serverInfoFormGroup">
-    <form [formGroup]="serverInfoFormGroup" class="font-14">
+    <form [formGroup]="serverInfoFormGroup" class="font-13">
       <ng-template matStepLabel>Server Info</ng-template>
       <mat-form-field>
         <mat-label>Server Address (Ip or Hostname)</mat-label>
@@ -35,8 +35,8 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="uploadOptsFormGroup">
-    <form [formGroup]="uploadOptsFormGroup" class="font-14">
-      <ng-template matStepLabel>Upload Options</ng-template>
+    <form [formGroup]="uploadOptsFormGroup" class="font-13">
+      <ng-template matStepLabel>Upload Options (Optional)</ng-template>
       <!--Upload path -->
       <mat-form-field>
         <mat-label>Upload Path</mat-label>
@@ -66,8 +66,8 @@
     </form>
   </mat-step>
   <mat-step>
-    <form [formGroup]="hdOptsFormGroup" class="font-14">
-      <ng-template matStepLabel>Hardware Configuration</ng-template>
+    <form [formGroup]="hdOptsFormGroup" class="font-13">
+      <ng-template matStepLabel>Hardware Configuration (Optional)</ng-template>
       <!--MemoryThreshold-->
       <mat-form-field>
         <mat-label>Memory Threshold (Gb)</mat-label>
@@ -92,5 +92,5 @@
 
 <mat-dialog-actions fxLayoutAlign="flex-end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button color="accent" [disabled]="!(addressReachable && serverInfoFormGroup.valid && hdOptsFormGroup.valid && uploadOptsFormGroup.valid && !isBusy)" (click)="onSubmit()">Add Server</button>
+  <button mat-button color="accent" [disabled]="!(addressReachable && serverInfoFormGroup.valid && hdOptsFormGroup.valid && uploadOptsFormGroup.valid && !isBusy)" (click)="onSubmit()">Save</button>
 </mat-dialog-actions>

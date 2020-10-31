@@ -285,5 +285,12 @@ namespace XtraUpload.WebApi.Controllers
 
             return HandleResult(Result, _mapper.Map<StorageServerDto>(Result.Server));
         }
+        [HttpPatch("storageserver")]
+        public async Task<IActionResult> UpdateStorageServer(UpdateStorageServerCommand storageServer)
+        {
+            StorageServerResult Result = await _mediatr.Send(storageServer);
+
+            return HandleResult(Result, _mapper.Map<StorageServerDto>(Result.Server));
+        }
     }
 }
