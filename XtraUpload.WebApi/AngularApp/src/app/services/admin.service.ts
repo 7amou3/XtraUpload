@@ -11,9 +11,7 @@ export class AdminService {
     private isbusy$ = new Subject<boolean>();
     serviceBusy$ = this.isbusy$.asObservable();
 
-    constructor(
-        private http: HttpClient,
-        @Inject('BASE_URL') private baseUrl: string) { }
+    constructor(private http: HttpClient) { }
     notifyBusy(val: boolean): void {
         return this.isbusy$.next(val);
     }
@@ -49,8 +47,8 @@ export class AdminService {
         return this.http.get<IFileTypeCount[]>('admin/filetypesstats/', { params: params });
     }
 
-    healthCheck(): Observable<IHealthCheck> {
-        return this.http.get<IHealthCheck>(this.baseUrl + 'health');
+    healthCheck(url: string): Observable<IHealthCheck> {
+        return this.http.get<IHealthCheck>(url);
     }
 
     getFiles(pageEvent: PageEvent, search: ISearchFile): Observable<IPaging<IFileInfoExtended>> {

@@ -9,6 +9,7 @@ import { ExtensionsComponent } from './files/extensions/extensions.component';
 import { SettingsComponent } from './settings/settings.component';
 import { PagesComponent } from './pages/pages.component';
 import { ServersComponent } from './servers/servers.component';
+import { ServershealthComponent } from './servers/servershealth/servershealth.component';
 
 export const AdminRoutes: Routes = [
   {
@@ -24,7 +25,8 @@ export const AdminRoutes: Routes = [
       { path: 'extensions', component: ExtensionsComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'pages', component: PagesComponent },
-      { path: 'servers', component: ServersComponent }
+      { path: 'servers', component: ServersComponent },
+      { path: 'servershealth', component: ServershealthComponent }
     ]
   }
 ];

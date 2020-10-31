@@ -55,19 +55,17 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                using (var call = _storageClient.CheckConnectivity())
+                using var call = _storageClient.CheckConnectivity();
+                _logger.LogDebug("Start connection");
+                await foreach (var message in call.ResponseStream.ReadAllAsync())
                 {
-                    _logger.LogDebug("Start connection");
-                    await foreach (var message in call.ResponseStream.ReadAllAsync())
+                    if (_urls.ServerUrl == message.ServerAddress)
                     {
-                        if (_urls.ServerUrl == message.ServerAddress)
-                        {
-                            await call.RequestStream.WriteAsync(new ConnectivityResponse() { Status = new gRequestStatus() });
-                        }
+                        await call.RequestStream.WriteAsync(new ConnectivityResponse() { Status = new gRequestStatus() });
                     }
-                    _logger.LogDebug("Disconnecting");
-                    await call.RequestStream.CompleteAsync();
                 }
+                _logger.LogDebug("Disconnecting");
+                await call.RequestStream.CompleteAsync();
             }
             catch (Exception _ex)
             {
@@ -85,30 +83,28 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                using (var call = _storageClient.GetUploadOptions())
+                using var call = _storageClient.GetUploadOptions();
+                _logger.LogDebug("Start connection");
+
+                await foreach (var message in call.ResponseStream.ReadAllAsync())
                 {
-                    _logger.LogDebug("Start connection");
-
-                    await foreach (var message in call.ResponseStream.ReadAllAsync())
+                    if (_urls.ServerUrl == message.ServerAddress)
                     {
-                        if (_urls.ServerUrl == message.ServerAddress)
+                        await call.RequestStream.WriteAsync(new UploadOptsResponse()
                         {
-                            await call.RequestStream.WriteAsync(new UploadOptsResponse() 
+                            ServerAddress = _urls.ServerUrl,
+                            UploadOptions = new gUploadOptions()
                             {
-                                ServerAddress = _urls.ServerUrl,
-                                UploadOptions = new gUploadOptions() 
-                                {
-                                    ChunkSize = _uploadOpts.Value.ChunkSize,
-                                    Expiration = _uploadOpts.Value.Expiration,
-                                    UploadPath = _uploadOpts.Value.UploadPath 
-                                }
-                            });
-                        }
+                                ChunkSize = _uploadOpts.Value.ChunkSize,
+                                Expiration = _uploadOpts.Value.Expiration,
+                                UploadPath = _uploadOpts.Value.UploadPath
+                            }
+                        });
                     }
-
-                    _logger.LogDebug("Disconnecting");
-                    await call.RequestStream.CompleteAsync();
                 }
+
+                _logger.LogDebug("Disconnecting");
+                await call.RequestStream.CompleteAsync();
             }
             catch (Exception _ex)
             {
@@ -126,37 +122,35 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                using (var call = _storageClient.SetUploadOptions())
+                using var call = _storageClient.SetUploadOptions();
+                _logger.LogDebug("Start connection");
+
+                await foreach (var message in call.ResponseStream.ReadAllAsync())
                 {
-                    _logger.LogDebug("Start connection");
-
-                    await foreach (var message in call.ResponseStream.ReadAllAsync())
+                    if (_urls.ServerUrl == message.ServerAddress)
                     {
-                        if (_urls.ServerUrl == message.ServerAddress)
+                        // Write the upload opts to appsettings
+                        await _uploadOpts.Update(s =>
                         {
-                            // Write the upload opts to appsettings
-                            await _uploadOpts.Update(s =>
+                            s.ChunkSize = message.UploadOptions.ChunkSize;
+                            s.Expiration = message.UploadOptions.Expiration;
+                            s.UploadPath = message.UploadOptions.UploadPath;
+                        });
+                        await call.RequestStream.WriteAsync(new UploadOptsResponse()
+                        {
+                            ServerAddress = _urls.ServerUrl,
+                            UploadOptions = new gUploadOptions()
                             {
-                                s.ChunkSize = message.UploadOptions.ChunkSize;
-                                s.Expiration = message.UploadOptions.Expiration;
-                                s.UploadPath = message.UploadOptions.UploadPath;
-                            });
-                            await call.RequestStream.WriteAsync(new UploadOptsResponse()
-                            {
-                                ServerAddress = _urls.ServerUrl,
-                                UploadOptions = new gUploadOptions()
-                                {
-                                    ChunkSize = message.UploadOptions.ChunkSize,
-                                    Expiration = message.UploadOptions.Expiration,
-                                    UploadPath = message.UploadOptions.UploadPath
-                                }
-                            });
-                        }
+                                ChunkSize = message.UploadOptions.ChunkSize,
+                                Expiration = message.UploadOptions.Expiration,
+                                UploadPath = message.UploadOptions.UploadPath
+                            }
+                        });
                     }
-
-                    _logger.LogDebug("Disconnecting");
-                    await call.RequestStream.CompleteAsync();
                 }
+
+                _logger.LogDebug("Disconnecting");
+                await call.RequestStream.CompleteAsync();
             }
             catch (Exception _ex)
             {
@@ -174,29 +168,27 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                using (var call = _storageClient.GetHardwareOptions())
+                using var call = _storageClient.GetHardwareOptions();
+                _logger.LogDebug("Start connection");
+
+                await foreach (var message in call.ResponseStream.ReadAllAsync())
                 {
-                    _logger.LogDebug("Start connection");
-
-                    await foreach (var message in call.ResponseStream.ReadAllAsync())
+                    if (_urls.ServerUrl == message.ServerAddress)
                     {
-                        if (_urls.ServerUrl == message.ServerAddress)
+                        await call.RequestStream.WriteAsync(new HardwareOptsResponse()
                         {
-                            await call.RequestStream.WriteAsync(new HardwareOptsResponse()
+                            ServerAddress = _urls.ServerUrl,
+                            HardwareOptions = new gHardwareOptions()
                             {
-                                ServerAddress = _urls.ServerUrl,
-                                HardwareOptions = new gHardwareOptions()
-                                {
-                                    MemoryThreshold = _hardwareOpts.Value.MemoryThreshold,
-                                    StorageThreshold = _hardwareOpts.Value.StorageThreshold
-                                }
-                            });
-                        }
+                                MemoryThreshold = _hardwareOpts.Value.MemoryThreshold,
+                                StorageThreshold = _hardwareOpts.Value.StorageThreshold
+                            }
+                        });
                     }
-
-                    _logger.LogDebug("Disconnecting");
-                    await call.RequestStream.CompleteAsync();
                 }
+
+                _logger.LogDebug("Disconnecting");
+                await call.RequestStream.CompleteAsync();
             }
             catch (Exception _ex)
             {
@@ -214,35 +206,33 @@ namespace XtraUpload.StorageManager.Service
         {
             try
             {
-                using (var call = _storageClient.SetHardwareOptions())
+                using var call = _storageClient.SetHardwareOptions();
+                _logger.LogDebug("Start connection");
+
+                await foreach (var message in call.ResponseStream.ReadAllAsync())
                 {
-                    _logger.LogDebug("Start connection");
-
-                    await foreach (var message in call.ResponseStream.ReadAllAsync())
+                    if (_urls.ServerUrl == message.ServerAddress)
                     {
-                        if (_urls.ServerUrl == message.ServerAddress)
+                        // Write the hardware opts to appsettings
+                        await _hardwareOpts.Update(s =>
                         {
-                            // Write the hardware opts to appsettings
-                            await _hardwareOpts.Update(s =>
+                            s.MemoryThreshold = (ushort)message.HardwareOptions.MemoryThreshold;
+                            s.StorageThreshold = (ushort)message.HardwareOptions.StorageThreshold;
+                        });
+                        await call.RequestStream.WriteAsync(new HardwareOptsResponse()
+                        {
+                            ServerAddress = _urls.ServerUrl,
+                            HardwareOptions = new gHardwareOptions()
                             {
-                                s.MemoryThreshold = (ushort)message.HardwareOptions.MemoryThreshold;
-                                s.StorageThreshold = (ushort)message.HardwareOptions.StorageThreshold;
-                            });
-                            await call.RequestStream.WriteAsync(new HardwareOptsResponse()
-                            {
-                                ServerAddress = _urls.ServerUrl,
-                                HardwareOptions = new gHardwareOptions()
-                                {
-                                    StorageThreshold = message.HardwareOptions.StorageThreshold,
-                                    MemoryThreshold = message.HardwareOptions.MemoryThreshold
-                                }
-                            });
-                        }
+                                StorageThreshold = message.HardwareOptions.StorageThreshold,
+                                MemoryThreshold = message.HardwareOptions.MemoryThreshold
+                            }
+                        });
                     }
-
-                    _logger.LogDebug("Disconnecting");
-                    await call.RequestStream.CompleteAsync();
                 }
+
+                _logger.LogDebug("Disconnecting");
+                await call.RequestStream.CompleteAsync();
             }
             catch (Exception _ex)
             {

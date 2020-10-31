@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -30,7 +31,18 @@ namespace XtraUpload.GrpcServices
             _uploadOptsCommand = uploadOptsProxy as IUploadOptsClientCommand;
 
         }
-        
+        public override Task<AuthResponse> IsAuthorized(Empty request, ServerCallContext context)
+        {
+            var authorized = context.GetHttpContext().User.Identity.IsAuthenticated;
+            var response = new AuthResponse()
+            {
+                Status = new gRequestStatus()
+                {
+                    Status = authorized ? RequestStatus.Success : Protos.RequestStatus.Failed
+                }
+            };
+            return Task.FromResult(response);
+        }
         public override async Task CheckConnectivity(IAsyncStreamReader<ConnectivityResponse> requestStream, IServerStreamWriter<ConnectivityRequest> responseStream, ServerCallContext context)
         {
             _checkClientProxy.StorageServerConnectivityRequested += ConnectivityRequested;

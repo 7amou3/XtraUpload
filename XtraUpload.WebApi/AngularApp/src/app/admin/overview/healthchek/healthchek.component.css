@@ -1,10 +1,4 @@
-  table {
-    width: 100%;
-  }
-  .mat-row:hover {
-    background: rgba(180,180,180,0.3);
-  }
-  tr.mat-row:last-child {
+  .mat-row:last-child {
     font-weight: bold;
   }
 

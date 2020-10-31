@@ -30,7 +30,10 @@ const TREE_DATA: IMenuNode[] = [
   {
     name: 'Storage Servers',
     iconname: 'storage',
-    url: '/administration/servers'
+    children: [
+      { name: 'Servers', url: '/administration/servers' },
+      { name: 'Health', url: '/administration/servershealth' }
+    ]
   },
   {
     name: 'Settings',

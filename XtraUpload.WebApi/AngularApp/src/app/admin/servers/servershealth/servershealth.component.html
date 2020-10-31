@@ -1,0 +1,22 @@
+<mat-accordion *ngFor="let element of serversHealth">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-13">
+                {{element.address}}
+            </mat-panel-title>
+            <mat-panel-description fxLayout="row wrap" class="font-13">
+                <div fxFlex="40" *ngIf="!element.status; else elseBlock">
+                    <mat-progress-bar mode="query"></mat-progress-bar>
+                </div>
+                <ng-template #elseBlock>
+                    <mat-icon *ngIf="element.status == 'Unhealthy'" class="font-18" color="warn">error</mat-icon>
+                    <mat-icon *ngIf="element.status == 'Degraded'" class="font-18" color="accent">warning</mat-icon>
+                    <mat-icon *ngIf="element.status == 'Healthy'" class="font-18" color="primary">done</mat-icon>
+                    {{element.status}}
+                </ng-template>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-healthchek [serverUrl]="element.address" (serverStatus)="onServerStatus($event, element)" fxFlex="100">
+        </app-healthchek>
+    </mat-expansion-panel>
+</mat-accordion>

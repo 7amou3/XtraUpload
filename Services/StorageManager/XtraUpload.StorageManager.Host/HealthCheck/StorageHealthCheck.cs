@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Domain;
-using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.StorageManager.Host
 {

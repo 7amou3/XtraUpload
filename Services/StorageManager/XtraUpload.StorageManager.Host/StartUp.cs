@@ -74,8 +74,10 @@ namespace XtraUpload.StorageManager.Host
             
             // Health check
             services.AddHealthChecks()
+                .AddCheck<ConnectivityHealthCheck>("gRPC Server Connectivity")
                 .AddCheck<FileStoreHealthCheck>("Storage Permissions")
-                .AddCheck<StorageHealthCheck>("Storage Space");
+                .AddCheck<StorageHealthCheck>("Storage Space")
+                .AddCheck<MemoryHealthCheck>("Memory");
 
             // Client certificate config
             IConfigurationSection certSection = config.GetSection(nameof(ClientCertificateConfig));
