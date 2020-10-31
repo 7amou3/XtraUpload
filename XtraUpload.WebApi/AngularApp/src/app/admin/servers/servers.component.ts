@@ -8,6 +8,7 @@ import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { AddserverComponent } from './dialogs/addserver/addserver.component';
+import { DeleteserverComponent } from './dialogs/deleteserver/deleteserver.component';
 import { EditserverComponent } from './dialogs/editserver/editserver.component';
 
 @Component({
@@ -87,5 +88,23 @@ export class ServersComponent extends ComponentBase implements OnInit {
         }
       });
   }
-  onDelete() {}
+  onDelete() {
+    const dialogRef = this.dialog.open(DeleteserverComponent, {
+      width: '500px',
+      data: this.selectedServer
+    });
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((server: IStorageServer) => {
+        if (!server) {
+          return;
+        }
+        const index = this.dataSource.data.findIndex(s => s.id === server.id);
+        if (index !== -1) {
+          this.dataSource.data.splice(index, 1);
+          this.refreshTable();
+          this.snackBar.open(`The server ${server.address} has been deleted successfully`, '', { duration: 3000 });
+        }
+      });
+  }
 }

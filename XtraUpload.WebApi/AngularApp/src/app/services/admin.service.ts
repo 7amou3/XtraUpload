@@ -180,7 +180,9 @@ export class AdminService {
     deletePage(deletePage: IPage) {
         return this.http.delete('admin/page/' + deletePage.id);
     }
-
+    getPage(url: string): Observable<IPage> {
+        return this.http.get<IPage>('setting/page/' + url);
+    }
     getStorageServers(): Observable<IStorageServer[]> {
         return this.http.get<IStorageServer[]>('admin/storageservers');
     }
@@ -203,11 +205,10 @@ export class AdminService {
     addStorageServer(addserver: IAddStorageServer): Observable<IStorageServer> {
         return this.http.post<IStorageServer>('admin/storageserver', addserver);
     }
-    updateStorageServer(updateServer: IUpdateStorageServer) {
-        console.log(updateServer);
+    updateStorageServer(updateServer: IUpdateStorageServer): Observable<IStorageServer>{
         return this.http.patch<IStorageServer>('admin/storageserver', updateServer);
     }
-    getPage(url: string): Observable<IPage> {
-        return this.http.get<IPage>('setting/page/' + url);
+    deleteServer(server: IStorageServer): Observable<IStorageServer> {
+        return this.http.delete<IStorageServer>('admin/storageserver/'+server.id);
     }
 }

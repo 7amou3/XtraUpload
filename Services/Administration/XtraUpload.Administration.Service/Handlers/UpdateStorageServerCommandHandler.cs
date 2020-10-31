@@ -17,17 +17,14 @@ namespace XtraUpload.Administration.Service
         readonly IUnitOfWork _unitOfWork;
         readonly IHardwareOptsClientProxy _hardwareOptsProxy;
         readonly IUploadOptsClientProxy _uploadOptsClientProxy;
-        readonly ILogger<AddStorageServerCommandHandler> _logger;
 
         public UpdateStorageServerCommandHandler(
             IUnitOfWork unitOfWork,
             IHardwareOptsClientProxy hardwareOptsProxy,
-            IUploadOptsClientProxy uploadOptsClientProxy,
-            ILogger<AddStorageServerCommandHandler> logger
+            IUploadOptsClientProxy uploadOptsClientProxy
             )
         {
             _unitOfWork = unitOfWork;
-            _logger = logger;
             _hardwareOptsProxy = hardwareOptsProxy;
             _uploadOptsClientProxy = uploadOptsClientProxy;
         }

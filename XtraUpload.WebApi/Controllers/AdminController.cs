@@ -9,7 +9,7 @@ using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
-
+using System;
 
 namespace XtraUpload.WebApi.Controllers
 {
@@ -289,6 +289,14 @@ namespace XtraUpload.WebApi.Controllers
         public async Task<IActionResult> UpdateStorageServer(UpdateStorageServerCommand storageServer)
         {
             StorageServerResult Result = await _mediatr.Send(storageServer);
+
+            return HandleResult(Result, _mapper.Map<StorageServerDto>(Result.Server));
+        }
+
+        [HttpDelete("storageserver/{serverid}")]
+        public async Task<IActionResult> UpdateStorageServer(string serverid)
+        {
+            StorageServerResult Result = await _mediatr.Send(new DeleteStorageServerCommand(serverid));
 
             return HandleResult(Result, _mapper.Map<StorageServerDto>(Result.Server));
         }
