@@ -44,6 +44,7 @@ namespace XtraUpload.GrpcServices
             services.AddSingleton<ICheckClientProxy, CheckClientProxy>();
             services.AddSingleton<IUploadOptsClientProxy, UploadOptsClientProxy>();
             services.AddSingleton<IHardwareOptsClientProxy, HardwareOptsClientProxy>();
+            services.AddSingleton<IStorageHealthClientProxy, StorageHealthClientProxy>();
 
             // Root certificate config
             IConfigurationSection certSection = config.GetSection(nameof(RootCertificateConfig));

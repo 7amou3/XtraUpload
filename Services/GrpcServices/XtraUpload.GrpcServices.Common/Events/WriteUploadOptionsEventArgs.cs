@@ -3,9 +3,9 @@ using XtraUpload.Domain;
 
 namespace XtraUpload.GrpcServices.Common
 {
-    public class WriteUploadOptsRequestedEventArgs : EventArgs
+    public class WriteUploadOptionsEventArgs : EventArgs
     {
-        public WriteUploadOptsRequestedEventArgs(UploadOptions uploadOptions, string serverAddress)
+        public WriteUploadOptionsEventArgs(UploadOptions uploadOptions, string serverAddress)
         {
             UploadOptions = uploadOptions;
             ServerAddress = serverAddress;

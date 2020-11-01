@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace XtraUpload.GrpcServices.Common
 {
-    public class ReadUploadOptsRequestedEventArgs : EventArgs
+    public class ReadStorageHealthEventArgs : EventArgs
     {
-        public ReadUploadOptsRequestedEventArgs(string serverAddress)
+        public ReadStorageHealthEventArgs(string serverAddress)
         {
             ServerAddress = serverAddress;
         }

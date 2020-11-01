@@ -15,20 +15,23 @@ namespace XtraUpload.GrpcServices
     [Authorize(AuthenticationSchemes = CertificateAuthenticationDefaults.AuthenticationScheme)]
     public class gStorageManagerService : gStorageManager.gStorageManagerBase
     {
+        readonly ILogger<gStorageManagerService> _logger;
         readonly ICheckClientCommand _checkClientCommand;
         readonly IHardwareOptsClientCommand _hardwareOptsCmd;
         readonly IUploadOptsClientCommand _uploadOptsCommand;
-        readonly ILogger<gStorageManagerService> _logger;
+        readonly IStorageHealthClientCommand _healthClientCommand;
         public gStorageManagerService(
             ICheckClientProxy checkClientProxy,
             IUploadOptsClientProxy uploadOptsProxy,
             IHardwareOptsClientProxy hardwareProxy,
+            IStorageHealthClientProxy healthClientProxy,
             ILogger<gStorageManagerService> logger)
         {
             _logger = logger;
             _checkClientCommand = checkClientProxy as ICheckClientCommand;
             _hardwareOptsCmd = hardwareProxy as IHardwareOptsClientCommand;
             _uploadOptsCommand = uploadOptsProxy as IUploadOptsClientCommand;
+            _healthClientCommand = healthClientProxy as IStorageHealthClientCommand;
 
         }
         public override Task<AuthResponse> IsAuthorized(Empty request, ServerCallContext context)
@@ -91,7 +94,7 @@ namespace XtraUpload.GrpcServices
                 _uploadOptsCommand.ReadUploadOptsRequested -= uploadOptionsRequested;
             }
 
-            async void uploadOptionsRequested(object sender, ReadUploadOptsRequestedEventArgs e)
+            async void uploadOptionsRequested(object sender, ReadUploadOptionsEventArgs e)
             {
                 _logger.LogDebug("Sending request to " + e.ServerAddress);
 
@@ -117,7 +120,7 @@ namespace XtraUpload.GrpcServices
                 _uploadOptsCommand.WriteUploadOptsRequested -= uploadOptionsRequested;
             }
 
-            async void uploadOptionsRequested(object sender, WriteUploadOptsRequestedEventArgs e)
+            async void uploadOptionsRequested(object sender, WriteUploadOptionsEventArgs e)
             {
                 _logger.LogDebug("Sending request to " + e.ServerAddress);
 
@@ -144,7 +147,7 @@ namespace XtraUpload.GrpcServices
                 _hardwareOptsCmd.ReadHardwareOptionsRequested -= hardwareOptionsRequested;
             }
 
-            async void hardwareOptionsRequested(object sender, ReadHardwareOptsRequestedEventArgs e)
+            async void hardwareOptionsRequested(object sender, ReadHardwareOptionsEventArgs e)
             {
                 _logger.LogDebug("Sending request to " + e.ServerAddress);
 
@@ -171,11 +174,43 @@ namespace XtraUpload.GrpcServices
                 _hardwareOptsCmd.WriteHardwareOptionsRequested -= hardwareOptsRequested;
             }
 
-            async void hardwareOptsRequested(object sender, WriteHardwareOptsRequestedEventArgs e)
+            async void hardwareOptsRequested(object sender, WriteHardwareOptionsEventArgs e)
             {
                 _logger.LogDebug("Sending request to " + e.ServerAddress);
 
                 await responseStream.WriteAsync(new HardwareOptsResponse() { HardwareOptions = e.HardwareOpts.Convert(), ServerAddress = e.ServerAddress });
+            }
+        }
+
+        public override async Task StorageServerHealth(IAsyncStreamReader<StorageHealthResponse> requestStream, IServerStreamWriter<StorageHealthRequest> responseStream, ServerCallContext context)
+        {
+            try
+            {
+                _healthClientCommand.ReadStorageHealthRequested += readStorageHealthRequested;
+
+                await foreach (var message in requestStream.ReadAllAsync())
+                {
+                    _logger.LogDebug("Request received from " + message.ServerAddress);
+
+                    _healthClientCommand.SetStorageHealthStatus(new StorageHealthResult()
+                    {
+                        ServerAddress = message.ServerAddress,
+                        StorageInfo = message.StorageInfo.Convert()
+                        // Todo: convert for Memory and cpu status
+                    }, message.ServerAddress) ;
+                }
+            }
+            finally
+            {
+                _logger.LogError("Connection lost with the remote storage server");
+                _healthClientCommand.ReadStorageHealthRequested -= readStorageHealthRequested;
+            }
+
+            async void readStorageHealthRequested(object sender, ReadStorageHealthEventArgs e)
+            {
+                _logger.LogDebug("Sending request to " + e.ServerAddress);
+
+                await responseStream.WriteAsync(new StorageHealthRequest() { ServerAddress = e.ServerAddress });
             }
         }
     }

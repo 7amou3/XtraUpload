@@ -26,11 +26,11 @@ namespace XtraUpload.GrpcServices.Common
         /// <summary>
         /// Event raised to read upload options of designated client storage
         /// </summary>
-        event EventHandler<ReadUploadOptsRequestedEventArgs> ReadUploadOptsRequested;
+        event EventHandler<ReadUploadOptionsEventArgs> ReadUploadOptsRequested;
         /// <summary>
         /// Event raised to write upload options to designated client storage
         /// </summary>
-        event EventHandler<WriteUploadOptsRequestedEventArgs> WriteUploadOptsRequested;
+        event EventHandler<WriteUploadOptionsEventArgs> WriteUploadOptsRequested;
         /// <summary>
         /// Sets the upload options for a given server (must be called only in the GrpcServices project)
         /// </summary>

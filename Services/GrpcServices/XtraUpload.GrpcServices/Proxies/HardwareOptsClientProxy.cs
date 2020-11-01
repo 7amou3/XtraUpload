@@ -43,11 +43,11 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Event raised to read hardware options configuration of the designated client storage
         /// </summary>
-        public event EventHandler<ReadHardwareOptsRequestedEventArgs> ReadHardwareOptionsRequested;
+        public event EventHandler<ReadHardwareOptionsEventArgs> ReadHardwareOptionsRequested;
         /// <summary>
         /// Event raised to write hardware options configuration of the designated client storage
         /// </summary>
-        public event EventHandler<WriteHardwareOptsRequestedEventArgs> WriteHardwareOptionsRequested;
+        public event EventHandler<WriteHardwareOptionsEventArgs> WriteHardwareOptionsRequested;
 
         /// <summary>
         /// Sets the hardware options for a given server (must be called only in the GrpcServices project)
@@ -77,7 +77,7 @@ namespace XtraUpload.GrpcServices
         {
             HardwareCheckOptionsResult Result = new HardwareCheckOptionsResult();
 
-            ReadHardwareOptionsRequested?.Invoke(this, new ReadHardwareOptsRequestedEventArgs(serverAddress));
+            ReadHardwareOptionsRequested?.Invoke(this, new ReadHardwareOptionsEventArgs(serverAddress));
             if (await _signal.WaitAsync(WAIT_TIME))
             {
                 if (_serversConfig.TryGetValue(serverAddress, out HardwareCheckOptions options))
@@ -104,7 +104,7 @@ namespace XtraUpload.GrpcServices
         public async Task<OperationResult> WriteHardwareOptions(HardwareCheckOptions hardwareOpts, string serverAddress)
         {
             OperationResult Result = new OperationResult();
-            WriteHardwareOptionsRequested?.Invoke(this, new WriteHardwareOptsRequestedEventArgs(hardwareOpts, serverAddress));
+            WriteHardwareOptionsRequested?.Invoke(this, new WriteHardwareOptionsEventArgs(hardwareOpts, serverAddress));
             if (await _signal.WaitAsync(WAIT_TIME))
             {
                 if (!_serversConfig.TryGetValue(serverAddress, out HardwareCheckOptions options))

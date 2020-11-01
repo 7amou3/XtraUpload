@@ -6,9 +6,12 @@ namespace XtraUpload.GrpcServices
     public class StartableServices
     {
         private readonly ICheckClientCommand _checkClientCommand;
-        public StartableServices(ICheckClientProxy checkProxy)
+        private readonly IStorageHealthClientCommand _storageHealthCommand;
+
+        public StartableServices(ICheckClientProxy checkProxy, IStorageHealthClientProxy healthProxy)
         {
             _checkClientCommand = checkProxy as ICheckClientCommand;
+            _storageHealthCommand = healthProxy as IStorageHealthClientCommand;
         }
 
         public void Start()
@@ -17,6 +20,7 @@ namespace XtraUpload.GrpcServices
             Task.Run(() =>
             {
                 _checkClientCommand.Initialize();
+                _storageHealthCommand.Initialize();
             });
         }
     }

@@ -26,11 +26,11 @@ namespace XtraUpload.GrpcServices.Common
         /// <summary>
         /// Event raised to read hardware options configuration of the designated client storage
         /// </summary>
-        event EventHandler<ReadHardwareOptsRequestedEventArgs> ReadHardwareOptionsRequested;
+        event EventHandler<ReadHardwareOptionsEventArgs> ReadHardwareOptionsRequested;
         /// <summary>
         /// Event raised to write hardware options configuration of the designated client storage
         /// </summary>
-        event EventHandler<WriteHardwareOptsRequestedEventArgs> WriteHardwareOptionsRequested;
+        event EventHandler<WriteHardwareOptionsEventArgs> WriteHardwareOptionsRequested;
         /// <summary>
         /// Sets the hardware options for a given server (must be called only in the GrpcServices project)
         /// </summary>
