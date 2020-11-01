@@ -203,6 +203,9 @@ export interface IAddStorageServer {
   uploadOpts: IUploadOptions;
   hardwareOpts: IHardwareOptions;
 }
+export interface IUpdateStorageServer extends IAddStorageServer {
+  id: string;
+}
 export enum itemAction {
   info = 0,
   rename,

@@ -2,9 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpInterceptor, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-/**
- * Forward http requests made by XtraUpload services to the backend url defined in environment.js
- */
+/** Forward http requests made by XtraUpload services to the backend url */
 @Injectable()
 export class UrlForwarderHandler implements HttpInterceptor {
   constructor(

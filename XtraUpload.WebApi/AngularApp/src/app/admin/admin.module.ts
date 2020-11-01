@@ -62,6 +62,9 @@ import { SimplemdeModule } from 'ngx-simplemde'
 import { AddpageComponent } from './pages/dialogs/addpage/addpage.component';
 import { ServersComponent } from './servers/servers.component';
 import { AddserverComponent } from './servers/dialogs/addserver/addserver.component';
+import { ServershealthComponent } from './servers/servershealth/servershealth.component';
+import { EditserverComponent } from './servers/dialogs/editserver/editserver.component';
+import { DeleteserverComponent } from './servers/dialogs/deleteserver/deleteserver.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +94,10 @@ import { AddserverComponent } from './servers/dialogs/addserver/addserver.compon
     DeletepageComponent,
     AddpageComponent,
     ServersComponent,
-    AddserverComponent
+    AddserverComponent,
+    ServershealthComponent,
+    EditserverComponent,
+    DeleteserverComponent
   ],
   imports: [
     CommonModule,

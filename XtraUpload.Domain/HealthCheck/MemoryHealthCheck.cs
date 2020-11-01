@@ -3,9 +3,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using XtraUpload.Domain;
 
-namespace XtraUpload.Setting.Host
+namespace XtraUpload.Domain
 {
     public class MemoryHealthCheck : IHealthCheck
     {

@@ -1,0 +1,35 @@
+.divider
+{
+	position: relative;
+    height: 1px;
+    &:before
+    {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 5%;
+        right: 5%;
+        width: 90%;
+        height: 1px;
+        background-image: linear-gradient(to right, transparent, rgb(199, 199, 199), transparent);
+    }
+}
+.footer {
+    padding: 10px;
+    .copyright {
+        font-size: 12px;
+    }
+    .footer-links {
+        margin-left: auto;
+        a {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 2em;
+            margin-right: 15px;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        
+    }
+}

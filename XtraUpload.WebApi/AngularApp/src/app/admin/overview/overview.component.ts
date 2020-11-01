@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
@@ -12,12 +12,15 @@ import { Subject } from 'rxjs';
 })
 export class OverviewComponent extends ComponentBase implements OnInit {
   adminOverview: IAdminOverView;
+  serverUrl: string;
   filesCount$ = new Subject<IItemCount[]>();
   usersCount$ = new Subject<IItemCount[]>();
   fileTypesCount$ = new Subject<IFileTypeCount[]>();
   constructor(
-    private adminService: AdminService) {
+    private adminService: AdminService,
+    @Inject('BASE_URL') baseUrl: string) {
     super();
+    this.serverUrl = baseUrl;
    }
 
   ngOnInit(): void {

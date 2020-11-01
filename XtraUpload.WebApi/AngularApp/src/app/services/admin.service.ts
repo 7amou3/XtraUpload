@@ -4,16 +4,14 @@ import { PageEvent } from '@angular/material/paginator';
 import { Observable, Subject } from 'rxjs';
 import { IAdminOverView, IDateRange, IItemCount, IFileTypeCount,
     IHealthCheck, IPaging, IFileExtension, IFilteredUser, ISearchFile, IEditExtension, IFileInfo,
-    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer, IUploadOptions, IHardwareOptions, IAddStorageServer } from 'app/domain';
+    IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer, IUploadOptions, IHardwareOptions, IAddStorageServer, IUpdateStorageServer } from 'app/domain';
 
 @Injectable()
 export class AdminService {
     private isbusy$ = new Subject<boolean>();
     serviceBusy$ = this.isbusy$.asObservable();
 
-    constructor(
-        private http: HttpClient,
-        @Inject('BASE_URL') private baseUrl: string) { }
+    constructor(private http: HttpClient) { }
     notifyBusy(val: boolean): void {
         return this.isbusy$.next(val);
     }
@@ -49,8 +47,8 @@ export class AdminService {
         return this.http.get<IFileTypeCount[]>('admin/filetypesstats/', { params: params });
     }
 
-    healthCheck(): Observable<IHealthCheck> {
-        return this.http.get<IHealthCheck>(this.baseUrl + 'health');
+    healthCheck(url: string): Observable<IHealthCheck> {
+        return this.http.get<IHealthCheck>(url);
     }
 
     getFiles(pageEvent: PageEvent, search: ISearchFile): Observable<IPaging<IFileInfoExtended>> {
@@ -182,7 +180,9 @@ export class AdminService {
     deletePage(deletePage: IPage) {
         return this.http.delete('admin/page/' + deletePage.id);
     }
-
+    getPage(url: string): Observable<IPage> {
+        return this.http.get<IPage>('setting/page/' + url);
+    }
     getStorageServers(): Observable<IStorageServer[]> {
         return this.http.get<IStorageServer[]>('admin/storageservers');
     }
@@ -205,7 +205,10 @@ export class AdminService {
     addStorageServer(addserver: IAddStorageServer): Observable<IStorageServer> {
         return this.http.post<IStorageServer>('admin/storageserver', addserver);
     }
-    getPage(url: string): Observable<IPage> {
-        return this.http.get<IPage>('setting/page/' + url);
+    updateStorageServer(updateServer: IUpdateStorageServer): Observable<IStorageServer>{
+        return this.http.patch<IStorageServer>('admin/storageserver', updateServer);
+    }
+    deleteServer(server: IStorageServer): Observable<IStorageServer> {
+        return this.http.delete<IStorageServer>('admin/storageserver/'+server.id);
     }
 }

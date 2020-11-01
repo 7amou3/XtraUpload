@@ -55,7 +55,7 @@ namespace XtraUpload.StorageManager.Host
             }
             catch (Exception exc)
             {
-                _logger.LogWarning("Failed to run cleanup job: " + exc.Message);
+                _logger.LogError("Failed to run cleanup job: " + exc.Message);
             }
             finally
             {

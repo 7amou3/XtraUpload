@@ -1,0 +1,45 @@
+.sheet-header {
+    display: flex;
+    .mat-icon {
+        font-size: 18px;
+    }
+    .mat-icon-button {
+        margin-left: auto;
+    }
+    .card-title {
+        font-size: 14px;
+        font-weight: 500;
+    }
+}
+.mat-divider {
+    margin: 0 -15px 0 -15px;
+}
+
+.dropzone {
+    background: transparent; 
+    margin-top: 20px;
+    &.drop-visibility{
+        display: none;
+    }
+    .icon-add-files {
+        font-size: 80px; 
+        margin-left: -50px;
+    }
+}
+
+.mat-list-item:hover {
+    background: rgba(180,180,180,0.3);
+}
+
+.loading-container {
+    height: 90px;
+}
+.disconnedted-servers {
+    height: 180px;
+    text-align: center;
+    .mat-icon {
+        width: 128px;
+        height: 128px;
+        color: crimson;
+    }
+}

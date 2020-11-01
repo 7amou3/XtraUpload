@@ -13,7 +13,7 @@ import { forEachPromise } from '../helpers';
 @Component({
   selector: 'app-upload-bottom-sheet',
   templateUrl: './upload-bottom-sheet.component.html',
-  styleUrls: ['./upload-bottom-sheet.component.css']
+  styleUrls: ['./upload-bottom-sheet.component.scss']
 })
 export class UploadBottomSheetComponent extends ComponentBase implements OnInit {
   storageLimitReached: boolean;

@@ -3,6 +3,7 @@ option csharp_namespace = "XtraUpload.Protos";
 import "domain/gUploadOptions.proto";
 import "domain/gRequestStatus.proto";
 import "domain/gHardwareOptions.proto";
+import "google/protobuf/empty.proto";
 
 package gstoragemanager;
 
@@ -13,6 +14,7 @@ service gStorageManager {
 	rpc GetUploadOptions (stream UploadOptsResponse) returns (stream UploadOptsRequest);
 	rpc GetHardwareOptions (stream HardwareOptsResponse) returns (stream HardwareOptsRequest);
 	rpc SetHardwareOptions (stream HardwareOptsResponse) returns (stream HardwareOptsResponse);
+	rpc IsAuthorized (google.protobuf.Empty) returns (AuthResponse);
 }
 
 message UploadOptsResponse {
@@ -38,4 +40,7 @@ message HardwareOptsResponse {
 }
 message HardwareOptsRequest {
 	string serverAddress = 1;
+}
+message AuthResponse {
+	gRequestStatus status = 1;
 }

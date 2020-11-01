@@ -134,7 +134,7 @@ namespace XtraUpload.GrpcServices
         /// </summary>
         public override async Task<gSaveAvatarResponse> SaveAvatar(gSaveAvatarRequest request, ServerCallContext context)
         {
-            var result = await _mediatr.Send(new SaveAvatarCommand(request.AvatarUrl, request.UserId));
+            var result = await _mediatr.Send(new SaveAvatarCommand(request.UserId, request.AvatarUrl));
 
             return new gSaveAvatarResponse() { Status = result.Convert() };
         }
