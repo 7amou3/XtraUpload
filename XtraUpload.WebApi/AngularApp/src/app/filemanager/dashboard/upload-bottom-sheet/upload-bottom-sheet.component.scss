@@ -34,3 +34,12 @@
 .loading-container {
     height: 90px;
 }
+.disconnedted-servers {
+    height: 180px;
+    text-align: center;
+    .mat-icon {
+        width: 128px;
+        height: 128px;
+        color: crimson;
+    }
+}

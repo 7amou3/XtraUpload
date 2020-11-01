@@ -6,6 +6,7 @@ import { FileManagerService, HeaderService } from 'app/services';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
 import { IAvatarData } from '../../domain';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-avatar',
@@ -17,7 +18,8 @@ export class AvatarComponent extends ComponentBase implements OnInit {
   croppedImage: any = '';
   constructor(
     private fileMngService: FileManagerService,
-    private headerService: HeaderService) {
+    private headerService: HeaderService,
+    private snackBar: MatSnackBar) {
     super();
   }
 
@@ -59,6 +61,12 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     .toPromise();
 
     setting$.then(s => {
+      console.log(s)
+      if (!s.storageServer) {
+        this.snackBar.open('Unreachable storage servers. Please contact customer support.', '', { duration: 3000 });
+        return;
+      }
+       
       this.fileMngService.startUpload(file, s, 'avatarupload', null)
       .pipe(takeUntil(this.onDestroy),
         finalize(() => this.isBusy = false))

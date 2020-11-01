@@ -25,6 +25,10 @@ export class CustomIconService {
     .addSvgIcon(
       "xu-servers",
       this.domSanitizer.bypassSecurityTrustResourceUrl(this.baseUrl + "/assets/images/svg/xu-servers.svg")
+    )
+    .addSvgIcon(
+      "disconnected",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(this.baseUrl + "/assets/images/svg/diconnected.svg")
     );
   }
 }

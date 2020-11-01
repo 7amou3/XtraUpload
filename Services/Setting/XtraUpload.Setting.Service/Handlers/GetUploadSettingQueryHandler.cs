@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Domain.Infra;
+using XtraUpload.GrpcServices.Common;
 using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.Setting.Service
@@ -23,10 +24,12 @@ namespace XtraUpload.Setting.Service
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
         readonly UploadOptions _uploadOpt;
+        readonly ICheckClientProxy _checkClientProxy;
         readonly ILogger<GetUploadSettingQueryHandler> _logger;
  
         public GetUploadSettingQueryHandler(
             IUnitOfWork unitOfWork,
+            ICheckClientProxy checkClientProxy,
             IOptionsMonitor<UploadOptions> uploadOpt,
             IHttpContextAccessor httpContextAccessor,
             ILogger<GetUploadSettingQueryHandler> logger)
@@ -34,6 +37,7 @@ namespace XtraUpload.Setting.Service
             _logger = logger;
             _unitOfWork = unitOfWork;
             _uploadOpt = uploadOpt.CurrentValue;
+            _checkClientProxy = checkClientProxy;
             _caller = httpContextAccessor.HttpContext.User;
         }
         
@@ -51,7 +55,7 @@ namespace XtraUpload.Setting.Service
                 Result.MaxFileSize = int.Parse(_caller.Claims.Single(c => c.Type == "MaxFileSize").Value);
                 Result.ChunkSize = _uploadOpt.ChunkSize * 1024 * 1024;
                 Result.FileExtensions = string.Join(", ", extensions.Select(s => s.Name));
-                Result.StorageServer = await GetStorageServer();
+                Result.StorageServer = GetStorageServer();
             }
             catch (Exception _ex)
             {
@@ -64,13 +68,13 @@ namespace XtraUpload.Setting.Service
             return Result;
         }
         /// <summary>
-        /// Get the least loaded server @, for now we pick a random server 
+        /// Get the least loaded server @, for now we pick a random healthy server 
         /// Todo: Get the least loaded storage server based on the monitoring state 
         /// </summary>
         /// <returns></returns>
-        private async Task<StorageServer> GetStorageServer()
+        private StorageServer GetStorageServer()
         {
-            IEnumerable<StorageServer> servers = await _unitOfWork.StorageServer.FindAsync(s => s.State == ServerState.Active);
+            IEnumerable<StorageServer> servers = _checkClientProxy.GetHealthyServers;
             if (servers.Any())
             {
                 Random rand = new Random();

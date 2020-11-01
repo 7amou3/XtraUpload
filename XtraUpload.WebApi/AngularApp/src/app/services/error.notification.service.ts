@@ -8,7 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ErrorNotificationService {
 
   constructor(
-    public snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private zone: NgZone) { }
 
   showSuccess(message: string): void {

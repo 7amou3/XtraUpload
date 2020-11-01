@@ -6,7 +6,7 @@
 </div>
 <mat-divider></mat-divider>
 
-<section *ngIf="!isBusy;else elseBlock">
+<section *ngIf="!isBusy && uploadSetting?.storageServer; else elseBlock">
   <!--Drop Zone -->
   <ngx-dropzone [maxFileSize]="uploadSetting?.maxFileSize *1024 *1024" [accept]="uploadSetting?.fileExtensions"
     [class.drop-visibility]="files.length> 0" #drop class="dropzone" (change)="onSelect($event)">
@@ -62,7 +62,13 @@
   </div>
 </section>
 <ng-template #elseBlock>
-  <div fxLayoutAlign="center center" class="loading-container">
+  <div *ngIf="isBusy; else storageDisconnected" fxLayoutAlign="center center" class="loading-container">
     <mat-progress-bar mode="query" color="accent"></mat-progress-bar>
   </div>
+  <ng-template #storageDisconnected>
+    <div class="disconnedted-servers">
+      <mat-icon svgIcon="disconnected"></mat-icon>
+      <p>Unreachable storage servers. Please contact customer support.</p>
+    </div>
+  </ng-template> 
 </ng-template>

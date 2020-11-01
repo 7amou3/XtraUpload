@@ -16,6 +16,7 @@ namespace XtraUpload.GrpcServices
                 endpoints.MapGrpcService<gFileManagerService>();
                 endpoints.MapGrpcService<gStorageManagerService>();
             });
+            app.ApplicationServices.GetService<StartableServices>().Start();
         }
         public static void AddGrpcServices(this IServiceCollection services, IConfiguration config)
         {
@@ -38,6 +39,7 @@ namespace XtraUpload.GrpcServices
                     };
                 });
             // Register services
+            services.AddSingleton<StartableServices>();
             services.AddSingleton<ClientCertificateValidator>();
             services.AddSingleton<ICheckClientProxy, CheckClientProxy>();
             services.AddSingleton<IUploadOptsClientProxy, UploadOptsClientProxy>();

@@ -15,7 +15,7 @@ namespace XtraUpload.GrpcServices
     [Authorize(AuthenticationSchemes = CertificateAuthenticationDefaults.AuthenticationScheme)]
     public class gStorageManagerService : gStorageManager.gStorageManagerBase
     {
-        readonly ICheckClientProxy _checkClientProxy;
+        readonly ICheckClientCommand _checkClientCommand;
         readonly IHardwareOptsClientCommand _hardwareOptsCmd;
         readonly IUploadOptsClientCommand _uploadOptsCommand;
         readonly ILogger<gStorageManagerService> _logger;
@@ -26,7 +26,7 @@ namespace XtraUpload.GrpcServices
             ILogger<gStorageManagerService> logger)
         {
             _logger = logger;
-            _checkClientProxy = checkClientProxy;
+            _checkClientCommand = checkClientProxy as ICheckClientCommand;
             _hardwareOptsCmd = hardwareProxy as IHardwareOptsClientCommand;
             _uploadOptsCommand = uploadOptsProxy as IUploadOptsClientCommand;
 
@@ -47,20 +47,20 @@ namespace XtraUpload.GrpcServices
         {
             try
             {
-                _checkClientProxy.StorageServerConnectivityRequested += ConnectivityRequested;
+                _checkClientCommand.StorageServerConnectivityRequested += ConnectivityRequested;
 
                 await foreach (var message in requestStream.ReadAllAsync())
                 {
                     string server = context.Host;
                     _logger.LogDebug("Request received from " + server);
 
-                    _checkClientProxy.SetConnectivityStatus(message.Status.Convert());
+                    _checkClientCommand.SetConnectivityStatus(message.Status.Convert());
                 }
             }
             finally
             {
                 _logger.LogError("Connection lost with the remote storage server");
-                _checkClientProxy.StorageServerConnectivityRequested -= ConnectivityRequested;
+                _checkClientCommand.StorageServerConnectivityRequested -= ConnectivityRequested;
             }
             
             async void ConnectivityRequested(object sender, StorageServerConnectivityEventArgs e)
