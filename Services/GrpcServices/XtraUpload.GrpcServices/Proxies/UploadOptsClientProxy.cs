@@ -42,11 +42,11 @@ namespace XtraUpload.GrpcServices
         /// <summary>
         /// Event raised to read upload options of designated client storage
         /// </summary>
-        public event EventHandler<ReadUploadOptsRequestedEventArgs> ReadUploadOptsRequested;
+        public event EventHandler<ReadUploadOptionsEventArgs> ReadUploadOptsRequested;
         /// <summary>
         /// Event raised to write upload options to designated client storage
         /// </summary>
-        public event EventHandler<WriteUploadOptsRequestedEventArgs> WriteUploadOptsRequested;
+        public event EventHandler<WriteUploadOptionsEventArgs> WriteUploadOptsRequested;
         /// <summary>
         /// Sets the upload options for a given server
         /// </summary>
@@ -75,7 +75,7 @@ namespace XtraUpload.GrpcServices
         {
             UploadOptionsResult Result = new UploadOptionsResult();
             // Raise event to call client storage server
-            ReadUploadOptsRequested?.Invoke(this, new ReadUploadOptsRequestedEventArgs(serverAddress));
+            ReadUploadOptsRequested?.Invoke(this, new ReadUploadOptionsEventArgs(serverAddress));
             if(await _signal.WaitAsync(WAIT_TIME))
             {
                 if (_serversConfig.TryGetValue(serverAddress, out UploadOptions options))
@@ -103,7 +103,7 @@ namespace XtraUpload.GrpcServices
         public async Task<OperationResult> WriteUploadOptions(UploadOptions uploadOpts, string serverAddress)
         {
             OperationResult Result = new OperationResult();
-            WriteUploadOptsRequested?.Invoke(this, new WriteUploadOptsRequestedEventArgs(uploadOpts, serverAddress));
+            WriteUploadOptsRequested?.Invoke(this, new WriteUploadOptionsEventArgs(uploadOpts, serverAddress));
             if (await _signal.WaitAsync(WAIT_TIME))
             {
                 if (!_serversConfig.TryGetValue(serverAddress, out UploadOptions options))

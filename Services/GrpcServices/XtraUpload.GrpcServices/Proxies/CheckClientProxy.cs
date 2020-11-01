@@ -12,6 +12,9 @@ using XtraUpload.GrpcServices.Common;
 
 namespace XtraUpload.GrpcServices
 {
+    /// <summary>
+    /// Check the connectivity of storage clients
+    /// </summary>
     public class CheckClientProxy : ICheckClientProxy, ICheckClientCommand, IDisposable
     {
         private const int EXPIRATION = 30 * 1000; // 30s

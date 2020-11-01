@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using XtraUpload.Domain;
 using XtraUpload.Protos;
@@ -44,14 +46,15 @@ namespace XtraUpload.StorageManager.Service
             Task.Run(() =>
             {
                 Task.WaitAll(
-                    StartStorageServerCheck(), 
+                    StartStorageConnectivityCheck(),
+                    StartStorageHealthCheck(),
                     StartUploadConfigRetrieval(),
                     StartUploadConfigWrite(),
                     StartHardwareConfigRetrieval(),
                     StartHardwareConfigWrite());
             });
         }
-        private async Task StartStorageServerCheck()
+        private async Task StartStorageConnectivityCheck()
         {
             try
             {
@@ -76,7 +79,41 @@ namespace XtraUpload.StorageManager.Service
                 _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
-                await StartStorageServerCheck();
+                await StartStorageConnectivityCheck();
+            }
+        }
+
+        private async Task StartStorageHealthCheck()
+        {
+            try
+            {
+                using var call = _storageClient.StorageServerHealth();
+                _logger.LogDebug("Start connection");
+                await foreach (var message in call.ResponseStream.ReadAllAsync())
+                {
+                    if (_urls.ServerUrl == message.ServerAddress)
+                    {
+                        var storageInfo = GetStorageSpaceInfo();
+                        await call.RequestStream.WriteAsync(new StorageHealthResponse() 
+                        {
+                             ServerAddress = message.ServerAddress,
+                             StorageInfo = new gStorageSpaceInfo() { UsedDiskSpace = (ulong)storageInfo.UsedDiskSpace, FreeDiskSpace = (ulong)storageInfo.FreeDiskSpace }
+                        });
+                    }
+                }
+                _logger.LogDebug("Disconnecting");
+                await call.RequestStream.CompleteAsync();
+            }
+            catch (Exception _ex)
+            {
+                _logger.LogError(_ex.Message);
+            }
+            finally
+            {
+                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                await Task.Delay(RETRY_DELAY);
+                // Retry new connection
+                await StartStorageHealthCheck();
             }
         }
         private async Task StartUploadConfigRetrieval()
@@ -245,6 +282,25 @@ namespace XtraUpload.StorageManager.Service
                 // Retry new connection
                 await StartHardwareConfigWrite();
             }
+        }
+
+        private StorageSpaceInfo GetStorageSpaceInfo()
+        {
+            StorageSpaceInfo result = new StorageSpaceInfo();
+            string rootDrive = Path.GetPathRoot(_uploadOpts.Value.UploadPath);
+            DriveInfo driveInfo = DriveInfo.GetDrives().FirstOrDefault(s => s.Name == rootDrive);
+            if (driveInfo != null)
+            {
+                result.FreeDiskSpace = driveInfo.AvailableFreeSpace;
+                result.UsedDiskSpace = driveInfo.TotalSize;
+            }
+            else
+            {
+                #region Trace
+                _logger.LogError($"No drive found with the name: {rootDrive}, please check your appsettings.json configs");
+                #endregion
+            }
+            return result;
         }
     }
 }

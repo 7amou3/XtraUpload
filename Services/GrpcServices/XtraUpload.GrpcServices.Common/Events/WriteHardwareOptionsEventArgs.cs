@@ -3,9 +3,9 @@ using XtraUpload.Domain;
 
 namespace XtraUpload.GrpcServices.Common
 {
-    public class WriteHardwareOptsRequestedEventArgs : EventArgs
+    public class WriteHardwareOptionsEventArgs : EventArgs
     {
-        public WriteHardwareOptsRequestedEventArgs(HardwareCheckOptions hardwareOpt, string serverAddress)
+        public WriteHardwareOptionsEventArgs(HardwareCheckOptions hardwareOpt, string serverAddress)
         {
             HardwareOpts = hardwareOpt;
             ServerAddress = serverAddress;

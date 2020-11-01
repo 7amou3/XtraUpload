@@ -1,13 +1,11 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
+using XtraUpload.GrpcServices.Common;
 
 namespace XtraUpload.Administration.Service
 {
@@ -18,19 +16,18 @@ namespace XtraUpload.Administration.Service
     {
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
-        readonly UploadOptions _uploadOpts;
+        readonly IStorageHealthClientProxy _storageHealthProxy;
         readonly ILogger<GetAdminOverViewQueryHandler> _logger;
-
         public GetAdminOverViewQueryHandler(
             IMediator mediator,
             IUnitOfWork unitOfWork,
-            IOptionsMonitor<UploadOptions> uploadsOpts,
+            IStorageHealthClientProxy storageHealthProxy,
             ILogger<GetAdminOverViewQueryHandler> logger)
         {
             _logger = logger;
             _mediator = mediator;
             _unitOfWork = unitOfWork;
-            _uploadOpts = uploadsOpts.CurrentValue;
+            _storageHealthProxy = storageHealthProxy;
         }
         public async Task<AdminOverViewResult> Handle(GetAdminOverViewQuery request, CancellationToken cancellationToken)
         {
@@ -44,19 +41,12 @@ namespace XtraUpload.Administration.Service
 
             long freeSpace = 0;
             long totalsize = 0;
-            string rootDrive = Path.GetPathRoot(_uploadOpts.UploadPath);
-            DriveInfo driveInfo = DriveInfo.GetDrives().FirstOrDefault(s => s.Name == rootDrive);
-            if (driveInfo != null)
+            foreach (var server in _storageHealthProxy.GetServersHealth)
             {
-                freeSpace = driveInfo.TotalFreeSpace;
-                totalsize = driveInfo.TotalSize;
+                freeSpace += (long)server.StorageInfo.FreeDiskSpace;
+                totalsize += (long)server.StorageInfo.UsedDiskSpace;
             }
-            else
-            {
-                #region Trace
-                _logger.LogError($"No drive found with the name: {rootDrive}, please check your appsettings.json configs");
-                #endregion
-            }
+            
             var userStats = await _mediator.Send(new GetUserStatsQuery(request.DateRange));
             var uploadStats = await _mediator.Send(new GetUploadStatsQuery(request.DateRange));
             var fileStats = await _mediator.Send(new GetFileTypeStatsQuery(request.DateRange));
