@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Cryptography.X509Certificates;
+using XtraUpload.Domain.Infra;
 using XtraUpload.GrpcServices.Common;
 
 namespace XtraUpload.GrpcServices
@@ -38,6 +39,23 @@ namespace XtraUpload.GrpcServices
                         }
                     };
                 });
+            // forward certificate in case of proxy web server in front of xtraupload
+            services.AddCertificateForwarding(options =>
+            {
+                options.CertificateHeader = "X-SSL-CERT";
+                options.HeaderConverter = (headerValue) =>
+                {
+                    X509Certificate2 clientCertificate = null;
+
+                    if (!string.IsNullOrWhiteSpace(headerValue))
+                    {
+                        byte[] bytes = Helpers.StringToByteArray(headerValue);
+                        clientCertificate = new X509Certificate2(bytes);
+                    }
+
+                    return clientCertificate;
+                };
+            });
             // Register services
             services.AddSingleton<StartableServices>();
             services.AddSingleton<ClientCertificateValidator>();
