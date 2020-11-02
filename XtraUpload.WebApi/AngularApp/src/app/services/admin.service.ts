@@ -137,9 +137,7 @@ export class AdminService {
     updateJwtOpts(jwtParams) {
         return this.http.patch('admin/jwtOptions/', jwtParams);
     }
-    updateUploadOpts(uploadParams) {
-        return this.http.patch('admin/uploadOptions/', uploadParams);
-    }
+    
     updateEmailOpts(emailParams: IEmailSettings) {
         return this.http.patch('admin/emailOptions/', {
             smtp: {

@@ -183,13 +183,6 @@ namespace XtraUpload.WebApi.Controllers
             return HandleResult(result);
         }
 
-        [HttpPatch("uploadOptions")]
-        public async Task<IActionResult> UpdateUploadOptions(Domain.UploadOptions model)
-        {
-            OperationResult result = await _mediatr.Send(new UpdateConfigSectionCommand(model));
-
-            return HandleResult(result);
-        }
         [HttpPatch("emailOptions")]
         public async Task<IActionResult> UpdateEmailOptions(EmailSettings model)
         {

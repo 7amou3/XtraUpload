@@ -57,61 +57,14 @@
                                         Save changes
                                     </button>
                                 </mat-card-actions>
-                                <div class="font-10 text-muted">
-                                    <mat-icon class="font-14">help</mat-icon>Changes to these fields may take up to 5 min to be
-                                    visible on front page.
-                                </div>
             
                             </form>
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <!--Upload settings-->
-                <div fxFlex="100" id="{{links[1].fragment}}">
-                    <mat-card>
-                        <mat-list>
-                            <div mat-subheader class="bg-info text-white">Upload Settings</div>
-                        </mat-list>
-                        <mat-divider></mat-divider>
-                        <mat-card-content>
-                            <form [formGroup]="uploadFormGroup" (ngSubmit)="onUploadSettingSubmit(uploadFormGroup.value)"
-                                class="font-14">
-                                <!--UploadPath-->
-                                <mat-form-field>
-                                    <mat-label>Upload Path</mat-label>
-                                    <input matInput type="text" formControlName="uploadPath" required>
-                                    <mat-hint>The full path to the upload folder (must be writable)</mat-hint>
-                                    <mat-error *ngIf="uploadPath.invalid">{{getErrorMessage(uploadPath)}}</mat-error>
-                                </mat-form-field>
-                                <!--ChunkSize-->
-                                <mat-form-field>
-                                    <mat-label>Chunk Size (Mb)</mat-label>
-                                    <input matInput type="number" formControlName="chunkSize" required>
-                                    <mat-hint>The size of the uploaded file's chunk must be less than the limit of your server
-                                        request body size</mat-hint>
-                                    <mat-error *ngIf="chunkSize.invalid">{{getErrorMessage(chunkSize)}}</mat-error>
-                                </mat-form-field>
-                                <!--Expiration-->
-                                <mat-form-field>
-                                    <mat-label>File Expiration (minutes)</mat-label>
-                                    <input matInput type="number" formControlName="expiration" required>
-                                    <mat-hint>Expiration time where incomplete files can no longer be updated </mat-hint>
-                                    <mat-error *ngIf="expiration.invalid">{{getErrorMessage(expiration)}}</mat-error>
-                                </mat-form-field>
-                                <!-- Submit button-->
-                                <mat-card-actions>
-                                    <button mat-raised-button
-                                        [disabled]="!uploadFormGroup.valid || uploadBusy" type="submit">
-                                        <mat-progress-bar mode="indeterminate" *ngIf="uploadBusy"></mat-progress-bar>
-                                        Save changes
-                                    </button>
-                                </mat-card-actions>
-                            </form>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
+                
                 <!--Jwt settings-->
-                <div fxFlex="100" id="{{links[2].fragment}}">
+                <div fxFlex="100" id="{{links[1].fragment}}">
                     <mat-card>
                         <mat-list>
                             <div mat-subheader class="bg-info text-white">Jwt Settings</div>
@@ -146,7 +99,7 @@
                                     <input matInput [type]="hideSecretKey ? 'password' : 'text'" formControlName="secretKey"
                                         required>
                                     <mat-hint>A secret key to signing token key</mat-hint>
-                                    <mat-hint fxLayoutAlign="flex-end">{{secretKey.value.length}} / 32</mat-hint>
+                                    <mat-hint align="end" fxLayoutAlign="flex-end">{{secretKey.value.length}} / 32</mat-hint>
                                     <button type="button" mat-icon-button matSuffix (click)="hideSecretKey = !hideSecretKey"
                                         [attr.aria-label]="'Hide secret key'" [attr.aria-pressed]="hideSecretKey">
                                         <mat-icon>{{hideSecretKey ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -166,7 +119,7 @@
                     </mat-card>
                 </div>
                 <!--Social Auth-->
-                <div fxFlex="100" id="{{links[3].fragment}}">
+                <div fxFlex="100" id="{{links[2].fragment}}">
                     <mat-card>
                         <mat-list>
                             <div mat-subheader class="bg-info text-white">Social Auth</div>
@@ -200,7 +153,7 @@
                     </mat-card>
                 </div>
                 <!--Email settings-->
-                <div fxFlex="100" id="{{links[4].fragment}}">
+                <div fxFlex="100" id="{{links[3].fragment}}">
                     <mat-card>
                         <mat-list>
                             <div mat-subheader class="bg-info text-white">Email Settings</div>
@@ -267,7 +220,7 @@
                     </mat-card>
                 </div>
                 <!--Hardware Opts-->
-                <div fxFlex="100" id="{{links[5].fragment}}">
+                <div fxFlex="100" id="{{links[4].fragment}}">
                     <mat-card>
                         <mat-list>
                             <div mat-subheader class="bg-info text-white">Hardware Options</div>
