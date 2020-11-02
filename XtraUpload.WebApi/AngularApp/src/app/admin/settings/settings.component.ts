@@ -36,11 +36,6 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   validFor = new FormControl('', [Validators.required, Validators.min(1)]);
   issuer = new FormControl('', [Validators.required]);
   audience = new FormControl('', [Validators.required]);
-
-  uploadFormGroup: FormGroup;
-  uploadPath = new FormControl('', [Validators.required]);
-  chunkSize = new FormControl('', [Validators.required, Validators.min(1)]);
-  expiration = new FormControl('', [Validators.required, Validators.min(1)]);
   emailFormGroup: FormGroup;
   server = new FormControl('', [Validators.required]);
   port = new FormControl('', [Validators.required, Validators.min(1)]);
@@ -89,7 +84,6 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     // TODO: move content table management to a component (Single Responsibility Principle)
     const links: Link[] = [
       { fragment: 'pagesettings', name: 'Page Settings', active: true },
-      { fragment: 'uploadsettings', name: 'Upload Settings', active: false },
       { fragment: 'jwtsettings', name: 'Jwt Settings', active: false },
       { fragment: 'socialauth', name: 'Social Auth', active: false },
       { fragment: 'emailsettings', name: 'Email Settings', active: false },
@@ -127,11 +121,6 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       validFor: this.validFor,
       secretKey: this.secretKey
     });
-    this.uploadFormGroup = this.fb.group({
-      uploadPath: this.uploadPath,
-      chunkSize: this.chunkSize,
-      expiration: this.expiration
-    });
     this.emailFormGroup = this.fb.group({
       server: this.server,
       port: this.port,
@@ -161,9 +150,9 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       finalize(() => this.adminService.notifyBusy(false)))
     .subscribe((data: any) => {
       // page settings
-      this.title.setValue(data.appSettings.title);
-      this.description.setValue(data.appSettings.description);
-      this.keywords.setValue(data.appSettings.keywords);
+      this.title.setValue(data.appInfo.title);
+      this.description.setValue(data.appInfo.description);
+      this.keywords.setValue(data.appInfo.keywords);
       // email settings
       this.server.setValue(data.emailSettings.smtp.server);
       this.port.setValue(data.emailSettings.smtp.port);
@@ -172,10 +161,6 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       this.senderName.setValue(data.emailSettings.sender.name);
       this.adminEmail.setValue(data.emailSettings.sender.admin);
       this.supportEmail.setValue(data.emailSettings.sender.support);
-      // upload settings
-      this.uploadPath.setValue(data.uploadOptions.uploadPath);
-      this.chunkSize.setValue(data.uploadOptions.chunkSize);
-      this.expiration.setValue(data.uploadOptions.expiration);
       // hardware settings
       this.memoryThreshold.setValue(data.hardwareCheckOptions.memoryThreshold);
       this.storageThreshold.setValue(data.hardwareCheckOptions.storageThreshold);
@@ -229,21 +214,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       }
     );
   }
-  onUploadSettingSubmit(uploadParams) {
-    this.uploadBusy = true;
-    this.adminService.updateUploadOpts(uploadParams)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.uploadBusy = false))
-    .subscribe(
-      () => {
-        this.showSuccessMsg('Upload Options');
-      },
-      error => {
-        this.handleError(error);
-      }
-    );
-  }
+
   onEmailSubmit(emailParams: IEmailSettings) {
     this.emailBusy = true;
     this.adminService.updateEmailOpts(emailParams)
