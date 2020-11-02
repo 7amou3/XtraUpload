@@ -108,6 +108,8 @@ namespace XtraUpload.WebApi
 
             app.UseStaticFiles();
 
+            app.UseCertificateForwarding();
+
             app.UseAuthentication();
             
             app.UseRouting();
