@@ -44,7 +44,7 @@ namespace XtraUpload.StorageManager.Host
             // Add grpc clients
             services.AddGrpcClient<gFileManager.gFileManagerClient>(options =>
             {
-                options.Address = new Uri(config["UrlsConfig:RemoteApiUrl"]);
+                options.Address = new Uri(config["UrlsConfig:RemoteGrpcUrl"]);
             })
             .ConfigureChannel((serviceProvider, channel) =>
             {
@@ -56,7 +56,7 @@ namespace XtraUpload.StorageManager.Host
 
             services.AddGrpcClient<gStorageManager.gStorageManagerClient>(options =>
             {
-                options.Address = new Uri(config["UrlsConfig:RemoteApiUrl"]);
+                options.Address = new Uri(config["UrlsConfig:RemoteGrpcUrl"]);
             })
             .ConfigureChannel((serviceProvider, channel) =>
             {
