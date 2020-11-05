@@ -7,8 +7,8 @@
         /// </summary>
         public string ServerUrl { get; set; }
         /// <summary>
-        /// The remote api url
+        /// The remote gRPC server url
         /// </summary>
-        public string RemoteApiUrl { get; set; }
+        public string RemoteGrpcUrl { get; set; }
     }
 }
