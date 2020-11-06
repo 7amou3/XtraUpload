@@ -9,6 +9,29 @@ sudo apt-get update; \
   sudo apt-get install -y dotnet-sdk-3.1  && \
   sudo apt-get install -y aspnetcore-runtime-3.1
   
+# Install MySql
+read -p "Do you want to install MySql database? (Y/N): " confirmMySql
+if confirmMySql == [yY] || $confirmMySql == [yY][eE][sS]
+then
+  sudo apt-get install mysql-server
+  sudo mysql_secure_installation
+  updateMySqlAuth
+fi
+
+function updateMySqlAuth
+{
+  read -p "Enter new MySql password: " mySqlPassword
+  read -p "Confirm new password: " retypePassword
+  if mySqlPassword == retypePassword
+  then
+    sudo mysql
+    sudo mysql --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY $mySqlPassword;"
+  else
+    echo "Confirmation password does not match, try again"
+    updateMySqlAuth
+  fi
+}
+
 # Install nodejs to build the Angular App
 sudo apt install nodejs && \
     sudo apt install npm
