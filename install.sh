@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install script for Ubuntu 20.04
+# To execute this install script, open a terminal and type: sudo chmod +x install.sh && sudo ./install.sh
+
 # Install dotnet runtime (Ubuntu)
 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
@@ -10,14 +13,6 @@ sudo apt-get update; \
   sudo apt-get install -y aspnetcore-runtime-3.1
   
 # Install MySql
-read -p "Do you want to install MySql database? (Y/N): " confirmMySql
-if confirmMySql == [yY] || $confirmMySql == [yY][eE][sS]
-then
-  sudo apt-get install mysql-server
-  sudo mysql_secure_installation
-  updateMySqlAuth
-fi
-
 function updateMySqlAuth
 {
   read -p "Enter new MySql password: " mySqlPassword
@@ -34,6 +29,19 @@ function updateMySqlAuth
     updateMySqlAuth
   fi
 }
+read -p "Do you want to install MySql database? (Y/N): " confirmMySql
+if confirmMySql == [yY] || $confirmMySql == [yY][eE][sS]
+then
+  sudo apt-get install mysql-server
+  sudo mysql_secure_installation
+  updateMySqlAuth
+fi
+
+# Install nginx
+sudo apt install nginx
+sudo ufw allow 'Nginx HTTP' && \ 
+  sudo ufw allow 'Nginx HTTPS'
+sudo systemctl enable nginx
 
 # Install nodejs to build the Angular App
 sudo apt install nodejs && \
@@ -41,7 +49,7 @@ sudo apt install nodejs && \
 
 # Build the solution
 buildDir="/var/www/xtraupload"
-mkdir -m 755 $buildDir
+mkdir -m 755 -p $buildDir
 dotnet publish --configuration Release -o $buildDir
 
 # Install entity framewrok tools to generate migrations and update the db
