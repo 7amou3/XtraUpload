@@ -15,33 +15,36 @@ sudo apt-get update; \
 # Install MySql
 function updateMySqlAuth
 {
-  read -p "Enter new MySql password: " mySqlPassword
-  read -p "Confirm new password: " retypePassword
-  if mySqlPassword == retypePassword
-  then
-    sudo mysql
-    sudo mysql --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY $mySqlPassword;"
-    sudo mysql --execute="FLUSH PRIVILEGES;"
-    sudo mysql --execute="exit;"
-    read -p "Please update the [XtraUpload.WebApi/appsettings.json] with the new database password, once it is done press any key to continue." waiting
+  read -p "Enter new MySql password: " -s mySqlPassword && printf '\n'
+  read -p "Confirm new password: " -s retypePassword && printf '\n'
+  
+  if [ $mySqlPassword == $retypePassword ]; then
+    
+    sudo mysql << EOF
+     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mySqlPassword';
+     FLUSH PRIVILEGES;
+     exit;
+EOF
+    read -p "Please update the [XtraUpload.WebApi/appsettings.json] with the new database password, once it is done press [Enter] to continue." waiting
   else
     echo "Confirmation password does not match, try again"
     updateMySqlAuth
   fi
 }
+
 read -p "Do you want to install MySql database? (Y/N): " confirmMySql
-if confirmMySql == [yY] || $confirmMySql == [yY][eE][sS]
-then
-  sudo apt-get install mysql-server
-  sudo mysql_secure_installation
-  updateMySqlAuth
+if [ $confirmMySql == "Y" ] || [ $confirmMySql == "y" ]; then
+  sudo apt-get install mysql-server && \
+  	mysql_secure_installation && \
+  	updateMySqlAuth
 fi
 
 # Install nginx
-sudo apt install nginx
+sudo apt install nginx && 
+  sudo systemctl enable nginx
 sudo ufw allow 'Nginx HTTP' && \ 
   sudo ufw allow 'Nginx HTTPS'
-sudo systemctl enable nginx
+
 
 # Install nodejs to build the Angular App
 sudo apt install nodejs && \
@@ -51,6 +54,7 @@ sudo apt install nodejs && \
 buildDir="/var/www/xtraupload"
 mkdir -m 755 -p $buildDir
 dotnet publish --configuration Release -o $buildDir
+mv "{$buildDir}/AngularApp/dist/*" "{$buildDir}/AngularApp" && rm "{$buildDir}/AngularApp/dist"
 
 # Install entity framewrok tools to generate migrations and update the db
 dotnet tool install --global dotnet-ef
@@ -65,7 +69,7 @@ dotnet ef database update initCommit -p ./Database/XtraUpload.Database.Migration
 certDir="/home/certificates/localhost"
 sudo mkdir -m 755 -p $certDir && cd $_
 
-cat <<EOF >/$certDir/https.config
+sudo cat <<EOF >/$certDir/https.config
 [req]
 default_bits       = 2048
 default_md         = sha256
@@ -105,7 +109,7 @@ sudo chmod 644 localhost.crt localhost.pfx
 sudo cp localhost.crt /usr/share/ca-certificates && sudo update-ca-certificates
 
 # Generate a monitoring service 
-cat <<EOF >/etc/systemd/system/api-xtraupload.service
+sudo cat <<EOF >/etc/systemd/system/api-xtraupload.service
 [Unit]
 Description=XtraUpload Api Service
 
