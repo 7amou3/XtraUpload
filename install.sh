@@ -26,6 +26,9 @@ function updateMySqlAuth
   then
     sudo mysql
     sudo mysql --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY $mySqlPassword;"
+    sudo mysql --execute="FLUSH PRIVILEGES;"
+    sudo mysql --execute="exit;"
+    read -p "Please update the [XtraUpload.WebApi/appsettings.json] with the new database password, once it is done press any key to continue." waiting
   else
     echo "Confirmation password does not match, try again"
     updateMySqlAuth
