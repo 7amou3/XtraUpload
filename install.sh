@@ -54,7 +54,7 @@ sudo apt install nodejs && \
 buildDir="/var/www/xtraupload"
 mkdir -m 755 -p $buildDir
 sudo dotnet publish --configuration Release # -o $buildDir
-mv ./XtraUpload.WebApi/bin/Release/netcoreapp3.1/publish/ $buildDir && \
+mv ./XtraUpload.WebApi/bin/Release/netcoreapp3.1/publish/* $buildDir && \
 mv "${buildDir}/AngularApp/dist/*" "${buildDir}/AngularApp" && rm "${buildDir}/AngularApp/dist"
 
 # Install entity framewrok tools to generate migrations and update the db
