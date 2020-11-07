@@ -1,7 +1,8 @@
+
 #!/bin/bash
 
-# Install script for Ubuntu 20.04
-# To execute this install script, open a terminal and type: sudo chmod +x install.sh && sudo ./install.sh
+# Ubuntu 20.04 - Install script
+# To execute this install script, open a terminal and type: chmod +x install.sh && ./install.sh (don't use sudo, use the xtraupload user)
 
 # Install dotnet runtime (Ubuntu)
 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -37,6 +38,8 @@ if [ $confirmMySql == "Y" ] || [ $confirmMySql == "y" ]; then
   sudo apt-get install mysql-server && \
   	mysql_secure_installation && \
   	updateMySqlAuth
+else 
+  read -p "Please update the [XtraUpload.WebApi/appsettings.json] with the database password, once it is done press [Enter] to continue." waiting
 fi
 
 # Install nginx
@@ -52,10 +55,13 @@ sudo apt install nodejs && \
 
 # Build the solution
 buildDir="/var/www/xtraupload"
-mkdir -m 755 -p $buildDir
-sudo dotnet publish --configuration Release # -o $buildDir
-mv ./XtraUpload.WebApi/bin/Release/netcoreapp3.1/publish/* $buildDir && \
-mv "${buildDir}/AngularApp/dist/*" "${buildDir}/AngularApp" && rm "${buildDir}/AngularApp/dist"
+sudo install -d -m 755 -o $USER $buildDir
+if [ ! -d $buildDir ]; then
+ echo "Directory ${buildDir} DOES NOT exists."
+ exit 1
+fi
+
+dotnet publish --configuration Release -o $buildDir
 
 # Install entity framewrok tools to generate migrations and update the db
 dotnet tool install --global dotnet-ef
@@ -66,10 +72,15 @@ dotnet ef database update initCommit -p ./Database/XtraUpload.Database.Migration
 # dotnet ef migrations script -o ./Database/XtraUpload.Database.Migrations/script.sql -p ./Database/XtraUpload.Database.Migrations -s XtraUpload.WebApi
 # mv ./Database/XtraUpload.Database.Migrations/script.sql $buildDir
 
+mv "${buildDir}/AngularApp/dist/*" "${buildDir}/AngularApp" && rm "${buildDir}/AngularApp/dist"
+
 # generate ssl certs for localhost. if you don't plan on using a reverse proxy, you can supply certs signed a by public CA (letsencrypt for exemple)
 certDir="/home/certificates/localhost"
-sudo mkdir -m 755 -p $certDir && cd $_
-
+sudo install -d -m 755 -o $USER $certDir && cd $_
+if [ ! -d $certDir ]; then
+ echo "Directory ${certDir} DOES NOT exists."
+ exit 1
+fi
 sudo cat <<EOF >/$certDir/https.config
 [req]
 default_bits       = 2048
@@ -102,6 +113,10 @@ keyUsage                    = critical, cRLSign, digitalSignature, keyCertSign
 DNS.1   = localhost
 IP.1    = 127.0.0.1
 EOF
+if [ ! -f $certDir/https.config ]; then
+    echo $certDir"/https.config does not exist."
+    exit 1
+fi
 
 sudo openssl req -config https.config -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout localhost.key -days 3650 -out localhost.crt
 sudo openssl pkcs12 -export -out localhost.pfx -inkey localhost.key -in localhost.crt -password pass:";xE)^C8wUH#vP)@5.YGpzv"
@@ -110,7 +125,7 @@ sudo chmod 644 localhost.crt localhost.pfx
 sudo cp localhost.crt /usr/share/ca-certificates && sudo update-ca-certificates
 
 # Generate a monitoring service 
-sudo cat <<EOF >/etc/systemd/system/api-xtraupload.service
+sudo bash -c 'cat <<EOF >/etc/systemd/system/api-xtraupload.service
 [Unit]
 Description=XtraUpload Api Service
 
@@ -122,13 +137,18 @@ Restart=always
 RestartSec=10
 KillSignal=SIGINT
 SyslogIdentifier=dotnet-example
-User=root
+User=$USER
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF'
+
+if [ ! -f /etc/systemd/system/api-xtraupload.service ]; then
+    echo "/etc/systemd/system/api-xtraupload.service does not exist."
+    exit 1
+fi
 
 sudo systemctl enable api-xtraupload.service
 sudo systemctl start api-xtraupload
