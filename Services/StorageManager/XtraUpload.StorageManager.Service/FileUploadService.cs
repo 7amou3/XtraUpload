@@ -88,7 +88,7 @@ namespace XtraUpload.StorageManager.Service
                 FolderId = metadata["folderId"].GetString(Encoding.UTF8) == "root"
                                                                                 ? null
                                                                                 : metadata["folderId"].GetString(Encoding.UTF8),
-                Extension = Helpers.GetFileExtension(metadata["contentType"].GetString(Encoding.UTF8)),
+                Extension = Helpers.GetFileExtension(metadata["contentType"].GetString(Encoding.UTF8)) ?? string.Empty,
                 StorageServerId = metadata["serverId"].GetString(Encoding.UTF8),
                 CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
                 LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),

@@ -21,7 +21,7 @@ namespace XtraUpload.WebApi
                         serverOptions.Configure(context.Configuration.GetSection("Kestrel"))
                         .Endpoint("gRPCServer", listenOptions =>
                         {
-                            listenOptions.HttpsOptions.ClientCertificateMode = ClientCertificateMode.RequireCertificate;
+                            listenOptions.HttpsOptions.ClientCertificateMode = ClientCertificateMode.AllowCertificate;
                         });
                     });
                     webBuilder.UseStartup<Startup>();
