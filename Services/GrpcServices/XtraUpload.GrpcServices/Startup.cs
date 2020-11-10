@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Security.Cryptography.X509Certificates;
-using XtraUpload.Domain.Infra;
+using System.Text;
 using XtraUpload.GrpcServices.Common;
 
 namespace XtraUpload.GrpcServices
@@ -49,8 +50,15 @@ namespace XtraUpload.GrpcServices
 
                     if (!string.IsNullOrWhiteSpace(headerValue))
                     {
-                        byte[] bytes = Helpers.StringToByteArray(headerValue);
-                        clientCertificate = new X509Certificate2(bytes);
+                        try
+                        {
+                            byte[] bytes = Encoding.ASCII.GetBytes(headerValue);
+                            clientCertificate = new X509Certificate2(bytes);
+                        }
+                        catch(Exception)
+                        {
+                            //Todo: log the error
+                        }
                     }
 
                     return clientCertificate;
