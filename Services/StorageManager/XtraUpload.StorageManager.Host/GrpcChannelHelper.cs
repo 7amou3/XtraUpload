@@ -10,6 +10,8 @@ using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using XtraUpload.StorageManager.Common;
+using System.Threading;
+using System.Net.Security;
 
 namespace XtraUpload.StorageManager.Host
 {
@@ -50,7 +52,29 @@ namespace XtraUpload.StorageManager.Host
             }
             return handler;
         }
-
+        /// <summary>
+        /// Create a custom http2 handler allowing gRPC streams to stay alive during periods of inactivity
+        /// </summary>
+        public static SocketsHttpHandler CreateSocketHandler(IServiceProvider serviceProvider)
+        {
+            var handler = new SocketsHttpHandler
+            {
+                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
+                KeepAlivePingDelay = TimeSpan.FromSeconds(60),
+                KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
+                EnableMultipleHttp2Connections = true
+            };
+            var clientCert = LoadSSLCertificate(serviceProvider);
+            
+            if (clientCert != null)
+            {
+                handler.SslOptions = new SslClientAuthenticationOptions() 
+                { 
+                    ClientCertificates = new X509CertificateCollection(new X509Certificate[] { clientCert })
+                };
+            }
+            return handler;
+        }
         private static X509Certificate2 LoadSSLCertificate(IServiceProvider serviceProvider)
         {
             var config = serviceProvider.GetService<IConfiguration>();

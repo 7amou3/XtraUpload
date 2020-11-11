@@ -76,7 +76,7 @@ namespace XtraUpload.StorageManager.Service
             }
             finally
             {
-                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                _logger.LogError("Connexion lost, retrying to establish new connection in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
                 await StartStorageConnectivityCheck();
@@ -110,7 +110,7 @@ namespace XtraUpload.StorageManager.Service
             }
             finally
             {
-                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                _logger.LogError("Connexion lost, retrying to establish new connection in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
                 await StartStorageHealthCheck();
@@ -149,7 +149,7 @@ namespace XtraUpload.StorageManager.Service
             }
             finally
             {
-                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                _logger.LogError("Connexion lost, retrying to establish new connection in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
                 await StartUploadConfigRetrieval();
@@ -195,7 +195,7 @@ namespace XtraUpload.StorageManager.Service
             }
             finally
             {
-                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                _logger.LogError("Connexion lost, retrying to establish new connection in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
                 await StartUploadConfigWrite();
@@ -233,7 +233,7 @@ namespace XtraUpload.StorageManager.Service
             }
             finally
             {
-                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                _logger.LogError("Connexion lost, retrying to establish new connection in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
                 await StartHardwareConfigRetrieval();
@@ -277,7 +277,7 @@ namespace XtraUpload.StorageManager.Service
             }
             finally
             {
-                _logger.LogError("Connexion lost, retrying to establish new connetion in progress...");
+                _logger.LogError("Connexion lost, retrying to establish new connection in progress...");
                 await Task.Delay(RETRY_DELAY);
                 // Retry new connection
                 await StartHardwareConfigWrite();

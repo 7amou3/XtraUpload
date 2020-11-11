@@ -62,7 +62,7 @@ namespace XtraUpload.StorageManager.Host
             {
                 channel.Credentials = GrpcChannelHelper.CreateSecureChannel(serviceProvider);
             })
-            .ConfigurePrimaryHttpMessageHandler((s) => GrpcChannelHelper.CreateHttpHandler(s))
+            .ConfigurePrimaryHttpMessageHandler((s) => GrpcChannelHelper.CreateSocketHandler(s))
             .AddInterceptor<LoggerInterceptor>();
 
             // Add mediatr (no need to register all handlers, mediatr will scan the assembly and register them automatically)
