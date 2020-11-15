@@ -9,10 +9,10 @@ using XtraUpload.Email.Service.Common;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
-using System;
 
 namespace XtraUpload.WebApi.Controllers
 {
+    [DemoFilter]
     [Authorize(Policy = "Admin")]
     public class AdminController : BaseController
     {

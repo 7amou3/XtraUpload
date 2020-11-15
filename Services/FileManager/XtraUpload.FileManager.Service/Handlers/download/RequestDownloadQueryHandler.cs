@@ -36,7 +36,7 @@ namespace XtraUpload.FileManager.Service
 
             RequestDownloadResult Result = new RequestDownloadResult()
             {
-                File = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.Id == request.FileId)
+                File = await _unitOfWork.Files.FirstOrDefaultAsync(s => s.Id == request.FileId && s.Status != ItemStatus.To_Be_Deleted)
             };
             // Check if file exist
             if (Result.File == null)

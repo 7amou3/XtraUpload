@@ -166,7 +166,7 @@ namespace XtraUpload.WebApi
         /// Register Dto
         /// </summary>
         /// <param name="services"></param>
-        private void RegisterDto(IServiceCollection services)
+        private static void RegisterDto(IServiceCollection services)
         {
             services.AddAutoMapper(cfg => {
                 cfg.CreateMap<User, StandardLoginQuery>();

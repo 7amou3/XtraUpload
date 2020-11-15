@@ -32,7 +32,7 @@ namespace XtraUpload.StorageManager.Service
         {
             DeleteFilesResult result = new DeleteFilesResult();
 
-            var response = await _fileMngClient.GetFilesToDeleteAsync(new gGetFilesToDeleteRequest());
+            var response = await _fileMngClient.GetFilesToDeleteAsync(new gGetFilesToDeleteRequest(), cancellationToken: cancellationToken);
 
             if (response == null)
             {
@@ -42,6 +42,11 @@ namespace XtraUpload.StorageManager.Service
             if (response.Status.Status != Protos.RequestStatus.Success)
             {
                 result.ErrorContent = new ErrorContent(response.Status.Message, ErrorOrigin.Server);
+                return result;
+            }
+            if (!response.FilesItem.Any())
+            {
+                // No files to delete for now
                 return result;
             }
 
@@ -59,7 +64,7 @@ namespace XtraUpload.StorageManager.Service
             // Request to delete files from db
             gDeleteFilesRequest delRequest = new gDeleteFilesRequest();
             delRequest.FilesId.Add(response.FilesItem.Select(s => s.Id));
-            var deleteResponse = await _fileMngClient.DeleteFilesFromDbAsync(delRequest);
+            var deleteResponse = await _fileMngClient.DeleteFilesFromDbAsync(delRequest, cancellationToken: cancellationToken);
 
             if (deleteResponse == null)
             {

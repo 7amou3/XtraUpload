@@ -54,7 +54,7 @@ namespace XtraUpload.Administration.Service
             Result.UsersCount = userStats.UsersCount;
             Result.FilesCount = uploadStats.FilesCount;
             Result.FileTypesCount = fileStats.FileTypesCount;
-            Result.TotalFiles = await _unitOfWork.Files.CountAsync();
+            Result.TotalFiles = await _unitOfWork.Files.CountAsync(s => s.Status != ItemStatus.To_Be_Deleted);
             Result.TotalUsers = await _unitOfWork.Users.CountAsync();
             Result.DriveSize = totalsize;
             Result.FreeSpace = freeSpace;
