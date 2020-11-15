@@ -6,13 +6,13 @@
 </div>
 <mat-divider></mat-divider>
 
-<section *ngIf="!isBusy && uploadSetting?.storageServer; else elseBlock">
+<section *ngIf="!isBusy && (uploadSetting$ | async)?.storageServer; else elseBlock">
   <!--Drop Zone -->
-  <ngx-dropzone [maxFileSize]="uploadSetting?.maxFileSize *1024 *1024" [accept]="uploadSetting?.fileExtensions"
+  <ngx-dropzone [maxFileSize]="(uploadSetting$ | async).maxFileSize *1024 *1024" [accept]="(uploadSetting$ | async).fileExtensions"
     [class.drop-visibility]="files.length> 0" #drop class="dropzone" (change)="onSelect($event)">
     <ngx-dropzone-label>
       <mat-icon class="icon-add-files">add</mat-icon>
-      <p class="text-muted font-12" *ngIf="uploadSetting?.maxFileSize as maxfilesize">
+      <p class="text-muted font-12" *ngIf="(uploadSetting$ | async).maxFileSize as maxfilesize">
         Max File Size: {{maxfilesize *1024 *1024 | bytes:2}}
       </p>
     </ngx-dropzone-label>

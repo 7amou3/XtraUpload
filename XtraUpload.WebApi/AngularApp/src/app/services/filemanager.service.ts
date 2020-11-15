@@ -76,8 +76,7 @@ export class FileManagerService {
     items.forEach(item => {
       if (isFile(item)) {
         files.push(item);
-      }
-      else {
+      } else {
         folders.push(item);
       }
     });

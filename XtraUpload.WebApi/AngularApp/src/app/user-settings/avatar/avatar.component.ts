@@ -61,7 +61,6 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     .toPromise();
 
     setting$.then(s => {
-      console.log(s)
       if (!s.storageServer) {
         this.snackBar.open('Unreachable storage servers. Please contact customer support.', '', { duration: 3000 });
         return;

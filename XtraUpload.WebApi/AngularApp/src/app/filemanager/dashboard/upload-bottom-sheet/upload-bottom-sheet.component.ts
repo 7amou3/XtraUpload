@@ -3,7 +3,7 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { FileManagerService } from 'app/services';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UploadStatus, IUploadSettings, IFileInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
@@ -18,7 +18,7 @@ import { forEachPromise } from '../helpers';
 export class UploadBottomSheetComponent extends ComponentBase implements OnInit {
   storageLimitReached: boolean;
   files: FileUpload[] = [];
-  uploadSetting: IUploadSettings;
+  uploadSetting$ = new BehaviorSubject<IUploadSettings>(null);
   constructor(
     private fileMngService: FileManagerService,
     private route: ActivatedRoute,
@@ -32,10 +32,11 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       takeUntil(this.onDestroy),
       finalize(() => this.isBusy = false))
     .subscribe(setting => {
-      this.uploadSetting = setting;
+      this.uploadSetting$.next(setting);
     },
-    (error) => {
-      throw error;
+      (error) => {
+        this.uploadSetting$.next(null);
+        throw error;
     });
     this.fileMngService.storageQuotaReached$
     .pipe(takeUntil(this.onDestroy))
@@ -69,17 +70,17 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       upstatus.status = 'ToDo';
       upstatus.message = 0 as Object;
       upstatus.size = upload.size;
-      const fileToUpload = { file: upload, uploadStatus$: new ReplaySubject<UploadStatus>(), name: upload.name, size: upload.size, downloadUrl: null };
+      const fileToUpload = { file: upload, uploadStatus$: new BehaviorSubject<UploadStatus>(null), name: upload.name, size: upload.size, downloadUrl: null };
       this.files.push(fileToUpload);
       fileToUpload.uploadStatus$.next(upstatus);
     });
     const numFilesToUpload = this.files.filter(s => s.file).length;
-    if (numFilesToUpload > this.uploadSetting.concurrentUpload) {
-      const amount = numFilesToUpload - this.uploadSetting.concurrentUpload;
+    if (numFilesToUpload > this.uploadSetting$.getValue().concurrentUpload) {
+      const amount = numFilesToUpload - this.uploadSetting$.getValue().concurrentUpload;
       for (let i = 0; i < amount; i++) {
         this.files.splice(this.files.length - 1, 1);
       }
-      throw Error(`Max conccurent upload exceeded, you can upload up to ${this.uploadSetting.concurrentUpload} files at a time.`);
+      throw Error(`Max conccurent upload exceeded, you can upload up to ${this.uploadSetting$.getValue().concurrentUpload} files at a time.`);
     }
   }
 
@@ -95,7 +96,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       currentFolderId = 'root';
     }
     // Sequentialy process uploads
-    forEachPromise(this.files.filter(s => s.file != null), this.uploadPromise, new UploadContext(this.fileMngService, this.files, this.uploadSetting, this.onDestroy, currentFolderId))
+    forEachPromise(this.files.filter(s => s.file != null), this.uploadPromise, new UploadContext(this.fileMngService, this.files, this.uploadSetting$.getValue(), this.onDestroy, currentFolderId))
     .then(() => {});
   }
   uploadPromise(upload: FileUpload, context: UploadContext) {
@@ -125,16 +126,16 @@ export class FileUpload {
   file: File;
   name: string;
   size: number;
-  uploadStatus$: ReplaySubject<UploadStatus>;
+  uploadStatus$: BehaviorSubject<UploadStatus>;
   downloadUrl: string;
 }
 export class UploadContext {
 
   constructor( fileManagerService: FileManagerService, 
-    files: FileUpload[], 
+    files: FileUpload[],
     uploadSettings: IUploadSettings,
     onDestroy: Subject<void>,
-    currentFolderId :string) {
+    currentFolderId: string) {
       this.fileManagerService = fileManagerService;
       this.files = files;
       this.uploadSettings = uploadSettings;
@@ -145,5 +146,5 @@ export class UploadContext {
   uploadSettings: IUploadSettings;
   files: FileUpload[];
   onDestroy: Subject<void>;
-  currentFolderId :string;
+  currentFolderId: string;
 }

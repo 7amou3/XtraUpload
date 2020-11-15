@@ -51,6 +51,7 @@ namespace XtraUpload.Database.Data
         {
             var query = _context.Files
                         .Where(s => s.CreatedAt >= start && s.CreatedAt <= end)
+                        .Where(s => s.Status != ItemStatus.To_Be_Deleted)
                         .GroupBy(f => f.Extension)
                         .OrderBy(s => s.Key)
                         .Select(s => new FileTypesCountResult
