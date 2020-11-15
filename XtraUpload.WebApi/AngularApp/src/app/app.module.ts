@@ -60,7 +60,7 @@ export function loadIcons(iconService: CustomIconService) {
     MatButtonModule,
     MatSnackBarModule,
     HttpClientModule,
-    RouterModule.forRoot(AppRoutes, {scrollPositionRestoration: 'enabled'}),
+    RouterModule.forRoot(AppRoutes, { scrollPositionRestoration: 'enabled', relativeLinkResolution: 'legacy' }),
     Angulartics2Module.forRoot(),
     PipeModule,
     FooterModule
