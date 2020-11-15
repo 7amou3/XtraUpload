@@ -22,7 +22,7 @@ namespace XtraUpload.Database.Data
             // Primary key
             builder.HasKey(u => u.Id);
             // Indexes for "email" to allow efficient lookups
-            builder.HasIndex(u => u.Email).HasName("Email").IsUnique();
+            builder.HasIndex(u => u.Email).HasDatabaseName("Email").IsUnique();
 
             // Limit the size of columns to use efficient database types
             builder.Property(u => u.UserName).HasMaxLength(255);

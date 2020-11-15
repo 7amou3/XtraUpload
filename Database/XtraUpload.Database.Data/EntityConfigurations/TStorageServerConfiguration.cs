@@ -16,7 +16,7 @@ namespace XtraUpload.Database.Data
             // Let Ef generate ids
             builder.Property(s => s.Id).ValueGeneratedOnAdd();
             // Index
-            builder.HasIndex(u => u.Address).HasName("IpAddress").IsUnique();
+            builder.HasIndex(u => u.Address).HasDatabaseName("IpAddress").IsUnique();
             // Each SS has many entries in the Files table
             builder.HasMany(s => s.Files).WithOne(e => e.StorageServer).HasForeignKey(ur => ur.StorageServerId).OnDelete(DeleteBehavior.Cascade);
 

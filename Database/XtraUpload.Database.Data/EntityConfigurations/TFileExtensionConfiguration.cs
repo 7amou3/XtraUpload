@@ -14,7 +14,7 @@ namespace XtraUpload.Database.Data
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Id).ValueGeneratedNever();
             // Add index
-            builder.HasIndex(u => u.Name).HasName("Name").IsUnique();
+            builder.HasIndex(u => u.Name).HasDatabaseName("Name").IsUnique();
             // Limit the size of columns to use efficient database types
             builder.Property(u => u.Name).HasMaxLength(8);
             int i = 1;

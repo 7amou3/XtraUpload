@@ -57,7 +57,6 @@ namespace XtraUpload.StorageManager.Service
             {
                 _logger.LogError(_ex.Message);
                 ctx.HttpContext.Response.StatusCode = 500;
-                throw _ex;
             }
         }
 

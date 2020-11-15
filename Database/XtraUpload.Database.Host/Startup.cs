@@ -23,8 +23,8 @@ namespace XtraUpload.Database.Host
             else if (string.CompareOrdinal(dbProvider, "mysql") == 0)
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                   options.UseMySql(
-                       config["DataBase:ConnectionString"],
+                   options.UseMySql(config["DataBase:ConnectionString"],
+                       ServerVersion.AutoDetect(config["DataBase:ConnectionString"]),
                        mySqlServerOptions => mySqlServerOptions.MigrationsAssembly("XtraUpload.Database.Migrations")));
             }
             else

@@ -35,6 +35,7 @@ namespace XtraUpload.StorageManager.Host
             {
                 return Task.FromResult(HealthCheckResult.Unhealthy("Please check that the file store have the Read and Write permission."));
             }
+
         }
     }
 }
