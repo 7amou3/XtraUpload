@@ -36,10 +36,10 @@ export abstract class ChartBase extends ComponentBase {
         return d.getTime() < new Date().getTime();
     }
     protected populateChart(data: IItemCount[]) {
-        const yAxis = this.lineChartData[0].data;
-        // do not update chart if we got the same data back from the servr
-        if (yAxis.length === data.length && yAxis.every(function(value, index) { return value === data[index].itemCount; } )) {
-           return;
+        const yAxis = this.lineChartData[0].data as any;
+        // do not update chart if we got the same data back from the server
+        if (yAxis.length === data.length && yAxis.every((value: number, i: number) => value === data[i].itemCount)) {
+            return;
         }
         // empty chart axis
         yAxis.splice(0, yAxis.length);
