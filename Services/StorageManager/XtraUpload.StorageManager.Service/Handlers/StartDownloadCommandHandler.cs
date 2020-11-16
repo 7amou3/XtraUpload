@@ -47,16 +47,17 @@ namespace XtraUpload.StorageManager.Service
                 DownloadId = request.DownloadId,
                 RequesterAddress = _httpContext.Request.Host.Value
             };
+            _logger.LogInformation($"Request made by {downloadRequest.RequesterAddress} to download file {request.DownloadId}");
             // query the api
             gDownloadFileResponse dResponse = await _fileMngClient.GetDownloadFileAsync(downloadRequest);
-            if (dResponse == null)
+            if (dResponse == null || dResponse.Status == null)
             {
                 Result.ErrorContent = new ErrorContent("No response has been received from the server.", ErrorOrigin.Server);
                 return Result;
             }
             if (dResponse.Status.Status != Protos.RequestStatus.Success)
             {
-                Result.ErrorContent = new ErrorContent(dResponse.Status.Message, ErrorOrigin.None);
+                Result.ErrorContent = new ErrorContent(dResponse.Status.Message, ErrorOrigin.Server);
                 return Result;
             }
             string filePath = Path.Combine(_uploadOpt.UploadPath, dResponse.FileItem.UserId, dResponse.FileItem.Id, dResponse.FileItem.Id);
@@ -77,6 +78,7 @@ namespace XtraUpload.StorageManager.Service
                 return Result;
             }
 
+            _logger.LogInformation("Getting the response header of the file "+dResponse.FileItem.Name);
             // Get the response header information made by the current http request.
             HttpResponseHeader responseHeader = GetResponseHeader(dResponse.FileItem);
 
@@ -108,9 +110,9 @@ namespace XtraUpload.StorageManager.Service
         {
             DownloadStatus status = DownloadStatus.UNKNOWN;
             FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
             try
             {
+                _logger.LogInformation($"Start sending file: {filePath} to client.");
                 status = await SendDownloadFile(responseHeader, fileStream, speed);
             }
             catch (Exception ex)
@@ -243,6 +245,7 @@ namespace XtraUpload.StorageManager.Service
                     await _httpContext.Response.Body.FlushAsync();
 
                     fileLength -= length;
+                    _logger.LogInformation($"{fileLength} left to download");
                     // Throttle write speed
                     if (fileLength > 0)
                     {
