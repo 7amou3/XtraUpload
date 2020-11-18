@@ -24,7 +24,7 @@ namespace XtraUpload.Administration.Service
             {
                 Name = request.ExtName
             };
-            _unitOfWork.FileExtensions.Add(newFileType);
+            await _unitOfWork.FileExtensions.AddAsync(newFileType);
 
             // Save to db
             result = await _unitOfWork.CompleteAsync(result);

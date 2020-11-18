@@ -49,7 +49,7 @@ namespace XtraUpload.StorageManager.Service
             };
             _logger.LogInformation($"Request made by {downloadRequest.RequesterAddress} to download file {request.DownloadId}");
             // query the api
-            gDownloadFileResponse dResponse = await _fileMngClient.GetDownloadFileAsync(downloadRequest);
+            gDownloadFileResponse dResponse = await _fileMngClient.GetDownloadFileAsync(downloadRequest, cancellationToken: cancellationToken);
             if (dResponse == null || dResponse.Status == null)
             {
                 Result.ErrorContent = new ErrorContent("No response has been received from the server.", ErrorOrigin.Server);
@@ -98,7 +98,7 @@ namespace XtraUpload.StorageManager.Service
                 {
                     FileId = dResponse.FileItem.Id,
                     RequesterIp = _httpContext.Request.Host.Value
-                });
+                }, cancellationToken: cancellationToken);
             }
             else
             {
@@ -238,14 +238,13 @@ namespace XtraUpload.StorageManager.Service
                 if (!_httpContext.RequestAborted.IsCancellationRequested)
                 {
                     dStatus = DownloadStatus.INPROGRESS;
-                    int length = fileStream.Read(buffer, 0, 8192);
+                    int length = fileStream.Read(buffer, 0, buffer.Length);
 
-                    await _httpContext.Response.Body.WriteAsync(buffer, 0, length);
+                    await _httpContext.Response.Body.WriteAsync(buffer.AsMemory(0, length));
 
                     await _httpContext.Response.Body.FlushAsync();
 
                     fileLength -= length;
-                    _logger.LogInformation($"{fileLength} left to download");
                     // Throttle write speed
                     if (fileLength > 0)
                     {

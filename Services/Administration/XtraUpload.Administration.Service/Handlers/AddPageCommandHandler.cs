@@ -34,7 +34,7 @@ namespace XtraUpload.Administration.Service
             request.Page.CreatedAt = DateTime.Now;
             request.Page.UpdatedAt = DateTime.Now;
             request.Page.Url = Regex.Replace(request.Page.Name.ToLower(), @"\s+", "_");
-            _unitOfWork.Pages.Add(request.Page);
+            await _unitOfWork.Pages.AddAsync(request.Page);
 
             // Save to db
             result = await _unitOfWork.CompleteAsync(result);

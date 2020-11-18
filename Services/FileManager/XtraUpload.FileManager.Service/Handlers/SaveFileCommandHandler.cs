@@ -26,7 +26,7 @@ namespace XtraUpload.FileManager.Service
             CreateFileResult Result = new CreateFileResult();
 
             // Add file to collection
-            _unitOfWork.Files.Add(request.File);
+            await _unitOfWork.Files.AddAsync(request.File);
             // Save to db
             Result = await _unitOfWork.CompleteAsync(Result);
             var files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Id == request.File.Id);

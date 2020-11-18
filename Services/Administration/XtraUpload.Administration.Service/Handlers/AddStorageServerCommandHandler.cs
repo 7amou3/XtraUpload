@@ -46,7 +46,7 @@ namespace XtraUpload.Administration.Service
                 Address = request.StorageInfo.Address,
                 State = request.StorageInfo.State 
             };
-            _unitOfWork.StorageServer.Add(newServer);
+            await _unitOfWork.StorageServer.AddAsync(newServer);
 
             // Update upload options config
             var writeUploadOptsResult = await _uploadOptsClientProxy.WriteUploadOptions(request.UploadOpts, request.StorageInfo.Address);

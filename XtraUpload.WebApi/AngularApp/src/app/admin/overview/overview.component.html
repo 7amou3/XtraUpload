@@ -1,7 +1,7 @@
 
 <div>
     <section fxLayout="row wrap" fxLayoutAlign="center baseline">
-        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25">
+        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex="25">
             <mat-card class="bg-warning">
                 <mat-list>
                     <mat-list-item>
@@ -12,7 +12,7 @@
                 </mat-list>
             </mat-card>
         </div>
-        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25">
+        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex="25">
             <mat-card class="bg-danger">
                 <mat-list>
                     <mat-list-item>
@@ -24,7 +24,7 @@
             </mat-card>
         </div>
         <!--Available disc space-->
-        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25">
+        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex="25">
             <mat-card class="bg-success">
                 <mat-list>
                     <mat-list-item>
@@ -36,7 +36,7 @@
             </mat-card>
         </div>
         <!--Drive size-->
-        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex.md="25" fxFlex.lg="25">
+        <div fxFlex.lt-sm="100" fxFlex.sm="50" fxFlex="25">
             <mat-card class="bg-info">
                 <mat-list>
                     <mat-list-item>
@@ -51,8 +51,8 @@
 
     <!--File Chart-->
     <div fxLayout="row wrap">  
-        <app-fileuploads [filesCount$]="filesCount$" fxFlex.sm="100" fxFlex.md="70" fxFlex.lg="70"></app-fileuploads>
-        <app-piechart [fileTypesCount$]="fileTypesCount$" fxFlex.sm="100" fxFlex.md="30" fxFlex.lg="30"></app-piechart>
+        <app-fileuploads [filesCount$]="filesCount$" fxFlex.lt-sm="100" fxFlex.sm="100" fxFlex="70"></app-fileuploads>
+        <app-piechart [fileTypesCount$]="fileTypesCount$" fxFlex.lt-sm="100" fxFlex.sm="100" fxFlex="30"></app-piechart>
         <app-users [usersCount$]="usersCount$" fxFlex="100"></app-users>
         <app-healthchek [serverUrl]="serverUrl" fxFlex="100" ></app-healthchek>
     </div>

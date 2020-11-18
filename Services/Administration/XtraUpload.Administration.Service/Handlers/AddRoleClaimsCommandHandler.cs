@@ -40,7 +40,7 @@ namespace XtraUpload.Administration.Service
                 Id = Helpers.GenerateUniqueId(),
                 Name = model.Role.Name
             };
-            _unitOfWork.Roles.Add(role);
+            await _unitOfWork.Roles.AddAsync(role);
             // Add claims
             List<RoleClaim> claims = new List<RoleClaim>();
             if (model.Claims.AdminAreaAccess != null && model.Claims.AdminAreaAccess.Value)
@@ -80,7 +80,7 @@ namespace XtraUpload.Administration.Service
                 claims.Add(new RoleClaim() { RoleId = role.Id, ClaimType = XtraUploadClaims.WaitTime.ToString(), ClaimValue = model.Claims.WaitTime.ToString() });
             }
 
-            _unitOfWork.RoleClaims.AddRange(claims);
+            await _unitOfWork.RoleClaims.AddRangeAsync(claims);
 
             // Save to db
             result = await _unitOfWork.CompleteAsync(result);

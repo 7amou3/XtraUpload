@@ -46,7 +46,7 @@ namespace XtraUpload.FileManager.Service
                 Parentid = request.ParentFolderId,
                 UserId = userId
             };
-            _unitOfWork.Folders.Add(newFolder);
+            await _unitOfWork.Folders.AddAsync(newFolder);
 
             // Save to db
             CreateFolderResult Result = await _unitOfWork.CompleteAsync(new CreateFolderResult());

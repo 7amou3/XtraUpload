@@ -63,7 +63,7 @@ namespace XtraUpload.Setting.Service
                 UserId = userId,
                 IpAdress = request.UserIp
             };
-            _unitOfWork.ConfirmationKeys.Add(token);
+            await _unitOfWork.ConfirmationKeys.AddAsync(token);
             // Save changes to db
             Result = await _unitOfWork.CompleteAsync(Result);
             if (Result.State == OperationState.Success)

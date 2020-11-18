@@ -55,14 +55,14 @@ namespace XtraUpload.Database.Data
             return await _dbContext.Set<TEntity>().CountAsync(predicate);
         }
 
-        public void Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Add(entity);
+            await _dbContext.Set<TEntity>().AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            _dbContext.Set<TEntity>().AddRange(entities);
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
         }
 
         public void Remove(TEntity entity)

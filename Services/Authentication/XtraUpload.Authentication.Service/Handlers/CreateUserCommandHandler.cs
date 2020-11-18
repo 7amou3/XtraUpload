@@ -60,7 +60,7 @@ namespace XtraUpload.Authentication.Service
             };
 
             // Add the new user to the db
-            _unitOfWork.Users.Add(user);
+            await _unitOfWork.Users.AddAsync(user);
 
             // Save to db
             Result = await _unitOfWork.CompleteAsync(Result);

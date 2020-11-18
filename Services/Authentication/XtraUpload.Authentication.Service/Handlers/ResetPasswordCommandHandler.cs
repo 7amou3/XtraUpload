@@ -56,7 +56,7 @@ namespace XtraUpload.Authentication.Service
                 IpAdress = request.ClientIp
             };
             // add the key to current collection
-            _unitOfWork.ConfirmationKeys.Add(token);
+            await _unitOfWork.ConfirmationKeys.AddAsync(token);
 
             // Save to db
             Result = await _unitOfWork.CompleteAsync(Result);

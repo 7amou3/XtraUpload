@@ -46,7 +46,7 @@ namespace XtraUpload.FileManager.Service
                 IpAdress = _clientIp,
                 StartedAt = DateTime.Now
             };
-            _unitOfWork.Downloads.Add(download);
+            await _unitOfWork.Downloads.AddAsync(download);
 
             // Try to save in db
             Result = await _unitOfWork.CompleteAsync(Result);

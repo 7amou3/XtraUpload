@@ -24,7 +24,7 @@ namespace XtraUpload.Email.Service
         public async Task Handle(UserCreatedNotification notification, CancellationToken cancellationToken)
         {
             // Store a confirmation email token
-            _unitOfWork.ConfirmationKeys.Add(new ConfirmationKey()
+            await _unitOfWork.ConfirmationKeys.AddAsync(new ConfirmationKey()
             {
                 GenerateAt = DateTime.Now,
                 Id = Helpers.GenerateUniqueId(),

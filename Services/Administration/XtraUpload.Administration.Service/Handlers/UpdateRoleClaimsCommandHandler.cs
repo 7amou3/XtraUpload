@@ -97,7 +97,7 @@ namespace XtraUpload.Administration.Service
                     updatedClaims.Add(new RoleClaim() { RoleId = model.Role.Id, ClaimType = XtraUploadClaims.WaitTime.ToString(), ClaimValue = model.Claims.WaitTime.ToString() });
                 }
 
-                _unitOfWork.RoleClaims.AddRange(updatedClaims);
+                await _unitOfWork.RoleClaims.AddRangeAsync(updatedClaims);
 
                 // Save to db
                 result = await _unitOfWork.CompleteAsync(result);
