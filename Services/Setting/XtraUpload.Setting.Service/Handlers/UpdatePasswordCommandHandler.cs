@@ -43,7 +43,7 @@ namespace XtraUpload.Setting.Service
 
             // Update the password in the collection
             user.Password = Helpers.HashPassword(request.NewPassword);
-            user.LastModified = DateTime.Now;
+            user.LastModified = DateTime.UtcNow;
 
             // Save to db
             return await _unitOfWork.CompleteAsync(Result);

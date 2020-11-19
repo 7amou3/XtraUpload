@@ -43,7 +43,7 @@ namespace XtraUpload.FileManager.Service
                 Id = Helpers.GenerateUniqueId(),
                 FileId = request.FileId,
                 IpAdress = _clientIp,
-                StartedAt = DateTime.Now
+                StartedAt = DateTime.UtcNow
             };
             await _unitOfWork.Downloads.AddAsync(download);
 

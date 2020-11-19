@@ -33,7 +33,7 @@ namespace XtraUpload.FileManager.Service
 
             // Increment the count
             file.DownloadCount++;
-            file.LastModified = DateTime.Now;
+            file.LastModified = DateTime.UtcNow;
             Result = await _unitOfWork.CompleteAsync(Result);
 
             return Result;

@@ -50,7 +50,7 @@ namespace XtraUpload.Authentication.Service
             {
                 Id = Helpers.GenerateUniqueId(),
                 Status = RequestStatus.InProgress,
-                GenerateAt = DateTime.Now,
+                GenerateAt = DateTime.UtcNow,
                 UserId = user.Id,
                 IpAdress = request.ClientIp
             };

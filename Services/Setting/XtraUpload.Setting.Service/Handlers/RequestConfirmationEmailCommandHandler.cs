@@ -57,7 +57,7 @@ namespace XtraUpload.Setting.Service
             ConfirmationKey token = new ConfirmationKey()
             {
                 Id = Helpers.GenerateUniqueId(),
-                GenerateAt = DateTime.Now,
+                GenerateAt = DateTime.UtcNow,
                 Status = RequestStatus.InProgress,
                 UserId = userId,
                 IpAdress = request.UserIp

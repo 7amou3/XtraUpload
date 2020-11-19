@@ -41,8 +41,8 @@ namespace XtraUpload.Database.Data
                 UserName = "Admin",
                 Email = "admin@admin.com",
                 Password = Helpers.HashPassword("admin01"),
-                CreatedAt = DateTime.Now,
-                LastModified = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
+                LastModified = DateTime.UtcNow,
                 RoleId = "1", // admin rol id
                 Theme = Theme.Light
             };

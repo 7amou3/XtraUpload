@@ -39,7 +39,7 @@ namespace XtraUpload.Administration.Service
                 return result;
             }
             // Update
-            page.UpdatedAt = DateTime.Now;
+            page.UpdatedAt = DateTime.UtcNow;
             page.Content = request.Page.Content;
             page.Name = request.Page.Name;
             page.Url = Regex.Replace(request.Page.Name.ToLower(), @"\s+", "_");

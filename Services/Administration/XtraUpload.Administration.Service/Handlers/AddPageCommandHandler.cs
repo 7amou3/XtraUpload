@@ -30,8 +30,8 @@ namespace XtraUpload.Administration.Service
                 return result;
             }
             request.Page.Id = Helpers.GenerateUniqueId();
-            request.Page.CreatedAt = DateTime.Now;
-            request.Page.UpdatedAt = DateTime.Now;
+            request.Page.CreatedAt = DateTime.UtcNow;
+            request.Page.UpdatedAt = DateTime.UtcNow;
             request.Page.Url = Regex.Replace(request.Page.Name.ToLower(), @"\s+", "_");
             await _unitOfWork.Pages.AddAsync(request.Page);
 

@@ -43,7 +43,7 @@ namespace XtraUpload.FileManager.Service
 
             // Prepare data
             file.Name = request.NewName;
-            file.LastModified = DateTime.Now;
+            file.LastModified = DateTime.UtcNow;
 
             // Try to save to db
             Result = await _unitOfWork.CompleteAsync(Result);

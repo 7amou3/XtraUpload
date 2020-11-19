@@ -74,7 +74,7 @@ namespace XtraUpload.FileManager.Service
         {
             // count the total current client downloads
             var query = await _unitOfWork.Downloads.FindAsync(s => s.IpAdress == _clientIp
-                                                                    && s.StartedAt.AddSeconds(TTW) > DateTime.Now);
+                                                                    && s.StartedAt.AddSeconds(TTW) > DateTime.UtcNow);
 
             GetTTWResult Result = new GetTTWResult
             {
@@ -82,7 +82,7 @@ namespace XtraUpload.FileManager.Service
             };
             if (Result.TotalDownloads != 0)
             {
-                var elapsedTime = (query.ElementAt(query.Count() - 1).StartedAt.AddSeconds(TTW) - DateTime.Now).TotalSeconds;
+                var elapsedTime = (query.ElementAt(query.Count() - 1).StartedAt.AddSeconds(TTW) - DateTime.UtcNow).TotalSeconds;
                 Result.TimeToWait = elapsedTime > 0 ? (int)Math.Round(elapsedTime) : 0;
             }
 

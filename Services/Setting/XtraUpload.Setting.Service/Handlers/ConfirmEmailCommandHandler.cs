@@ -43,7 +43,7 @@ namespace XtraUpload.Setting.Service
             }
 
             confirmationKey.User.EmailConfirmed = true;
-            confirmationKey.User.LastModified = DateTime.Now;
+            confirmationKey.User.LastModified = DateTime.UtcNow;
 
             // Save changes to db
             return await _unitOfWork.CompleteAsync(Result);

@@ -25,7 +25,7 @@ namespace XtraUpload.Email.Service
             // Store a confirmation email token
             await _unitOfWork.ConfirmationKeys.AddAsync(new ConfirmationKey()
             {
-                GenerateAt = DateTime.Now,
+                GenerateAt = DateTime.UtcNow,
                 Id = Helpers.GenerateUniqueId(),
                 Status = RequestStatus.InProgress,
                 UserId = notification.User.Id

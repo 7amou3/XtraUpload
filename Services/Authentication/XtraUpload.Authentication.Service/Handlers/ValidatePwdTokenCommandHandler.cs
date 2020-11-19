@@ -53,7 +53,7 @@ namespace XtraUpload.Authentication.Service
                 return Result;
             }
             user.Password = Helpers.HashPassword(request.NewPassword);
-            user.LastModified = DateTime.Now;
+            user.LastModified = DateTime.UtcNow;
 
             // Update the recovery status
             recoveryInfo.Status = RequestStatus.Completed;

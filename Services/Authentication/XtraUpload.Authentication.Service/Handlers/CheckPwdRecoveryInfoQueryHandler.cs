@@ -43,7 +43,7 @@ namespace XtraUpload.Authentication.Service
             }
 
             // Generated link expires after 24h (by a background alien thread)
-            if (DateTime.Now > recoveryInfo.GenerateAt.AddDays(1))
+            if (DateTime.UtcNow > recoveryInfo.GenerateAt.AddDays(1))
             {
                 Result.ErrorContent = new ErrorContent("The provided token was expired", ErrorOrigin.Client);
             }

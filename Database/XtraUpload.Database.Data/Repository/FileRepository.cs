@@ -98,7 +98,7 @@ namespace XtraUpload.Database.Data
                 var res = _context.Files
                             .Include(u => u.User)
                             .Where(s => userGroup.RoleId == s.User.RoleId)
-                            .Where(s => s.LastModified < DateTime.Now.AddDays(- int.Parse(userGroup.ClaimValue)))
+                            .Where(s => s.LastModified < DateTime.UtcNow.AddDays(- int.Parse(userGroup.ClaimValue)))
                             .ToList();
 
                 expiredFiles.AddRange(res);

@@ -88,8 +88,8 @@ namespace XtraUpload.StorageManager.Service
                                                                                 : metadata["folderId"].GetString(Encoding.UTF8),
                 Extension = Helpers.GetFileExtension(metadata["contentType"].GetString(Encoding.UTF8)) ?? string.Empty,
                 StorageServerId = metadata["serverId"].GetString(Encoding.UTF8),
-                CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
-                LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
+                CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc)),
+                LastModified = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc)),
                 Status = Protos.ItemStatus.Visible
             };
 

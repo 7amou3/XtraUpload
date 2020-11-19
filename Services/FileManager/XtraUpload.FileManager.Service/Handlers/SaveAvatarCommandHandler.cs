@@ -30,7 +30,7 @@ namespace XtraUpload.FileManager.Service
 
             // Save the new url
             user.Avatar = request.AvatarUrl;
-            user.LastModified = DateTime.Now;
+            user.LastModified = DateTime.UtcNow;
             Result = await _unitOfWork.CompleteAsync(Result);
 
             return Result;

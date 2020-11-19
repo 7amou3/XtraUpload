@@ -25,8 +25,8 @@ namespace XtraUpload.Database.Data
                 Url = "terms_of_service",
                 Content = "Terms of service content here",
                 VisibleInFooter = true,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             },
             new Page()
             {
@@ -35,8 +35,8 @@ namespace XtraUpload.Database.Data
                 Content = "Privacy Policy content here",
                 Url = "privacy_policy",
                 VisibleInFooter = true,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             },
             new Page()
             {
@@ -45,8 +45,8 @@ namespace XtraUpload.Database.Data
                 Url = "copyright",
                 VisibleInFooter = true,
                 Content = "Copyright content here",
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             }
             );
         }

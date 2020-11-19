@@ -140,8 +140,8 @@ namespace XtraUpload.Domain
                     Name = "Documents",
                     Parentid = "root",
                     UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    LastModified = DateTime.Now
+                    CreatedAt = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow
                 },
                 new FolderItem()
                 {
@@ -149,8 +149,8 @@ namespace XtraUpload.Domain
                     Name = "Images",
                     Parentid = "root",
                     UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    LastModified = DateTime.Now
+                    CreatedAt = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow
                 },
                 new FolderItem()
                 {
@@ -158,8 +158,8 @@ namespace XtraUpload.Domain
                     Name = "Videos",
                     Parentid = "root",
                     UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    LastModified = DateTime.Now
+                    CreatedAt = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow
                 }
             };
 

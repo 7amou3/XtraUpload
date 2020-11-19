@@ -37,7 +37,7 @@ namespace XtraUpload.Setting.Service
             }
             // Update
             user.Theme = request.Theme;
-            user.LastModified = DateTime.Now;
+            user.LastModified = DateTime.UtcNow;
 
             // Save to db
             return await _unitOfWork.CompleteAsync(result);

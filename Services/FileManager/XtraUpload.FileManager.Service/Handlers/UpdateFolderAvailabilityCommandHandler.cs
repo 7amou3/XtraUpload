@@ -46,7 +46,7 @@ namespace XtraUpload.FileManager.Service
 
             // Prepare data
             folder.Status = request.IsOnline ? ItemStatus.Visible : ItemStatus.Hidden;
-            folder.LastModified = DateTime.Now;
+            folder.LastModified = DateTime.UtcNow;
 
             // Try to save in db
             Result = await _unitOfWork.CompleteAsync(Result);

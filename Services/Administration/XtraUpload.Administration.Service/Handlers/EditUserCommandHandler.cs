@@ -47,7 +47,7 @@ namespace XtraUpload.Administration.Service
             user.UserName = request.UserName;
             user.EmailConfirmed = request.EmailConfirmed;
             user.AccountSuspended = request.SuspendAccount;
-            user.LastModified = DateTime.Now;
+            user.LastModified = DateTime.UtcNow;
 
             // Persist changes
             return await _unitOfWork.CompleteAsync(result);
