@@ -238,7 +238,7 @@ namespace XtraUpload.StorageManager.Service
                 if (!_httpContext.RequestAborted.IsCancellationRequested)
                 {
                     dStatus = DownloadStatus.INPROGRESS;
-                    int length = fileStream.Read(buffer, 0, buffer.Length);
+                    int length = await fileStream.ReadAsync(buffer);
 
                     await _httpContext.Response.Body.WriteAsync(buffer.AsMemory(0, length));
 

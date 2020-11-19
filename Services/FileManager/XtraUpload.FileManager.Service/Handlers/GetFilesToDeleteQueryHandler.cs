@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,13 +27,20 @@ namespace XtraUpload.FileManager.Service
         }
         public async Task<GetFilesResult> Handle(GetFilesToDeleteQuery request, CancellationToken cancellationToken)
         {
+            List<FileItem> filesToDelete = new List<FileItem>();
             string remoteServerIp = _httpContext.Connection.RemoteIpAddress.ToString();
             _logger.LogInformation("Getting a list of files to remove from server: " + remoteServerIp);
-
-            GetFilesResult Result = new GetFilesResult
+            IEnumerable<FileItem> files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Status == ItemStatus.To_Be_Deleted);
+            foreach (FileItem file in files)
             {
-                Files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Status == ItemStatus.To_Be_Deleted
-                                                                            && Helpers.HostnameToIp(s.StorageServer.Address) == remoteServerIp)
+                if (Helpers.HostnameToIp(file.StorageServer.Address).Contains(remoteServerIp))
+                {
+                    filesToDelete.Add(file);
+                }
+            }
+            GetFilesResult Result = new GetFilesResult()
+            {
+                Files = filesToDelete
             };
 
             _logger.LogInformation(Result.Files.Count() + " Files to be deleted from: "+ remoteServerIp);

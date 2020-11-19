@@ -40,7 +40,7 @@ namespace XtraUpload.StorageServer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            // Do not close the stream, MVC will handle it
+            // Do not close the stream, .NET will handle it
             var stream = System.IO.File.OpenRead(Result.Url);
 
             return File(stream, "image/png");
@@ -60,7 +60,7 @@ namespace XtraUpload.StorageServer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            // Do not close the stream, MVC will handle it
+            // Do not close the stream, .NET will handle it
             var stream = System.IO.File.OpenRead(Result.Url);
 
             return new FileStreamResult(stream, "image/png");
@@ -80,7 +80,7 @@ namespace XtraUpload.StorageServer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            // Do not close the stream, MVC will handle it
+            // Do not close the stream, .NET will handle it
             var stream = System.IO.File.OpenRead(Result.Url);
 
             return new FileStreamResult(stream, "image/png");

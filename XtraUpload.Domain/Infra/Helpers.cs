@@ -181,45 +181,20 @@ namespace XtraUpload.Domain
         /// <summary>
         /// Convert a hostname to ip
         /// </summary>
-        public static string HostnameToIp(string hostname)
+        public static IEnumerable<string> HostnameToIp(string hostname)
         {
-            string ip = null;
+            List<string> ipList = new List<string>();
             try
             {
-                ip = Dns.GetHostEntry(hostname).AddressList
-                .First(addr => addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                .ToString();
+                IPAddress[] ips = Dns.GetHostAddresses(new Uri(hostname).Host);
+                ipList.AddRange(ips.Select(s => s.ToString()));
             }
-            catch (Exception _ex)
+            catch(Exception)
             {
-                // invalid dns entry
+
             }
-            return ip;
+            
+            return ipList;
         }
     }
-
-    /// <summary>
-    /// TimeSpans are not serialized consistently depending on what properties are present. So this 
-    /// serializer will ensure the format is maintained no matter what.
-    /// </summary>
-    public class TimespanConverter : JsonConverter<TimeSpan>
-    {
-        /// <summary>
-        /// Format: Days.Hours:Minutes:Seconds:Milliseconds
-        /// </summary>
-        public const string TimeSpanFormatString = @"d\.hh\:mm\:ss\:FFF";
-
-        public override void WriteJson(JsonWriter writer, TimeSpan value, JsonSerializer serializer)
-        {
-            var timespanFormatted = $"{value.ToString(TimeSpanFormatString)}";
-            writer.WriteValue(timespanFormatted);
-        }
-
-        public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {
-            TimeSpan.TryParseExact((string)reader.Value, TimeSpanFormatString, null, out TimeSpan parsedTimeSpan);
-            return parsedTimeSpan;
-        }
-    }
-
 }
