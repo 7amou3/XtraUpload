@@ -59,7 +59,7 @@ namespace XtraUpload.WebApi.Controllers
         [HttpGet("confirmemail")]
         public async Task<IActionResult> ConfirmEmail()
         {
-            OperationResult result = await _mediatr.Send(new RequestConfirmationEmailCommand(Request.Host.Host));
+            OperationResult result = await _mediatr.Send(new RequestConfirmationEmailCommand(Request.HttpContext.Connection.RemoteIpAddress.ToString()));
 
             return HandleResult(result);
         }

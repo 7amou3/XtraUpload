@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using tusdotnet.Interfaces;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;

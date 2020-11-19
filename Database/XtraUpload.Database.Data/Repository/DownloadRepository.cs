@@ -23,7 +23,6 @@ namespace XtraUpload.Database.Data
         {
             return await _context.Downloads
                         .Include(s => s.File)
-                        .Include(s => s.File.StorageServer)
                         .Select(s => new DownloadedFileResult() { File = s.File, Download = s })
                         .SingleOrDefaultAsync(s => s.Download.Id == downloadId);
         }

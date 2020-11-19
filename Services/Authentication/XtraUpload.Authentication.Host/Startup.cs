@@ -10,7 +10,6 @@ using XtraUpload.Database.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using MediatR;
-using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.Authentication.Host
 {

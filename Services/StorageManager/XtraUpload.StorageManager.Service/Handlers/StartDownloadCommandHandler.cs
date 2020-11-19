@@ -45,7 +45,7 @@ namespace XtraUpload.StorageManager.Service
             gDownloadFileRequest downloadRequest = new gDownloadFileRequest()
             {
                 DownloadId = request.DownloadId,
-                RequesterAddress = _httpContext.Request.Host.Value
+                RequesterAddress = _httpContext.Connection.RemoteIpAddress.ToString()
             };
             _logger.LogInformation($"Request made by {downloadRequest.RequesterAddress} to download file {request.DownloadId}");
             // query the api
@@ -97,7 +97,7 @@ namespace XtraUpload.StorageManager.Service
                 await _fileMngClient.FileDownloadCompletedAsync(new gDownloadCompletedRequest()
                 {
                     FileId = dResponse.FileItem.Id,
-                    RequesterIp = _httpContext.Request.Host.Value
+                    RequesterIp = _httpContext.Connection.RemoteIpAddress.ToString()
                 }, cancellationToken: cancellationToken);
             }
             else

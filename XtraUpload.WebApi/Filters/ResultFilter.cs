@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.WebApi.Filters
 {

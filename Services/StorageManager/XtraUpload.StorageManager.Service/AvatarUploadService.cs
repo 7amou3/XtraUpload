@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using tusdotnet.Models.Configuration;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 
 namespace XtraUpload.StorageManager.Service

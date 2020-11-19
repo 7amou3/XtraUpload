@@ -1,7 +1,6 @@
 ﻿using XtraUpload.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using XtraUpload.Domain.Infra;
 using System;
 using System.Collections.Generic;
 

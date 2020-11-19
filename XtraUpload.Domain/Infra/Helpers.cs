@@ -12,8 +12,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Net;
 
-namespace XtraUpload.Domain.Infra
+namespace XtraUpload.Domain
 {
     public static class Helpers
     {
@@ -177,7 +178,24 @@ namespace XtraUpload.Domain.Infra
                 return new WritableOptions<T>(environment.ContentRootFileProvider, options, section.Key, file);
             });
         }
-
+        /// <summary>
+        /// Convert a hostname to ip
+        /// </summary>
+        public static string HostnameToIp(string hostname)
+        {
+            string ip = null;
+            try
+            {
+                ip = Dns.GetHostEntry(hostname).AddressList
+                .First(addr => addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                .ToString();
+            }
+            catch (Exception _ex)
+            {
+                // invalid dns entry
+            }
+            return ip;
+        }
     }
 
     /// <summary>

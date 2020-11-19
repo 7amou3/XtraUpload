@@ -4,7 +4,7 @@ using XtraUpload.Email.Service.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using XtraUpload.Domain.Infra;
+using XtraUpload.Domain;
 
 namespace XtraUpload.Email.Host
 {

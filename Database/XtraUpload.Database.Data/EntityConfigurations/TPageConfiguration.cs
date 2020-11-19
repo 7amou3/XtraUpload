@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.Database.Data
 {

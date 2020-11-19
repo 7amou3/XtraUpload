@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.Setting.Service.Common;
 
 namespace XtraUpload.Setting.Service

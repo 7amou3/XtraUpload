@@ -7,7 +7,6 @@ using System;
 using tusdotnet;
 using XtraUpload.StorageManager.Service;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.Protos;
 using MediatR;
 using XtraUpload.StorageManager.Common;

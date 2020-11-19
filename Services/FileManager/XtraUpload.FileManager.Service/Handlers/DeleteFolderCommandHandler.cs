@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service.Handlers

@@ -9,7 +9,6 @@ using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.Administration.Service
 {

@@ -43,14 +43,17 @@ namespace XtraUpload.GrpcServices
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public override async Task<gUserResponse> GetUser(gUserRequest request, ServerCallContext context)
-        {   
-            var userResult = await _mediatr.Send(new GetUserByIdQuery());
-            
-            return new gUserResponse() 
-            {  
-                User = userResult.User.Convert(),
-                Status = userResult.Convert()
-            };
+        {
+            var response = new gUserResponse();
+            var result = await _mediatr.Send(new GetUserByIdQuery());
+
+            response.Status = result.Convert();
+            if (result.State == OperationState.Success)
+            {
+                response.User = result.User.Convert();
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -58,13 +61,16 @@ namespace XtraUpload.GrpcServices
         /// </summary>
         public override async Task<gFileItemResponse> SaveFile(gFileItemRequest request, ServerCallContext context)
         {
-            var file = request.FileItem.Convert();
-            var saveResult = await _mediatr.Send(new SaveFileCommand(file));
-            return new gFileItemResponse()
+            var response = new gFileItemResponse();
+            var result = await _mediatr.Send(new SaveFileCommand(request.FileItem.Convert()));
+            
+            response.Status = result.Convert();
+            if (result.State == OperationState.Success)
             {
-                FileItem = saveResult.File.Convert(),
-                Status = saveResult.Convert()
-            };
+                response.FileItem = result.File.Convert();
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -72,9 +78,16 @@ namespace XtraUpload.GrpcServices
         /// </summary>
         public async override Task<gFileItemResponse> GetFileById(gFileRequest request, ServerCallContext context)
         {
+            var response = new gFileItemResponse();
             var result = await _mediatr.Send(new GetFileServerInfoQuery(request.Fileid));
 
-            return new gFileItemResponse() { FileItem = result.File.Convert(), Status = result.Convert() };
+            response.Status = result.Convert();
+            if (result.State == OperationState.Success)
+            {
+                response.FileItem = result.File.Convert();
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -83,14 +96,17 @@ namespace XtraUpload.GrpcServices
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "User")]
         public async override Task<gDownloadFileResponse> GetDownloadFile(gDownloadFileRequest request, ServerCallContext context)
         {
+            var response = new gDownloadFileResponse();
             var result = await _mediatr.Send(new GetDownloadByIdQuery(request.DownloadId, request.RequesterAddress));
-           
-            return new gDownloadFileResponse()
+            
+            response.Status = result.Convert();
+            if (result.State == OperationState.Success)
             {
-                Status = result.Convert(),
-                FileItem = result.File.Convert(),
-                DownloadSpeed = result.DownloadSpeed,
-            };
+                response.FileItem = result.File.Convert();
+                response.DownloadSpeed = result.DownloadSpeed;
+            }
+
+            return response;
         }
 
         /// <summary>

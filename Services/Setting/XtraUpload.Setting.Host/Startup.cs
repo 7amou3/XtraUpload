@@ -4,7 +4,6 @@ using XtraUpload.Setting.Service.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using XtraUpload.Domain.Infra;
 using XtraUpload.Domain;
 
 namespace XtraUpload.Setting.Host

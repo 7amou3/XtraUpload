@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 using System.Linq;
 
@@ -24,7 +23,7 @@ namespace XtraUpload.FileManager.Service
         public GenerateTempLinkCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
-            _clientIp = httpContextAccessor.HttpContext.Request.Host.Host;
+            _clientIp = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
         }
 
         public async Task<TempLinkResult> Handle(GenerateTempLinkCommand request, CancellationToken cancellationToken)

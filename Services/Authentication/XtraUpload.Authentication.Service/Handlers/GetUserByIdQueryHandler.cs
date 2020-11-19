@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 
 namespace XtraUpload.Authentication.Service
 {

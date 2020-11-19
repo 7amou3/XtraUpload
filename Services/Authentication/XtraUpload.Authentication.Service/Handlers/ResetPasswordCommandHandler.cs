@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.Email.Service.Common;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

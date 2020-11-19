@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using XtraUpload.Administration.Service.Common;
 using XtraUpload.Authentication.Service.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 using XtraUpload.WebApi.Filters;
 using XtraUpload.Setting.Service.Common;

@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
-using XtraUpload.Domain.Infra;
 using XtraUpload.FileManager.Service.Common;
 
 namespace XtraUpload.FileManager.Service
@@ -27,7 +26,7 @@ namespace XtraUpload.FileManager.Service
             _mediatr = mediatr;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
-            _clientIp = httpContextAccessor.HttpContext.Request.Host.Host;
+            _clientIp = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
         }
 
         public async Task<RequestDownloadResult> Handle(RequestDownloadQuery request, CancellationToken cancellationToken)
