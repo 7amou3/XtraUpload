@@ -9,7 +9,7 @@ import { takeUntil, finalize } from 'rxjs/operators';
   templateUrl: './forgotpwd.component.html'
 })
 export class ForgotpwdComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Forgot Password';
+  private readonly pageTitle =  $localize`Forgot Password`;
   forgotPassFormGroup: FormGroup;
   email = new FormControl('', [Validators.required, Validators.email]);
   constructor(
@@ -26,8 +26,8 @@ export class ForgotpwdComponent extends ComponentBase implements OnInit {
     });
   }
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-        this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.email.hasError('required') ?  $localize`You must enter a value` :
+        this.email.hasError('email') ?  $localize`Not a valid email` : '';
   }
   onSubmit(lostPwdParams) {
     this.isBusy = true;
@@ -38,7 +38,7 @@ export class ForgotpwdComponent extends ComponentBase implements OnInit {
       .subscribe(
         () => {
           this.resetForm(this.forgotPassFormGroup);
-          this.message$.next({successMessage: 'An email has been sent. Please check your inbox'});
+          this.message$.next({successMessage:  $localize`An email has been sent. Please check your inbox`});
         },
         (error) => {
           this.message$.next({errorMessage: error?.error?.errorContent?.message});

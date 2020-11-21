@@ -9,7 +9,7 @@ import { takeUntil, finalize } from 'rxjs/operators';
   templateUrl: './confirmemail.component.html'
 })
 export class ConfirmemailComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Email Confirmation';
+  private readonly pageTitle = $localize`Email Confirmation`;
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
@@ -28,7 +28,7 @@ export class ConfirmemailComponent extends ComponentBase implements OnInit {
       finalize(() => this.isBusy = false))
     .subscribe(
       () => {
-        this.message$.next({successMessage: 'Your Email has been confirmed successfully.'});
+        this.message$.next({successMessage: $localize`Your Email has been confirmed successfully.`});
       },
       (error) => {
         this.message$.next({errorMessage: error?.error?.errorContent?.message});

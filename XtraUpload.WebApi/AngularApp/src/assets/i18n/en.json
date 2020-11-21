@@ -1,0 +1,26 @@
+{
+  "locale": "en",
+  "translations": {
+    "7196360912393502967": "You must enter a value",
+    "5139373245967023016": "Must be at least {$PH} characters long",
+    "1274686598843595771": "Login to your account",
+    "7408541314475571768": "Not a valid email",
+    "2255738207434422096": "LOGIN",
+    "4768749765465246664": "Email",
+    "1431416938026210429": "Password",
+    "931252989873527145": "Remember me",
+    "2727496946419791472": "Forgot password?",
+    "8185370059108794707": "Or login with",
+    "8164791295086777340": "Don't have an account?",
+    "2308975396733519902": "Create an account",
+    "5018804994794983050": "Signup",
+    "299729188394562667": "Account successfully created, please log in.",
+    "5325648582536528830": "SIGN UP",
+    "7350726246375917862": "I have read and agree to the",
+    "2544569632476723854": "Terms",
+    "318942249653729463": "CREATE ACCOUNT",
+    "5735362992341441153": "Or sign up using",
+    "5277739594710154939": "Already have an account?",
+    "2336550011721758066": "Log in"
+  }
+}

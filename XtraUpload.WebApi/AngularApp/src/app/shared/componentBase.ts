@@ -14,8 +14,8 @@ export abstract class ComponentBase implements OnDestroy {
 
   /** validate a view input  */
   getErrorMessage(fc: FormControl) {
-    return fc.hasError('required') ? 'You must enter a value' :
-      fc.hasError('minlength') ? `Must be at least ${fc.errors.minlength.requiredLength} characters long` :
+    return fc.hasError('required') ? $localize`You must enter a value` :
+      fc.hasError('minlength') ? $localize`Must be at least ${fc.errors.minlength.requiredLength} characters long` :
         '';
   }
   /** Reset a form to it's initial state */

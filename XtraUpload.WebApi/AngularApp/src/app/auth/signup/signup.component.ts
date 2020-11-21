@@ -11,7 +11,7 @@ import { AuthService, SeoService } from 'app/services';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Signup';
+  private readonly pageTitle = $localize`Signup`;
   signupFormGroup: FormGroup;
   userName = new FormControl('', [Validators.required, Validators.minLength(4)]);
   email = new FormControl('', [Validators.required, Validators.email]);
@@ -35,8 +35,8 @@ export class SignupComponent extends ComponentBase implements OnInit {
     });
   }
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-        this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.email.hasError('required') ? $localize`You must enter a value` :
+        this.email.hasError('email') ? $localize`Not a valid email` : '';
   }
   onSubmit(signupParams: ISignupParams) {
     this.isBusy = true;
@@ -46,7 +46,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
       finalize(() => this.isBusy = false))
     .subscribe(
       () => {
-        this.message$.next({successMessage: `Account successfully created, please log in.`});
+        this.message$.next({successMessage: $localize`Account successfully created, please log in.`});
         this.resetForm(this.signupFormGroup);
       },
       error => {

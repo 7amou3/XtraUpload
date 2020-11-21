@@ -4,7 +4,6 @@ import { AuthService, SeoService } from 'app/services';
 import { ILoginParams, IGenericMessage } from 'app/domain';
 import { ComponentBase } from 'app/shared';
 import { takeUntil } from 'rxjs/operators';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +11,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Login to your account';
+  private readonly pageTitle = $localize`Login to your account`;
   loginFormGroup: FormGroup;
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required, Validators.minLength(6)]);
@@ -32,8 +31,8 @@ export class LoginComponent extends ComponentBase implements OnInit {
     });
   }
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-        this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.email.hasError('required') ? $localize`You must enter a value` :
+        this.email.hasError('email') ? $localize`Not a valid email` : '';
   }
   onSubmit(loginParams: ILoginParams) {
     this.isBusy = true;

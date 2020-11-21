@@ -3,16 +3,16 @@
         <div fxFlex.sm="70" fxFlex.md="50" fxFlex.lg="40">
             <mat-card>
                 <mat-card-header>
-                    <mat-card-title>Reset Your Password</mat-card-title>
+                    <mat-card-title i18n>Reset Your Password</mat-card-title>
                 </mat-card-header>
                 <mat-divider></mat-divider>
                 <mat-card-content>
                     <form [formGroup]="forgotPassFormGroup" class="font-14" (ngSubmit)="onSubmit(forgotPassFormGroup.value)">
                         <app-message [message$]="message$"></app-message>
                         <!-- Current Password -->
-                        <p>Enter the email address you used to create your account:</p>
+                        <p i18n>Enter the email address you used to create your account:</p>
                         <mat-form-field>
-                            <mat-label>Enter email</mat-label>
+                            <mat-label i18n>Enter email</mat-label>
                             <input matInput [type]="email" formControlName="email" required>
                             <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
                         </mat-form-field>
@@ -20,12 +20,12 @@
                         <!-- Submit button-->
                         <mat-card-actions>
                             <button mat-flat-button class="btn-block btn-lg mat-primary"
-                                [disabled]="!forgotPassFormGroup.valid || isBusy" type="submit">
+                                [disabled]="!forgotPassFormGroup.valid || isBusy" type="submit" i18n>
                                 <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
                                 SEND ME A PASSWORD-RESET EMAIL
                             </button>
                         </mat-card-actions>
-                        <p class="text-muted">
+                        <p class="text-muted" i18n>
                             After clicking the button above, an email will be sent to you with a link to reset your
                             password.
                         </p>

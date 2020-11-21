@@ -1,6 +1,6 @@
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler, APP_INITIALIZER } from '@angular/core';
+import { NgModule, ErrorHandler, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -66,6 +66,7 @@ export function loadIcons(iconService: CustomIconService) {
     FooterModule
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: "en-US" },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: UrlForwarderHandler, multi: true },

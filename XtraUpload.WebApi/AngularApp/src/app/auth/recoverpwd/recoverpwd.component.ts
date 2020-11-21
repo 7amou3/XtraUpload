@@ -11,7 +11,7 @@ import { RecoverPassword } from 'app/domain';
   templateUrl: './recoverpwd.component.html'
 })
 export class RecoverpwdComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Recover Password';
+  private readonly pageTitle =  $localize`Recover Password`;
   private recoverPassword = new RecoverPassword();
   recoverPassFormGroup: FormGroup;
   password = new FormControl('', [Validators.required, Validators.minLength(6)]);
@@ -55,7 +55,7 @@ export class RecoverpwdComponent extends ComponentBase implements OnInit {
     .subscribe(
       () => {
         this.resetForm(this.recoverPassFormGroup);
-        this.message$.next({successMessage: 'Your password has been updated successfully, please login.'});
+        this.message$.next({successMessage:  $localize`Your password has been updated successfully, please login.`});
       },
       error => {
         this.message$.next({errorMessage: error?.error?.errorContent?.message});

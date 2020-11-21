@@ -3,14 +3,14 @@
         <div fxFlex.sm="60" fxFlex.lg="40" fxFlex.md="50">
             <mat-card class="font-14">
                 <mat-card-header>
-                    <mat-card-title>Email Confirmation</mat-card-title>
+                    <mat-card-title i18n>Email Confirmation</mat-card-title>
                 </mat-card-header>
                 <mat-divider></mat-divider>
                 <mat-card-content>
                     <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
                     <app-message [message$]="message$"></app-message>
                     <mat-card-actions>
-                        <button mat-flat-button class="btn-block btn-lg mat-primary" [routerLink]="['/filemanager']">
+                        <button mat-flat-button class="btn-block btn-lg mat-primary" [routerLink]="['/filemanager']" i18n>
                             GO TO MY FILES
                         </button>
                     </mat-card-actions>

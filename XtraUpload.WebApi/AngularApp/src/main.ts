@@ -1,8 +1,8 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
+import { loadTranslations } from '@angular/localize';
 import { environment } from './environments/environment';
-
+import { getTranslations, ParsedTranslationBundle } from '@locl/core';
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
 }
@@ -17,6 +17,12 @@ const providers = [
 if (environment.production) {
   enableProdMode();
 }
-
-platformBrowserDynamic(providers).bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+getTranslations('/assets/i18n/ar.json').then(
+  (data: ParsedTranslationBundle) => {
+    loadTranslations(data.translations);
+    import('./app/app.module').then(module => {
+      platformBrowserDynamic(providers).bootstrapModule(module.AppModule)
+        .catch(err => console.error(err));
+    });
+  }
+);
