@@ -10,7 +10,7 @@
            <form [formGroup]="signupFormGroup" (ngSubmit)="onSubmit(signupFormGroup.value)" class="font-14">
              <app-message [message$]="message$"></app-message>
              <mat-form-field>
-               <mat-label>User name</mat-label>
+               <mat-label i18n>User name</mat-label>
                <input matInput formControlName="userName" required>
                <mat-error *ngIf="userName.invalid">{{getErrorMessage(userName)}}</mat-error>
              </mat-form-field>

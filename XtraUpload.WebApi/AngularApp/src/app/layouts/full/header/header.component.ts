@@ -5,7 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.scss']
 })
 export class HeaderComponent extends ComponentBase implements OnInit {
   @Input() currentTheme: 'dark' | 'light';

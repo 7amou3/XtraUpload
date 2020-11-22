@@ -10,9 +10,8 @@
                     <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
                     <app-message [message$]="message$"></app-message>
                     <mat-card-actions>
-                        <button mat-flat-button class="btn-block btn-lg mat-primary" [routerLink]="['/filemanager']" i18n>
-                            GO TO MY FILES
-                        </button>
+                        <button mat-flat-button class="btn-block btn-lg mat-primary" [routerLink]="['/filemanager']" i18n
+                        >GO TO MY FILES</button>
                     </mat-card-actions>
                 </mat-card-content>
             </mat-card>

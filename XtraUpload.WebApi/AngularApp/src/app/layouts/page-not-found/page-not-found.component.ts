@@ -10,7 +10,7 @@ export class PageNotFoundComponent implements OnInit {
   constructor(
     private titleService: Title
   ) {
-    titleService.setTitle('404 Page Not Found');
+    titleService.setTitle($localize`404 Page Not Found`);
    }
 
   ngOnInit(): void {

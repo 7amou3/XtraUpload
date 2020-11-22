@@ -10,7 +10,7 @@
         <mat-card>
             <div fxLayout="row wrap">
                 <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
-                <h4 class="card-title m-l-15">Folder content</h4>
+                <h4 class="card-title m-l-15" i18n>Folder content</h4>
             </div>
             <mat-divider></mat-divider>
             <mat-card-content style="min-height: 500px;">
@@ -24,7 +24,7 @@
                 <div *ngIf="(folderContent$ | async)?.length == 0" fxlayoutalign="center center">
                     <div class="text-center no-records">
                         <mat-icon svgIcon="xu-folder"></mat-icon>
-                        <p>No files in here</p>
+                        <p i18n>No files in here</p>
                     </div>
                 </div>
             </mat-card-content>

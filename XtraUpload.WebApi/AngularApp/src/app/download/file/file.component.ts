@@ -53,7 +53,7 @@ export class FileComponent extends ComponentBase implements OnInit {
           .subscribe(
             file => {
               this.fileItem = file;
-              this.seoService.setPageTitle('Download ' + file.name);
+              this.seoService.setPageTitle($localize`Download`+ ' ' + file.name);
               this.startCountDownTimer(file.waitTime);
             },
             (err) => {

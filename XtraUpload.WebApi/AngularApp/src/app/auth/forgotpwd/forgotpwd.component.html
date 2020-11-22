@@ -20,16 +20,14 @@
                         <!-- Submit button-->
                         <mat-card-actions>
                             <button mat-flat-button class="btn-block btn-lg mat-primary"
-                                [disabled]="!forgotPassFormGroup.valid || isBusy" type="submit" i18n>
+                                [disabled]="!forgotPassFormGroup.valid || isBusy" type="submit">
                                 <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
-                                SEND ME A PASSWORD-RESET EMAIL
+                                <span i18n>SEND ME A PASSWORD-RESET EMAIL</span>
                             </button>
                         </mat-card-actions>
-                        <p class="text-muted" i18n>
-                            After clicking the button above, an email will be sent to you with a link to reset your
-                            password.
-                        </p>
-
+                        <p class="text-muted" i18n
+                        >After clicking the button above, an email will be sent to you with a link to reset your
+                            password.</p>
                     </form>
                 </mat-card-content>
             </mat-card>

@@ -37,7 +37,7 @@ export class SidebarComponent extends TreeBase implements OnInit {
     .pipe(takeUntil(this.onDestroy))
     .subscribe(
       folders => {
-        this.seoService.setPageTitle('Download ' + folders[folders.length - 1].name);
+        this.seoService.setPageTitle($localize`Download`+ ' ' + folders[folders.length - 1].name);
         const rootFolder = {
           id: this.folderId,
           name: folders[folders.length - 1].name,
