@@ -32,6 +32,7 @@
             *ngIf="!downloadurl"
             color="accent"
             [disabled]="timerInProgress || requestInProgress"
+            i18n-matTooltip
             matTooltip="Generate download link"
             (click)="onDownloadRequested()"
             class="btn-block btn-lg m-t-20 m-b-20 mat-raised-button mat-primary">
@@ -45,6 +46,7 @@
               [disabled]="downloadState === 'started'"
               mat-fab color="warn"
               (click)="startDownload()"
+              i18n-matTooltip
               matTooltip="Start download"
               style="height: 125px; width: 125px;" i18n
               >Start Download</button>

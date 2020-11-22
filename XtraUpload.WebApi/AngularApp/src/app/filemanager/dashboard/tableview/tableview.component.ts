@@ -92,7 +92,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
           this.dataSource.data.splice(index, 1);
         }
       });
-      this.snackBar.open(`File(s)/Folder(s) has been moved successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`File(s)/Folder(s) has been moved successfully`, '', { duration: 3000 });
       this.selections = [];
       this.refreshTable();
   }
@@ -109,7 +109,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
   /** invoked when a new sub folder has been added */
   protected handleNewSubFolder(folder: IFolderInfo): void {
     if (!folder) {
-      this.snackBar.open('Server Error, please try again.', '', { duration: 3000 });
+      this.snackBar.open($localize`Server Error, please try again.`, '', { duration: 3000 });
       return;
     }
 
@@ -119,7 +119,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       this.dataSource.data.push(folder);
       this.refreshTable();
     }
-    this.snackBar.open(`The new subfolder ${folder.name} has been added successfully`, '', { duration: 3000 });
+    this.snackBar.open($localize`The new subfolder ${folder.name} has been added successfully`, '', { duration: 3000 });
   }
 
   /** invoked when a file has been renamed */
@@ -132,7 +132,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfile.name = file.name;
       rfile.lastModified = file.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The file ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The file ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
     }
   }
 
@@ -147,7 +147,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfile.status = file.status;
       rfile.lastModified = file.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The online availability of ${rfile.name} has been changed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The online availability of ${rfile.name} has been changed successfully`, '', { duration: 3000 });
     }
   }
 
@@ -162,7 +162,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfolder.status = folder.status;
       rfolder.lastModified = folder.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The online availability of ${rfolder.name} has been changed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The online availability of ${rfolder.name} has been changed successfully`, '', { duration: 3000 });
     }
   }
   /** invoked when a folder has been renamed */
@@ -175,7 +175,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfile.name = folder.name;
       rfile.lastModified = folder.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The folder ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The folder ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
     }
   }
   /** invoked when a file has been deleted */
@@ -188,7 +188,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
       this.refreshTable();
-      this.snackBar.open(`File(s) has been deleted successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`File(s) has been deleted successfully`, '', { duration: 3000 });
       // Remove from selection
       const sId = this.selections.findIndex(s => s.id === file.id);
       if (index !== -1) {
@@ -207,7 +207,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
       this.refreshTable();
-      this.snackBar.open(`Folder(s) has been deleted successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`Folder(s) has been deleted successfully`, '', { duration: 3000 });
     }
     // Remove if it's content are displayed
     const folderid = this.route.snapshot.queryParamMap.get('folder') ?? 'root';

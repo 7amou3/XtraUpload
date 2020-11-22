@@ -18,7 +18,7 @@ import { SidenavService } from 'app/services/sidenav.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'My Files & Folders';
+  private readonly pageTitle = $localize`My Files & Folders`;
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
   @ViewChild('sidenav') sidenav: MatSidenav;

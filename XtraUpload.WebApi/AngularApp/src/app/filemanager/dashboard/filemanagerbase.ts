@@ -156,13 +156,13 @@ export abstract class FilemanagerBase extends ComponentBase {
         foldersCount++;
       }
     });
-    dragDesc = foldersCount === 1 ? `1 folder` :
-      foldersCount > 1 ? `${foldersCount} folders` : '';
+    dragDesc = foldersCount === 1 ? $localize`1 folder` :
+      foldersCount > 1 ? $localize`${foldersCount} folders` : '';
 
     dragDesc += foldersCount > 0 && filesCount > 0 ? ', ' : '';
 
-    dragDesc += filesCount === 1 ? `1 file` :
-      filesCount > 1 ? `${filesCount} files` : '';
+    dragDesc += filesCount === 1 ? $localize`1 file` :
+      filesCount > 1 ? $localize`${filesCount} files` : '';
 
     return dragDesc;
   }

@@ -25,13 +25,13 @@ export class DeleteItemComponent extends ComponentBase {
           }
           else folderCount++;
         });
-        this.message = folderCount === 1 ? `1 folder` :
-        folderCount > 1 ? `${folderCount} folders` : '';
+        this.message = folderCount === 1 ? $localize`1 folder` :
+        folderCount > 1 ? $localize`${folderCount} folders` : '';
 
         this.message += folderCount > 0 && fileCount > 0 ? ', ' : '';
 
-        this.message += fileCount === 1 ? `1 file` :
-        fileCount > 1 ? `${fileCount} files` : '';
+        this.message += fileCount === 1 ? $localize`1 file` :
+        fileCount > 1 ? $localize`${fileCount} files` : '';
       }
       else {
         this.message = items[0].name;

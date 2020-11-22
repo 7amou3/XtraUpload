@@ -1,5 +1,5 @@
 <div class="sheet-header">
-  <p class="card-title">Select Files to Upload</p>
+  <p class="card-title" i18n>Select Files to Upload</p>
   <a mat-icon-button mat-button (click)="onCloseUploadSheet($event)">
     <mat-icon>close</mat-icon>
   </a>
@@ -20,7 +20,7 @@
       <ngx-dropzone-label>
         <mat-icon class="icon-add-files">add</mat-icon>
         <p class="text-muted font-12" *ngIf="setting.maxFileSize as maxfilesize">
-          Max File Size: {{maxfilesize *1024 *1024 | bytes:2}}
+          <span i18n>Max File Size:</span>&nbsp;{{maxfilesize *1024 *1024 | bytes:2}}
         </p>
       </ngx-dropzone-label>
     </ngx-dropzone>
@@ -43,13 +43,13 @@
         </mat-progress-bar>
         <!--Upload status icons-->
         <a *ngIf="(file.uploadStatus$ | async)?.status === 'ToDo'" mat-icon-button mat-button
-          (click)="onRemoveFile(file)" matTooltip="Remove from selection">
+          (click)="onRemoveFile(file)" i18n-matTooltip matTooltip="Remove from selection">
           <mat-icon class="text-danger font-18">delete</mat-icon>
         </a>
-        <mat-icon *ngIf="(file.uploadStatus$ | async)?.status === 'Success'" matTooltip="Upload successful"
+        <mat-icon *ngIf="(file.uploadStatus$ | async)?.status === 'Success'" i18n-matTooltip matTooltip="Upload successful"
           class="text-success font-18">done
         </mat-icon>
-        <a mat-icon-button mat-button matTooltip="An Error has occurred while uploading the file."
+        <a mat-icon-button mat-button i18n-matTooltip matTooltip="An Error has occurred while uploading the file."
           *ngIf="(file.uploadStatus$ | async)?.status === 'Error'" (click)="onRemoveFile(file)">
           <mat-icon class="text-danger font-18">error</mat-icon>
         </a>
@@ -59,21 +59,21 @@
     <!--Action buttons-->
     <div fxLayout="row wrap" class="m-t-10">
       <div fxFlex="40">
-        <button mat-raised-button [disabled]="storageLimitReached" class="m-r-5" (click)="drop.showFileSelector()">Add
-          files</button>
+        <button mat-raised-button [disabled]="storageLimitReached" class="m-r-5" (click)="drop.showFileSelector()"
+        i18n>Add files</button>
       </div>
       <div fxLayoutAlign="flex-end" fxFlex="60">
-        <button mat-raised-button class="m-r-5" (click)="onCloseUploadSheet($event)">Cancel</button>
-        <button mat-raised-button color="accent" (click)="onRequestUpload()">Start Upload</button>
+        <button mat-raised-button class="m-r-5" (click)="onCloseUploadSheet($event)" i18n>Cancel</button>
+        <button mat-raised-button color="accent" (click)="onRequestUpload()" i18n>Start Upload</button>
       </div>
-      <mat-error *ngIf="storageLimitReached">You have reached your max storage space.</mat-error>
+      <mat-error *ngIf="storageLimitReached" i18n>You have reached your max storage space.</mat-error>
     </div>
   </div>
   <!--Storage disconnected tpl-->
   <ng-template #storageDisconnected>
     <div class="disconnedted-servers">
       <mat-icon svgIcon="disconnected"></mat-icon>
-      <p>Unreachable storage servers. Please contact customer support.</p>
+      <p i18n>Unreachable storage servers. Please contact customer support.</p>
     </div>
   </ng-template>
 </section>

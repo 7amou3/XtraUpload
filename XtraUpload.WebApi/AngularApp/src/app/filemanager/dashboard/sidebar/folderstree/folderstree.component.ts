@@ -56,7 +56,7 @@ export class FoldersTreeComponent extends TreeBase implements OnInit {
         }
       });
     }, () => {
-      throw new Error('Unknown error occured while waiting for server response.');
+      throw new Error($localize`Unknown error occured while waiting for server response.`);
     });
 
     // Add new subfolder to tree on creation event

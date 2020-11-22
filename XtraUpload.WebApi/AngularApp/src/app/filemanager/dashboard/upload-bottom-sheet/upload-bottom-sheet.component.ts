@@ -54,16 +54,16 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
     if (event.rejectedFiles.length > 0) {
       const rejected = event.rejectedFiles[0] as RejectedFile;
         if (rejected.reason === 'type') {
-          throw Error ('The selected file type is not allowed.');
+          throw Error ($localize`The selected file type is not allowed.`);
         } else {
-          throw Error ('You exceeded the file size limit.');
+          throw Error ($localize`You exceeded the file size limit.`);
         }
     }
     // Accepted files
     event.addedFiles.forEach((upload: File) => {
       if (this.files.find(s => s.name === upload.name)) {
         // file already exist
-        throw Error(`File ${upload.name} already exist`);
+        throw Error($localize`File ${upload.name} already exist`);
       }
       const upstatus = new UploadStatus();
       upstatus.filename = upload.name;
@@ -80,7 +80,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       for (let i = 0; i < amount; i++) {
         this.files.splice(this.files.length - 1, 1);
       }
-      throw Error(`Max conccurent upload exceeded, you can upload up to ${this.uploadSetting$.getValue().concurrentUpload} files at a time.`);
+      throw Error($localize`Max conccurent upload exceeded, you can upload up to ${this.uploadSetting$.getValue().concurrentUpload} files at a time.`);
     }
   }
 

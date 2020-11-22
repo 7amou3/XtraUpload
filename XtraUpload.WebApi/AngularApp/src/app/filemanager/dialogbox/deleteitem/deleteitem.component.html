@@ -1,13 +1,13 @@
-<h2 mat-dialog-title>Delete</h2>
+<h2 mat-dialog-title i18n>Delete</h2>
 <mat-dialog-content class="mat-typography">
     <p>
-        Are you sure you want to delete <b>{{message}}</b> ?
+        <span i18n>Are you sure you want to delete</span>&nbsp;<b>{{message}}</b> ?
     </p>
 </mat-dialog-content>
 <mat-dialog-actions fxLayoutAlign="flex-end">
-    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button mat-dialog-close i18n>Cancel</button>
     <button mat-button
     [disabled]="isBusy" 
     (click)="onDelete()" 
-    color="warn">Delete</button>
+    color="warn" i18n>Delete</button>
   </mat-dialog-actions>
