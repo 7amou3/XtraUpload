@@ -11,13 +11,13 @@
             mat-icon-button
             i18n-matTooltip
             matTooltip="Select a theme"
-            [matMenuTriggerFor]="styleMenu"
+            [matMenuTriggerFor]="moreOptionsMenu"
     >
-        <mat-icon style="font-size: 18px;">brush</mat-icon>
+        <mat-icon style="font-size: 18px;">more_vert</mat-icon>
     </button>
 </ng-template>
 <!--Loged In user-->
-<mat-menu #profile="matMenu" class="mymegamenu">
+<mat-menu #profile="matMenu">
     <button *ngIf="loggedIn.role === 'Admin'" mat-menu-item [routerLink]="['/administration']">
         <mat-icon>view_quilt</mat-icon>
         <span i18n>Admin Area</span>
@@ -38,11 +38,19 @@
     <ng-container *ngTemplateOutlet="selectorTpl"></ng-container>
 </mat-menu>
 <!--Guest-->
-<mat-menu #styleMenu="matMenu">
+<mat-menu #moreOptionsMenu="matMenu">
     <ng-container *ngTemplateOutlet="selectorTpl"></ng-container>
 </mat-menu>
 
 <ng-template #selectorTpl>
+    <!--Translate-->
+    <button mat-menu-item (click)="openLangDialog()">
+        <mat-icon>language</mat-icon> 
+        <span i18n>English</span>
+        <mat-icon class="more-lang">keyboard_arrow_down</mat-icon>
+    </button>
+    <mat-divider></mat-divider>
+    <!--Themes-->
     <button [disabled]="currentTheme === 'light'" mat-menu-item (click)="onChangeThemeClick('light')">
         <mat-icon>brightness_5</mat-icon> 
         <span i18n>Light Theme</span>

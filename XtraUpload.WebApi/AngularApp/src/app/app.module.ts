@@ -14,12 +14,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 import { IsLoggedInDirective } from './shared/loggedin.directive';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Angulartics2Module } from 'angulartics2';
 import { AppComponent } from './app.component';
 import { FooterModule } from './shared';
-import { FullComponent, HeaderComponent, PageNotFoundComponent } from './layouts';
+import { FullComponent, HeaderComponent, LanguagesComponent, PageNotFoundComponent } from './layouts';
 
 import {
   UrlForwarderHandler,
@@ -45,7 +47,8 @@ export function loadIcons(iconService: CustomIconService) {
     FullComponent,
     ProgressComponent,
     PageNotFoundComponent,
-    IsLoggedInDirective
+    IsLoggedInDirective,
+    LanguagesComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +60,8 @@ export function loadIcons(iconService: CustomIconService) {
     MatDividerModule,
     MatMenuModule,
     MatIconModule,
+    MatListModule,
+    MatDialogModule,
     MatButtonModule,
     MatSnackBarModule,
     HttpClientModule,

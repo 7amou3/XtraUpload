@@ -1,0 +1,12 @@
+<h4 mat-dialog-title i18n>Choose language</h4>
+<mat-dialog-content>
+    
+    <mat-selection-list #shoes [multiple]="false">
+        <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+            {{shoe}}
+        </mat-list-option>
+    </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="flex-end">
+    <button mat-button color="accent" type="submit" i18n>Save</button>
+</mat-dialog-actions>

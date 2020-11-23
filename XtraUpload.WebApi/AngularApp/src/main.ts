@@ -17,7 +17,7 @@ const providers = [
 if (environment.production) {
   enableProdMode();
 }
-getTranslations('/assets/i18n/ar.json').then(
+getTranslations('/assets/i18n/en.json').then(
   (data: ParsedTranslationBundle) => {
     loadTranslations(data.translations);
     import('./app/app.module').then(module => {
