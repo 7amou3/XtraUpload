@@ -23,6 +23,7 @@ namespace XtraUpload.Database.Data
             IFileExtensionRepository fileExtensions, 
             IPageRepository pages,
             IStorageServerRepository storageServer,
+            ILanguageRepository languages,
             ILogger<UnitOfWork> logger)
         {
             _context = context;
@@ -37,6 +38,7 @@ namespace XtraUpload.Database.Data
             FileExtensions = fileExtensions;
             Pages = pages;
             StorageServer = storageServer;
+            Languages = languages;
         }
 
         public IUserRepository Users { get; private set; }
@@ -49,6 +51,7 @@ namespace XtraUpload.Database.Data
         public IFileExtensionRepository FileExtensions { get; private set; }
         public IPageRepository Pages { get; private set; }
         public IStorageServerRepository StorageServer { get; private set; }
+        public ILanguageRepository Languages { get; private set; }
 
         public async Task<int> CompleteAsync()
         {

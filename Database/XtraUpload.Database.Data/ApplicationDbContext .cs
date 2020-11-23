@@ -19,6 +19,7 @@ namespace XtraUpload.Database.Data
         public DbSet<FileExtension> FileExtensions { get; set; }
         public DbSet<Page> Pages { get; set; }
         public DbSet<StorageServer> StorageServers { get; set; }
+        public DbSet<Language> Languages { get; set; }
         // Identity models are inherited from the base class, no need to redefine them here..
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -35,6 +36,7 @@ namespace XtraUpload.Database.Data
             builder.ApplyConfiguration(new TPageConfiguration());
             builder.ApplyConfiguration(new TFileConfiguration());
             builder.ApplyConfiguration(new TStorageServerConfiguration());
+            builder.ApplyConfiguration(new TLanguageConfiguration());
         }
     }
 }
