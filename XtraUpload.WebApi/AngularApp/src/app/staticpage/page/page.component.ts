@@ -33,7 +33,7 @@ export class PageComponent extends ComponentBase implements OnInit {
          this.page = page;
        },
        () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/404']);
        });
     });
   }

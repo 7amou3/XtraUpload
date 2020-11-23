@@ -44,7 +44,7 @@ export class FolderComponent extends ComponentBase implements OnInit {
         this.folderId = params.get('id');
         this.subfolderId = params.get('sub');
         if (!this.folderId) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/404']);
         }
         else {
           this.fileMngService.getPublicFolderContent(this.folderId, this.subfolderId)

@@ -43,7 +43,7 @@ export class FileComponent extends ComponentBase implements OnInit {
       params => {
         const fileId = params.get('id');
         if (!fileId) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/404']);
         }
         else {
           this.fileMngService.getFile(fileId)
