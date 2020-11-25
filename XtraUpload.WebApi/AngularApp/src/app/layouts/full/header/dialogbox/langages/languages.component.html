@@ -1,7 +1,7 @@
 <h4 mat-dialog-title i18n>Choose language</h4>
 <mat-dialog-content>
-    <mat-selection-list [(ngModel)]="selectedCultures" [multiple]="false" *ngIf="languages$ | async as languages else loading">
-        <mat-list-option *ngFor="let lang of languages" [value]="lang.culture">
+    <mat-selection-list [(ngModel)]="selectedLangs" [multiple]="false" *ngIf="languages$ | async as languages else loading">
+        <mat-list-option *ngFor="let lang of languages" [value]="lang">
             {{lang.name}}
         </mat-list-option>
     </mat-selection-list>

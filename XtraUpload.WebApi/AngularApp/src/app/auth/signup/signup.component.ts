@@ -4,7 +4,6 @@ import { ComponentBase } from 'app/shared';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { ISignupParams } from 'app/domain';
 import { AuthService, SeoService, UserStorageService } from 'app/services';
-import { getBrowserCultureLang } from '@locl/core';
 
 @Component({
   selector: 'app-signup',
@@ -42,7 +41,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
   }
   onSubmit(signupParams: ISignupParams) {
     this.isBusy = true;
-    signupParams.language = this.userStorage.getUserLang().culture;
+    signupParams.language = this.userStorage.getUserLang();
     this.authService.requestSignup(signupParams)
     .pipe(
       takeUntil(this.onDestroy),

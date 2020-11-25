@@ -84,7 +84,7 @@ namespace XtraUpload.WebApi.Controllers
             {
                 opts.AfterMap((src, dest) =>
                 {
-                    dest.Language = result.User.Language.Culture;
+                    dest.Language = _mapper.Map<LanguageDto>(result.User.Language);
                     dest.JwtToken = result.JwtToken;
                     dest.Role = result.Role.RoleClaims.Any(s => s.ClaimType == XtraUploadClaims.AdminAreaAccess.ToString()) ? "Admin" : "User";
                 });

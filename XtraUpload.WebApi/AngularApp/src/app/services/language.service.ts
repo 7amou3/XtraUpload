@@ -18,14 +18,22 @@ export class LanguageService {
         // check if user already set his language
         const profile = this.userStorage.getProfile();
         if (profile?.language) {
-            langPath = '/assets/i18n/' + profile.language + '.json';
+            langPath = '/assets/i18n/' + profile.language.culture + '.json';
         }
         // Set browser lang if it's supported   
         else {
             const browserLocl = getBrowserLang();
             var langs = await this.getLanguages();
-            if (langs && langs.filter(s => s.culture === browserLocl)) {
+            const supportedLang = langs.filter(s => s.culture === browserLocl)[0];
+            if (langs && supportedLang) {
                 langPath = '/assets/i18n/' + browserLocl + '.json';
+                this.userStorage.setUserLang(supportedLang);
+            }
+            // Language is not supported by XtraUpload, set the default lang
+            else {
+                const defaultLang = langs.filter(s => s.default)[0];
+                langPath = '/assets/i18n/' + defaultLang.culture + '.json';
+                this.userStorage.setUserLang(defaultLang);
             }
         }
         

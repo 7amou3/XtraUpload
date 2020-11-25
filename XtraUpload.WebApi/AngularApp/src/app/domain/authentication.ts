@@ -1,3 +1,5 @@
+import { ILanguage } from "./settings";
+
 export interface ILoginParams {
   userName: string;
   password: string;
@@ -7,7 +9,7 @@ export interface ILoginParams {
 export interface ISignupParams extends ILoginParams {
   email: string;
   termsOfservice: boolean;
-  language: string;
+  language: ILanguage;
 }
 
 export interface IProfile {
@@ -23,7 +25,7 @@ export interface IProfile {
   role: string;
   itemsDisplay: 'list' | 'grid';
   theme: 'dark' | 'light';
-  language: string;
+  language: ILanguage;
 }
 export interface IProfileClaim extends IProfile {
   roleName: string;

@@ -69,6 +69,7 @@ export interface IPageHeader {
 export interface ILanguage {
   name: string;
   culture: string;
+  default: boolean;
 }
 export interface IExtendedSocialUser extends SocialUser {
   language: string;

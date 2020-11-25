@@ -19,15 +19,20 @@ export class UserStorageService {
     return JSON.parse(pageSetting);
   }
   getUserLang(): ILanguage {
-    const languages = this.getAppLanguages();
     const profile = this.getProfile();
     if (profile?.language) {
-      const langName = !languages 
-                                  ? $localize`Language`
-                                  : languages.filter(s => s.culture === profile.language)[0].name;
-      return { name: langName, culture: profile.language }
+      return profile.language
     } 
     else return { culture: getBrowserCultureLang() } as ILanguage;
+  }
+  setUserLang(language: ILanguage) {
+    let profile = this.getProfile();
+    // If the user is not logged in, we create a Profile placeholder
+    if (!profile) {
+      profile = {} as IProfile;
+    }
+    profile.language = language;
+    this.saveUser(profile);
   }
   getAppLanguages(): ILanguage[] {
     const langs = localStorage.getItem(APP_LANG);
@@ -40,15 +45,7 @@ export class UserStorageService {
     if (!langs) return;
     window.localStorage.setItem(APP_LANG, JSON.stringify(langs));
   }
-  updateLang(culture: string) {
-    let profile = this.getProfile();
-    // If the user is not logged in, we create a Profile placeholder
-    if (!profile) {
-      profile = {} as IProfile;
-    }
-    profile.language = culture;
-    this.saveUser(profile);
-  }
+ 
   updateTheme(theme: 'dark' | 'light') {
     let profile = this.getProfile();
     // If the user is not logged in we create a Profile placeholder

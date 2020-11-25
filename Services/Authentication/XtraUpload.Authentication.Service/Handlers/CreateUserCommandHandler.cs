@@ -45,7 +45,7 @@ namespace XtraUpload.Authentication.Service
             }
 
             IEnumerable<Language> languages = await _unitOfWork.Languages.GetAll();
-            string[] culture = request.Language.Split('-'); // en-US
+            string[] culture = request.Language.Culture.Split('-'); // en-US
             var validLang = languages.FirstOrDefault(s => s.Culture == culture[0]);
 
             // Create the user model

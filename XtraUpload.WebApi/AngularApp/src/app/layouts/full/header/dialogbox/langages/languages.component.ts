@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 })
 export class LanguagesComponent extends ComponentBase implements OnInit {
   languages$ = new Subject<ILanguage[]>();
-  selectedCultures : string[] = [];
+  selectedLangs : ILanguage[] = [];
   constructor(
     private languageService: LanguageService,
     private userStorage: UserStorageService,
@@ -26,18 +26,18 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
     const languages = await this.languageService.getLanguages();
     if (languages) {
       this.languages$.next(languages);
-      this.selectedCultures[0] = this.userStorage.getUserLang().culture;
+      this.selectedLangs[0] = this.userStorage.getUserLang();
     }
   }
   async onLangClick() {
-    this.userStorage.updateLang(this.selectedCultures[0]);
+    this.userStorage.setUserLang(this.selectedLangs[0]);
     if (!this.loggedIn?.isLoggedIn) {
       // Reload the app to apply the selected lang
       window.location.href = '/'
     }
     // User is loggedin, update user lang in db
     else {
-      const result = await this.languageService.updateLanguage(this.selectedCultures[0])
+      const result = await this.languageService.updateLanguage(this.selectedLangs[0].culture)
       if (result) {
         // Reload the app since to apply the selected lang
         window.location.href = '/'

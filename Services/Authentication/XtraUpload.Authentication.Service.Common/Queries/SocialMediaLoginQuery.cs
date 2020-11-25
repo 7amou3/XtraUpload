@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
+using XtraUpload.Domain;
 
 namespace XtraUpload.Authentication.Service.Common
 {
@@ -21,6 +22,6 @@ namespace XtraUpload.Authentication.Service.Common
         [Required]
         public string AuthToken { get; set; }
         public string IdToken { get; set; }
-        public string Language { get; set; }
+        public Language Language { get; set; }
     }
 }
