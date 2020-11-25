@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getBrowserCultureLang } from '@locl/core';
-import { IAppInitializerConfig, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
+import { IAppInitializerConfig, ILanguage, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
 const PROFILE = 'xu-Profile';
 const APP_INFO = 'xu-AppInfo';
 const APP_LANG = 'xu-Lang';
@@ -18,17 +18,44 @@ export class UserStorageService {
     }
     return JSON.parse(pageSetting);
   }
-  getLang(): string {
+  getUserLang(): ILanguage {
+    const languages = this.getAppLanguages();
     const profile = this.getProfile();
-    return profile?.language ?? getBrowserCultureLang();
+    if (profile?.language) {
+      const langName = !languages 
+                                  ? $localize`Language`
+                                  : languages.filter(s => s.culture === profile.language)[0].name;
+      return { name: langName, culture: profile.language }
+    } 
+    else return { culture: getBrowserCultureLang() } as ILanguage;
+  }
+  getAppLanguages(): ILanguage[] {
+    const langs = localStorage.getItem(APP_LANG);
+    if (!langs) {
+      return null;
+    }
+    return JSON.parse(langs);
+  }
+  saveAppLanguages(langs: ILanguage[]) {
+    if (!langs) return;
+    window.localStorage.setItem(APP_LANG, JSON.stringify(langs));
   }
   updateLang(culture: string) {
     let profile = this.getProfile();
-    // If the user is not logedin we create a Profile placeholder
+    // If the user is not logged in, we create a Profile placeholder
     if (!profile) {
       profile = {} as IProfile;
     }
     profile.language = culture;
+    this.saveUser(profile);
+  }
+  updateTheme(theme: 'dark' | 'light') {
+    let profile = this.getProfile();
+    // If the user is not logged in we create a Profile placeholder
+    if (!profile) {
+      profile = {} as IProfile;
+    }
+    profile.theme = theme;
     this.saveUser(profile);
   }
   getPageLinks(): IPageHeader[] {
@@ -71,8 +98,13 @@ export class UserStorageService {
     return user.jwtToken?.token;
   }
 
+  /**Clear local storage but keep user preferences (ex language, theme..) */
   clearLocalStorage() {
-    window.localStorage.removeItem(PROFILE);
+    const user = this.getProfile();
+    // Delete all key value pairs
     window.localStorage.clear();
+    // Save user preferences
+    const profile = { language: user.language, theme: user.theme} as IProfile;
+    this.saveUser(profile);
   }
 }

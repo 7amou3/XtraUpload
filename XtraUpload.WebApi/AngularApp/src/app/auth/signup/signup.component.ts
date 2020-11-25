@@ -42,7 +42,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
   }
   onSubmit(signupParams: ISignupParams) {
     this.isBusy = true;
-    signupParams.language = this.userStorage.getLang();
+    signupParams.language = this.userStorage.getUserLang().culture;
     this.authService.requestSignup(signupParams)
     .pipe(
       takeUntil(this.onDestroy),

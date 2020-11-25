@@ -30,9 +30,12 @@ import {
   GlobalErrorHandler,
   ProgressComponent
 } from './http-interceptor';
-import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService, CustomIconService } from 'app/services';
+import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService, CustomIconService, LanguageService } from 'app/services';
 import { SpinnerComponent } from './shared';
 import { PipeModule } from './shared/pipe-modules';
+export function languageFactory(lang: LanguageService) {
+  return () => lang.init();
+}
 export function webSettingFactory(settings: SettingsService) {
   return () => settings.appInitializerConfig().toPromise();
 }
@@ -79,6 +82,12 @@ export function loadIcons(iconService: CustomIconService) {
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {
       provide: APP_INITIALIZER,
+      useFactory: languageFactory,
+      deps: [LanguageService],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
       useFactory: webSettingFactory,
       deps: [SettingsService],
       multi: true
@@ -94,7 +103,8 @@ export function loadIcons(iconService: CustomIconService) {
     SettingsService,
     HeaderService,
     SidenavService,
-    CustomIconService
+    CustomIconService,
+    LanguageService
   ],
   bootstrap: [AppComponent]
 })

@@ -12,3 +12,4 @@ export * from './sidenav.service';
 export * from './seo.service';
 export * from './header.service';
 export * from './custom.icon.service';
+export * from './language.service';

@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ILanguage } from 'app/domain';
-import { SettingsService, UserStorageService } from 'app/services';
+import { LanguageService, UserStorageService } from 'app/services';
 import { ComponentBase, ILoggedin } from 'app/shared';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-langages',
@@ -15,7 +14,7 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
   languages$ = new Subject<ILanguage[]>();
   selectedCultures : string[] = [];
   constructor(
-    private settingService: SettingsService,
+    private languageService: LanguageService,
     private userStorage: UserStorageService,
     private dialogRef: MatDialogRef<LanguagesComponent>,
     @Inject(MAT_DIALOG_DATA) private loggedIn: ILoggedin
@@ -23,15 +22,14 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
       super();
      }
 
-  ngOnInit(): void {
-    this.settingService.getLanguages()
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(languages => {
+  async ngOnInit() {
+    const languages = await this.languageService.getLanguages();
+    if (languages) {
       this.languages$.next(languages);
-      this.selectedCultures[0] = this.userStorage.getLang();
-    });
+      this.selectedCultures[0] = this.userStorage.getUserLang().culture;
+    }
   }
-  onLangSelected() {
+  async onLangClick() {
     this.userStorage.updateLang(this.selectedCultures[0]);
     if (!this.loggedIn?.isLoggedIn) {
       // Reload the app to apply the selected lang
@@ -39,14 +37,11 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
     }
     // User is loggedin, update user lang in db
     else {
-      this.settingService.updateLanguage(this.selectedCultures[0])
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(result => {
-        if (result) {
-          // Reload the app since to apply the selected lang
-          window.location.href = '/'
-        }
-      });
+      const result = await this.languageService.updateLanguage(this.selectedCultures[0])
+      if (result) {
+        // Reload the app since to apply the selected lang
+        window.location.href = '/'
+      }
     }
   }
 }

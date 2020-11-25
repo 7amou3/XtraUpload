@@ -14,6 +14,7 @@ export class HeaderComponent extends ComponentBase implements OnInit {
   @Input() currentTheme: 'dark' | 'light';
   @Output() selectedTheme = new EventEmitter<'dark' | 'light'>();
   avatar: string;
+  currentLanguage: string;
   loggedIn: ILoggedin;
   constructor(
     private dialog: MatDialog,
@@ -43,6 +44,8 @@ export class HeaderComponent extends ComponentBase implements OnInit {
          this.storageService.saveUser(user);
        }
      });
+     // Set lang text
+     this.currentLanguage = this.storageService.getUserLang().name;
    }
   onLoggedIn(loggedIn: ILoggedin) {
     this.loggedIn = loggedIn;
@@ -56,14 +59,9 @@ export class HeaderComponent extends ComponentBase implements OnInit {
     }
   }
   openLangDialog(): void {
-    const dialogRef = this.dialog.open(LanguagesComponent, {
+    this.dialog.open(LanguagesComponent, {
       width: '350px',
       data: this.loggedIn,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      
     });
   }
 

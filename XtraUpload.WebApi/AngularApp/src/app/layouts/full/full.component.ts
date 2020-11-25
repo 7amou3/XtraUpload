@@ -51,16 +51,7 @@ export class FullComponent extends ComponentBase implements OnInit {
     // update backdrop
     this.updateBackDrop(theme);
     // update storage
-    let user = this.userStorageService.getProfile();
-    if (!user) {
-      // create a session storage for the user
-      const profile: Partial<IProfile> = {theme: theme};
-      user = this.userStorageService.saveUser(profile as IProfile);
-    }
-    else {
-      user.theme = theme;
-      this.userStorageService.saveUser(user);
-    }
+    this.userStorageService.updateTheme(theme);
   }
   private updateBackDrop(theme: 'dark' | 'light') {
     (theme === 'dark') ? this.overlayContainer.getContainerElement().classList.add('dark-theme')

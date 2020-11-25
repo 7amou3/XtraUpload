@@ -30,12 +30,13 @@
         <mat-icon>settings</mat-icon>
         <span i18n>Settings</span>
     </button>
+    <mat-divider></mat-divider>
+    <ng-container *ngTemplateOutlet="selectorTpl"></ng-container>
+    <mat-divider></mat-divider>
     <button mat-menu-item (click)="onSignOut()">
         <mat-icon>exit_to_app</mat-icon>
         <span i18n>Sign Out</span> 
     </button>
-    <mat-divider></mat-divider>
-    <ng-container *ngTemplateOutlet="selectorTpl"></ng-container>
 </mat-menu>
 <!--Guest-->
 <mat-menu #moreOptionsMenu="matMenu">
@@ -46,7 +47,7 @@
     <!--Translate-->
     <button mat-menu-item (click)="openLangDialog()">
         <mat-icon>language</mat-icon> 
-        <span i18n>English</span>
+        <span>{{ currentLanguage }}</span>
         <mat-icon class="more-lang">keyboard_arrow_down</mat-icon>
     </button>
     <mat-divider></mat-divider>

@@ -14,6 +14,11 @@ export class AuthService {
     return this.http.post<IProfile>('user/login', loginParams)
       .pipe(
         tap(profile => {
+          const p = this.userStorage.getProfile();
+          if (p){
+            if (p.theme) profile.theme = p.theme;
+            if (p.language) profile.language = p.language;
+          }
           this.userStorage.saveUser(profile);
         })
       );
@@ -22,6 +27,11 @@ export class AuthService {
     return this.http.post<IProfile>('user/socialauth', user)
     .pipe(
       tap(profile => {
+        const p = this.userStorage.getProfile();
+        if (p){
+          if (p.theme) profile.theme = p.theme;
+          if (p.language) profile.language = p.language;
+        }
         this.userStorage.saveUser(profile);
       })
     );

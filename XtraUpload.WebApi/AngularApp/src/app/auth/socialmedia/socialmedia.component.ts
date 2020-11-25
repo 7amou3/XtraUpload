@@ -38,7 +38,7 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
   process(user: SocialUser) {
     this.isBusy = true;
     let exUser: IExtendedSocialUser = Object.create(user);
-    exUser.language = this.userStorage.getLang();
+    exUser.language = this.userStorage.getUserLang().culture;
     this.localAuth.socialmediaAuth(exUser)
     .pipe(
       takeUntil(this.onDestroy),
