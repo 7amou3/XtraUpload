@@ -3,7 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ComponentBase } from 'app/shared';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { ISignupParams } from 'app/domain';
-import { AuthService, SeoService } from 'app/services';
+import { AuthService, SeoService, UserStorageService } from 'app/services';
+import { getBrowserCultureLang } from '@locl/core';
 
 @Component({
   selector: 'app-signup',
@@ -22,6 +23,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private userStorage: UserStorageService,
     private seoService: SeoService) {
     super();
     seoService.setPageTitle(this.pageTitle);
@@ -40,6 +42,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
   }
   onSubmit(signupParams: ISignupParams) {
     this.isBusy = true;
+    signupParams.language = this.userStorage.getLang();
     this.authService.requestSignup(signupParams)
     .pipe(
       takeUntil(this.onDestroy),

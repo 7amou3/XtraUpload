@@ -26,7 +26,7 @@ namespace XtraUpload.Authentication.Service
         {
             XuIdentityResult Result = new XuIdentityResult();
 
-            User userInfo = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            User userInfo = await _unitOfWork.Users.GetUser(u => u.Email == request.Email);
 
             // If user does not exist
             if (userInfo == null)
@@ -40,7 +40,7 @@ namespace XtraUpload.Authentication.Service
                     SocialMediaId = request.Id,
                     Password = Helpers.GenerateUniqueId(),
                     Provider = (AuthProvider)Enum.Parse(typeof(AuthProvider), request.Provider),
-                }));
+                }, request.Language));
 
                 if (userResult.State != OperationState.Success)
                 {

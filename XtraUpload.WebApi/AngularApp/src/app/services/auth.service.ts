@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { GoogleLoginProvider, FacebookLoginProvider,
-         SocialAuthServiceConfig, SocialUser } from 'angularx-social-login';
-import { IProfile, ILoginParams, ISignupParams, RecoverPassword } from 'app/domain';
+         SocialAuthServiceConfig } from 'angularx-social-login';
+import { IProfile, ILoginParams, ISignupParams, RecoverPassword, IExtendedSocialUser } from 'app/domain';
 import { UserStorageService } from './user.storage.service';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class AuthService {
         })
       );
   }
-  socialmediaAuth(user: SocialUser) {
+  socialmediaAuth(user: IExtendedSocialUser) {
     return this.http.post<IProfile>('user/socialauth', user)
     .pipe(
       tap(profile => {

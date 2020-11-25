@@ -1,3 +1,5 @@
+import { SocialUser } from "angularx-social-login";
+
 export interface IAppInitializerConfig {
   appInfo: IWebAppInfo;
   pagesHeader: IPageHeader[];
@@ -63,6 +65,13 @@ export interface IPageHeader {
   visibleInFooter: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+export interface ILanguage {
+  name: string;
+  culture: string;
+}
+export interface IExtendedSocialUser extends SocialUser {
+  language: string;
 }
 export interface IPage extends IPageHeader {
   content: string;

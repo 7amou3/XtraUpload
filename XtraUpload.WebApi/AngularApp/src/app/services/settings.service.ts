@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IAppInitializerConfig, IChangePassword, IWebAppInfo } from 'app/domain';
+import { IAppInitializerConfig, IChangePassword, ILanguage, IWebAppInfo } from 'app/domain';
 import { map } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
 import { of, Observable } from 'rxjs';
@@ -33,5 +33,11 @@ export class SettingsService {
       themeId = 1;
     }
     return this.http.patch('setting/theme', { theme: themeId });
+  }
+  getLanguages(): Observable<ILanguage[]> {
+    return this.http.get<ILanguage[]>('setting/languages');
+  }
+  updateLanguage(culture: string) {
+    return this.http.patch<ILanguage>('setting/language', {culture: culture});
   }
 }

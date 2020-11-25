@@ -7,6 +7,7 @@ namespace XtraUpload.Database.Data
 {
     public class TLanguageConfiguration : IEntityTypeConfiguration<Language>
     {
+        public static Guid _defaultLangId = Guid.NewGuid();
         public void Configure(EntityTypeBuilder<Language> builder)
         {
             // Primary key
@@ -16,12 +17,13 @@ namespace XtraUpload.Database.Data
             // Fields length
             builder.Property(u => u.Culture).HasMaxLength(8);
             builder.Property(u => u.Name).HasMaxLength(24);
+
             // Seed table
             builder.HasData(
-                new Language() { Id = Guid.NewGuid(), Name = "English", Culture = "en-US" },
-                new Language() { Id = Guid.NewGuid(), Name = "Francais", Culture = "fr-FR" },
-                new Language() { Id = Guid.NewGuid(), Name = "Español", Culture = "es-ES" },
-                new Language() { Id = Guid.NewGuid(), Name = "العربية", Culture = "ar-MA" }
+                new Language() { Id = _defaultLangId, Name = "English", Culture = "en", Default = true },
+                new Language() { Id = Guid.NewGuid(), Name = "Francais", Culture = "fr" },
+                new Language() { Id = Guid.NewGuid(), Name = "Español", Culture = "es" },
+                new Language() { Id = Guid.NewGuid(), Name = "العربية", Culture = "ar" }
                 );
         }
     }

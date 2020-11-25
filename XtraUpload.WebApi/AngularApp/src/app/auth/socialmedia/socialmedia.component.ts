@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AuthService } from 'app/services';
+import { AuthService, UserStorageService } from 'app/services';
 import { ComponentBase } from 'app/shared';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { SocialUser } from 'angularx-social-login';
 import { SocialAuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
-import { IGenericMessage } from 'app/domain';
+import { IExtendedSocialUser, IGenericMessage } from 'app/domain';
 
 @Component({
   selector: 'app-socialmedia',
@@ -15,7 +15,8 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
   @Output() loginMessage = new EventEmitter<IGenericMessage>();
   constructor(
     private localAuth: AuthService,
-    private socialAuth: SocialAuthService
+    private socialAuth: SocialAuthService,
+    private userStorage: UserStorageService
     ) {
     super();
   }
@@ -36,7 +37,9 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
 
   process(user: SocialUser) {
     this.isBusy = true;
-    this.localAuth.socialmediaAuth(user)
+    let exUser: IExtendedSocialUser = Object.create(user);
+    exUser.language = this.userStorage.getLang();
+    this.localAuth.socialmediaAuth(exUser)
     .pipe(
       takeUntil(this.onDestroy),
       finalize(() => this.isBusy = false))

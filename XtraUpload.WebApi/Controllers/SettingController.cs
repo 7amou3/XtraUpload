@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using XtraUpload.Domain;
 using XtraUpload.Setting.Service.Common;
 using XtraUpload.Administration.Service.Common;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace XtraUpload.WebApi.Controllers
 {
@@ -87,8 +85,8 @@ namespace XtraUpload.WebApi.Controllers
         {
             AppInitializerConfigResult result = await _mediatr.Send(new GetAppInitializerConfigQuery());
             return HandleResult(result, new {
-                AppInfo = result.AppInfo, 
-                Version = result.Version,
+                result.AppInfo,
+                result.Version,
                 PagesHeader = _mapper.Map<IEnumerable<PageHeaderDto>>(result.Pages)
             });
         }
@@ -100,6 +98,23 @@ namespace XtraUpload.WebApi.Controllers
             ReadAppSettingResult result = await _mediatr.Send(new GetAppSettingsQuery());
 
             return Ok(result.SocialAuthSettings);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("languages")]
+        public async Task<IActionResult> GetLanguages()
+        {
+            LanguagesResult result = await _mediatr.Send(new GetLanguagesQuery());
+
+            return HandleResult(result, _mapper.Map<IEnumerable<LanguageDto>>(result.Languages));
+        }
+
+        [HttpPatch("language")]
+        public async Task<IActionResult> UpdateLanguage(UpdateLanguageCommand command)
+        {
+            OperationResult result = await _mediatr.Send(command);
+
+            return HandleResult(result);
         }
     }
 }

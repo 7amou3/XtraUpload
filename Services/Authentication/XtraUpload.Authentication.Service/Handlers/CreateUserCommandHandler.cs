@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
@@ -42,6 +44,10 @@ namespace XtraUpload.Authentication.Service
                 return Result;
             }
 
+            IEnumerable<Language> languages = await _unitOfWork.Languages.GetAll();
+            string[] culture = request.Language.Split('-'); // en-US
+            var validLang = languages.FirstOrDefault(s => s.Culture == culture[0]);
+
             // Create the user model
             user = new User()
             {
@@ -55,7 +61,8 @@ namespace XtraUpload.Authentication.Service
                 Avatar = request.User.Avatar,
                 SocialMediaId = request.User.SocialMediaId,
                 RoleId = "2", // is the basic user rol see OnModelCreating of ApplicationDbContext
-                Theme = Theme.Light
+                Theme = Theme.Light,
+                LanguageId = validLang == null ? languages.First(s => s.Default).Id : validLang.Id
             };
 
             // Add the new user to the db

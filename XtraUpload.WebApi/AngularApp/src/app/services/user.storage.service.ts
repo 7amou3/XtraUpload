@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { getBrowserCultureLang } from '@locl/core';
 import { IAppInitializerConfig, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
 const PROFILE = 'xu-Profile';
 const APP_INFO = 'xu-AppInfo';
+const APP_LANG = 'xu-Lang';
 const STATICPAGE_LINKS = 'xu-PageLinks';
 /**
  *  Store user data to localstorage
@@ -15,6 +17,19 @@ export class UserStorageService {
       return null;
     }
     return JSON.parse(pageSetting);
+  }
+  getLang(): string {
+    const profile = this.getProfile();
+    return profile?.language ?? getBrowserCultureLang();
+  }
+  updateLang(culture: string) {
+    let profile = this.getProfile();
+    // If the user is not logedin we create a Profile placeholder
+    if (!profile) {
+      profile = {} as IProfile;
+    }
+    profile.language = culture;
+    this.saveUser(profile);
   }
   getPageLinks(): IPageHeader[] {
     const links = localStorage.getItem(STATICPAGE_LINKS);
@@ -34,12 +49,6 @@ export class UserStorageService {
   saveUser(profile: IProfile): IProfile {
     if (!profile) {
       return;
-    }
-    if ((profile.theme as unknown) === 0 || profile.theme === 'dark') {
-      profile.theme = 'dark';
-    }
-    else {
-      profile.theme = 'light';
     }
     window.localStorage.removeItem(PROFILE);
     window.localStorage.setItem(PROFILE, JSON.stringify(profile));

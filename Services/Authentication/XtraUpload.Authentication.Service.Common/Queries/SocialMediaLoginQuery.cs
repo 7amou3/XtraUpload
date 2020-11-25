@@ -21,5 +21,6 @@ namespace XtraUpload.Authentication.Service.Common
         [Required]
         public string AuthToken { get; set; }
         public string IdToken { get; set; }
+        public string Language { get; set; }
     }
 }

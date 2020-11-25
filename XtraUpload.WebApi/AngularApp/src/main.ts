@@ -2,7 +2,8 @@ import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { loadTranslations } from '@angular/localize';
 import { environment } from './environments/environment';
-import { getTranslations, ParsedTranslationBundle } from '@locl/core';
+import { getTranslations, getBrowserCultureLang, ParsedTranslationBundle } from '@locl/core';
+import { IProfile } from 'app/domain';
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
 }
@@ -17,7 +18,17 @@ const providers = [
 if (environment.production) {
   enableProdMode();
 }
-getTranslations('/assets/i18n/en.json').then(
+
+let langPath = '/assets/i18n/en.json';
+const userItem = localStorage.getItem('xu-Profile');
+if (userItem) {
+  var user: IProfile = JSON.parse(userItem)
+  if (user.language) {
+    langPath = '/assets/i18n/' + user.language + '.json';
+  }
+}
+
+getTranslations(langPath).then(
   (data: ParsedTranslationBundle) => {
     loadTranslations(data.translations);
     import('./app/app.module').then(module => {

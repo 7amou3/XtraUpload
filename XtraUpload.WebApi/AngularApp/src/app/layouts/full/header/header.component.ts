@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService, UserStorageService, SettingsService, HeaderService } from 'app/services';
 import { ComponentBase, ILoggedin } from 'app/shared';
 import { takeUntil } from 'rxjs/operators';
@@ -58,7 +58,7 @@ export class HeaderComponent extends ComponentBase implements OnInit {
   openLangDialog(): void {
     const dialogRef = this.dialog.open(LanguagesComponent, {
       width: '350px',
-      data: {}
+      data: this.loggedIn,
     });
 
     dialogRef.afterClosed().subscribe(result => {

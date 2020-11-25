@@ -29,7 +29,7 @@ namespace XtraUpload.Authentication.Service
         {
             XuIdentityResult Result = new XuIdentityResult();
 
-            User user = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.Email == credentials.Email);
+            User user = await _unitOfWork.Users.GetUser(u => u.Email == credentials.Email);
             // Check the user exist
             if (user == null)
             {

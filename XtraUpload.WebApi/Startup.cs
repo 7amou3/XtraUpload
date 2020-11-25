@@ -190,6 +190,7 @@ namespace XtraUpload.WebApi
                 cfg.CreateMap<DeleteFolderResult, DeleteFolderResultDto>();
                 cfg.CreateMap<DeleteItemsResult, DeleteItemsResultDto>();
                 cfg.CreateMap<GetFolderContentResult, FolderContentDto>();
+                cfg.CreateMap<Language, LanguageDto>();
                 cfg.CreateMap<PageHeader, PageHeaderDto>();
             },
             typeof(Startup));

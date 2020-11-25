@@ -29,6 +29,8 @@ namespace XtraUpload.Database.Data
 
             // Each User have one entry in the Role join table
             builder.HasOne(u => u.Role).WithMany(e => e.Users).HasForeignKey(ur => ur.RoleId).OnDelete(DeleteBehavior.Cascade);
+            // Each User has one language
+            builder.HasOne(u => u.Language).WithMany(s => s.Users).HasForeignKey(k => k.LanguageId).OnDelete(DeleteBehavior.Cascade);
             // Each user can have many Files
             builder.HasMany(u => u.Files).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.SetNull);
             // Each user can have many Folders
@@ -44,7 +46,8 @@ namespace XtraUpload.Database.Data
                 CreatedAt = DateTime.UtcNow,
                 LastModified = DateTime.UtcNow,
                 RoleId = "1", // admin rol id
-                Theme = Theme.Light
+                Theme = Theme.Light,
+                LanguageId = TLanguageConfiguration._defaultLangId
             };
             // Add admin
             builder.HasData(admin);
