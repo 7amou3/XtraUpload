@@ -1,21 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { GoogleLoginProvider, FacebookLoginProvider,
-         SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { IProfile, ILoginParams, ISignupParams, RecoverPassword, IExtendedSocialUser } from 'app/domain';
 import { UserStorageService } from './user.storage.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   constructor(private http: HttpClient, private userStorage: UserStorageService) { }
-  requestLogin(loginParams: ILoginParams): Observable<IProfile> {
+  async requestLogin(loginParams: ILoginParams): Promise<IProfile> {
     return this.http.post<IProfile>('user/login', loginParams)
       .pipe(
         tap(profile => {
           const p = this.userStorage.getProfile();
-          if (p){
+          if (p) {
+            if (p.theme) profile.theme = p.theme;
+            if (p.language) profile.language = p.language;
+          }
+          this.userStorage.saveUser(profile);
+        })
+      )
+      .toPromise();
+  }
+  async socialmediaAuth(user: IExtendedSocialUser) {
+    return this.http.post<IProfile>('user/socialauth', user)
+      .pipe(
+        tap(profile => {
+          const p = this.userStorage.getProfile();
+          if (p) {
             if (p.theme) profile.theme = p.theme;
             if (p.language) profile.language = p.language;
           }
@@ -23,41 +36,30 @@ export class AuthService {
         })
       );
   }
-  socialmediaAuth(user: IExtendedSocialUser) {
-    return this.http.post<IProfile>('user/socialauth', user)
-    .pipe(
-      tap(profile => {
-        const p = this.userStorage.getProfile();
-        if (p){
-          if (p.theme) profile.theme = p.theme;
-          if (p.language) profile.language = p.language;
-        }
-        this.userStorage.saveUser(profile);
-      })
-    );
-  }
-  loadConfig(): Observable<SocialAuthServiceConfig> {
+  loadConfig(): Promise<SocialAuthServiceConfig> {
     return this.http.get('setting/socialauthconfig')
-    .pipe(
-      map( (r: any) => {
-        return {
-          autoLogin: false,
-          providers: [
-            {
-              id: GoogleLoginProvider.PROVIDER_ID,
-              provider: new GoogleLoginProvider(
-                r.googleAuth.clientId
-              ),
-            },
-            {
-              id: FacebookLoginProvider.PROVIDER_ID,
-              provider: new FacebookLoginProvider(
-                r.facebookAuth.appId
+      .pipe(
+        map((r: any) => {
+          return {
+            autoLogin: false,
+            providers: [
+              {
+                id: GoogleLoginProvider.PROVIDER_ID,
+                provider: new GoogleLoginProvider(
+                  r.googleAuth.clientId
                 ),
-            }
-          ]
-        };
-       }));
+              },
+              {
+                id: FacebookLoginProvider.PROVIDER_ID,
+                provider: new FacebookLoginProvider(
+                  r.facebookAuth.appId
+                ),
+              }
+            ]
+          };
+        })
+      )
+      .toPromise();
   }
   requestSignup(signupParams: ISignupParams) {
     return this.http.post('user/register', signupParams);
@@ -75,7 +77,7 @@ export class AuthService {
     return this.http.get('setting/confirmemail/');
   }
   confirmEmail(emailToken: string) {
-    return this.http.put('setting/confirmemail/', {emailToken: emailToken});
+    return this.http.put('setting/confirmemail/', { emailToken: emailToken });
   }
   isUserAuthicated(): boolean {
     const user = this.userStorage.getProfile();

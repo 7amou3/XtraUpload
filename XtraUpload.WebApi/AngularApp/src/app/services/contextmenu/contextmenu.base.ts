@@ -70,12 +70,10 @@ export abstract class ContextMenuBase extends ComponentBase {
         });
         dialogRef.afterClosed()
             .pipe(takeUntil(this.onDestroy))
-            .subscribe((subFolder: ICreateFolderModel) => {
+            .subscribe(async (subFolder: ICreateFolderModel) => {
                 if (subFolder) {
                     // request create sub folder
-                    this.fileManagerService.createSubFolder(subFolder)
-                        .pipe(takeUntil(this.onDestroy))
-                        .subscribe();
+                    await this.fileManagerService.createSubFolder(subFolder);
                 }
             });
     }
@@ -87,19 +85,13 @@ export abstract class ContextMenuBase extends ComponentBase {
 
         dialogRef.afterClosed()
             .pipe(takeUntil(this.onDestroy))
-            .subscribe((result: IRenameItemModel) => {
+            .subscribe(async (result: IRenameItemModel) => {
                 if (result) {
                     if (isFile(item)) {
                         // request rename the file
-                        this.fileManagerService.renameFile(result)
-                            .pipe(takeUntil(this.onDestroy))
-                            .subscribe();
+                        await this.fileManagerService.renameFile(result);
                     }
-                    else {
-                        this.fileManagerService.renameFolder(result)
-                            .pipe(takeUntil(this.onDestroy))
-                            .subscribe();
-                    }
+                    else await this.fileManagerService.renameFolder(result);
                 }
             });
     }
@@ -127,13 +119,9 @@ export abstract class ContextMenuBase extends ComponentBase {
 
     }
     private openDeleteDialog(items: IItemInfo[]): void {
-        const dialogRef = this.dialog.open(DeleteItemComponent, {
+        this.dialog.open(DeleteItemComponent, {
             width: '500px',
             data: items
         });
-
-        dialogRef.afterClosed()
-            .pipe(takeUntil(this.onDestroy))
-            .subscribe();
     }
 }

@@ -40,28 +40,24 @@ export class FolderComponent extends ComponentBase implements OnInit {
     this.route.queryParamMap
     .pipe(takeUntil(this.onDestroy))
     .subscribe(
-      params => {
+      async params => {
         this.folderId = params.get('id');
         this.subfolderId = params.get('sub');
         if (!this.folderId) {
           this.router.navigate(['/404']);
         }
         else {
-          this.fileMngService.getPublicFolderContent(this.folderId, this.subfolderId)
-          .pipe(
-            takeUntil(this.onDestroy),
-            finalize(() => this.isBusy = false))
-          .subscribe(
-            (items) => {
+          await this.fileMngService.getPublicFolderContent(this.folderId, this.subfolderId)
+          .then((items) => {
+              this.isBusy = false;
               this.folderContent$.next(items);
-            },
-            (err) => {
-              if (err.error?.errorContent?.message) {
-                this.message$.next({errorMessage: err.error.errorContent.message});
-              }
-              throw err;
+          })
+          .catch((err) => {
+            if (err.error?.errorContent?.message) {
+              this.message$.next({errorMessage: err.error.errorContent.message});
             }
-          );
+            throw err;
+          });
         }
       }
     );

@@ -23,7 +23,7 @@ export class SidebarComponent extends TreeBase implements OnInit {
     super();
    }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.route.queryParamMap
     .pipe(takeUntil(this.onDestroy))
     .subscribe(
@@ -33,10 +33,8 @@ export class SidebarComponent extends TreeBase implements OnInit {
         this.selectedFolderId = subfolderId ?? folderId;
       }
     );
-    this.filemanagerService.getFolderTreeById(this.folderId)
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(
-      folders => {
+    await this.filemanagerService.getFolderTreeById(this.folderId)
+    .then(folders => {
         this.seoService.setPageTitle($localize`Download`+ ' ' + folders[folders.length - 1].name);
         const rootFolder = {
           id: this.folderId,

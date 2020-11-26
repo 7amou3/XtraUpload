@@ -2,8 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileManagerService } from 'app/services';
 import { IItemInfo, IFolderNode } from 'app/domain';
-import { takeUntil, finalize } from 'rxjs/operators';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-moveitem',
@@ -18,11 +18,10 @@ export class MoveItemComponent extends TreeBase implements OnInit {
       super();
      }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.filemanagerService.getAllFolders()
     .pipe(takeUntil(this.onDestroy))
-    .subscribe(
-      folders => {
+    .subscribe(folders => {
         // build the folders tree
         this.folders = [this.rootFolder, ...folders ?? []];
         this.buildFolderTree(this.folders);
@@ -34,17 +33,13 @@ export class MoveItemComponent extends TreeBase implements OnInit {
   onItemClick(node: IFolderNode) {
     this.selectedFolderId = node.id;
   }
-  onMove() {
+  async onMove() {
     this.isBusy = true;
-    this.filemanagerService.requestMoveItems(this.items, this.selectedFolderId)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
+    await this.filemanagerService.requestMoveItems(this.items, this.selectedFolderId)
+    .then(() => {
+        this.isBusy = false;
         this.dialogRef.close();
-      },
-      error => this.handleError(error)
-    );
+    })
+    .catch(error => this.handleError(error));
   }
 }

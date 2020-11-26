@@ -25,7 +25,7 @@ import { RecoverpwdComponent } from './recoverpwd/recoverpwd.component';
 import { ConfirmemailComponent } from './confirmemail/confirmemail.component';
 
 export function socialLoginFactory(authService: AuthService): Promise<SocialAuthServiceConfig> {
-  return authService.loadConfig().toPromise();
+  return authService.loadConfig();
 }
 
 @NgModule({

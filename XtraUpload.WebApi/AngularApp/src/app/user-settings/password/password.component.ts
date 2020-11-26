@@ -3,8 +3,6 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormGroupDirective } f
 import { ComponentBase } from 'app/shared';
 import { IChangePassword } from 'app/domain';
 import { SettingsService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
-
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
@@ -27,24 +25,21 @@ export class ChangePasswordComponent extends ComponentBase implements OnInit {
       newPassword: this.newPassword
     });
   }
-  onSubmit(changePassParams: IChangePassword) {
+  async onSubmit(changePassParams: IChangePassword) {
     if (changePassParams.newPassword === changePassParams.oldPassword) {
       this.message$.next({errorMessage: 'The new password must differ from current password.'});
       return;
     }
     this.isBusy = true;
-    this.settingsService.changePassword(changePassParams)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        () => {
-          this.resetForm(this.changePassFormGroup);
-          this.message$.next({successMessage: 'your password has been successfully changed.'});
-        },
-        (error) => {
-          this.message$.next({errorMessage: error?.error?.errorContent?.message});
-          throw error;
-        });
+    await this.settingsService.changePassword(changePassParams)
+    .then(() => {
+      this.isBusy = false;
+      this.resetForm(this.changePassFormGroup);
+      this.message$.next({successMessage: 'your password has been successfully changed.'});
+    })
+    .catch(error => {
+      this.message$.next({errorMessage: error?.error?.errorContent?.message});
+      throw error;
+    });
   }
 }

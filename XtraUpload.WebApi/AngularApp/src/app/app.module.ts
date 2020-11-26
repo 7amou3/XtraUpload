@@ -37,7 +37,7 @@ export function languageFactory(lang: LanguageService) {
   return () => lang.init();
 }
 export function webSettingFactory(settings: SettingsService) {
-  return () => settings.appInitializerConfig().toPromise();
+  return () => settings.appInitializerConfig();
 }
 export function loadIcons(iconService: CustomIconService) {
   return () => iconService.init();

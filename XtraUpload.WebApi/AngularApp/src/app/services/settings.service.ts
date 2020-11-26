@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { IAppInitializerConfig, IChangePassword } from 'app/domain';
 import { map } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
-import { Observable } from 'rxjs';
 import { SeoService } from './seo.service';
 
 @Injectable()
@@ -13,7 +12,7 @@ export class SettingsService {
     private userStorage: UserStorageService,
     private seoService: SeoService) { }
 
-  appInitializerConfig(): Observable<IAppInitializerConfig> {
+  async appInitializerConfig(): Promise<IAppInitializerConfig> {
     return this.http.get<IAppInitializerConfig>('setting/appinitializerconfig')
       .pipe(
         map(result => {
@@ -21,18 +20,18 @@ export class SettingsService {
           this.seoService.setMetaPage(result.appInfo);
           return result;
         })
-      );
-
+      )
+      .toPromise();
   }
-  changePassword(changePassword: IChangePassword) {
-    return this.http.patch('setting/password', changePassword);
+  async changePassword(changePassword: IChangePassword) {
+    return this.http.patch('setting/password', changePassword).toPromise();
   }
-  updateTheme(theme: 'dark' | 'light') {
+  async updateTheme(theme: 'dark' | 'light') {
     let themeId = 0;
     if (theme === 'light') {
       themeId = 1;
     }
-    return this.http.patch('setting/theme', { theme: themeId });
+    return this.http.patch('setting/theme', { theme: themeId }).toPromise();
   }
   
 }

@@ -3,7 +3,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService, SeoService } from 'app/services';
 import { ILoginParams, IGenericMessage } from 'app/domain';
 import { ComponentBase } from 'app/shared';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -34,21 +33,18 @@ export class LoginComponent extends ComponentBase implements OnInit {
     return this.email.hasError('required') ? $localize`You must enter a value` :
         this.email.hasError('email') ? $localize`Not a valid email` : '';
   }
-  onSubmit(loginParams: ILoginParams) {
+  async onSubmit(loginParams: ILoginParams) {
     this.isBusy = true;
-    this.authService.requestLogin(loginParams)
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(
-      (data) => {
+    await this.authService.requestLogin(loginParams)
+    .then((data) => {
         // Reload the entire app
         window.location.href = data.role === 'Admin' ? '/administration' :  '/filemanager';
-      },
-      (error) => {
+      })
+      .catch((error) => {
         this.isBusy = false;
         this.message$.next({errorMessage: error?.error?.errorContent?.message});
         throw error;
-      }
-    );
+      });
   }
   onSMMessage(message: IGenericMessage) {
     this.message$.next(message);

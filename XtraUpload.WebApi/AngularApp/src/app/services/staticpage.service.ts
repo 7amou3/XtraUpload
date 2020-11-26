@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IPage, IPageHeader } from 'app/domain';
-import { Observable } from 'rxjs';
+import { IPage } from 'app/domain';
 
 @Injectable()
 export class StaticPageService {
     constructor(private http: HttpClient) { }
-    getPage(url: string): Observable<IPage> {
-        return this.http.get<IPage>('setting/page/' + url);
+    async getPage(url: string): Promise<IPage> {
+        return this.http.get<IPage>('setting/page/' + url).toPromise();
     }
 }

@@ -50,12 +50,11 @@ export class HeaderComponent extends ComponentBase implements OnInit {
   onLoggedIn(loggedIn: ILoggedin) {
     this.loggedIn = loggedIn;
   }
-  onChangeThemeClick(theme: 'dark' | 'light') {
+  async onThemeClick(theme: 'dark' | 'light') {
     this.selectedTheme.emit(theme);
+    // update usrer db
     if (this.loggedIn.isLoggedIn) {
-      this.settingService.updateTheme(theme)
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe();
+      await this.settingService.updateTheme(theme);
     }
   }
   openLangDialog(): void {

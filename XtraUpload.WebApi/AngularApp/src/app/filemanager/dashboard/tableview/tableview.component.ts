@@ -71,16 +71,14 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
   }
 
   /** Handles the drop event */
-  protected handleDrop(dropIndex: number): void {
+  protected async handleDrop(dropIndex: number): Promise<void> {
     // get the drop folder
     const folder = this.dataSource.data[dropIndex];
     if (this.isdroppableArea(folder) === false) {
       return;
     }
-
-    this.filemanagerService.requestMoveItems(this.selections, folder.id)
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe();
+    
+    await this.filemanagerService.requestMoveItems(this.selections, folder.id);
   }
 
   /** Invoked when item(s) has moved successfully */

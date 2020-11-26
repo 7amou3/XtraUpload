@@ -52,11 +52,11 @@
     </button>
     <mat-divider></mat-divider>
     <!--Themes-->
-    <button [disabled]="currentTheme === 'light'" mat-menu-item (click)="onChangeThemeClick('light')">
+    <button [disabled]="currentTheme === 'light'" mat-menu-item (click)="onThemeClick('light')">
         <mat-icon>brightness_5</mat-icon> 
         <span i18n>Light Theme</span>
     </button>
-    <button [disabled]="currentTheme === 'dark'" mat-menu-item (click)="onChangeThemeClick('dark')">
+    <button [disabled]="currentTheme === 'dark'" mat-menu-item (click)="onThemeClick('dark')">
         <mat-icon>brightness_3</mat-icon>
         <span i18n>Dark Theme</span>
     </button>

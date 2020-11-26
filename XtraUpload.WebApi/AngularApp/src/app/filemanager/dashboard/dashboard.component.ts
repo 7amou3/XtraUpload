@@ -52,8 +52,8 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     this.initView();
     this.route.queryParamMap
     .pipe(takeUntil(this.onDestroy))
-    .subscribe(params => {
-      this.getFolderContent(params.get('folder'));
+    .subscribe(async params => {
+      await this.getFolderContent(params.get('folder'));
     });
 
     // Display sidenav menu on request
@@ -93,17 +93,14 @@ export class DashboardComponent extends ComponentBase implements OnInit {
       this.displayMode = storage.itemsDisplay;
     }
   }
-  getFolderContent(folderId?: string): void {
+  async getFolderContent(folderId?: string): Promise<void> {
     this.isBusy = true;
-    this.filemanagerService.getFolderContent(folderId)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      data => {
-        this.folderContent$.next(data);
-      }
-    );
+    await this.filemanagerService.getFolderContent(folderId)
+    .then( data => {
+      this.isBusy = false
+      this.folderContent$.next(data);
+    })
+    .catch(error => this.handleError(error)); 
   }
 
   changeDisplay(display: 'list' | 'grid') {

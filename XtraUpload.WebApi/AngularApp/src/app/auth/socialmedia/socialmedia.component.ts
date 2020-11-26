@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService, UserStorageService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { takeUntil, finalize } from 'rxjs/operators';
 import { SocialUser } from 'angularx-social-login';
 import { SocialAuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 import { IExtendedSocialUser, IGenericMessage } from 'app/domain';
@@ -24,7 +23,7 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
   signInWithGoogle(): void {
     this.socialAuth
     .signIn(GoogleLoginProvider.PROVIDER_ID)
-    .then(user => this.process(user));
+    .then(async user => await this.process(user));
   }
 
   ngOnInit(): void {
@@ -32,27 +31,22 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
   signInWithFB(): void {
     this.socialAuth
     .signIn(FacebookLoginProvider.PROVIDER_ID)
-    .then(user => this.process(user));
+    .then(async user => await this.process(user));
   }
 
-  process(user: SocialUser) {
+  async process(user: SocialUser) {
     this.isBusy = true;
     let exUser: IExtendedSocialUser = Object.create(user);
     exUser.language = this.userStorage.getUserLang().culture;
-    this.localAuth.socialmediaAuth(exUser)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
+    await this.localAuth.socialmediaAuth(exUser)
+    .then(() => 
         // Reload the entire app
-        window.location.href = '/filemanager';
-      },
-      error => {
-        this.loginMessage.emit({errorMessage: error?.error?.errorContent?.message});
-        throw error;
-      }
-    );
+        window.location.href = '/filemanager')
+    .catch(error => {
+      this.isBusy = false;
+      this.loginMessage.emit({errorMessage: error?.error?.errorContent?.message});
+      throw error;
+    })
   }
 
 }
