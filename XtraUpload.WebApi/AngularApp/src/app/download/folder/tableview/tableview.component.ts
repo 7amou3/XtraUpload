@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FilemanagerBase } from 'app/filemanager/dashboard/filemanagerbase';
 import { IFileInfo, IFolderInfo, IItemsMenu, IItemInfo } from 'app/domain';
-import { FileManagerService } from 'app/services';
+import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -25,13 +25,14 @@ export class TableviewComponent extends FilemanagerBase  implements OnInit {
   @ViewChild('itemstable', { static: true }) itemstable: MatTable<IItemInfo>;
   constructor(
     filemanagerService: FileManagerService,
+    uploadService: UploadService,
     public ctxMenuService: FileMngContextMenuService,
     private route: ActivatedRoute,
     private router: Router,
     breakpointObserver: BreakpointObserver,
     @Inject('API_URL') apiUrl: string
     ) {
-    super(filemanagerService, ctxMenuService, apiUrl);
+    super(filemanagerService, uploadService, ctxMenuService, apiUrl);
     breakpointObserver.observe(['(max-width: 600px)']).pipe(takeUntil(this.onDestroy)).subscribe(result => {
       this.isMobile =  result.matches;
       this.displayedColumns = result.matches

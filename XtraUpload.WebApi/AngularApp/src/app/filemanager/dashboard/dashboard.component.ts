@@ -48,7 +48,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initView();
     this.route.queryParamMap
     .pipe(takeUntil(this.onDestroy))
@@ -67,9 +67,8 @@ export class DashboardComponent extends ComponentBase implements OnInit {
       this.sidenav.open();
     });
     // Get the upload setting
-    this.filemanagerService.getUploadSetting()
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(uploadSetting => {
+    await this.filemanagerService.getUploadSetting()
+    .then(uploadSetting => {
       this.uploadSetting$.next(uploadSetting);
     });
     // Subscribe to header menu click event

@@ -26,7 +26,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { FileManagerRoutes } from './filemanager.routing';
 import { PipeModule } from 'app/shared/pipe-modules';
-import { FileManagerService, UserStorageService, AuthGuardService, AuthService } from 'app/services';
+import { FileManagerService, UserStorageService, AuthGuardService, AuthService, UploadService } from 'app/services';
 import { FileMngContextMenuService, SnavContextMenuService } from 'app/services/contextmenu';
 import { DashboardComponent, TableviewComponent, GridviewComponent, IteminfoComponent,
          AppSidebarComponent, FoldersTreeComponent, UploadBottomSheetComponent} from './dashboard';
@@ -79,6 +79,7 @@ import { MoveItemComponent } from './dialogbox/moveitem/moveitem.component';
   ],
   providers: [
     AuthService,
+    UploadService,
     AuthGuardService,
     FileManagerService,
     UserStorageService,

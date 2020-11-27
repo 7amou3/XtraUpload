@@ -6,7 +6,7 @@ import { ReplaySubject } from 'rxjs';
 import { isFile } from './helpers';
 import { IItemInfo, itemAction, IFolderInfo, IFileInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
-import { FileManagerService } from 'app/services';
+import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 
 /** Manages the common functionalities of a filemanager component  */
@@ -24,6 +24,7 @@ export abstract class FilemanagerBase extends ComponentBase {
 
   constructor(
     protected filemanagerService: FileManagerService,
+    protected uploadService: UploadService,
     public ctxMenuService: FileMngContextMenuService,
     private apiUrl: string) {
     super();
@@ -66,7 +67,7 @@ export abstract class FilemanagerBase extends ComponentBase {
       .subscribe(folder => {
         this.handleRenameFolder(folder);
       });
-    this.filemanagerService.fileUploaded$
+    this.uploadService.fileUploaded$
       .pipe(takeUntil(this.onDestroy))
       .subscribe(file => {
         this.handleNewFile(file);

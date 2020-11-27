@@ -1,7 +1,7 @@
 import {Component, Output, EventEmitter, OnInit, Input} from '@angular/core';
 import { IFolderInfo, IUploadSettings } from 'app/domain';
 import { ComponentBase } from 'app/shared';
-import { FileManagerService, UserStorageService, AuthService } from 'app/services';
+import { FileManagerService, UserStorageService, AuthService, UploadService } from 'app/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -18,6 +18,7 @@ export class AppSidebarComponent extends ComponentBase implements OnInit {
   username: string;
   constructor(
     private fileMngService: FileManagerService,
+    private uploadService: UploadService,
     private storageService: UserStorageService,
     private authService: AuthService) {
     super();
@@ -33,7 +34,7 @@ export class AppSidebarComponent extends ComponentBase implements OnInit {
     }
 
     // subscribe to successful upload to update progressbar size status
-    this.fileMngService.fileUploaded$
+    this.uploadService.fileUploaded$
     .pipe(takeUntil(this.onDestroy))
     .subscribe(
       file => {

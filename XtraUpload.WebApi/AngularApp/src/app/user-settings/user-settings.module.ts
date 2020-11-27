@@ -19,7 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'app/shared';
 import { PipeModule } from 'app/shared/pipe-modules';
 import { UserSettingsRoutes } from './user-setting.routing';
-import { FileManagerService, SettingsService, UserStorageService, AuthGuardService } from 'app/services';
+import { FileManagerService, SettingsService, UserStorageService, AuthGuardService, UploadService } from 'app/services';
 import {SettingsComponent, OverviewComponent, UserinfoComponent, ChangePasswordComponent,
     AvatarComponent } from './';
 import { ImageCropperModule } from 'ngx-image-cropper';
@@ -60,6 +60,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     providers: [
         SettingsService,
         AuthGuardService,
+        UploadService,
         FileManagerService,
         UserStorageService
     ]

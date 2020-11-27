@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import * as tus from 'tus-js-client';
 import { UserStorageService } from './user.storage.service';
 import {
-  IFolderModel, IItemInfo, IFolderInfo, UploadStatus,
+  IFolderModel, IItemInfo, IFolderInfo,
   IFileInfo, MovedItemsModel, ICreateFolderModel, IRenameItemModel, IDownload, IUploadSettings,
   IAccountOverview, IBulkDelete
 } from '../domain';
 import { isFile } from 'app/filemanager/dashboard/helpers';
-import { HttpResponse } from 'tus-js-client';
 
 @Injectable()
 export class FileManagerService {
@@ -24,8 +22,6 @@ export class FileManagerService {
   fileRenamed$ = new Subject<IFileInfo>();
   /** Emited when a folder has been renamed */
   folderRenamed$ = new Subject<IFolderInfo>();
-  /** Emited when a file has been successfully uploaded */
-  fileUploaded$ = new Subject<IFileInfo>();
   /** Emited when a file availability changed */
   fileAvailabilityChanged$ = new Subject<IFileInfo>();
   /** Emited when a folder availability changed */
@@ -119,8 +115,8 @@ export class FileManagerService {
       .toPromise();
   }
 
-  getFile(fileId: string): Observable<IFileInfo> {
-    return this.http.get<IFileInfo>('file/requestdownload/' + fileId);
+  async getFile(fileId: string): Promise<IFileInfo> {
+    return this.http.get<IFileInfo>('file/requestdownload/' + fileId).toPromise();
   }
 
   deleteItems(items: IItemInfo[]): Observable<IBulkDelete> {
@@ -146,72 +142,6 @@ export class FileManagerService {
         })
       );
   }
-
-  startUpload(file: File, uploadSettings: IUploadSettings, urlPath: string, folderId: string): Observable<UploadStatus> {
-    let upload: tus.Upload;
-    const event = new Subject<UploadStatus>();
-    const uploadStatus = new UploadStatus();
-    uploadStatus.filename = file.name;
-    uploadStatus.size = file.size;
-
-    const onTusError = (error) => {
-      uploadStatus.status = 'Error';
-      uploadStatus.message = error;
-      event.next(uploadStatus);
-    };
-    const onAfterResponse = (req, res: HttpResponse) => {
-      if (res.getStatus() == 204) {
-        uploadStatus.uploadData = JSON.parse(res.getHeader("upload-data"));
-      }
-    };
-    const onTusSuccess = () => {
-      uploadStatus.status = 'Success';
-      uploadStatus.fileId = upload.url.split('/').pop();
-      event.next(uploadStatus);
-      if (urlPath === 'fileupload') {
-        const file = uploadStatus.uploadData as IFileInfo;
-        file.createdAt = new Date();
-        file.lastModified = new Date();
-        this.fileUploaded$.next(uploadStatus.uploadData as IFileInfo);
-      }
-    };
-    const onTusProgress = (bytesUploaded: number, bytesTotal: number): void => {
-      const progress = (bytesUploaded / bytesTotal * 100).toFixed(1);
-      uploadStatus.status = 'InProgress';
-      // uploadStatus.fileId = upload.url.split('/').pop();
-      uploadStatus.message = progress as Object;
-      event.next(uploadStatus);
-    };
-    // add '/' at the end of the url if not exist
-    const address = uploadSettings.storageServer.address.replace(/\/?$/, '/');
-    // Defaut urlPath for tus is [fileupload or avatarupload] as configured in the server
-    const uri = address + urlPath;
-
-    upload = new tus.Upload(file,
-      {
-        endpoint: uri,
-        chunkSize: uploadSettings.chunkSize === 0 ? 25 * 1024 * 1024 : uploadSettings.chunkSize,
-        onError: onTusError,
-        onProgress: onTusProgress,
-        onSuccess: onTusSuccess,
-        onAfterResponse: onAfterResponse,
-        retryDelays: [0, 3000, 5000, 10000, 20000],
-        metadata: {
-          name: file.name,
-          contentType: file.type || 'application/octet-stream',
-          folderId: folderId,
-          serverId: uploadSettings.storageServer.id
-        },
-        headers: {
-          'authorization': 'Bearer ' + this.storageService.getToken()
-        }
-      });
-    // Start the upload
-    upload.start();
-
-    return event;
-  }
-
   updateFileAvailability(file: IItemOnlineAvailability) {
     return this.http.patch<IFileInfo>('file/fileavailability', { fileid: file.itemId, available: file.available })
       .pipe(
@@ -225,11 +155,11 @@ export class FileManagerService {
       );
   }
 
-  generateDownloadLink(fileid: string): Observable<IDownload> {
-    return this.http.get<IDownload>('file/templink/' + fileid);
+  async generateDownloadLink(fileid: string): Promise<IDownload> {
+    return this.http.get<IDownload>('file/templink/' + fileid).toPromise();
   }
 
-  startDownload(url: string): Observable<Blob> {
+  startDownload(url: string): Promise<Blob> {
     return this.http.get(url, {
       responseType: 'blob',
       reportProgress: true,
@@ -237,11 +167,12 @@ export class FileManagerService {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${this.storageService.getToken()}`
       }
-    });
+    })
+    .toPromise();
   }
 
-  getUploadSetting(): Observable<IUploadSettings> {
-    return this.http.get<IUploadSettings>('setting/uploadsetting');
+  async getUploadSetting(): Promise<IUploadSettings> {
+    return this.http.get<IUploadSettings>('setting/uploadsetting').toPromise();
   }
 
   getAccountOverview(): Observable<IAccountOverview> {

@@ -1,4 +1,5 @@
 import { IProfile } from '.';
+import * as tus from 'tus-js-client'
 
 /** Represent a file or a folder */
 export interface IItemInfo {
@@ -117,6 +118,7 @@ export interface IFlatNode {
 }
 
 export class UploadStatus {
+  instance: tus.Upload;
   status: 'Unknown' | 'ToDo' | 'InProgress' | 'Success' | 'Error';
   filename: string;
   fileId: string;

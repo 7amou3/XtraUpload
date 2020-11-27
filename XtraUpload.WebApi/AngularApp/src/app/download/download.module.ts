@@ -21,7 +21,7 @@ import { RouterModule } from '@angular/router';
 import { MessageModule, FooterModule } from '../shared';
 import { PipeModule } from '../shared/pipe-modules';
 import { DownloadRoutes } from './download.routing';
-import { FileManagerService } from 'app/services';
+import { FileManagerService, UploadService } from 'app/services';
 import { FileComponent } from './file/file.component';
 import { FolderComponent } from './folder/folder.component';
 import { SidebarComponent } from './folder/sidebar/sidebar.component';
@@ -62,6 +62,7 @@ import { FileMngContextMenuService, SnavContextMenuService } from 'app/services/
   ],
   providers: [
     FileManagerService,
+    UploadService,
     FileMngContextMenuService,
     SnavContextMenuService
   ]
