@@ -9,17 +9,13 @@
     <mat-sidenav-content>
         <mat-card>
             <div fxLayout="row wrap">
-                <mat-progress-bar *ngIf="isBusy" mode="query"></mat-progress-bar>
+                <mat-progress-bar *ngIf="isBusy" color="accent" mode="query"></mat-progress-bar>
                 <h4 class="card-title m-l-15" i18n>Folder content</h4>
             </div>
             <mat-divider></mat-divider>
             <mat-card-content style="min-height: 500px;">
                 <app-message [message$]="message$"></app-message>
                 <app-tableview [folderContent$]="folderContent$"></app-tableview>
-                <!--Query in progress-->
-                <div *ngIf="isBusy" fxLayout="row wrap" fxLayoutAlign="center center">
-                    <mat-spinner color="accent" style="margin-top: 80px;"></mat-spinner>
-                </div>
                 <!--Empty folder-->
                 <div *ngIf="(folderContent$ | async)?.length == 0" fxlayoutalign="center center">
                     <div class="text-center no-records">

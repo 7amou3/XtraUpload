@@ -78,8 +78,9 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
     if (this.isdroppableArea(folder) === false) {
       return;
     }
-    
-    await this.filemanagerService.requestMoveItems(this.selections, folder.id);
+    this.filemanagerService.notifyBusy(true);
+    await this.filemanagerService.requestMoveItems(this.selections, folder.id)
+    .finally(() => this.filemanagerService.notifyBusy(false));
   }
 
   /** Invoked when item(s) has moved successfully */

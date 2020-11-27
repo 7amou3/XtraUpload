@@ -29,14 +29,9 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
   async ngOnInit() {
     this.isBusy = true;
     await this.fileMngService.getUploadSetting()
-      .then(setting => {
-        this.isBusy = false
-        this.uploadSetting$.next(setting);
-      })
-      .catch(error => {
-        this.uploadSetting$.next(null);
-        throw error;
-      });
+      .then(setting => this.uploadSetting$.next(setting))
+      .catch(() => this.uploadSetting$.next(null))
+      .finally(() => this.isBusy = false);
     this.fileMngService.storageQuotaReached$
       .pipe(takeUntil(this.onDestroy))
       .subscribe(storageLimitReached => {

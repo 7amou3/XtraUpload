@@ -15,6 +15,7 @@
 
         <mat-sidenav-content>
               <!-- Header section-->
+              <mat-progress-bar color="accent" *ngIf="isBusy" mode="query"></mat-progress-bar>
               <mat-card class="m-0">
                   <div class="p-l-20 p-t-20 p-b-5">
                     <h4 class="card-title m-0" i18n>My Files & Folders</h4>
@@ -60,10 +61,6 @@
                 <mat-card-content style="min-height: 530px">
                   <app-tableview *ngIf="displayMode == 'list'" [folderContent$]="folderContent$"></app-tableview>
                   <app-gridview *ngIf="displayMode == 'grid'" [folderContent$]="folderContent$"></app-gridview>
-                  <!--Query in progress-->
-                  <div *ngIf="isBusy" fxLayout="row wrap" fxLayoutAlign="center center">
-                    <mat-spinner color="accent" style="margin-top: 80px;"></mat-spinner>
-                  </div>
                   <!--Empty folder-->
                   <div *ngIf="(folderContent$ | async)?.length == 0" 
                         fxlayoutalign="center center">

@@ -4,7 +4,6 @@ import { tap, map } from 'rxjs/operators';
 import { GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { IProfile, ILoginParams, ISignupParams, RecoverPassword, IExtendedSocialUser } from 'app/domain';
 import { UserStorageService } from './user.storage.service';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -61,37 +60,31 @@ export class AuthService {
       )
       .toPromise();
   }
-  requestSignup(signupParams: ISignupParams) {
-    return this.http.post('user/register', signupParams);
+  async requestSignup(signupParams: ISignupParams) {
+    return this.http.post('user/register', signupParams).toPromise();
   }
-  resetPassword(lostPwdParams) {
-    return this.http.post('user/lostpassword', lostPwdParams);
+  async resetPassword(lostPwdParams) {
+    return this.http.post('user/lostpassword', lostPwdParams).toPromise();
   }
-  recoverPassInfo(recoveryId: string) {
-    return this.http.get('user/pwdrecoveryinfo/' + recoveryId);
+  async recoverPassInfo(recoveryId: string) {
+    return this.http.get('user/pwdrecoveryinfo/' + recoveryId).toPromise();
   }
-  updatePassword(recoverPassword: RecoverPassword) {
-    return this.http.put('user/recoverPassword/', recoverPassword);
+  async updatePassword(recoverPassword: RecoverPassword) {
+    return this.http.put('user/recoverPassword/', recoverPassword).toPromise();
   }
-  requestConfirmEmail() {
-    return this.http.get('setting/confirmemail/');
+  async requestConfirmEmail() {
+    return this.http.get('setting/confirmemail/').toPromise();
   }
-  confirmEmail(emailToken: string) {
-    return this.http.put('setting/confirmemail/', { emailToken: emailToken });
+  async confirmEmail(emailToken: string) {
+    return this.http.put('setting/confirmemail/', { emailToken: emailToken }).toPromise();
   }
   isUserAuthicated(): boolean {
     const user = this.userStorage.getProfile();
-    if (user && user.jwtToken) {
-      return true;
-    }
-    return false;
+    return user != null && user.jwtToken != null;
   }
   isAdminAuthenticated(): boolean {
     const admin = this.userStorage.getProfile();
-    if (admin && admin.jwtToken && admin.role === 'Admin') {
-      return true;
-    }
-    return false;
+    return admin != null && admin.jwtToken != null && admin.role === 'Admin'
   }
   signOut(): void {
     this.userStorage.clearLocalStorage();

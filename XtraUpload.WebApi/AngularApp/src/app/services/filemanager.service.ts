@@ -30,9 +30,17 @@ export class FileManagerService {
   folderTreeChanged$ = new Subject<IFolderInfo[]>();
   storageQuotaReached$ = new ReplaySubject<boolean>();
   itemsMoved$ = new Subject<string[]>();
+  private isbusy$ = new Subject<boolean>();
+  serviceBusy$ = this.isbusy$.asObservable();
+
   constructor(
     private http: HttpClient,
     private storageService: UserStorageService) { }
+
+  /** Notify whether the service is busy */
+  notifyBusy(val: boolean): void {
+    return this.isbusy$.next(val);
+  }
 
   /** Get all folders */
   getAllFolders(): Observable<IFolderInfo[]> {
@@ -43,7 +51,7 @@ export class FileManagerService {
     return this.http.get<IFolderInfo[]>('folder/folders/' + folderid).toPromise();
   }
   /** Get files and folders within a folder */
-  getFolderContent(folderid?: string): Promise<IItemInfo[]> {
+  async getFolderContent(folderid?: string): Promise<IItemInfo[]> {
     let url = 'folder/';
     if (folderid) {
       url = url.concat(folderid);
@@ -75,7 +83,7 @@ export class FileManagerService {
     });
     return this.http.put('file/moveitems', new MovedItemsModel(files, folders, destFolderId))
       .pipe(
-        map((result: any) => {
+        tap((result: any) => {
           if (result) {
             this.folderTreeChanged$.next(result.folders);
             this.itemsMoved$.next(result.movedItemsIds);
@@ -119,7 +127,7 @@ export class FileManagerService {
     return this.http.get<IFileInfo>('file/requestdownload/' + fileId).toPromise();
   }
 
-  deleteItems(items: IItemInfo[]): Observable<IBulkDelete> {
+  async deleteItems(items: IItemInfo[]): Promise<IBulkDelete> {
     const files = [];
     const folders = [];
     items.forEach(item => {
@@ -140,26 +148,25 @@ export class FileManagerService {
             this.subFolderDeleted$.next(folder.folders[folder.folders.length - 1]);
           });
         })
-      );
+      )
+      .toPromise();
   }
-  updateFileAvailability(file: IItemOnlineAvailability) {
+  async updateFileAvailability(file: IItemOnlineAvailability) {
     return this.http.patch<IFileInfo>('file/fileavailability', { fileid: file.itemId, available: file.available })
-      .pipe(
-        tap(data => this.fileAvailabilityChanged$.next(data))
-      );
+      .pipe(tap(data => this.fileAvailabilityChanged$.next(data)))
+      .toPromise();
   }
-  updateFolderAvailability(folder: IItemOnlineAvailability) {
+  async updateFolderAvailability(folder: IItemOnlineAvailability) {
     return this.http.patch<IFolderInfo>('folder/folderavailability', { folderid: folder.itemId, available: folder.available })
-      .pipe(
-        tap(data => this.folderAvailabilityChanged$.next(data))
-      );
+      .pipe(tap(data => this.folderAvailabilityChanged$.next(data)))
+      .toPromise();
   }
 
   async generateDownloadLink(fileid: string): Promise<IDownload> {
     return this.http.get<IDownload>('file/templink/' + fileid).toPromise();
   }
 
-  startDownload(url: string): Promise<Blob> {
+  async startDownload(url: string): Promise<Blob> {
     return this.http.get(url, {
       responseType: 'blob',
       reportProgress: true,
@@ -168,15 +175,15 @@ export class FileManagerService {
         Authorization: `Bearer ${this.storageService.getToken()}`
       }
     })
-    .toPromise();
+      .toPromise();
   }
 
   async getUploadSetting(): Promise<IUploadSettings> {
     return this.http.get<IUploadSettings>('setting/uploadsetting').toPromise();
   }
 
-  getAccountOverview(): Observable<IAccountOverview> {
-    return this.http.get<IAccountOverview>('setting/accountoverview');
+  async getAccountOverview(): Promise<IAccountOverview> {
+    return this.http.get<IAccountOverview>('setting/accountoverview').toPromise();
   }
 }
 

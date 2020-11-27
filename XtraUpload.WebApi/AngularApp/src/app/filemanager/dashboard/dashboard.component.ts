@@ -3,7 +3,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSidenav } from '@angular/material/sidenav';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Subject, ReplaySubject, merge } from 'rxjs';
 import { ComponentBase } from 'app/shared';
 import { IItemInfo, IFolderInfo, itemAction, IUploadSettings} from 'app/domain';
@@ -55,7 +55,11 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     .subscribe(async params => {
       await this.getFolderContent(params.get('folder'));
     });
-
+    this.filemanagerService.serviceBusy$
+    .pipe(takeUntil(this.onDestroy))
+    .subscribe(isbusy => {
+      this.isBusy = isbusy;
+    });
     // Display sidenav menu on request
     merge(
       this.mainCtxMenuService.itemInfoRequested$,
@@ -67,7 +71,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
       this.sidenav.open();
     });
     // Get the upload setting
-    await this.filemanagerService.getUploadSetting()
+    this.filemanagerService.getUploadSetting()
     .then(uploadSetting => {
       this.uploadSetting$.next(uploadSetting);
     });
@@ -96,10 +100,10 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.filemanagerService.getFolderContent(folderId)
     .then( data => {
-      this.isBusy = false
       this.folderContent$.next(data);
     })
-    .catch(error => this.handleError(error)); 
+    .catch(error => this.handleError(error))
+    .finally(() => this.isBusy = false);
   }
 
   changeDisplay(display: 'list' | 'grid') {

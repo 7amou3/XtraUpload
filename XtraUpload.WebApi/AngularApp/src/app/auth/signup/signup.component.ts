@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ComponentBase } from 'app/shared';
-import { takeUntil, finalize } from 'rxjs/operators';
 import { ISignupParams } from 'app/domain';
 import { AuthService, SeoService, UserStorageService } from 'app/services';
 
@@ -32,29 +31,22 @@ export class SignupComponent extends ComponentBase implements OnInit {
       email: this.email,
       userName: this.userName,
       password: this.password,
-      termsOfService : this.termsOfService
+      termsOfService: this.termsOfService
     });
   }
   getEmailErrorMessage() {
     return this.email.hasError('required') ? $localize`You must enter a value` :
-        this.email.hasError('email') ? $localize`Not a valid email` : '';
+      this.email.hasError('email') ? $localize`Not a valid email` : '';
   }
-  onSubmit(signupParams: ISignupParams) {
+  async onSubmit(signupParams: ISignupParams) {
     this.isBusy = true;
     signupParams.language = this.userStorage.getUserLang();
-    this.authService.requestSignup(signupParams)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
-        this.message$.next({successMessage: $localize`Account successfully created, please log in.`});
+    await this.authService.requestSignup(signupParams)
+      .then(() => {
+        this.message$.next({ successMessage: $localize`Account successfully created, please log in.` });
         this.resetForm(this.signupFormGroup);
-      },
-      error => {
-        this.message$.next({errorMessage: error?.error?.errorContent?.message});
-        throw error;
-      }
-    );
+      })
+      .catch(error => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .finally(() => this.isBusy = false);
   }
 }

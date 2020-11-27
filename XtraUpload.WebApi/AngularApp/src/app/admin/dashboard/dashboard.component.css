@@ -2,3 +2,8 @@
 .m-t-23 {
     margin-top: 23px;
 }
+.mat-progress-bar {
+    z-index: 9999;
+    top: 0px;
+    position: absolute;
+}

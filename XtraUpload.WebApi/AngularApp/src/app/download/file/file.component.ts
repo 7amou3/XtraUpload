@@ -48,7 +48,6 @@ export class FileComponent extends ComponentBase implements OnInit {
           // Get file info from the server
           await this.fileMngService.getFile(fileId)
             .then(file => {
-              this.isBusy = false;
               this.fileItem = file;
               this.seoService.setPageTitle($localize`Download` + ' ' + file.name);
               this.startCountDownTimer(file.waitTime);
@@ -58,7 +57,8 @@ export class FileComponent extends ComponentBase implements OnInit {
                 this.message$.next({ errorMessage: err.error.errorContent.message });
               }
               throw err;
-            });
+            })
+            .finally(() => this.isBusy = false);
         }
       );
     this.progressService.getProgress$()
@@ -121,15 +121,15 @@ export class FileComponent extends ComponentBase implements OnInit {
     if (!this.timerInProgress) {
       await this.fileMngService.generateDownloadLink(this.fileItem.id)
         .then(data => {
-          this.requestInProgress = false
           this.downloadurl = data.downloadurl;
         })
         .catch((error) => {
           if (error.error?.errorContent?.message) {
             this.message$.next({ errorMessage: error.error.errorContent.message });
           }
-          throw error;
-        });
+          else throw error;
+        })
+        .finally(() => this.requestInProgress = false);
     }
   }
   async startDownload() {

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileManagerService, SidenavService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { IItemInfo } from 'app/domain';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -49,15 +49,15 @@ export class FolderComponent extends ComponentBase implements OnInit {
         else {
           await this.fileMngService.getPublicFolderContent(this.folderId, this.subfolderId)
           .then((items) => {
-              this.isBusy = false;
               this.folderContent$.next(items);
           })
           .catch((err) => {
             if (err.error?.errorContent?.message) {
               this.message$.next({errorMessage: err.error.errorContent.message});
             }
-            throw err;
-          });
+            else throw err;
+          })
+          .finally(() => this.isBusy = false);
         }
       }
     );

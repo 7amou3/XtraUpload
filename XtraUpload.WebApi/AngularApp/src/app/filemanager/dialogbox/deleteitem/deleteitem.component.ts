@@ -4,7 +4,6 @@ import { IItemInfo, IBulkDelete } from 'app/domain';
 import { isFile } from '../../dashboard/helpers';
 import { ComponentBase } from 'app/shared';
 import { FileManagerService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-deleteitem',
@@ -16,39 +15,36 @@ export class DeleteItemComponent extends ComponentBase {
     private fileManagerService: FileManagerService,
     private dialogRef: MatDialogRef<DeleteItemComponent>,
     @Inject(MAT_DIALOG_DATA) private items: IItemInfo[]) {
-      super();
-      if (items.length > 1) {
-        let fileCount = 0, folderCount = 0;
-        items.forEach(f => {
-          if (isFile(f)) {
-            fileCount++;
-          }
-          else folderCount++;
-        });
-        this.message = folderCount === 1 ? $localize`1 folder` :
+    super();
+    if (items.length > 1) {
+      let fileCount = 0, folderCount = 0;
+      items.forEach(f => {
+        if (isFile(f)) {
+          fileCount++;
+        }
+        else folderCount++;
+      });
+      this.message = folderCount === 1 ? $localize`1 folder` :
         folderCount > 1 ? $localize`${folderCount} folders` : '';
 
-        this.message += folderCount > 0 && fileCount > 0 ? ', ' : '';
+      this.message += folderCount > 0 && fileCount > 0 ? ', ' : '';
 
-        this.message += fileCount === 1 ? $localize`1 file` :
+      this.message += fileCount === 1 ? $localize`1 file` :
         fileCount > 1 ? $localize`${fileCount} files` : '';
-      }
-      else {
-        this.message = items[0].name;
-      }
+    }
+    else {
+      this.message = items[0].name;
+    }
   }
 
-  onDelete() {
+  async onDelete() {
     this.isBusy = true;
-    this.fileManagerService.deleteItems(this.items)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        (deletedItems: IBulkDelete) => {
-          this.dialogRef.close(deletedItems);
-        }
-      );
+    await this.fileManagerService.deleteItems(this.items)
+      .then((deletedItems: IBulkDelete) => {
+        this.dialogRef.close(deletedItems);
+      })
+      .catch(error => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
 
 }

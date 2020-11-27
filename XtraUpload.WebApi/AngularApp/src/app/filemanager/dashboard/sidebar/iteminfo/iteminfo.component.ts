@@ -46,14 +46,16 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
         }
       );
   }
-  onAvailableItemChange(event: MatSlideToggleChange) {
-    let serviceCall$: Observable<IItemInfo> = this.fileMngService.updateFolderAvailability({ itemId: this.itemInfo.id, available: event.checked });
+  async onAvailableItemChange(event: MatSlideToggleChange) {
+    let serviceCall: Promise<IFileInfo | IFolderInfo>;
     if (isFile(this.itemInfo)) {
-      serviceCall$ = this.fileMngService.updateFileAvailability({ itemId: this.itemInfo.id, available: event.checked });
+      serviceCall = this.fileMngService.updateFileAvailability({ itemId: this.itemInfo.id, available: event.checked });
     }
-
-    serviceCall$
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(/*Item info will be pulled from itemInfo$ input*/);
+    else {
+      serviceCall = this.fileMngService.updateFolderAvailability({ itemId: this.itemInfo.id, available: event.checked });
+    }
+    
+    await serviceCall.then(/*Item info will be pulled from itemInfo$ input*/)
+    .catch(error => this.handleError(error));
   }
 }

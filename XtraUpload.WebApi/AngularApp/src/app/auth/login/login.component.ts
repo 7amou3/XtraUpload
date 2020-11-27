@@ -31,20 +31,17 @@ export class LoginComponent extends ComponentBase implements OnInit {
   }
   getEmailErrorMessage() {
     return this.email.hasError('required') ? $localize`You must enter a value` :
-        this.email.hasError('email') ? $localize`Not a valid email` : '';
+      this.email.hasError('email') ? $localize`Not a valid email` : '';
   }
   async onSubmit(loginParams: ILoginParams) {
     this.isBusy = true;
     await this.authService.requestLogin(loginParams)
-    .then((data) => {
+      .then((data) => {
         // Reload the entire app
-        window.location.href = data.role === 'Admin' ? '/administration' :  '/filemanager';
+        window.location.href = data.role === 'Admin' ? '/administration' : '/filemanager';
       })
-      .catch((error) => {
-        this.isBusy = false;
-        this.message$.next({errorMessage: error?.error?.errorContent?.message});
-        throw error;
-      });
+      .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .finally(() => this.isBusy = false);
   }
   onSMMessage(message: IGenericMessage) {
     this.message$.next(message);

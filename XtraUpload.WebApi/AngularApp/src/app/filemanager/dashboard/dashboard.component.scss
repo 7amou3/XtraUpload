@@ -3,7 +3,12 @@
   right: 17px;
   top: 52px;
 }
-
+.mat-progress-bar {
+ 
+  z-index: 9999;
+  top: 0px;
+  position: absolute;
+}
 .bread-crumb {
   min-height: 24px;
   .mat-icon {

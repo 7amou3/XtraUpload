@@ -37,9 +37,9 @@ export class MoveItemComponent extends TreeBase implements OnInit {
     this.isBusy = true;
     await this.filemanagerService.requestMoveItems(this.items, this.selectedFolderId)
     .then(() => {
-        this.isBusy = false;
         this.dialogRef.close();
     })
-    .catch(error => this.handleError(error));
+    .catch(error => this.handleError(error))
+    .finally(() => this.isBusy = false);
   }
 }
