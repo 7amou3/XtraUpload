@@ -16,22 +16,22 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
     private localAuth: AuthService,
     private socialAuth: SocialAuthService,
     private userStorage: UserStorageService
-    ) {
+  ) {
     super();
   }
 
   signInWithGoogle(): void {
     this.socialAuth
-    .signIn(GoogleLoginProvider.PROVIDER_ID)
-    .then(async user => await this.process(user));
+      .signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then(async user => await this.process(user));
   }
 
   ngOnInit(): void {
   }
   signInWithFB(): void {
     this.socialAuth
-    .signIn(FacebookLoginProvider.PROVIDER_ID)
-    .then(async user => await this.process(user));
+      .signIn(FacebookLoginProvider.PROVIDER_ID)
+      .then(async user => await this.process(user));
   }
 
   async process(user: SocialUser) {
@@ -39,14 +39,11 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
     let exUser: IExtendedSocialUser = Object.create(user);
     exUser.language = this.userStorage.getUserLang().culture;
     await this.localAuth.socialmediaAuth(exUser)
-    .then(() => 
+      .then(() =>
         // Reload the entire app
         window.location.href = '/filemanager')
-    .catch(error => {
-      this.isBusy = false;
-      this.loginMessage.emit({errorMessage: error?.error?.errorContent?.message});
-      throw error;
-    })
+      .catch(error => this.loginMessage.emit({ errorMessage: error?.error?.errorContent?.message }))
+      .finally(() => this.isBusy = false)
   }
 
 }

@@ -19,8 +19,7 @@ export class AuthService {
           }
           this.userStorage.saveUser(profile);
         })
-      )
-      .toPromise();
+      ).toPromise();
   }
   async socialmediaAuth(user: IExtendedSocialUser) {
     return this.http.post<IProfile>('user/socialauth', user)
@@ -33,7 +32,7 @@ export class AuthService {
           }
           this.userStorage.saveUser(profile);
         })
-      );
+      ).toPromise();
   }
   loadConfig(): Promise<SocialAuthServiceConfig> {
     return this.http.get('setting/socialauthconfig')

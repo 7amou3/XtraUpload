@@ -37,38 +37,44 @@ export abstract class ServerDialogBase extends ComponentBase implements OnInit {
         this.checkingConnectivity = true;
 
         // Check connectivity
-        const result: any = await this.adminService.checkstorageconnectivity(this.address.value)
-            .finally(() => this.checkingConnectivity = false);
-        this.addressReachable = result?.state == 0;
-        // Check request status
-        if (result.state != 0) {
-            this.message$.next({ errorMessage: result?.errorContent?.message });
-            return;
-        }
-        this.address.setErrors(null);
-        this.message$.next({ successMessage: 'The storage server is up and running' });
+        await this.adminService.checkstorageconnectivity(this.address.value)
+            .then(async (result: any) => {
+                this.addressReachable = result?.state == 0;
+                // Check request status
+                if (result.state != 0) {
+                    this.message$.next({ errorMessage: result?.errorContent?.message });
+                    return;
+                }
+                this.address.setErrors(null);
+                this.message$.next({ successMessage: 'The storage server is up and running' });
 
-        // Retrieve storage server upload configuration
-        const uploadCfg: any = await this.adminService.getUploadConfigrConfig(this.address.value);
-        // Check request status
-        if (uploadCfg.state != 0) {
-            this.message$.next({ errorMessage: uploadCfg?.errorContent?.message });
-            return;
-        }
-        this.switchControls(true);
-        this.uploadPath.setValue(uploadCfg.uploadOpts.uploadPath);
-        this.chunkSize.setValue(uploadCfg.uploadOpts.chunkSize);
-        this.expiration.setValue(uploadCfg.uploadOpts.expiration);
-        
-        // Retrieve storage server hardware configuration
-        const harddwareCfg: any = await this.adminService.getHardwareConfig(this.address.value);
-        // Check request status
-        if (harddwareCfg.state != 0) {
-            this.message$.next({ errorMessage: harddwareCfg?.errorContent?.message });
-            return;
-        }
-        this.memoryThreshold.setValue(harddwareCfg.hardwareOptions.memoryThreshold);
-        this.storageThreshold.setValue(harddwareCfg.hardwareOptions.storageThreshold);
+                // Retrieve storage server upload configuration
+                this.adminService.getUploadConfigrConfig(this.address.value)
+                    .then((uploadCfg: any) => {
+                        // Check request status
+                        if (uploadCfg.state != 0) {
+                            this.message$.next({ errorMessage: uploadCfg?.errorContent?.message });
+                            return;
+                        }
+                        this.switchControls(true);
+                        this.uploadPath.setValue(uploadCfg.uploadOpts.uploadPath);
+                        this.chunkSize.setValue(uploadCfg.uploadOpts.chunkSize);
+                        this.expiration.setValue(uploadCfg.uploadOpts.expiration);
+                    });
+                // Retrieve storage server hardware configuration
+                this.adminService.getHardwareConfig(this.address.value)
+                    .then((harddwareCfg: any) => {
+                        // Check request status
+                        if (harddwareCfg.state != 0) {
+                            this.message$.next({ errorMessage: harddwareCfg?.errorContent?.message });
+                            return;
+                        }
+                        this.memoryThreshold.setValue(harddwareCfg.hardwareOptions.memoryThreshold);
+                        this.storageThreshold.setValue(harddwareCfg.hardwareOptions.storageThreshold);
+                    });
+            })
+            .finally(() => this.checkingConnectivity = false);
+
     }
     protected switchControls(enabled: boolean) {
         if (enabled) {
