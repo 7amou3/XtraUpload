@@ -6,7 +6,7 @@ import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
 import { Subject } from 'rxjs';
 import { IFileTypeCount } from 'app/domain';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-piechart',
@@ -58,16 +58,16 @@ export class PiechartComponent extends ComponentBase implements OnInit {
     }
     if (this.chart !== undefined) {
       this.chart.update();
-   }
+    }
   }
   reloadChart() {
     if (this.chart !== undefined) {
-       this.chart.chart.destroy();
-       this.chart.data = this.pieChartData;
-       this.chart.labels = this.pieChartLabels;
-       this.chart.ngOnInit();
+      this.chart.chart.destroy();
+      this.chart.data = this.pieChartData;
+      this.chart.labels = this.pieChartLabels;
+      this.chart.ngOnInit();
     }
-}
+  }
   rangeFilter(d: Date): boolean {
     return d.getTime() < new Date().getTime();
   }
@@ -79,17 +79,11 @@ export class PiechartComponent extends ComponentBase implements OnInit {
       case 3: return 'Multimedia';
     }
   }
-  onSearchItemsSubmit() {
+  async onSearchItemsSubmit() {
     this.isBusy = true;
-    this.adminService.filetypeStat({ start: this.start.value, end: this.end.value })
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        (data) => {
-          this.populatePieChart(data);
-        },
-        (error) => this.handleError(error)
-      );
+    await this.adminService.filetypeStat({ start: this.start.value, end: this.end.value })
+      .then((data) => this.populatePieChart(data))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
 }

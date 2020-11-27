@@ -3,7 +3,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IFileExtension } from 'app/domain';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-delete',
@@ -17,20 +16,15 @@ export class DeleteComponent extends ComponentBase implements OnInit {
     @Inject(MAT_DIALOG_DATA) public item: IFileExtension
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
   }
-  onDelete() {
+  async onDelete() {
     this.isBusy = true;
-    this.adminService.deleteExtension(this.item)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
-        this.dialogRef.close(this.item);
-      }, (error) => this.handleError(error)
-    );
+    await this.adminService.deleteExtension(this.item)
+      .then(() => this.dialogRef.close(this.item))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
 }

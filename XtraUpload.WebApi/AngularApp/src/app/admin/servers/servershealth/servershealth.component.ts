@@ -20,14 +20,8 @@ export class ServershealthComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getStorageServers()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (servers) => {
-          this.serversHealth = servers;
-        }
-      );
+      .then(servers => this.serversHealth = servers)
+      .finally(() => this.adminService.notifyBusy(false));
   }
   onServerStatus(eventOutput, server: IServerHealth) {
     server.status = eventOutput;

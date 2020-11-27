@@ -6,7 +6,7 @@ import { IStorageServer } from 'app/domain';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { AddserverComponent } from './dialogs/addserver/addserver.component';
 import { DeleteserverComponent } from './dialogs/deleteserver/deleteserver.component';
 import { EditserverComponent } from './dialogs/editserver/editserver.component';
@@ -31,14 +31,8 @@ export class ServersComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getStorageServers()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (servers) => {
-          this.dataSource.data = servers;
-        }
-      );
+      .then(servers => this.dataSource.data = servers)
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -71,7 +65,7 @@ export class ServersComponent extends ComponentBase implements OnInit {
   onEdit() {
     const dialogRef = this.dialog.open(EditserverComponent, {
       width: '560px',
-      data: {selectedServer: this.selectedServer, serversList: this.dataSource.data}
+      data: { selectedServer: this.selectedServer, serversList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))

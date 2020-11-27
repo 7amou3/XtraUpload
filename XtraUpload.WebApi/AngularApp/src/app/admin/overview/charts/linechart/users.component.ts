@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { AdminService } from 'app/services';
 import { IItemCount } from 'app/domain';
 import { Subject } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -17,7 +17,7 @@ export class UsersComponent extends ChartBase implements OnInit {
     private fb: FormBuilder,
     private adminService: AdminService) {
     super();
-   }
+  }
 
   ngOnInit(): void {
     this.lineChartData[0].label = 'Users';
@@ -28,7 +28,7 @@ export class UsersComponent extends ChartBase implements OnInit {
     });
 
     this.usersCount$
-    .pipe(takeUntil(this.onDestroy))
+      .pipe(takeUntil(this.onDestroy))
       .subscribe(
         data => {
           this.populateChart(data);
@@ -39,18 +39,12 @@ export class UsersComponent extends ChartBase implements OnInit {
     this.queryUserStats();
   }
 
-  private queryUserStats() {
+  private async queryUserStats() {
     this.isBusy = true;
-    this.adminService.userStats({start: this.start.value, end: this.end.value})
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      (data) => {
-        this.populateChart(data);
-      },
-      (error) => this.handleError(error)
-    );
+    await this.adminService.userStats({ start: this.start.value, end: this.end.value })
+      .then((data) => this.populateChart(data))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
 
 }

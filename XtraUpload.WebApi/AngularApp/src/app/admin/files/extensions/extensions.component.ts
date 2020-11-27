@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { IFileExtension, IEditExtension } from 'app/domain';
 import { ComponentBase } from 'app/shared';
@@ -32,14 +32,8 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getFileExtensions()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (ext) => {
-          this.dataSource.data = ext.sort((a, b) => (a.id - b.id));
-        }
-      );
+      .then((ext) => this.dataSource.data = ext.sort((a, b) => (a.id - b.id)))
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -72,7 +66,7 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
   onEdit() {
     const dialogRef = this.dialog.open(EditComponent, {
       width: '500px',
-      data: {selectedExt: this.selectedExt, fullExtList: this.dataSource.data}
+      data: { selectedExt: this.selectedExt, fullExtList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))

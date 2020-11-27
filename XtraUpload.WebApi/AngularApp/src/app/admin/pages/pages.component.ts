@@ -22,7 +22,7 @@ export class PagesComponent extends ComponentBase implements OnInit {
   displayedColumns: string[] = ['name', 'footerVisible', 'createdAt', 'updatedAt', 'actions'];
   dataSource = new MatTableDataSource<IPage>();
   @ViewChild('itemstable', { static: true }) itemstable: MatTable<IPage>;
-  constructor( private adminService: AdminService,
+  constructor(private adminService: AdminService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog) {
     super();
@@ -31,18 +31,12 @@ export class PagesComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getPages()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (pages) => {
-          this.dataSource.data = pages;
-        }
-      );
+      .then((pages) => this.dataSource.data = pages)
+      .finally(() => this.adminService.notifyBusy(false));
   }
 
-   /** every crud operation on table should call this method */
-   private refreshTable() {
+  /** every crud operation on table should call this method */
+  private refreshTable() {
     try {
       this.itemstable.renderRows();
     }
@@ -73,7 +67,7 @@ export class PagesComponent extends ComponentBase implements OnInit {
   onEdit() {
     const dialogRef = this.dialog.open(EditpageComponent, {
       width: '800px',
-      data: {selectedPage: this.selectedPage, fullPageList: this.dataSource.data}
+      data: { selectedPage: this.selectedPage, fullPageList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))

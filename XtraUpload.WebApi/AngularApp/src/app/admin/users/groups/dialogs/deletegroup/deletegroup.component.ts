@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
-import { finalize, takeUntil } from 'rxjs/operators';
 import { IUserRoleClaims } from 'app/domain';
 
 @Component({
@@ -17,22 +16,16 @@ export class DeletegroupComponent extends ComponentBase implements OnInit {
     @Inject(MAT_DIALOG_DATA) public item: { selectedGroup: IUserRoleClaims, fullGroupList: IUserRoleClaims[] }
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
   }
-  onDelete() {
+  async onDelete() {
     console.log(this.item);
     this.isBusy = true;
     this.adminService.deleteGroup(this.item.selectedGroup.role.id)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
-        this.dialogRef.close(this.item);
-      }, (error) => this.handleError(error)
-    );
+      .then(() => this.dialogRef.close(this.item))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
-
 }

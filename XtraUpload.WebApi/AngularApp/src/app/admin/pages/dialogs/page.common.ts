@@ -32,5 +32,5 @@ export abstract class PageCommon extends ComponentBase implements OnInit{
       this.Init();
   }
   /** Invoked when component is ready */
-  protected abstract Init();
+  protected abstract async Init();
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Inject, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { takeUntil, finalize, debounceTime} from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
@@ -19,8 +19,8 @@ interface Link {
 
   /* name of the anchor */
   name: string;
-   /* top offset px of the anchor */
-   top?: number;
+  /* top offset px of the anchor */
+  top?: number;
 }
 @Component({
   selector: 'app-settings',
@@ -32,7 +32,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   links: Link[] = [];
   jwtFormGroup: FormGroup;
   hideSecretKey = true;
-  secretKey = new FormControl('', [Validators.required, Validators.maxLength(32) ]);
+  secretKey = new FormControl('', [Validators.required, Validators.maxLength(32)]);
   validFor = new FormControl('', [Validators.required, Validators.min(1)]);
   issuer = new FormControl('', [Validators.required]);
   audience = new FormControl('', [Validators.required]);
@@ -53,7 +53,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   description = new FormControl('', [Validators.required, Validators.min(3)]);
   keywords = new FormControl('', [Validators.required, Validators.min(3)]);
   socialAuthFormGroup: FormGroup;
-  googleClientId =  new FormControl('', [Validators.required, Validators.min(3)]);
+  googleClientId = new FormControl('', [Validators.required, Validators.min(3)]);
   facebookAppId = new FormControl('', [Validators.required, Validators.min(3)]);
   jwtBusy = false;
   hdBusy = false;
@@ -101,20 +101,20 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       });
       this._scrollContainer = this.document.querySelectorAll('mat-sidenav-content')[0];
       fromEvent(this._scrollContainer, 'scroll')
-      .pipe(
-        takeUntil(this.onDestroy),
-        debounceTime(20))
-      .subscribe(() => this.onScroll());
+        .pipe(
+          takeUntil(this.onDestroy),
+          debounceTime(20))
+        .subscribe(() => this.onScroll());
     });
     this._route.fragment
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(fragment => {
-      this._urlFragment = fragment;
-      const target = document.getElementById(this._urlFragment);
-      if (target) {
-        target.scrollIntoView();
-      }
-    });
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(fragment => {
+        this._urlFragment = fragment;
+        const target = document.getElementById(this._urlFragment);
+        if (target) {
+          target.scrollIntoView();
+        }
+      });
     this.jwtFormGroup = this.fb.group({
       audience: this.audience,
       issuer: this.issuer,
@@ -145,34 +145,32 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     });
     this.adminService.notifyBusy(true);
     this.adminService.getSettings()
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.adminService.notifyBusy(false)))
-    .subscribe((data: any) => {
-      // page settings
-      this.title.setValue(data.appInfo.title);
-      this.description.setValue(data.appInfo.description);
-      this.keywords.setValue(data.appInfo.keywords);
-      // email settings
-      this.server.setValue(data.emailSettings.smtp.server);
-      this.port.setValue(data.emailSettings.smtp.port);
-      this.username.setValue(data.emailSettings.smtp.username);
-      this.password.setValue(data.emailSettings.smtp.password);
-      this.senderName.setValue(data.emailSettings.sender.name);
-      this.adminEmail.setValue(data.emailSettings.sender.admin);
-      this.supportEmail.setValue(data.emailSettings.sender.support);
-      // hardware settings
-      this.memoryThreshold.setValue(data.hardwareCheckOptions.memoryThreshold);
-      this.storageThreshold.setValue(data.hardwareCheckOptions.storageThreshold);
-      // jwt settings
-      this.audience.setValue(data.jwtIssuerOptions.audience);
-      this.issuer.setValue(data.jwtIssuerOptions.issuer);
-      this.secretKey.setValue(data.jwtIssuerOptions.secretKey);
-      this.validFor.setValue(data.jwtIssuerOptions.validFor);
-      // Social Auth settings
-      this.facebookAppId.setValue(data.socialAuthSettings.facebookAuth.appId);
-      this.googleClientId.setValue(data.socialAuthSettings.googleAuth.clientId);
-    });
+      .then((data: any) => {
+        // page settings
+        this.title.setValue(data.appInfo.title);
+        this.description.setValue(data.appInfo.description);
+        this.keywords.setValue(data.appInfo.keywords);
+        // email settings
+        this.server.setValue(data.emailSettings.smtp.server);
+        this.port.setValue(data.emailSettings.smtp.port);
+        this.username.setValue(data.emailSettings.smtp.username);
+        this.password.setValue(data.emailSettings.smtp.password);
+        this.senderName.setValue(data.emailSettings.sender.name);
+        this.adminEmail.setValue(data.emailSettings.sender.admin);
+        this.supportEmail.setValue(data.emailSettings.sender.support);
+        // hardware settings
+        this.memoryThreshold.setValue(data.hardwareCheckOptions.memoryThreshold);
+        this.storageThreshold.setValue(data.hardwareCheckOptions.storageThreshold);
+        // jwt settings
+        this.audience.setValue(data.jwtIssuerOptions.audience);
+        this.issuer.setValue(data.jwtIssuerOptions.issuer);
+        this.secretKey.setValue(data.jwtIssuerOptions.secretKey);
+        this.validFor.setValue(data.jwtIssuerOptions.validFor);
+        // Social Auth settings
+        this.facebookAppId.setValue(data.socialAuthSettings.facebookAuth.appId);
+        this.googleClientId.setValue(data.socialAuthSettings.googleAuth.clientId);
+      })
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** don't implement inerface */
   ngOnDestroy(): void {
@@ -192,85 +190,48 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   }
   /** Gets the scroll offset of the scroll container */
   private getScrollOffset(): number | void {
-    const {top} = this._element.nativeElement.getBoundingClientRect();
+    const { top } = this._element.nativeElement.getBoundingClientRect();
     if (typeof this._scrollContainer.scrollTop !== 'undefined') {
       return this._scrollContainer.scrollTop + 150;
     } else if (typeof this._scrollContainer.pageYOffset !== 'undefined') {
       return this._scrollContainer.pageYOffset + top;
     }
   }
-  onJwtSubmit(jwtParams) {
+  async onJwtSubmit(jwtParams) {
     this.jwtBusy = true;
-    this.adminService.updateJwtOpts(jwtParams)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.jwtBusy = false))
-    .subscribe(
-      () => {
-        this.showSuccessMsg('Jwt Options');
-      },
-      error => {
-        this.handleError(error);
-      }
-    );
+    await this.adminService.updateJwtOpts(jwtParams)
+      .then(() => this.showSuccessMsg('Jwt Options'))
+      .catch(error => this.handleError(error))
+      .finally(() => this.jwtBusy = false);
   }
 
-  onEmailSubmit(emailParams: IEmailSettings) {
+  async onEmailSubmit(emailParams: IEmailSettings) {
     this.emailBusy = true;
-    this.adminService.updateEmailOpts(emailParams)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.emailBusy = false))
-    .subscribe(
-      () => {
-        this.showSuccessMsg('Email Options');
-      },
-      error => {
-        this.handleError(error);
-      }
-    );
+    await this.adminService.updateEmailOpts(emailParams)
+      .then(() => this.showSuccessMsg('Email Options'))
+      .catch(error => this.handleError(error))
+      .finally(() => this.emailBusy = false);
   }
-  onHDOptionsSubmit(hardwareteParams) {
+  async onHDOptionsSubmit(hardwareteParams) {
     this.hdBusy = true;
-    this.adminService.updateHardwareOpts(hardwareteParams)
-    .pipe(takeUntil(this.onDestroy),
-          finalize(() => this.hdBusy = false))
-    .subscribe(
-      () => {
-        this.showSuccessMsg('Hardware Options');
-      },
-      error => {
-        this.handleError(error);
-      }
-    );
+    await this.adminService.updateHardwareOpts(hardwareteParams)
+      .then(() => this.showSuccessMsg('Hardware Options'))
+      .catch(error => this.handleError(error))
+      .finally(() => this.hdBusy = false);
   }
-  onPageSettingsSubmit(pageSettingParams) {
+  async onPageSettingsSubmit(pageSettingParams) {
     this.appSettingBusy = true;
-    this.adminService.updateAppInfo(pageSettingParams)
-    .pipe(takeUntil(this.onDestroy),
-      finalize(() => this.appSettingBusy = false))
-    .subscribe(
-      () => {
-        this.showSuccessMsg('Page Settings');
-      },
-      error => {
-        this.handleError(error);
-      }
-    );
+    await this.adminService.updateAppInfo(pageSettingParams)
+      .then(() => this.showSuccessMsg('Page Settings'))
+      .catch(error => this.handleError(error))
+      .finally(() => this.appSettingBusy = false);
   }
-  onSocialAuthSubmit(socialAuthParams) {
+  async onSocialAuthSubmit(socialAuthParams) {
     this.socialAuthBusy = true;
-    this.adminService.updateSocialAuthSettings(socialAuthParams)
-    .pipe(takeUntil(this.onDestroy),
-      finalize(() => this.socialAuthBusy = false))
-    .subscribe(
-      () => {
-        this.showSuccessMsg('Social Auth');
-      },
-      error => {
-        this.handleError(error);
-      }
-    );
+    await this.adminService.updateSocialAuthSettings(socialAuthParams)
+      .then(() => this.showSuccessMsg('Social Auth'))
+      .catch(error => this.handleError(error))
+      .finally(() => this.socialAuthBusy = false);
   }
   showSuccessMsg(section: string) {
     this.snackBar.open(`${section} has been updated successfully`, '', { duration: 3000 });

@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
-import { finalize, takeUntil } from 'rxjs/operators';
 import { IProfile } from 'app/domain';
 
 @Component({
@@ -17,21 +16,15 @@ export class DeleteuserComponent extends ComponentBase implements OnInit {
     @Inject(MAT_DIALOG_DATA) public users: IProfile[]
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
   }
-  onDelete() {
+  async onDelete() {
     this.isBusy = true;
     this.adminService.deleteUsers(this.users.map(s => s.id))
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
-        this.dialogRef.close(this.users);
-      }, (error) => this.handleError(error)
-    );
+      .then(() => this.dialogRef.close(this.users))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
-
 }

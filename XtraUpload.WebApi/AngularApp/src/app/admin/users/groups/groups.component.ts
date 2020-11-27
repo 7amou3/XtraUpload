@@ -36,19 +36,15 @@ export class GroupsComponent extends ComponentBase implements OnInit {
         : ['name', 'AdminAreaAccess', 'FileManagerAccess', 'DownloadSpeed', 'StorageSpace', 'MaxFileSize', 'FileExpiration', 'ConcurrentUpload', 'WaitTime', 'DownloadTTW', 'actions'];
     });
   }
-  displayedColumns: string[] = ['name', 'AdminAreaAccess', 'FileManagerAccess', 'DownloadSpeed', 'StorageSpace', 'MaxFileSize', 'FileExpiration', 'ConcurrentUpload', 'WaitTime', 'DownloadTTW', 'actions']; 
+  displayedColumns: string[] = ['name', 'AdminAreaAccess', 'FileManagerAccess', 'DownloadSpeed', 'StorageSpace', 'MaxFileSize', 'FileExpiration', 'ConcurrentUpload', 'WaitTime', 'DownloadTTW', 'actions'];
 
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getUsersGroups()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (userRole) => {
-          this.dataSource.data = userRole.sort((a, b) => (a.role.id - b.role.id));
-        }
-      );
+      .then((userRole) => {
+        this.dataSource.data = userRole.sort((a, b) => (a.role.id - b.role.id));
+      })
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -81,7 +77,7 @@ export class GroupsComponent extends ComponentBase implements OnInit {
   onEdit() {
     const dialogRef = this.dialog.open(EditgroupComponent, {
       width: '550px',
-      data: {selectedGroup: this.selectedGroup, fullGroupList: this.dataSource.data}
+      data: { selectedGroup: this.selectedGroup, fullGroupList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))
@@ -101,7 +97,7 @@ export class GroupsComponent extends ComponentBase implements OnInit {
   onDelete() {
     const dialogRef = this.dialog.open(DeletegroupComponent, {
       width: '500px',
-      data: {selectedGroup: this.selectedGroup, fullGroupList: this.dataSource.data}
+      data: { selectedGroup: this.selectedGroup, fullGroupList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))

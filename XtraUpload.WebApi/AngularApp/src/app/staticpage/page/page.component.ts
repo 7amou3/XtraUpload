@@ -26,13 +26,11 @@ export class PageComponent extends ComponentBase implements OnInit {
     .subscribe(async r => {
        await this.pageService.getPage(r.get('url'))
        .then(page => {
-        this.isBusy = false
         this.seoService.setPageTitle(page.name);
         this.page = page;
        })
-       .catch(() => {
-        this.router.navigate(['/404']);
-       });
+       .catch(() => this.router.navigate(['/404']))
+       .finally(() => this.isBusy = false);
     });
   }
 

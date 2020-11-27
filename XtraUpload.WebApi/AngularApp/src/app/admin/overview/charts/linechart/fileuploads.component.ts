@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AdminService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { IItemCount } from 'app/domain';
-import { FormBuilder} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ChartBase } from './chart.base';
 
@@ -17,7 +17,7 @@ export class FileuploadsComponent extends ChartBase implements OnInit {
     private fb: FormBuilder,
     private adminService: AdminService) {
     super();
-   }
+  }
 
   ngOnInit(): void {
     this.lineChartData[0].label = 'Uploads';
@@ -28,7 +28,7 @@ export class FileuploadsComponent extends ChartBase implements OnInit {
     });
 
     this.filesCount$
-    .pipe(takeUntil(this.onDestroy))
+      .pipe(takeUntil(this.onDestroy))
       .subscribe(
         data => {
           this.populateChart(data);
@@ -39,17 +39,11 @@ export class FileuploadsComponent extends ChartBase implements OnInit {
     this.queryUploadStats();
   }
 
-  private queryUploadStats() {
+  private async queryUploadStats() {
     this.isBusy = true;
-    this.adminService.uploadStats({start: this.start.value, end: this.end.value})
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      (data) => {
-        this.populateChart(data);
-      },
-      (error) => this.handleError(error)
-    );
+    await this.adminService.uploadStats({ start: this.start.value, end: this.end.value })
+      .then((data) => this.populateChart(data))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
 }

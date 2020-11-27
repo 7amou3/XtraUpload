@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
 import { IAdminOverView, IItemCount, IFileTypeCount } from 'app/domain';
 import { Subject } from 'rxjs';
 
@@ -21,22 +20,19 @@ export class OverviewComponent extends ComponentBase implements OnInit {
     @Inject('BASE_URL') baseUrl: string) {
     super();
     this.serverUrl = baseUrl;
-   }
+  }
 
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
-    this.adminService.Overview({start: this.subtractDate(14), end: new Date()})
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.adminService.notifyBusy(false)))
-    .subscribe(
-      (data) => {
+    this.adminService.Overview({ start: this.subtractDate(14), end: new Date() })
+      .then((data) => {
         this.adminOverview = data;
         this.filesCount$.next(data.filesCount);
         this.usersCount$.next(data.usersCount);
         this.fileTypesCount$.next(data.fileTypesCount);
-      },
-      (error) => this.handleError(error));
+      })
+      .catch((error) => this.handleError(error))
+      .finally(() => this.adminService.notifyBusy(false));
   }
 
 }

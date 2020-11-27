@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { takeUntil, merge, map, finalize } from 'rxjs/operators';
+import { takeUntil, merge, map } from 'rxjs/operators';
 import { IClaims, IUserRoleClaims } from 'app/domain';
 
 @Component({
@@ -29,7 +29,7 @@ export class AddgroupComponent extends ComponentBase implements OnInit {
     @Inject(MAT_DIALOG_DATA) private fullGroupList: IUserRoleClaims[]
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
     this.addFormGroup = this.fb.group({
@@ -46,47 +46,42 @@ export class AddgroupComponent extends ComponentBase implements OnInit {
     });
     // Listen for changes
     this.fileManagerAccess.valueChanges
-    .pipe(takeUntil(this.onDestroy),
-          merge(this.adminAreaAccess.valueChanges),
-          map(() => this.adminAreaAccess.value || this.fileManagerAccess.value))
-    .subscribe(state => {
-      if (state) {
-        this.storageSpace.enable({onlySelf: state});
-        this.maxFileSize.enable({onlySelf: state});
-        this.fileExpiration.enable({onlySelf: state});
-        this.concurrentUpload.enable({onlySelf: state});
-      }
-      else {
-        this.storageSpace.disable({onlySelf: state});
-        this.maxFileSize.disable({onlySelf: state});
-        this.fileExpiration.disable({onlySelf: state});
-        this.concurrentUpload.disable({onlySelf: state});
-      }
-    });
+      .pipe(takeUntil(this.onDestroy),
+        merge(this.adminAreaAccess.valueChanges),
+        map(() => this.adminAreaAccess.value || this.fileManagerAccess.value))
+      .subscribe(state => {
+        if (state) {
+          this.storageSpace.enable({ onlySelf: state });
+          this.maxFileSize.enable({ onlySelf: state });
+          this.fileExpiration.enable({ onlySelf: state });
+          this.concurrentUpload.enable({ onlySelf: state });
+        }
+        else {
+          this.storageSpace.disable({ onlySelf: state });
+          this.maxFileSize.disable({ onlySelf: state });
+          this.fileExpiration.disable({ onlySelf: state });
+          this.concurrentUpload.disable({ onlySelf: state });
+        }
+      });
     // Check if the group name is unique
     this.groupName.valueChanges
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(gName => {
-      // isUnique
-      if (this.fullGroupList.find(s => s.role.name === gName)) {
-        this.groupName.setErrors({'isDuplicated': true});
-      }
-      else if (this.groupName.hasError('isDuplicated')) {
-        this.groupName.setErrors(null);
-      }
-    });
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(gName => {
+        // isUnique
+        if (this.fullGroupList.find(s => s.role.name === gName)) {
+          this.groupName.setErrors({ 'isDuplicated': true });
+        }
+        else if (this.groupName.hasError('isDuplicated')) {
+          this.groupName.setErrors(null);
+        }
+      });
   }
-  onSubmit(groupParams: IClaims) {
+  async onSubmit(groupParams: IClaims) {
     this.isBusy = true;
-    this.adminService.addGroup(groupParams)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        (result) => {
-          this.dialogRef.close(result);
-        }, (error) => this.handleError(error)
-      );
+    await this.adminService.addGroup(groupParams)
+      .then((result) => this.dialogRef.close(result))
+      .catch((error) => this.handleError(error))
+      .finally(() => this.isBusy = false);
   }
 
 }

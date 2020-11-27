@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { takeUntil } from 'rxjs/operators';
 import { IUserRoleClaims, IEditProfile, IProfileClaim } from 'app/domain';
 
 @Component({
@@ -23,10 +22,10 @@ export class EdituserComponent extends ComponentBase implements OnInit {
     private dialogRef: MatDialogRef<EdituserComponent>,
     private fb: FormBuilder,
     private adminService: AdminService,
-    @Inject(MAT_DIALOG_DATA) public item: {user: IProfileClaim, groups: IUserRoleClaims[]}
+    @Inject(MAT_DIALOG_DATA) public item: { user: IProfileClaim, groups: IUserRoleClaims[] }
   ) {
     super();
-   }
+  }
   ngOnInit(): void {
     this.editFormGroup = this.fb.group({
       id: this.item.user.id,
@@ -37,18 +36,16 @@ export class EdituserComponent extends ComponentBase implements OnInit {
       suspendAccount: this.suspendAccount,
       selectedGroup: this.selectedGroup
     });
-      this.userName.setValue(this.item.user.userName);
-      this.email.setValue(this.item.user.email);
-      this.emailConfirmed.setValue(this.item.user.emailConfirmed);
-      this.suspendAccount.setValue(this.item.user.accountSuspended);
-      this.selectedGroup.setValue(this.item.groups.find(s => s.role.name === this.item.user.roleName));
+    this.userName.setValue(this.item.user.userName);
+    this.email.setValue(this.item.user.email);
+    this.emailConfirmed.setValue(this.item.user.emailConfirmed);
+    this.suspendAccount.setValue(this.item.user.accountSuspended);
+    this.selectedGroup.setValue(this.item.groups.find(s => s.role.name === this.item.user.roleName));
   }
-  onSubmit(user: IEditProfile) {
+  async onSubmit(user: IEditProfile) {
     user.roleId = this.selectedGroup.value.role.id;
-    this.adminService.updateUser(user)
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(() => {
-      this.dialogRef.close(user);
-    }, (error) => this.handleError(error));
+    await this.adminService.updateUser(user)
+      .then(() => this.dialogRef.close(user))
+      .catch((error) => this.handleError(error));
   }
 }
