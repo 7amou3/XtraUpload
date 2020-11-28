@@ -15,7 +15,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
   @ViewChild('snav') sidenav: MatSidenav;
-  private readonly pageTitle = 'Administration';
+  private readonly pageTitle = $localize`Administration`;
   subTitle = '';
   constructor(
     changeDetectorRef: ChangeDetectorRef,
@@ -63,25 +63,25 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   setSubPageTitle(title: string) {
     switch (title) {
       case '/administration/overview':
-        this.subTitle = 'Dashboard'; break;
+        this.subTitle = $localize`Dashboard`; break;
       case '/administration/files':
-        this.subTitle = 'Files'; break;
+        this.subTitle = $localize`Files`; break;
       case '/administration/extensions':
-        this.subTitle = 'Extensions'; break;
+        this.subTitle = $localize`Extensions`; break;
       case '/administration/users':
-        this.subTitle = 'Users'; break;
+        this.subTitle = $localize`Users`; break;
       case '/administration/groups':
-        this.subTitle = `Users' group`; break;
+        this.subTitle = $localize`Users' group`; break;
       case '/administration/settings':
-        this.subTitle = 'Settings'; break;
+        this.subTitle = $localize`Settings`; break;
       case '/administration/pages':
-        this.subTitle = 'Pages'; break;
+        this.subTitle = $localize`Pages`; break;
       case '/administration/servers':
-          this.subTitle = 'Manage Servers'; break;
+          this.subTitle = $localize`Manage Servers`; break;
       case '/administration/servershealth':
-        this.subTitle = 'Servers Health'; break;
+        this.subTitle = $localize`Servers Health`; break;
       default:
-        this.subTitle = 'Dashboard'; break;
+        this.subTitle = $localize`Dashboard`; break;
     }
   }
 

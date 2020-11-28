@@ -1,19 +1,20 @@
 
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { loadTranslations } from '@angular/localize';
+import { getTranslations, getBrowserLang } from '@locl/core';
+import { DOCUMENT, registerLocaleData } from '@angular/common';
 import { ILanguage } from 'app/domain';
 import { tap } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
-import { loadTranslations } from '@angular/localize';
-import { getTranslations, getBrowserLang } from '@locl/core';
-import { registerLocaleData } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
     private _locale: string;
     constructor(
         private http: HttpClient,
-        private userStorage: UserStorageService) { }
+        private userStorage: UserStorageService,
+        @Inject(DOCUMENT) private document: Document) { }
 
     get locale(): string {
         return this._locale || 'en';
@@ -43,6 +44,7 @@ export class LanguageService {
                 this.userStorage.setUserLang(defaultLang);
             }
         }
+        this.document.documentElement.lang = this._locale; 
         await this.localeInitializer(this._locale)
         await getTranslations('/assets/i18n/' + this._locale + '.json')
         .then(data => loadTranslations(data.translations));

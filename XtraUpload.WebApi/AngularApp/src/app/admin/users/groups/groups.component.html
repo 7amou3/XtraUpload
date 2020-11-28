@@ -1,5 +1,5 @@
 <div>
-  <button mat-mini-fab color="accent" matTooltip="Add Group" aria-label="Add new group" class="add-group"
+  <button mat-mini-fab color="accent" i18n-matTooltip matTooltip="Add Group" aria-label="Add new group" class="add-group"
     (click)="onAddGroup()">
     <mat-icon>add</mat-icon>
   </button>
@@ -7,12 +7,12 @@
 <table #itemstable mat-table [dataSource]="dataSource" [class.isMobile]="isMobile" class="mat-elevation-z1 m-t-10">
   <!-- Id Column -->
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Group</th>
+    <th mat-header-cell *matHeaderCellDef i18n>Group</th>
     <td mat-cell *matCellDef="let element"> {{element.role.name}} </td>
   </ng-container>
   <!-- AdminAreaAccess Column -->
   <ng-container matColumnDef="AdminAreaAccess">
-    <th mat-header-cell *matHeaderCellDef>Admin Area Access</th>
+    <th mat-header-cell *matHeaderCellDef i18n>Admin Area Access</th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'AdminAreaAccess'), else elseBlock">
         <mat-icon class="font-18" color="primary">done</mat-icon>
@@ -24,7 +24,7 @@
   </ng-container>
   <!-- "FileManagerAccess" Column -->
   <ng-container matColumnDef="FileManagerAccess">
-    <th mat-header-cell *matHeaderCellDef>File Manager Access</th>
+    <th mat-header-cell *matHeaderCellDef i18n>File Manager Access</th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'FileManagerAccess'), else elseBlock">
         <mat-icon class="font-18" color="primary">done</mat-icon>
@@ -36,7 +36,7 @@
   </ng-container>
   <!-- "StorageSpace" Column -->
   <ng-container matColumnDef="StorageSpace">
-    <th mat-header-cell *matHeaderCellDef>Storage Space</th>
+    <th mat-header-cell *matHeaderCellDef i18n>Storage Space</th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'StorageSpace') as space">
         {{ (space * 1024 * 1024) | bytes:2 }}
@@ -46,21 +46,22 @@
   <!-- "FileExpiration" Column -->
   <ng-container matColumnDef="FileExpiration">
     <th mat-header-cell *matHeaderCellDef>
-      File Expiration
+      <span i18n>File Expiration</span>
       <mat-icon class="font-12"
+        i18n-matTooltip
         matTooltip="A file is considered expired when it did not get downloaded within the provided time range.">help
       </mat-icon>
     </th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'FileExpiration') as expiration">
-        {{expiration}} day
+        {{expiration}} <i i18n>day</i>
       </span>
     </td>
   </ng-container>
   <!-- "DownloadTTW" Column -->
   <ng-container matColumnDef="DownloadTTW">
     <th mat-header-cell *matHeaderCellDef>
-      Download TTW
+      <span i18n>Download TTW</span>
       <mat-icon class="font-12" matTooltip="Time to wait when a download is already in progress.">help</mat-icon>
     </th>
     <td mat-cell *matCellDef="let element">
@@ -71,14 +72,14 @@
   </ng-container>
   <!-- "ConcurrentUpload" Column -->
   <ng-container matColumnDef="ConcurrentUpload">
-    <th mat-header-cell *matHeaderCellDef>Concurrent Upload</th>
+    <th mat-header-cell *matHeaderCellDef i18n>Concurrent Upload</th>
     <td mat-cell *matCellDef="let element">
       {{getClaim(element.claims, 'ConcurrentUpload')}}
     </td>
   </ng-container>
   <!-- "DownloadSpeed" Column -->
   <ng-container matColumnDef="DownloadSpeed">
-    <th mat-header-cell *matHeaderCellDef>Download Speed</th>
+    <th mat-header-cell *matHeaderCellDef i18n>Download Speed</th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'DownloadSpeed') as speed">
         {{ (speed * 1024) | bytes:2}}
@@ -87,7 +88,7 @@
   </ng-container>
   <!-- "MaxFileSize" Column -->
   <ng-container matColumnDef="MaxFileSize">
-    <th mat-header-cell *matHeaderCellDef>Max File Size</th>
+    <th mat-header-cell *matHeaderCellDef i18n>Max File Size</th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'MaxFileSize') as maxfilesize">
         {{ (maxfilesize * 1024 * 1024) | bytes:2}}
@@ -97,8 +98,8 @@
   <!-- "WaitTime" Column -->
   <ng-container matColumnDef="WaitTime">
     <th mat-header-cell *matHeaderCellDef>
-      Wait Time
-      <mat-icon class="font-12" matTooltip="Time to wait before the download starts">help</mat-icon>
+      <span i18n>Wait Time</span>
+      <mat-icon class="font-12" i18n-matTooltip matTooltip="Time to wait before the download starts">help</mat-icon>
     </th>
     <td mat-cell *matCellDef="let element">
       <span *ngIf="getClaim(element.claims, 'WaitTime') as waittime">
@@ -122,9 +123,11 @@
 
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="onEdit()">
-    <mat-icon>edit</mat-icon>Edit</button>
+    <mat-icon>edit</mat-icon>
+    <span i18n>Edit</span>
+  </button>
   <button mat-menu-item (click)="onDelete()">
     <mat-icon color="warn">delete</mat-icon>
-      Delete
+    <span i18n>Delete</span>
   </button>
 </mat-menu>

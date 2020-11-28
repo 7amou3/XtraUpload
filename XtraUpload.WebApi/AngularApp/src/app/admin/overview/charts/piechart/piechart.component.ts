@@ -23,7 +23,7 @@ export class PiechartComponent extends ComponentBase implements OnInit {
   public pieChartOptions: ChartOptions = {
     responsive: true,
   };
-  public pieChartLabels: Label[] = ['Multimedia', 'Documents', 'Archives', 'Others'];
+  public pieChartLabels: Label[] = [$localize`Multimedia`, $localize`Documents`, $localize`Archives`, $localize`Others`];
   public pieChartData: SingleDataSet = [50, 50, 50, 50];
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
@@ -75,10 +75,10 @@ export class PiechartComponent extends ComponentBase implements OnInit {
   }
   convertToStr(enumVal: number): string {
     switch (enumVal) {
-      case 0: return 'Others';
-      case 1: return 'Archives';
-      case 2: return 'Documents';
-      case 3: return 'Multimedia';
+      case 0: return $localize`Others`;
+      case 1: return $localize`Archives`;
+      case 2: return $localize`Documents`;
+      case 3: return $localize`Multimedia`;
     }
   }
   async onSearchItemsSubmit() {

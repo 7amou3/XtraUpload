@@ -61,7 +61,7 @@ export class PagesComponent extends ComponentBase implements OnInit {
         }
         this.dataSource.data.push(result);
         this.refreshTable();
-        this.snackBar.open(`The page ${result.name} has been added successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`The page ${result.name} has been added successfully`, '', { duration: 3000 });
       });
   }
   onEdit() {
@@ -83,7 +83,7 @@ export class PagesComponent extends ComponentBase implements OnInit {
           page.url = result.url;
           page.visibleInFooter = result.visibleInFooter;
           this.refreshTable();
-          this.snackBar.open(`The page ${page.name} has been updated successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The page ${page.name} has been updated successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -102,7 +102,7 @@ export class PagesComponent extends ComponentBase implements OnInit {
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.refreshTable();
-          this.snackBar.open(`The page ${page.name} has been deleted successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The page ${page.name} has been deleted successfully`, '', { duration: 3000 });
         }
       });
   }

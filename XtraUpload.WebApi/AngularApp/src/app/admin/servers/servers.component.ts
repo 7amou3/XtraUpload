@@ -59,7 +59,7 @@ export class ServersComponent extends ComponentBase implements OnInit {
         }
         this.dataSource.data.push(result);
         this.refreshTable();
-        this.snackBar.open(`The server ${result.address} has been added successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`The server ${result.address} has been added successfully`, '', { duration: 3000 });
       });
   }
   onEdit() {
@@ -78,7 +78,7 @@ export class ServersComponent extends ComponentBase implements OnInit {
           server.address = result.address;
           server.state = result.state;
           this.refreshTable();
-          this.snackBar.open(`The server ${result.address} has been updated successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The server ${result.address} has been updated successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -97,7 +97,7 @@ export class ServersComponent extends ComponentBase implements OnInit {
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.refreshTable();
-          this.snackBar.open(`The server ${server.address} has been deleted successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The server ${server.address} has been deleted successfully`, '', { duration: 3000 });
         }
       });
   }

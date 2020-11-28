@@ -22,8 +22,8 @@ export class FileuploadsComponent extends ChartBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lineChartData[0].label = 'Uploads';
-    this.chartTitle = 'File uploads per day';
+    this.lineChartData[0].label = $localize`Uploads`;
+    this.chartTitle = $localize`File uploads per day`;
     this.itemsSearchFormGroup = this.fb.group({
       start: this.start,
       end: this.end

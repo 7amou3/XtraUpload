@@ -22,8 +22,8 @@ export class UsersComponent extends ChartBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lineChartData[0].label = 'Users';
-    this.chartTitle = 'Users per day';
+    this.lineChartData[0].label = $localize`Users`;
+    this.chartTitle = $localize`Users per day`;
     this.itemsSearchFormGroup = this.fb.group({
       start: this.start,
       end: this.end

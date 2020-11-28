@@ -83,11 +83,11 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     this.mobileQuery.addListener(this._mobileQueryListener);
     // TODO: move content table management to a component (Single Responsibility Principle)
     const links: Link[] = [
-      { fragment: 'pagesettings', name: 'Page Settings', active: true },
-      { fragment: 'jwtsettings', name: 'Jwt Settings', active: false },
-      { fragment: 'socialauth', name: 'Social Auth', active: false },
-      { fragment: 'emailsettings', name: 'Email Settings', active: false },
-      { fragment: 'hardwareoptions', name: 'Hardware Options', active: false }
+      { fragment: 'pagesettings', name: $localize`Page Settings`, active: true },
+      { fragment: 'jwtsettings', name: $localize`Jwt Settings`, active: false },
+      { fragment: 'socialauth', name: $localize`Social Auth`, active: false },
+      { fragment: 'emailsettings', name: $localize`Email Settings`, active: false },
+      { fragment: 'hardwareoptions', name: $localize`Hardware Options`, active: false }
     ];
     this.links.push(...links);
   }
@@ -200,7 +200,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   async onJwtSubmit(jwtParams) {
     this.jwtBusy = true;
     await this.adminService.updateJwtOpts(jwtParams)
-      .then(() => this.showSuccessMsg('Jwt Options'))
+      .then(() => this.showSuccessMsg($localize`Jwt Options`))
       .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.jwtBusy = false);
   }
@@ -208,32 +208,32 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   async onEmailSubmit(emailParams: IEmailSettings) {
     this.emailBusy = true;
     await this.adminService.updateEmailOpts(emailParams)
-      .then(() => this.showSuccessMsg('Email Options'))
+      .then(() => this.showSuccessMsg($localize`Email Options`))
       .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.emailBusy = false);
   }
   async onHDOptionsSubmit(hardwareteParams) {
     this.hdBusy = true;
     await this.adminService.updateHardwareOpts(hardwareteParams)
-      .then(() => this.showSuccessMsg('Hardware Options'))
+      .then(() => this.showSuccessMsg($localize`Hardware Options`))
       .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.hdBusy = false);
   }
   async onPageSettingsSubmit(pageSettingParams) {
     this.appSettingBusy = true;
     await this.adminService.updateAppInfo(pageSettingParams)
-      .then(() => this.showSuccessMsg('Page Settings'))
+      .then(() => this.showSuccessMsg($localize`Page Settings`))
       .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.appSettingBusy = false);
   }
   async onSocialAuthSubmit(socialAuthParams) {
     this.socialAuthBusy = true;
     await this.adminService.updateSocialAuthSettings(socialAuthParams)
-      .then(() => this.showSuccessMsg('Social Auth'))
+      .then(() => this.showSuccessMsg($localize`Social Auth`))
       .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.socialAuthBusy = false);
   }
   showSuccessMsg(section: string) {
-    this.snackBar.open(`${section} has been updated successfully`, '', { duration: 3000 });
+    this.snackBar.open($localize`${section} has been updated successfully`, '', { duration: 3000 });
   }
 }

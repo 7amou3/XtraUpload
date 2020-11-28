@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { IStorageServer } from 'app/domain';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { finalize, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-servershealth',

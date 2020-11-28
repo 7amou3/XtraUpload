@@ -23,10 +23,9 @@ export class DeletegroupComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
   }
   async onDelete() {
-    console.log(this.item);
     this.isBusy = true;
     this.adminService.deleteGroup(this.item.selectedGroup.role.id)
-      .then(() => this.dialogRef.close(this.item))
+      .then(() => this.dialogRef.close(this.item.selectedGroup))
       .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }

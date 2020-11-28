@@ -167,7 +167,7 @@ export class FilesComponent extends ComponentBase implements OnInit {
             this.refreshTable();
           }
         });
-        this.snackBar.open(`${deletedFiles.length} file(s) has been deleted successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`${deletedFiles.length} file(s) has been deleted successfully`, '', { duration: 3000 });
       });
   }
 }

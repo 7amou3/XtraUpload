@@ -1,19 +1,18 @@
-<h2 mat-dialog-title>Add extension</h2>
+<h2 mat-dialog-title i18n>Add extension</h2>
 <form [formGroup]="addFormGroup" (ngSubmit)="onSubmit(addFormGroup.value)">
     <mat-dialog-content>
         <mat-form-field>
-            <mat-label>Add new extension</mat-label>
+            <mat-label i18n>Add new extension</mat-label>
             <input matInput formControlName="newExt" required>
             <mat-error *ngIf="newExt.invalid">{{getErrorMessage(newExt)}}</mat-error>
-            <mat-error *ngIf="newExt.hasError('itemExists')">An entry with the same extension name already exists.</mat-error>
+            <mat-error *ngIf="newExt.hasError('itemExists')" i18n>An entry with the same extension name already exists.</mat-error>
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions fxLayoutAlign="flex-end">
-        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button mat-dialog-close i18n>Cancel</button>
         <button
             mat-button color="accent"
             [disabled]="!addFormGroup.valid || isBusy" type="submit"
-            >Add
-        </button>
+            i18n>Add</button>
     </mat-dialog-actions>
 </form>

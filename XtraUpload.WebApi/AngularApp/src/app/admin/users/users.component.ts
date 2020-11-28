@@ -10,7 +10,7 @@ import { Subject, Observable } from 'rxjs';
 import { takeUntil, debounceTime, switchMap } from 'rxjs/operators';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
-import { IPaging, IProfile, IFilteredUser, ISearchFile, IUserRoleClaims, IEditProfile, IProfileClaim } from 'app/domain';
+import { IPaging, IProfile, IFilteredUser, ISearchFile, IUserRoleClaims, IProfileClaim } from 'app/domain';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { DeleteuserComponent } from './dialogs/deleteuser/deleteuser.component';
 import { EdituserComponent } from './dialogs/edituser/edituser.component';
@@ -159,7 +159,7 @@ export class UserListComponent extends ComponentBase implements OnInit {
           row.emailConfirmed = editedProfile.emailConfirmed;
           row.email = editedProfile.email;
           this.refreshTable();
-          this.snackBar.open(`The user ${editedProfile.userName} has been updated successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The user ${editedProfile.userName} has been updated successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -182,7 +182,7 @@ export class UserListComponent extends ComponentBase implements OnInit {
           }
         });
         this.refreshTable();
-        this.snackBar.open(`${profiles.length} User(s) has been deleted successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`${profiles.length} User(s) has been deleted successfully`, '', { duration: 3000 });
       });
   }
 }

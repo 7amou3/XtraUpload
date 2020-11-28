@@ -3,28 +3,26 @@
     <mat-accordion>
         <mat-expansion-panel class="mat-elevation-z0">
             <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Files by type
-                </mat-panel-title>
+                <mat-panel-title i18n>Files by type</mat-panel-title>
             </mat-expansion-panel-header>
             <div fxLayout fxLayoutWrap>
                 <form [formGroup]="filesSearchFormGroup" style="width: 100%;"
                     (ngSubmit)="onSearchItemsSubmit()">
                     <mat-form-field fxFlex.gt-lg="35" fxFlex.gt-md="35" fxFlex="100" style="margin-right: 25px;">
-                        <mat-label>Start Time</mat-label>
+                        <mat-label i18n>Start Time</mat-label>
                         <input matInput [matDatepicker]="startpicker" [matDatepickerFilter]="rangeFilter" formControlName="start" required>
                         <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
                         <mat-datepicker #startpicker></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field fxFlex.gt-lg="35" fxFlex.gt-md="35" fxFlex="100" style="margin-right: 25px;">
-                        <mat-label>End Time</mat-label>
+                        <mat-label i18n>End Time</mat-label>
                         <input matInput [matDatepicker]="endpicker" [matDatepickerFilter]="rangeFilter" formControlName="end" required>
                         <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
                         <mat-datepicker #endpicker></mat-datepicker>
                     </mat-form-field>
                     <div fxFlex="35" fxLayoutAlign="flex-end">
                         <button class="mat-elevation-z1" type="submit" color="primary" mat-mini-fab
-                            aria-label="Search upload history" matTooltip="Search" [disabled]="isBusy">
+                            aria-label="Search upload history" i18n-matTooltip matTooltip="Search" [disabled]="isBusy">
                             <mat-icon>search</mat-icon>
                         </button>
                     </div>

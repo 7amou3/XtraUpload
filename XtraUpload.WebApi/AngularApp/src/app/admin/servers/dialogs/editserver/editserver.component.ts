@@ -24,7 +24,7 @@ export class EditserverComponent extends ServerDialogBase {
   }
 
   Init(): void {
-    this.dialogTitle = 'Edit Storage Server';
+    this.dialogTitle = $localize`Edit Storage Server`;
     this.address.setValue(this.data.selectedServer.address);
     const opt = this.serverOptions.filter(s => s.state === this.data.selectedServer.state)[0];
     this.optionControl.setValue(opt);

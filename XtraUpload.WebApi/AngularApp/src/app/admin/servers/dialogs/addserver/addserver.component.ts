@@ -24,7 +24,7 @@ export class AddserverComponent extends ServerDialogBase implements OnInit {
   }
 
   Init(): void {
-    this.dialogTitle = 'Add Storage Server';
+    this.dialogTitle = $localize`Add Storage Server`;
   }
   async onSubmit() {
     if (this.serversList.filter(s => s.address === this.address.value).length > 0) {

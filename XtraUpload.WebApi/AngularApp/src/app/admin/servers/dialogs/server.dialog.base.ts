@@ -23,9 +23,9 @@ export abstract class ServerDialogBase extends ComponentBase implements OnInit {
     memoryThreshold = new FormControl({ value: '', disabled: true }, [Validators.required, Validators.min(1)]);
     storageThreshold = new FormControl({ value: '', disabled: true }, [Validators.required, Validators.min(1)]);
     serverOptions: IServerOption[] = [
-        { name: 'Active', state: serverState.Active, hint: 'Uploads and downloads are enabled' },
-        { name: 'Passive', state: serverState.Passive, hint: 'Downloads are available, uploads are disabled' },
-        { name: 'Disabled', state: serverState.Disabled, hint: 'Server is reachable, but no uploads/downloads are allowed' }
+        { name: $localize`Active`, state: serverState.Active, hint: $localize`Uploads and downloads are enabled` },
+        { name: $localize`Passive`, state: serverState.Passive, hint: $localize`Downloads are available, uploads are disabled` },
+        { name: $localize`Disabled`, state: serverState.Disabled, hint: $localize`Server is reachable, but no uploads/downloads are allowed` }
     ]
 
     constructor(protected adminService: AdminService, protected fb: FormBuilder,) {
@@ -46,7 +46,7 @@ export abstract class ServerDialogBase extends ComponentBase implements OnInit {
                     return;
                 }
                 this.address.setErrors(null);
-                this.message$.next({ successMessage: 'The storage server is up and running' });
+                this.message$.next({ successMessage: $localize`The storage server is up and running` });
 
                 // Retrieve storage server upload configuration
                 this.adminService.getUploadConfigrConfig(this.address.value)

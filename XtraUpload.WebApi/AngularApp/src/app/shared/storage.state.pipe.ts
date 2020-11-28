@@ -14,11 +14,11 @@ export class StorageStatePipe implements PipeTransform {
         }
         switch (state) {
             case 1:
-                result = 'Active'; break;
+                result = $localize`Active`; break;
             case 2:
-                result = 'Passive'; break;
+                result = $localize`Passive`; break;
             case 3:
-                result = 'Disabled'; break;
+                result = $localize`Disabled`; break;
         }
         return result;
     }

@@ -60,7 +60,7 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
         }
         this.dataSource.data.push(result);
         this.refreshTable();
-        this.snackBar.open(`The extension ${result.name} has been added successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`The extension ${result.name} has been added successfully`, '', { duration: 3000 });
       });
   }
   onEdit() {
@@ -78,7 +78,7 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
         if (ext) {
           ext.name = result.newExt;
           this.refreshTable();
-          this.snackBar.open(`The extension ${ext.name} has been renamed successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The extension ${ext.name} has been renamed successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -97,7 +97,7 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.refreshTable();
-          this.snackBar.open(`The extension ${result.name} has been deleted successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The extension ${result.name} has been deleted successfully`, '', { duration: 3000 });
         }
       });
   }

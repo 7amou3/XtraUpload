@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { AddgroupComponent } from './dialogs/addgroup/addgroup.component';
 import { DeletegroupComponent } from './dialogs/deletegroup/deletegroup.component';
 import { EditgroupComponent } from './dialogs/editgroup/editgroup.component';
@@ -71,7 +71,7 @@ export class GroupsComponent extends ComponentBase implements OnInit {
         }
         this.dataSource.data.push(result);
         this.refreshTable();
-        this.snackBar.open(`The user group ${result.role.name} has been added successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`The user group ${result.role.name} has been added successfully`, '', { duration: 3000 });
       });
   }
   onEdit() {
@@ -90,7 +90,7 @@ export class GroupsComponent extends ComponentBase implements OnInit {
           roleClaims.role.name = result.role.name;
           roleClaims.claims = result.claims;
           this.refreshTable();
-          this.snackBar.open(`The user group ${roleClaims.role.name} has been updated successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The user group ${roleClaims.role.name} has been updated successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -109,7 +109,7 @@ export class GroupsComponent extends ComponentBase implements OnInit {
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.refreshTable();
-          this.snackBar.open(`The user group ${result.role.name} has been deleted successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The user group ${result.role.name} has been deleted successfully`, '', { duration: 3000 });
         }
       });
   }
