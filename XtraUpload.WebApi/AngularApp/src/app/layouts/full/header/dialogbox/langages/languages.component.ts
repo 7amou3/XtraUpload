@@ -23,13 +23,14 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
      }
 
   async ngOnInit() {
-    const languages = await this.languageService.getLanguages();
-    if (languages) {
+    await this.languageService.getLanguages()
+    .then((languages) => {
       this.languages$.next(languages);
       this.selectedLangs[0] = this.userStorage.getUserLang();
-    }
+    })
   }
   async onLangClick() {
+    this.isBusy = true;
     this.userStorage.setUserLang(this.selectedLangs[0]);
     if (!this.loggedIn?.isLoggedIn) {
       // Reload the app to apply the selected lang

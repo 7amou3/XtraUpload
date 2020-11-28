@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ComponentBase } from 'app/shared';
 import { IChangePassword } from 'app/domain';
 import { SettingsService } from 'app/services';
@@ -27,7 +27,7 @@ export class ChangePasswordComponent extends ComponentBase implements OnInit {
   }
   async onSubmit(changePassParams: IChangePassword) {
     if (changePassParams.newPassword === changePassParams.oldPassword) {
-      this.message$.next({errorMessage: 'The new password must differ from current password.'});
+      this.message$.next({errorMessage: $localize`The new password must differ from current password.`});
       return;
     }
     this.isBusy = true;
@@ -35,7 +35,7 @@ export class ChangePasswordComponent extends ComponentBase implements OnInit {
     .then(() => {
       this.isBusy = false;
       this.resetForm(this.changePassFormGroup);
-      this.message$.next({successMessage: 'your password has been successfully changed.'});
+      this.message$.next({successMessage: $localize`Your password has been successfully changed.`});
     })
     .catch(error => {
       this.message$.next({errorMessage: error?.error?.errorContent?.message});

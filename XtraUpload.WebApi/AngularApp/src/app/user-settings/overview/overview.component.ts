@@ -29,7 +29,7 @@ export class OverviewComponent extends ComponentBase implements OnInit {
     this.sendingEmail = true;
     await this.authService.requestConfirmEmail()
       .then(() => {
-        this.message$.next({ successMessage: 'An email has been sent to your inbox, please check your email.' });
+        this.message$.next({ successMessage: $localize`An email has been sent to your inbox, please check your email.` });
       })
       .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
       .finally(() => this.sendingEmail = false);

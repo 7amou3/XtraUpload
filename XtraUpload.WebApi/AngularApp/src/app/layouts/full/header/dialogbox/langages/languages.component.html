@@ -6,9 +6,9 @@
         </mat-list-option>
     </mat-selection-list>
     <ng-template #loading>
-        <span>Loading...</span>
+        <span i18n>Loading...</span>
     </ng-template>
 </mat-dialog-content>
 <mat-dialog-actions fxLayoutAlign="flex-end">
-    <button mat-button color="accent" (click)="onLangClick()" i18n>Save</button>
+    <button mat-button color="accent" [disabled]="isBusy" (click)="onLangClick()" i18n>Save</button>
 </mat-dialog-actions>

@@ -17,7 +17,7 @@
                     <mat-list-item>
                         <mat-icon mat-list-icon class="text-white">publish</mat-icon>
                         <div mat-line class="text-white">{{accountOverview?.uploadSetting.usedSpace | bytes:2}}</div>
-                        <div mat-line class="text-white">Used Storage</div>
+                        <div mat-line class="text-white" i18n>Used Storage</div>
                     </mat-list-item>
                 </mat-list>
             </mat-card>
@@ -28,7 +28,7 @@
                     <mat-list-item>
                         <mat-icon mat-list-icon class="text-white">filter</mat-icon>
                         <div mat-line class="text-white">{{accountOverview?.filesStats.totalFiles}}</div>
-                        <div mat-line class="text-white">Active Files</div>
+                        <div mat-line class="text-white" i18n>Active Files</div>
                     </mat-list-item>
                 </mat-list>
             </mat-card>
@@ -39,7 +39,7 @@
                     <mat-list-item>
                         <mat-icon mat-list-icon class="text-white">arrow_downward</mat-icon>
                         <div mat-line class="text-white">{{accountOverview?.filesStats.totalDownloads}}</div>
-                        <div mat-line class="text-white">Total Downloads</div>
+                        <div mat-line class="text-white" i18n>Total Downloads</div>
                     </mat-list-item>
                 </mat-list>
             </mat-card>
@@ -52,30 +52,29 @@
         <div fxFlex.md="50" fxFlex.lg="50" fxFlex="100">
             <mat-card>
                 <mat-list role="list">
-                    <div mat-subheader class="bg-purple text-white">Profile</div>
+                    <div mat-subheader class="bg-purple text-white" i18n>Profile</div>
                     <mat-divider></mat-divider>
                     <mat-list-item role="listitem">
-                        <p matLine>{{accountOverview?.user.createdAt | date}}</p>
-                        <p matLine>Account creation date</p>
+                        <p matLine>{{accountOverview?.user.createdAt | localDate: 'longDate'}}</p>
+                        <p matLine i18n>Account creation date</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
-                        <p matLine>{{accountOverview?.user.lastModified | date}}</p>
-                        <p matLine>Last modification date</p>
+                        <p matLine>{{accountOverview?.user.lastModified | localDate: 'longDate'}}</p>
+                        <p matLine i18n>Last modification date</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
                         <p matLine>{{accountOverview?.user.email}}</p>
-                        <p matLine>Email address</p>
+                        <p matLine i18n>Email address</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
-                        <p matLine *ngIf="accountOverview?.user.emailConfirmed">Verified</p>
+                        <p matLine *ngIf="accountOverview?.user.emailConfirmed" i18n>Verified</p>
                         <p matLine *ngIf="!accountOverview?.user.emailConfirmed">
-                            Unverified
-                            <a class="font-14 text-info" style="cursor: pointer;" (click)="verifyEmail()">
-                                (verify now)
-                            </a>
+                            <span i18n>Unverified</span>
+                            <a class="font-14 text-info" style="cursor: pointer;" (click)="verifyEmail()"i18n
+                            >(verify now)</a>
                         </p>
                         <mat-progress-bar mode="indeterminate" *ngIf="sendingEmail"></mat-progress-bar>
-                        <p matLine>Email status</p>
+                        <p matLine i18n>Email status</p>
                     </mat-list-item>
 
                 </mat-list>
@@ -84,23 +83,23 @@
         <div fxFlex.md="50" fxFlex.lg="50" fxFlex="100">
             <mat-card>
                 <mat-list role="list">
-                    <div mat-subheader class="bg-success text-white">Download</div>
+                    <div mat-subheader class="bg-success text-white" i18n>Download</div>
                     <mat-divider></mat-divider>
                     <mat-list-item role="listitem">
                         <p mat-line>{{accountOverview?.downloadSetting.downloadSpeed | bytes:2}}/s</p>
-                        <p mat-line>Download speed</p>
+                        <p mat-line i18n>Download speed</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
                         <p mat-line>{{accountOverview?.downloadSetting.timeToWait | counter}}</p>
-                        <p mat-line>Time to wait before download starts</p>
+                        <p mat-line i18n>Time to wait before download starts</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
                         <p mat-line>{{accountOverview?.downloadSetting.downloadTTW | counter}}</p>
-                        <p mat-line>Time to wait before requesting a new download</p>
+                        <p mat-line i18n>Time to wait before requesting a new download</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
                         <p mat-line>{{accountOverview?.downloadSetting.fileExpiration}} day</p>
-                        <p mat-line>File expiration date</p>
+                        <p mat-line i18n>File expiration date</p>
                     </mat-list-item>
                 </mat-list>
             </mat-card>
@@ -111,15 +110,15 @@
         <div fxFlex.md="50" fxFlex.lg="50" fxFlex="100">
             <mat-card>
                 <mat-list role="list">
-                    <div mat-subheader class="bg-info text-white">Upload</div>
+                    <div mat-subheader class="bg-info text-white" i18n>Upload</div>
                     <mat-divider></mat-divider>
                     <mat-list-item role="listitem">
                         <p mat-line>{{accountOverview?.uploadSetting.concurrentUpload}}</p>
-                        <p mat-line>Concurent uploads</p>
+                        <p mat-line i18n>Concurent uploads</p>
                     </mat-list-item>
                     <mat-list-item role="listitem">
                       <p mat-line>{{accountOverview?.uploadSetting.maxFileSize *1024 *1024 | bytes}}</p>
-                        <p mat-line>Maximum file size</p>
+                        <p mat-line i18n>Maximum file size</p>
                     </mat-list-item>
                 </mat-list>
             </mat-card>

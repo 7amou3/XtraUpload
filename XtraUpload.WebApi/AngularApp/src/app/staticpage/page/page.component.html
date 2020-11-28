@@ -9,7 +9,7 @@
         <div [innerHTML]="page?.content | markdown"></div>
       </mat-card-content>
       <mat-card-actions fxLayoutAlign="flex-end">
-        <div class="text-muted font-14 p-5"><span i18n>Update At:</span>&nbsp;{{page?.updatedAt | date}}</div>
+        <div class="text-muted font-14 p-5"><span i18n>Update At:</span>&nbsp;{{page?.updatedAt | localDate: 'longDate'}}</div>
       </mat-card-actions>
     </mat-card>
   </div>

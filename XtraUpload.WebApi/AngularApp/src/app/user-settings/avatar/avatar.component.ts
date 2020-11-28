@@ -6,7 +6,7 @@ import { FileManagerService, HeaderService, UploadService } from 'app/services';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
 import { IAvatarData } from '../../domain';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-avatar',
@@ -30,9 +30,9 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     if (event.rejectedFiles.length > 0) {
       const rejected = event.rejectedFiles[0] as RejectedFile;
       if (rejected.reason === 'type') {
-        this.message$.next({ errorMessage: 'The selected file type is not allowed.' });
+        this.message$.next({ errorMessage: $localize`The selected file type is not allowed.` });
       } else {
-        this.message$.next({ errorMessage: 'You exceeded the file size limit.' });
+        this.message$.next({ errorMessage: $localize`You exceeded the file size limit.` });
       }
     }
     this.selectedImg = event.addedFiles[0];
@@ -47,7 +47,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     // cropper ready
   }
   loadImageFailed() {
-    this.message$.next({ errorMessage: 'Error occured while loading image.' });
+    this.message$.next({ errorMessage: $localize`Error occured while loading image.` });
   }
   onDeleteImage() {
     this.selectedImg = null;
@@ -59,7 +59,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     .then(async s => {
       if (!s.storageServer) {
         this.isBusy = false
-        this.snackBar.open('Unreachable storage servers. Please contact customer support.', '', { duration: 3000 });
+        this.snackBar.open($localize`Unreachable storage servers. Please contact customer support.`, '', { duration: 3000 });
         return;
       }
        
@@ -69,7 +69,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
         if (result.status === 'Success') {
           this.isBusy = false;
           this.selectedImg = null;
-          this.message$.next({ successMessage: 'Your avatar has been updated successfully.' });
+          this.message$.next({ successMessage: $localize`Your avatar has been updated successfully.` });
           this.headerService.notifyAvatarChanged(result.uploadData as IAvatarData);
         }
       }, error => this.handleError(error))

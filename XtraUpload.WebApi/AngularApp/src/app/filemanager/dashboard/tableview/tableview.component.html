@@ -30,7 +30,7 @@
   <!-- createdAt Column -->
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef i18n>Created at</th>
-    <td mat-cell *matCellDef="let item"> {{item.createdAt | date}} </td>
+    <td mat-cell *matCellDef="let item"> {{item.createdAt | localDate}} </td>
   </ng-container>
 
   <!-- downloads Column -->

@@ -1,18 +1,20 @@
 import {NgModule} from '@angular/core';
-import { TruncatePipe, BytesPipe, CounterPipe, StorageStatePipe } from '../shared';
+import { TruncatePipe, BytesPipe, CounterPipe, StorageStatePipe, LocalDatePipe } from '../shared';
 
 @NgModule({
   declarations: [
     TruncatePipe,
     BytesPipe,
     CounterPipe,
-    StorageStatePipe
+    StorageStatePipe,
+    LocalDatePipe
   ],
   exports: [
     TruncatePipe,
     BytesPipe,
     CounterPipe,
-    StorageStatePipe
+    StorageStatePipe,
+    LocalDatePipe
   ]
 })
 export class PipeModule {}

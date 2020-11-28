@@ -14,7 +14,7 @@ import { ComponentBase } from 'app/shared';
 export class SettingsComponent extends ComponentBase implements OnInit {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
-  private readonly pageTitle = 'Settings';
+  private readonly pageTitle = $localize`Settings`;
   @ViewChild('sidenav') sidenav: MatSidenav;
   subTitle = '';
   constructor(
@@ -54,16 +54,16 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   setSubPageTitle(title: string) {
     switch (title) {
       case '/settings/overview':
-        this.subTitle = 'Overview';
+        this.subTitle = $localize`Overview`;
         break;
       case 'AvatarComponent':
-        this.subTitle = 'Avatar';
+        this.subTitle = $localize`Avatar`;
         break;
       case '/settings/password':
-        this.subTitle = 'Password';
+        this.subTitle = $localize`Password`;
         break;
       case '/settings/avatar':
-        this.subTitle = 'User Info';
+        this.subTitle = $localize`User Info`;
         break;
       default:
         break;

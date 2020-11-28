@@ -11,6 +11,7 @@ import { FooterModule } from 'app/shared/footer/footer.module';
 import { StaticPageService } from '../services';
 import { PageComponent } from './page/page.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { PipeModule } from 'app/shared/pipe-modules';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MarkdownModule } from 'ngx-markdown';
     MatIconModule,
     MatCardModule,
     MatDividerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    PipeModule
   ],
   providers: [
     StaticPageService,
