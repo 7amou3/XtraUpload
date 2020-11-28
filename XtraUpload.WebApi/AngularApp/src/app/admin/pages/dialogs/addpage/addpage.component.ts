@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { IPage } from 'app/domain';
 import { PageCommon } from '../page.common';
@@ -14,6 +15,7 @@ export class AddpageComponent extends PageCommon {
   constructor(
     private dialogRef: MatDialogRef<AddpageComponent>,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) private fullPageList: IPage[]
   ) {
@@ -36,7 +38,7 @@ export class AddpageComponent extends PageCommon {
     this.isBusy = true;
     await this.adminService.addPage(formParams)
       .then(newPage => this.dialogRef.close(newPage))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 }

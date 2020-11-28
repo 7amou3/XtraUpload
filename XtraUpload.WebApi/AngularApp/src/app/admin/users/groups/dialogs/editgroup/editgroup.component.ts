@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { takeUntil, merge, map, finalize } from 'rxjs/operators';
+import { takeUntil, merge, map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
 import { IUserRoleClaims, IClaims } from 'app/domain';
@@ -25,6 +26,7 @@ export class EditgroupComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<EditgroupComponent>,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public item: { selectedGroup: IUserRoleClaims, fullGroupList: IUserRoleClaims[] }
   ) {
@@ -104,7 +106,7 @@ export class EditgroupComponent extends ComponentBase implements OnInit {
     this.item.selectedGroup.role.name = groupParams.groupName;
     await this.adminService.updateGroup(this.item.selectedGroup.role, groupParams)
       .then((result) => this.dialogRef.close(result))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
   getClaim(claim: string) {

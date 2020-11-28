@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IItemInfo, IBulkDelete } from 'app/domain';
 import { isFile } from '../../dashboard/helpers';
 import { ComponentBase } from 'app/shared';
@@ -12,6 +13,7 @@ import { FileManagerService } from 'app/services';
 export class DeleteItemComponent extends ComponentBase {
   message: string;
   constructor(
+    private snackBar: MatSnackBar,
     private fileManagerService: FileManagerService,
     private dialogRef: MatDialogRef<DeleteItemComponent>,
     @Inject(MAT_DIALOG_DATA) private items: IItemInfo[]) {
@@ -43,7 +45,7 @@ export class DeleteItemComponent extends ComponentBase {
       .then((deletedItems: IBulkDelete) => {
         this.dialogRef.close(deletedItems);
       })
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 

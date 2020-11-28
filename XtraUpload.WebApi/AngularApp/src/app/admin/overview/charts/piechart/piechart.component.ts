@@ -7,6 +7,7 @@ import { AdminService } from 'app/services';
 import { Subject } from 'rxjs';
 import { IFileTypeCount } from 'app/domain';
 import { takeUntil } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-piechart',
@@ -31,6 +32,7 @@ export class PiechartComponent extends ComponentBase implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService
   ) {
     super();
@@ -83,7 +85,7 @@ export class PiechartComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.adminService.filetypeStat({ start: this.start.value, end: this.end.value })
       .then((data) => this.populatePieChart(data))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 }

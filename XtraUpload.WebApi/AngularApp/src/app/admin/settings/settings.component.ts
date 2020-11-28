@@ -201,7 +201,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     this.jwtBusy = true;
     await this.adminService.updateJwtOpts(jwtParams)
       .then(() => this.showSuccessMsg('Jwt Options'))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.jwtBusy = false);
   }
 
@@ -209,28 +209,28 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     this.emailBusy = true;
     await this.adminService.updateEmailOpts(emailParams)
       .then(() => this.showSuccessMsg('Email Options'))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.emailBusy = false);
   }
   async onHDOptionsSubmit(hardwareteParams) {
     this.hdBusy = true;
     await this.adminService.updateHardwareOpts(hardwareteParams)
       .then(() => this.showSuccessMsg('Hardware Options'))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.hdBusy = false);
   }
   async onPageSettingsSubmit(pageSettingParams) {
     this.appSettingBusy = true;
     await this.adminService.updateAppInfo(pageSettingParams)
       .then(() => this.showSuccessMsg('Page Settings'))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.appSettingBusy = false);
   }
   async onSocialAuthSubmit(socialAuthParams) {
     this.socialAuthBusy = true;
     await this.adminService.updateSocialAuthSettings(socialAuthParams)
       .then(() => this.showSuccessMsg('Social Auth'))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.socialAuthBusy = false);
   }
   showSuccessMsg(section: string) {

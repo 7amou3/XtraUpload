@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentBase } from 'app/shared';
 import { AdminService } from 'app/services';
 import { IAdminOverView, IItemCount, IFileTypeCount } from 'app/domain';
@@ -16,6 +17,7 @@ export class OverviewComponent extends ComponentBase implements OnInit {
   usersCount$ = new Subject<IItemCount[]>();
   fileTypesCount$ = new Subject<IFileTypeCount[]>();
   constructor(
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject('BASE_URL') baseUrl: string) {
     super();
@@ -31,7 +33,7 @@ export class OverviewComponent extends ComponentBase implements OnInit {
         this.usersCount$.next(data.usersCount);
         this.fileTypesCount$.next(data.fileTypesCount);
       })
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.adminService.notifyBusy(false));
   }
 

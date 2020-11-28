@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IStorageServer } from 'app/domain';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
@@ -13,6 +14,7 @@ export class DeleteserverComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DeleteserverComponent>,
     private adminService: AdminService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public server: IStorageServer
   ) {
     super();
@@ -24,7 +26,7 @@ export class DeleteserverComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.adminService.deleteServer(this.server)
       .then(() => this.dialogRef.close(this.server))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 }

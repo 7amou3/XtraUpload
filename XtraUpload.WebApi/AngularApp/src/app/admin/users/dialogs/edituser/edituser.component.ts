@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
 import { IUserRoleClaims, IEditProfile, IProfileClaim } from 'app/domain';
@@ -21,6 +22,7 @@ export class EdituserComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<EdituserComponent>,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public item: { user: IProfileClaim, groups: IUserRoleClaims[] }
   ) {
@@ -46,6 +48,6 @@ export class EdituserComponent extends ComponentBase implements OnInit {
     user.roleId = this.selectedGroup.value.role.id;
     await this.adminService.updateUser(user)
       .then(() => this.dialogRef.close(user))
-      .catch((error) => this.handleError(error));
+      .catch((error) => this.handleError(error, this.snackBar));
   }
 }

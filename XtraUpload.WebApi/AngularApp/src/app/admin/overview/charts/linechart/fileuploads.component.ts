@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
 import { IItemCount } from 'app/domain';
@@ -14,6 +15,7 @@ import { ChartBase } from './chart.base';
 export class FileuploadsComponent extends ChartBase implements OnInit {
   @Input() filesCount$ = new Subject<IItemCount[]>();
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private adminService: AdminService) {
     super();
@@ -43,7 +45,7 @@ export class FileuploadsComponent extends ChartBase implements OnInit {
     this.isBusy = true;
     await this.adminService.uploadStats({ start: this.start.value, end: this.end.value })
       .then((data) => this.populateChart(data))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 }

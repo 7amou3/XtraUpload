@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileManagerService } from 'app/services';
 import { IItemInfo, IFolderNode } from 'app/domain';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
@@ -12,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class MoveItemComponent extends TreeBase implements OnInit {
   constructor(
+    private snackBar: MatSnackBar,
     private filemanagerService: FileManagerService,
     private dialogRef: MatDialogRef<MoveItemComponent>,
     @Inject(MAT_DIALOG_DATA) private items: IItemInfo[]) {
@@ -39,7 +41,7 @@ export class MoveItemComponent extends TreeBase implements OnInit {
     .then(() => {
         this.dialogRef.close();
     })
-    .catch(error => this.handleError(error))
+    .catch(error => this.handleError(error, this.snackBar))
     .finally(() => this.isBusy = false);
   }
 }

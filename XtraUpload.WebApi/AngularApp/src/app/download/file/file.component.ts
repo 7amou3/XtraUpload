@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from 'app/shared';
 import { FileManagerService, ProgressNotificationService, IProgressInfo, SeoService } from 'app/services';
@@ -28,6 +29,7 @@ export class FileComponent extends ComponentBase implements OnInit {
   constructor(
     private seoService: SeoService,
     private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
     private router: Router,
     private fileMngService: FileManagerService,
     private progressService: ProgressNotificationService
@@ -138,6 +140,6 @@ export class FileComponent extends ComponentBase implements OnInit {
         const blob = new Blob([response], { type: this.fileItem.mimeType });
         FileSaver.saveAs(blob, this.fileItem.name);
       })
-      .catch(error => this.handleError(error));
+      .catch(error => this.handleError(error, this.snackBar));
   }
 }

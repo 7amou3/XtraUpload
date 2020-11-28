@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Subject, Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FileManagerService } from 'app/services';
 import { IItemInfo, IFileInfo, IFolderInfo } from 'app/domain';
@@ -20,6 +21,7 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
   isFile: boolean;
   downloadUrl: string;
   constructor(
+    private snackBar: MatSnackBar,
     private fileMngService: FileManagerService) {
     super();
   }
@@ -56,6 +58,6 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
     }
     
     await serviceCall.then(/*Item info will be pulled from itemInfo$ input*/)
-    .catch(error => this.handleError(error));
+    .catch(error => this.handleError(error, this.snackBar));
   }
 }

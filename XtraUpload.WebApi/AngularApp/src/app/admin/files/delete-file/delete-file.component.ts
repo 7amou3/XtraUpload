@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { IFileInfo } from 'app/domain';
 import { ComponentBase } from 'app/shared';
@@ -11,6 +12,7 @@ import { ComponentBase } from 'app/shared';
 export class DeleteFileComponent extends ComponentBase implements OnInit {
 
   constructor(
+    private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<DeleteFileComponent>,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public files: IFileInfo[]
@@ -23,7 +25,7 @@ export class DeleteFileComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.adminService.deleteFiles(this.files)
       .then((result) => this.dialogRef.close(result))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 

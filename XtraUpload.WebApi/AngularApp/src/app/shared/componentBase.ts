@@ -1,5 +1,6 @@
 import { OnDestroy, Directive } from '@angular/core';
 import { FormControl, FormGroup, } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { IGenericMessage } from 'app/domain';
 
@@ -32,11 +33,11 @@ export abstract class ComponentBase implements OnDestroy {
    const subtracted =  currentDate.getTime()  - (day * 8.64e+7);
    return new Date(subtracted);
  }
- handleError(error) {
+ handleError(error, snackBar: MatSnackBar) {
   if (error?.error?.errorContent) {
-    throw new Error('Error 400: ' + error?.error?.errorContent?.message);
+    snackBar.open('Error 400: ' + error?.error?.errorContent?.message);
   } else {
-    throw error;
+    snackBar.open(error);
   }
  }
   ngOnDestroy() {

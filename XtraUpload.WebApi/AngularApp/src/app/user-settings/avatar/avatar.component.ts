@@ -67,14 +67,14 @@ export class AvatarComponent extends ComponentBase implements OnInit {
       .pipe(takeUntil(this.onDestroy))
       .subscribe(result => {
         if (result.status === 'Success') {
-          this.isBusy = false;
           this.selectedImg = null;
           this.message$.next({ successMessage: $localize`Your avatar has been updated successfully.` });
           this.headerService.notifyAvatarChanged(result.uploadData as IAvatarData);
         }
-      }, error => this.handleError(error))
+      }, error => this.handleError(error, this.snackBar))
     })
-    .catch(error => this.handleError(error));;
+    .catch(error => this.handleError(error, this.snackBar))
+    .finally(() => this.isBusy = false);
   }
   urltoBlob(dataurl, fileName, mimeType): File {
     let arr = dataurl.split(','), bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);

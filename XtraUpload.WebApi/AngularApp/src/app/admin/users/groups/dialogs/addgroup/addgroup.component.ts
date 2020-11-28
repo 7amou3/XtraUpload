@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { ComponentBase } from 'app/shared';
 import { takeUntil, merge, map } from 'rxjs/operators';
@@ -25,6 +26,7 @@ export class AddgroupComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<AddgroupComponent>,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) private fullGroupList: IUserRoleClaims[]
   ) {
@@ -80,7 +82,7 @@ export class AddgroupComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.adminService.addGroup(groupParams)
       .then((result) => this.dialogRef.close(result))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 

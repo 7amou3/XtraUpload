@@ -74,7 +74,6 @@ export function loadIcons(iconService: CustomIconService) {
     FooterModule
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: "en-US" },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: UrlForwarderHandler, multi: true },

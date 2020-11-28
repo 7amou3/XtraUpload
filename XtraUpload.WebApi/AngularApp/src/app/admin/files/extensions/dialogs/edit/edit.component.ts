@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFileExtension, IEditExtension } from 'app/domain';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ComponentBase } from 'app/shared';
@@ -13,6 +14,7 @@ export class EditComponent extends ComponentBase implements OnInit {
   editFormGroup: FormGroup;
   newExt = new FormControl('', [Validators.required, Validators.pattern('^[.][a-zA-Z0-9]*$'), Validators.minLength(3)]);
   constructor(
+    private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<EditComponent>,
     private fb: FormBuilder,
     private adminService: AdminService,
@@ -38,7 +40,7 @@ export class EditComponent extends ComponentBase implements OnInit {
     formParams.id = this.item.selectedExt.id;
     await this.adminService.updateExtension(formParams)
       .then(() => this.dialogRef.close(formParams))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IHardwareOptions, IStorageServer, IUploadOptions } from 'app/domain';
 import { AdminService } from 'app/services';
 import { ServerDialogBase } from '../server.dialog.base';
@@ -16,6 +17,7 @@ export class AddserverComponent extends ServerDialogBase implements OnInit {
     private dialogRef: MatDialogRef<AddserverComponent>,
     fb: FormBuilder,
     adminService: AdminService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) private serversList: IStorageServer[]
   ) {
     super(adminService, fb);
@@ -39,7 +41,7 @@ export class AddserverComponent extends ServerDialogBase implements OnInit {
     addStorageServer.storageInfo.state = (addStorageServer.storageInfo.state as any).state
     this.adminService.addStorageServer(addStorageServer)
       .then(server => this.dialogRef.close(server))
-      .catch(error => this.handleError(error))
+      .catch(error => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false)
   }
 }

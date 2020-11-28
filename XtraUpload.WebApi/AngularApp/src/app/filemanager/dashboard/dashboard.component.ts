@@ -3,6 +3,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil } from 'rxjs/operators';
 import { Subject, ReplaySubject, merge } from 'rxjs';
 import { ComponentBase } from 'app/shared';
@@ -38,6 +39,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     private snavCtxMenuService: SnavContextMenuService,
     private userstorageService: UserStorageService,
     private sidenaveService: SidenavService,
+    private snackBar: MatSnackBar,
     private bottomSheet: MatBottomSheet,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
@@ -99,10 +101,8 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   async getFolderContent(folderId?: string): Promise<void> {
     this.isBusy = true;
     await this.filemanagerService.getFolderContent(folderId)
-    .then( data => {
-      this.folderContent$.next(data);
-    })
-    .catch(error => this.handleError(error))
+    .then( data => this.folderContent$.next(data))
+    .catch(error => this.handleError(error, this.snackBar))
     .finally(() => this.isBusy = false);
   }
 

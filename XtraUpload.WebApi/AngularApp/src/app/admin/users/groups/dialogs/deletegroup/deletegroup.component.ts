@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ComponentBase } from 'app/shared';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { IUserRoleClaims } from 'app/domain';
 
@@ -13,6 +14,7 @@ export class DeletegroupComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DeletegroupComponent>,
     private adminService: AdminService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public item: { selectedGroup: IUserRoleClaims, fullGroupList: IUserRoleClaims[] }
   ) {
     super();
@@ -25,7 +27,7 @@ export class DeletegroupComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     this.adminService.deleteGroup(this.item.selectedGroup.role.id)
       .then(() => this.dialogRef.close(this.item))
-      .catch((error) => this.handleError(error))
+      .catch((error) => this.handleError(error, this.snackBar))
       .finally(() => this.isBusy = false);
   }
 }
