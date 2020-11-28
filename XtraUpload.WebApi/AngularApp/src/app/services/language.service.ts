@@ -16,7 +16,7 @@ export class LanguageService {
         private userStorage: UserStorageService) { }
 
     get locale(): string {
-        return this._locale || 'en-US';
+        return this._locale || 'en';
     }
     set locale(culture: string) {
         this._locale = culture;

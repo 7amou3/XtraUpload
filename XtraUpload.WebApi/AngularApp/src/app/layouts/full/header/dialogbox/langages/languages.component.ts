@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ILanguage } from 'app/domain';
 import { LanguageService, UserStorageService } from 'app/services';
 import { ComponentBase, ILoggedin } from 'app/shared';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-langages',
@@ -11,8 +11,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./languages.component.scss']
 })
 export class LanguagesComponent extends ComponentBase implements OnInit {
-  languages$ = new Subject<ILanguage[]>();
-  selectedLangs : ILanguage[] = [];
+  languages$ = new BehaviorSubject<ILanguage[]>(null);
+  selectedCultures : string[] = [];
   constructor(
     private languageService: LanguageService,
     private userStorage: UserStorageService,
@@ -26,19 +26,23 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
     await this.languageService.getLanguages()
     .then((languages) => {
       this.languages$.next(languages);
-      this.selectedLangs[0] = this.userStorage.getUserLang();
+      this.selectedCultures = [this.userStorage.getUserLang().culture];
     })
   }
   async onLangClick() {
     this.isBusy = true;
-    this.userStorage.setUserLang(this.selectedLangs[0]);
+    const lang = this.languages$.getValue().find(s => s.culture === this.selectedCultures[0]);
+    if (!lang) {
+      throw Error('Invalid language!')
+    }
+    this.userStorage.setUserLang(lang);
     if (!this.loggedIn?.isLoggedIn) {
       // Reload the app to apply the selected lang
       window.location.href = '/'
     }
     // User is loggedin, update user lang in db
     else {
-      const result = await this.languageService.updateLanguage(this.selectedLangs[0].culture)
+      const result = await this.languageService.updateLanguage(this.selectedCultures[0])
       if (result) {
         // Reload the app since to apply the selected lang
         window.location.href = '/'
