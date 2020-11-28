@@ -14,13 +14,14 @@
                 (change)="onSelect($event)">
                     <ngx-dropzone-label>
                     <mat-icon class="icon-add-files">add</mat-icon>
-                    <span class="text-muted font-12" i18n>Max Image Size: 2 Mb</span>
+                    <p class="text-muted font-12" i18n>Max Image Size: 2 Mb</p>
                     </ngx-dropzone-label>
                 </ngx-dropzone>
                 <button type="button"
                 [class.drop-visibility]="!selectedImg"
                 (click)="onDeleteImage()"
-                mat-mini-fab color="warn" 
+                mat-mini-fab color="warn"
+                i18n-matTooltip
                 matTooltip="Delete"
                 aria-label="Delete Selected Image"
                 class="delete-img">

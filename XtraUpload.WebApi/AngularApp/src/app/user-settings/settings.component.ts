@@ -56,15 +56,15 @@ export class SettingsComponent extends ComponentBase implements OnInit {
       case '/settings/overview':
         this.subTitle = $localize`Overview`;
         break;
-      case 'AvatarComponent':
+      case '/settings/avatar':
         this.subTitle = $localize`Avatar`;
         break;
       case '/settings/password':
         this.subTitle = $localize`Password`;
         break;
-      case '/settings/avatar':
+      /*case '/settings/userinfo':
         this.subTitle = $localize`User Info`;
-        break;
+        break;*/
       default:
         break;
     }

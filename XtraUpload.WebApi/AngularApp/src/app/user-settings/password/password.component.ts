@@ -33,13 +33,13 @@ export class ChangePasswordComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.settingsService.changePassword(changePassParams)
     .then(() => {
-      this.isBusy = false;
       this.resetForm(this.changePassFormGroup);
       this.message$.next({successMessage: $localize`Your password has been successfully changed.`});
     })
     .catch(error => {
       this.message$.next({errorMessage: error?.error?.errorContent?.message});
       throw error;
-    });
+    })
+    .finally(() => this.isBusy = false);
   }
 }

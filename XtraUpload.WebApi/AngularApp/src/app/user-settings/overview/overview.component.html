@@ -70,8 +70,8 @@
                         <p matLine *ngIf="accountOverview?.user.emailConfirmed" i18n>Verified</p>
                         <p matLine *ngIf="!accountOverview?.user.emailConfirmed">
                             <span i18n>Unverified</span>
-                            <a class="font-14 text-info" style="cursor: pointer;" (click)="verifyEmail()"i18n
-                            >(verify now)</a>
+                            <a class="font-14 text-info" style="cursor: pointer;" (click)="verifyEmail()"
+                            >(<span i18n>verify now</span>)</a>
                         </p>
                         <mat-progress-bar mode="indeterminate" *ngIf="sendingEmail"></mat-progress-bar>
                         <p matLine i18n>Email status</p>
