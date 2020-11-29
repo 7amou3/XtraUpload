@@ -36,10 +36,7 @@ export class ChangePasswordComponent extends ComponentBase implements OnInit {
       this.resetForm(this.changePassFormGroup);
       this.message$.next({successMessage: $localize`Your password has been successfully changed.`});
     })
-    .catch(error => {
-      this.message$.next({errorMessage: error?.error?.errorContent?.message});
-      throw error;
-    })
+    .catch(error => this.message$.next({errorMessage: error?.error?.errorContent?.message}))
     .finally(() => this.isBusy = false);
   }
 }

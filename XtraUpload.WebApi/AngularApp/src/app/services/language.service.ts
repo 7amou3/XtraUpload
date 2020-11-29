@@ -24,7 +24,7 @@ export class LanguageService {
     }
     async init(): Promise<void> {
         // check if user already set his language
-        const profile = this.userStorage.getProfile();
+        const profile = this.userStorage.profile;
         if (profile?.language?.culture) {
             this._locale = profile.language.culture;
         }
@@ -35,13 +35,13 @@ export class LanguageService {
             const supportedLang = langs.filter(s => s.culture === browserCulture)[0];
             if (langs && supportedLang) {
                 this._locale = browserCulture;
-                this.userStorage.setUserLang(supportedLang);
+                this.userStorage.userlanguage = supportedLang;
             }
             // Language is not supported by XtraUpload, set the default lang
             else {
                 const defaultLang = langs.filter(s => s.default)[0];
                 this._locale = defaultLang.culture;
-                this.userStorage.setUserLang(defaultLang);
+                this.userStorage.userlanguage = defaultLang;
             }
         }
         this.document.documentElement.lang = this._locale; 
@@ -60,12 +60,12 @@ export class LanguageService {
         return registerLocaleData(module.default);
     }
     async getLanguages(): Promise<ILanguage[]> {
-        var appLangs = this.userStorage.getAppLanguages();
+        var appLangs = this.userStorage.applanguages;
         if (!appLangs) {
             return this.http.get<ILanguage[]>('setting/languages')
                 .pipe(
-                    tap(l => {
-                        this.userStorage.saveAppLanguages(l);
+                    tap(langs => {
+                        this.userStorage.applanguages = langs;
                     })
                 ).toPromise();
         }

@@ -26,7 +26,7 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
     await this.languageService.getLanguages()
     .then((languages) => {
       this.languages$.next(languages);
-      this.selectedCultures = [this.userStorage.getUserLang().culture];
+      this.selectedCultures = [this.userStorage.userlanguage.culture];
     })
   }
   async onLangClick() {
@@ -35,7 +35,8 @@ export class LanguagesComponent extends ComponentBase implements OnInit {
     if (!lang) {
       throw Error('Invalid language!')
     }
-    this.userStorage.setUserLang(lang);
+    // Save to lacoal storage
+    this.userStorage.userlanguage = lang;
     if (!this.loggedIn?.isLoggedIn) {
       // Reload the app to apply the selected lang
       window.location.href = '/'

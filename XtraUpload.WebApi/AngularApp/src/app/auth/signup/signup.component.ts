@@ -40,7 +40,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
   }
   async onSubmit(signupParams: ISignupParams) {
     this.isBusy = true;
-    signupParams.language = this.userStorage.getUserLang();
+    signupParams.language = this.userStorage.userlanguage;
     await this.authService.requestSignup(signupParams)
       .then(() => {
         this.message$.next({ successMessage: $localize`Account successfully created, please log in.` });

@@ -16,7 +16,9 @@ export class SettingsService {
     return this.http.get<IAppInitializerConfig>('setting/appinitializerconfig')
       .pipe(
         map(result => {
-          this.userStorage.saveAppSettings(result);
+          result.appInfo.version = result.version;
+          this.userStorage.pagelinks = result.pagesHeader;
+          this.userStorage.appinfo = result.appInfo;
           this.seoService.setMetaPage(result.appInfo);
           return result;
         })

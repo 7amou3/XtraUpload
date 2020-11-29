@@ -80,7 +80,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     super();
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', () => this._mobileQueryListener);
     // TODO: move content table management to a component (Single Responsibility Principle)
     const links: Link[] = [
       { fragment: 'pagesettings', name: $localize`Page Settings`, active: true },
@@ -174,7 +174,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
   }
   /** don't implement inerface */
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     super.ngOnDestroy();
   }
   private onScroll(): void {

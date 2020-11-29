@@ -11,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${this.storageService.getToken()}`
+        Authorization: `Bearer ${this.storageService.jwt}`
       }
     });
     return next.handle(request);

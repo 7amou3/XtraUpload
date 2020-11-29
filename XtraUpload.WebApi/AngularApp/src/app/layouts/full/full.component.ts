@@ -3,7 +3,6 @@ import { Router, } from '@angular/router';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ComponentBase } from 'app/shared';
 import { UserStorageService } from 'app/services';
-import { IProfile } from 'app/domain';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { SidenavService } from 'app/services/sidenav.service';
 @Component({
@@ -14,7 +13,6 @@ import { SidenavService } from 'app/services/sidenav.service';
 
 export class FullComponent extends ComponentBase implements OnInit {
   mobileQuery: MediaQueryList;
-  private _mobileQueryListener: () => void;
   currentTheme: 'dark' | 'light';
   constructor(
     private overlayContainer: OverlayContainer,
@@ -26,13 +24,12 @@ export class FullComponent extends ComponentBase implements OnInit {
     ) {
     super();
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener("change", () => changeDetectorRef.detectChanges());
   }
 
   ngOnInit() {
     // get default theme from storage
-    let theme = this.userStorageService.getProfile()?.theme;
+    let theme = this.userStorageService.profile?.theme;
     // default theme is light
     if (!theme) {
       theme = 'light';

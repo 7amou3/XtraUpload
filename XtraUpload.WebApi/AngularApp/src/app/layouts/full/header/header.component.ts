@@ -25,7 +25,7 @@ export class HeaderComponent extends ComponentBase implements OnInit {
       super();
     }
    ngOnInit() {
-      const profile = this.storageService.getProfile();
+      const profile = this.storageService.profile;
       if (!profile?.avatar) {
           this.avatar = 'assets/images/users/profile-icon.png';
       } else {
@@ -35,17 +35,17 @@ export class HeaderComponent extends ComponentBase implements OnInit {
       this.headerService.subscribeAvatarChange()
      .pipe(takeUntil(this.onDestroy))
      .subscribe( avatarData => {
-       const user = this.storageService.getProfile();
+       const user = this.storageService.profile;
 
        if (user) {
          this.avatar = null;
          this.avatar = avatarData.avatarUrl + '/' + Date.now();
          user.avatar = avatarData.avatarUrl;
-         this.storageService.saveUser(user);
+         this.storageService.profile = user;
        }
      });
      // Set lang text
-     this.currentLanguage = this.storageService.getUserLang().name;
+     this.currentLanguage = this.storageService.userlanguage.name;
    }
   onLoggedIn(loggedIn: ILoggedin) {
     this.loggedIn = loggedIn;

@@ -65,7 +65,7 @@ export class UploadService {
                     serverId: uploadSettings.storageServer.id
                 },
                 headers: {
-                    'authorization': 'Bearer ' + this.storageService.getToken()
+                    'authorization': 'Bearer ' + this.storageService.jwt
                 }
             });
         // Start the upload

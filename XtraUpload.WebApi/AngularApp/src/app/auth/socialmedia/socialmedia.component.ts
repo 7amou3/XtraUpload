@@ -37,7 +37,7 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
   async process(user: SocialUser) {
     this.isBusy = true;
     let exUser: IExtendedSocialUser = Object.create(user);
-    exUser.language = this.userStorage.getUserLang().culture;
+    exUser.language = this.userStorage.userlanguage.culture;
     await this.localAuth.socialmediaAuth(exUser)
       .then(() =>
         // Reload the entire app

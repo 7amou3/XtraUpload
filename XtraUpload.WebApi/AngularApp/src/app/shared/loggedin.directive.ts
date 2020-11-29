@@ -9,9 +9,9 @@ export class IsLoggedInDirective implements OnInit {
   constructor(private userStorage: UserStorageService) { }
 
   ngOnInit() {
-    const token = this.userStorage.getToken();
+    const token = this.userStorage.jwt;
     if (token) {
-        this.LoggedIn.next({isLoggedIn: true, role: this.userStorage.getProfile().role});
+        this.LoggedIn.next({isLoggedIn: true, role: this.userStorage.profile.role});
     }
     else {
         this.LoggedIn.next({isLoggedIn: false});

@@ -24,7 +24,7 @@ namespace XtraUpload.Database.Data.Common
         /// <summary>
         /// Get the user role claims
         /// </summary>
-        Task<RoleClaimsResult> GetUserRoleClaims(User user);
+        Task<RoleClaims> GetUserRoleClaims(User user);
 
         /// <summary>
         /// Get all role claims pair

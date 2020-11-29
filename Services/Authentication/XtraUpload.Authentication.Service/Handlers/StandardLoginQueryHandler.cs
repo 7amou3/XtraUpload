@@ -52,8 +52,10 @@ namespace XtraUpload.Authentication.Service
                 return Result;
             }
 
+            RoleClaims claimsResult = await _unitOfWork.Users.GetUserRoleClaims(user);
+      
             // Get user claims
-            Result = await _mediator.Send(new GetLogedInUserClaimsQuery(user, credentials.RememberMe));
+            Result = await _mediator.Send(new GetLogedInUserClaimsQuery(user, claimsResult, credentials.RememberMe));
 
             #region Trace
             if (Result.State != OperationState.Success)

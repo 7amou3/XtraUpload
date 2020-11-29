@@ -172,7 +172,7 @@ export class FileManagerService {
       reportProgress: true,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Bearer ${this.storageService.getToken()}`
+        Authorization: `Bearer ${this.storageService.jwt}`
       }
     })
       .toPromise();

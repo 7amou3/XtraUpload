@@ -24,7 +24,7 @@ export class AppSidebarComponent extends ComponentBase implements OnInit {
     super();
   }
   ngOnInit() {
-    const profile = this.storageService.getProfile();
+    const profile = this.storageService.profile;
     if (profile) {
       this.avatar = profile.avatar;
       this.username = profile.userName;

@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Authentication.Service.Common;
-using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 
 namespace XtraUpload.Authentication.Service
@@ -14,13 +13,11 @@ namespace XtraUpload.Authentication.Service
     /// </summary>
     public class GetLogedInUserClaimsHandler : IRequestHandler<GetLogedInUserClaimsQuery, XuIdentityResult>
     {
-        readonly IUnitOfWork _unitOfWork;
         readonly IJwtFactory _jwtFactory;
         readonly JwtIssuerOptions _jwtOpts;
 
-        public GetLogedInUserClaimsHandler(IUnitOfWork unitOfWork, IJwtFactory jwtFactory, IOptionsSnapshot<JwtIssuerOptions> jwtOpts)
+        public GetLogedInUserClaimsHandler(IJwtFactory jwtFactory, IOptionsSnapshot<JwtIssuerOptions> jwtOpts)
         {
-            _unitOfWork = unitOfWork;
             _jwtFactory = jwtFactory;
             _jwtOpts = jwtOpts.Value;
         }
@@ -30,13 +27,14 @@ namespace XtraUpload.Authentication.Service
         /// </summary>
         public async Task<XuIdentityResult> Handle(GetLogedInUserClaimsQuery request, CancellationToken cancellationToken)
         {
-            XuIdentityResult Result = new XuIdentityResult();
-            RoleClaimsResult claimsResult = await _unitOfWork.Users.GetUserRoleClaims(request.User);
+            XuIdentityResult Result = new XuIdentityResult
+            {
+                User = request.User,
+                Role = request.RoleClaims.Role,
+                ClaimsIdentity = _jwtFactory.GenerateClaimsIdentity(request.User, request.RoleClaims.Claims)
+            };
 
-            Result.User = request.User;
-            Result.Role = claimsResult.Role;
-            Result.ClaimsIdentity = _jwtFactory.GenerateClaimsIdentity(Result.User, claimsResult.Claims);
-            Result.JwtToken = await GenerateJwt(Result.ClaimsIdentity, Result.User, request.RememberMe);
+            Result.JwtToken = await GenerateJwt(Result.ClaimsIdentity, request.User, request.RememberMe);
 
             return Result;
         }

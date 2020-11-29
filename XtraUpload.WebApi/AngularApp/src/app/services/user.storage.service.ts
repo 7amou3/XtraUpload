@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getBrowserCultureLang } from '@locl/core';
-import { IAppInitializerConfig, ILanguage, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
+import { ILanguage, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
 const PROFILE = 'xu-Profile';
 const APP_INFO = 'xu-AppInfo';
 const APP_LANG = 'xu-Lang';
@@ -8,100 +7,106 @@ const STATICPAGE_LINKS = 'xu-PageLinks';
 /**
  *  Store user data to localstorage
  * */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserStorageService {
+  private _profile: IProfile;
+  private _applanguages: ILanguage[];
+  private _appinfo: IWebAppInfo;
+  private _pagelinks: IPageHeader[];
   constructor() { }
-  getAppInfo(): IWebAppInfo {
-    const pageSetting = localStorage.getItem(APP_INFO);
-    if (!pageSetting) {
-      return null;
+
+  /** Get the profile from memory or local storage */
+  get profile(): IProfile {
+    if (!this._profile) {
+      const profile = localStorage.getItem(PROFILE);
+      if (profile) {
+        this._profile = JSON.parse(profile);
+      }
     }
-    return JSON.parse(pageSetting);
+    return this._profile;
   }
-  getUserLang(): ILanguage {
-    const profile = this.getProfile();
-    if (profile?.language) {
-      return profile.language
-    } 
-    else return { culture: getBrowserCultureLang() } as ILanguage;
-  }
-  setUserLang(language: ILanguage) {
-    let profile = this.getProfile();
-    // If the user is not logged in, we create a Profile placeholder
-    if (!profile) {
-      profile = {} as IProfile;
-    }
-    profile.language = language;
-    this.saveUser(profile);
-  }
-  getAppLanguages(): ILanguage[] {
-    const langs = localStorage.getItem(APP_LANG);
-    if (!langs) {
-      return null;
-    }
-    return JSON.parse(langs);
-  }
-  saveAppLanguages(langs: ILanguage[]) {
-    if (!langs) return;
-    window.localStorage.setItem(APP_LANG, JSON.stringify(langs));
-  }
- 
-  updateTheme(theme: 'dark' | 'light') {
-    let profile = this.getProfile();
-    // If the user is not logged in we create a Profile placeholder
-    if (!profile) {
-      profile = {} as IProfile;
-    }
-    profile.theme = theme;
-    this.saveUser(profile);
-  }
-  getPageLinks(): IPageHeader[] {
-    const links = localStorage.getItem(STATICPAGE_LINKS);
-    if (!links) {
-      return null;
-    }
-    return JSON.parse(links);
-  }
-  saveAppSettings(pageSettings: IAppInitializerConfig) {
-    if (!pageSettings) return;
-    pageSettings.appInfo.version = pageSettings.version;
-    window.localStorage.removeItem(APP_INFO);
-    window.localStorage.removeItem(STATICPAGE_LINKS);
-    window.localStorage.setItem(APP_INFO, JSON.stringify(pageSettings.appInfo));
-    window.localStorage.setItem(STATICPAGE_LINKS, JSON.stringify(pageSettings.pagesHeader));
-  }
-  saveUser(profile: IProfile): IProfile {
-    if (!profile) {
-      return;
-    }
-    window.localStorage.removeItem(PROFILE);
+
+  /** Save the profile to local storage */
+  set profile(profile: IProfile) {
+    if (!profile) return;
     window.localStorage.setItem(PROFILE, JSON.stringify(profile));
-    return profile;
+    this._profile = profile;
   }
 
-  getProfile(): IProfile {
-    const user = localStorage.getItem(PROFILE);
-    if (!user) {
-      return null;
+  get jwt() {
+    return this._profile?.jwtToken?.token;
+  }
+  
+  get userlanguage(): ILanguage {
+    return this._profile.language;
+  }
+  set userlanguage(language: ILanguage) {
+    // If the user is not logged in, we create a Profile placeholder
+    if (!this._profile) {
+      this._profile = {} as IProfile;
     }
-    return JSON.parse(user);
-  }
 
-  getToken(): string {
-    const user = this.getProfile();
-    if (!user) {
-      return null;
+    this._profile.language = language;
+    // save to local storages
+    this.profile = this._profile;
+  }
+  get applanguages(): ILanguage[] {
+    if (!this._applanguages) {
+      const applangs = localStorage.getItem(APP_LANG);
+      if (applangs) {
+        this._applanguages = JSON.parse(applangs);
+      }
     }
-    return user.jwtToken?.token;
+    return this._applanguages;
   }
-
+  set applanguages(languages: ILanguage[]) {
+    if (!languages) return;
+    this._applanguages = languages;
+    window.localStorage.setItem(APP_LANG, JSON.stringify(languages));
+  }
+  get appinfo(): IWebAppInfo {
+    if (!this._appinfo) {
+      const appinfo = localStorage.getItem(APP_INFO);
+      if (appinfo) {
+        this._appinfo = JSON.parse(appinfo);
+      }
+    }
+    return this._appinfo;
+  }
+  set appinfo(appInfo: IWebAppInfo) {
+    if (!appInfo) return;
+    this._appinfo = appInfo;
+    window.localStorage.setItem(APP_INFO, JSON.stringify(appInfo));
+  }
+  
+  get pagelinks(): IPageHeader[] {
+    if (!this._pagelinks) {
+      const pagelinks = localStorage.getItem(STATICPAGE_LINKS);
+      if (pagelinks) {
+        this._pagelinks = JSON.parse(pagelinks);
+      }
+    }
+    return this._pagelinks;
+  }
+  set pagelinks(pagelinks: IPageHeader[]) {
+    if (!pagelinks) return;
+    this._pagelinks = pagelinks;
+    window.localStorage.setItem(STATICPAGE_LINKS, JSON.stringify(pagelinks));
+  }
+  updateTheme(theme: 'dark' | 'light') {
+    // If the user is not logged in we create a Profile placeholder
+    if (!this._profile) {
+      this._profile = {} as IProfile;
+    }
+    this._profile.theme = theme;
+    // Save to local storage
+    this.profile = this._profile;
+  }
   /**Clear local storage but keep user preferences (ex language, theme..) */
   clearLocalStorage() {
-    const user = this.getProfile();
     // Delete all key value pairs
     window.localStorage.clear();
-    // Save user preferences
-    const profile = { language: user.language, theme: user.theme} as IProfile;
-    this.saveUser(profile);
+    // Save user preferences to local storage
+    this.profile = { language: this._profile.language, theme: this._profile.theme } as IProfile;
   }
 }

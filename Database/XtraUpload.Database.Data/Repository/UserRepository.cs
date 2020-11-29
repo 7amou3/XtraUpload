@@ -47,13 +47,13 @@ namespace XtraUpload.Database.Data
         /// <summary>
         /// Gets the user's role claims
         /// </summary>
-        public async Task<RoleClaimsResult> GetUserRoleClaims(User user)
+        public async Task<RoleClaims> GetUserRoleClaims(User user)
         {
             var query =  _context.Users
                                 .Include(s => s.Role)
                                 .ThenInclude(s => s.RoleClaims)
                                 .Where(s => s.Id == user.Id)
-                                .Select(s => new RoleClaimsResult { Role = s.Role, Claims = s.Role.RoleClaims });
+                                .Select(s => new RoleClaims { Role = s.Role, Claims = s.Role.RoleClaims });
 
             return await query.SingleOrDefaultAsync();
         }

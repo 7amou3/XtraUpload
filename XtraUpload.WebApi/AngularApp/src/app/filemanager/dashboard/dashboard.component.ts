@@ -47,7 +47,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', () => this._mobileQueryListener);
   }
 
   async ngOnInit() {
@@ -85,12 +85,12 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     });
   }
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     super.ngOnDestroy();
   }
 
   private initView(): void {
-    const storage = this.userstorageService.getProfile();
+    const storage = this.userstorageService.profile;
     if (!storage.itemsDisplay) {
       this.changeDisplay('list');
     }
@@ -107,11 +107,11 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   }
 
   changeDisplay(display: 'list' | 'grid') {
-    const userStorage = this.userstorageService.getProfile();
-    userStorage.itemsDisplay = display;
+    const profile = this.userstorageService.profile;
+    profile.itemsDisplay = display;
+    this.displayMode = display;
     // update the local storage with the new data
-    this.displayMode = this.userstorageService.saveUser(userStorage).itemsDisplay;
-
+    this.userstorageService.profile = profile;
   }
 
   openUploadSheet() {

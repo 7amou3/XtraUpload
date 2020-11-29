@@ -80,7 +80,7 @@ export class SidebarComponent extends ComponentBase implements OnInit {
   hasChild = (_: number, node: IFlatNode) => node.expandable;
   ngOnInit() {
     this.selectedUrl = this.router.url;
-    const appInfo = this.userstorgae.getAppInfo();
+    const appInfo = this.userstorgae.appinfo;
     if (appInfo) {
       this.softVersion = appInfo.version;
     }

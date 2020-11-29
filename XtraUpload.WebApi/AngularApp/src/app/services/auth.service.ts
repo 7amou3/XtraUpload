@@ -12,12 +12,12 @@ export class AuthService {
     return this.http.post<IProfile>('user/login', loginParams)
       .pipe(
         tap(profile => {
-          const p = this.userStorage.getProfile();
+          const p = this.userStorage.profile;
           if (p) {
             if (p.theme) profile.theme = p.theme;
             if (p.language) profile.language = p.language;
           }
-          this.userStorage.saveUser(profile);
+          this.userStorage.profile = profile;
         })
       ).toPromise();
   }
@@ -25,12 +25,12 @@ export class AuthService {
     return this.http.post<IProfile>('user/socialauth', user)
       .pipe(
         tap(profile => {
-          const p = this.userStorage.getProfile();
+          const p = this.userStorage.profile;
           if (p) {
             if (p.theme) profile.theme = p.theme;
             if (p.language) profile.language = p.language;
           }
-          this.userStorage.saveUser(profile);
+          this.userStorage.profile = profile;
         })
       ).toPromise();
   }
@@ -78,11 +78,11 @@ export class AuthService {
     return this.http.put('setting/confirmemail/', { emailToken: emailToken }).toPromise();
   }
   isUserAuthicated(): boolean {
-    const user = this.userStorage.getProfile();
+    const user = this.userStorage.profile;
     return user != null && user.jwtToken != null;
   }
   isAdminAuthenticated(): boolean {
-    const admin = this.userStorage.getProfile();
+    const admin = this.userStorage.profile;
     return admin != null && admin.jwtToken != null && admin.role === 'Admin'
   }
   signOut(): void {

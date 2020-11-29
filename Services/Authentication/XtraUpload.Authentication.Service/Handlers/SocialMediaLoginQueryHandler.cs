@@ -59,8 +59,9 @@ namespace XtraUpload.Authentication.Service
                 Result.ErrorContent = new ErrorContent(_localizer["Your Account Has Been Suspended."], ErrorOrigin.Client);
                 return Result;
             }
+            RoleClaims claimsResult = await _unitOfWork.Users.GetUserRoleClaims(userInfo);
 
-            return await _mediator.Send(new GetLogedInUserClaimsQuery(userInfo, false));
+            return await _mediator.Send(new GetLogedInUserClaimsQuery(userInfo, claimsResult, false));
         }
     }
 }
