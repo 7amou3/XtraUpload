@@ -24,6 +24,11 @@ using XtraUpload.Setting.Host;
 using XtraUpload.Database.Host;
 using XtraUpload.GrpcServices;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.Localization;
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using System;
+using System.Text;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace XtraUpload.WebApi
 {
@@ -48,6 +53,15 @@ namespace XtraUpload.WebApi
 
             // Add cors, see https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1 to configure cors according to your needs
             services.AddCors();
+
+            // Add i18n support
+            services.AddJsonLocalization(options =>
+            {
+                options.ResourcesPath = "i18n";
+                options.FileEncoding = Encoding.UTF8;
+                options.LocalizationMode = LocalizationMode.I18n;
+                options.CacheDuration = TimeSpan.FromDays(365);
+                });
 
             // Load XtraUpload modules
             services.AddDatabase(Configuration);
@@ -103,6 +117,13 @@ namespace XtraUpload.WebApi
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = Helpers.SupportedCultures,
+                SupportedUICultures = Helpers.SupportedCultures,
             });
 
             app.UseStaticFiles();

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,12 +17,14 @@ namespace XtraUpload.Authentication.Service
     {
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
         readonly ILogger<StandardLoginQueryHandler> _logger;
 
-        public StandardLoginQueryHandler(IUnitOfWork unitOfWork, IMediator mediator, ILogger<StandardLoginQueryHandler> logger)
+        public StandardLoginQueryHandler(IUnitOfWork unitOfWork, IMediator mediator, IJsonStringLocalizer localizer, ILogger<StandardLoginQueryHandler> logger)
         {
             _logger = logger;
             _mediator = mediator;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
 
@@ -33,19 +36,19 @@ namespace XtraUpload.Authentication.Service
             // Check the user exist
             if (user == null)
             {
-                Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No user found with the provided email."], ErrorOrigin.Client);
                 return Result;
             }
             // Check user is not suspended
             if (user.AccountSuspended)
             {
-                Result.ErrorContent = new ErrorContent("Your Account Has Been Suspended.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["Your Account Has Been Suspended."], ErrorOrigin.Client);
                 return Result;
             }
             // Check the password
             if (!Helpers.CheckPassword(credentials.Password, user.Password))
             {
-                Result.ErrorContent = new ErrorContent("Email or Password does not match", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["Email or Password does not match"], ErrorOrigin.Client);
                 return Result;
             }
 

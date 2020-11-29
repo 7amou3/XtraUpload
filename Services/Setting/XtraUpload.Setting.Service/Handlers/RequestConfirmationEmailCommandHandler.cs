@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
@@ -20,10 +21,12 @@ namespace XtraUpload.Setting.Service
         readonly IMediator _mediatr;
         readonly ClaimsPrincipal _caller;
         readonly IUnitOfWork _unitOfWork;
-        
-        public RequestConfirmationEmailCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IMediator mediatr)
+        readonly IJsonStringLocalizer _localizer;
+
+        public RequestConfirmationEmailCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IMediator mediatr, IJsonStringLocalizer localizer)
         {
             _mediatr = mediatr;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -36,7 +39,7 @@ namespace XtraUpload.Setting.Service
             // Check user exist
             if (user == null)
             {
-                Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No user found with the provided email."], ErrorOrigin.Client);
                 return Result;
             }
 
@@ -44,13 +47,13 @@ namespace XtraUpload.Setting.Service
             HealthCheckResult health = await _mediatr.Send(new EmailHealthCheckQuery());
             if (health.Status != HealthStatus.Healthy)
             {
-                Result.ErrorContent = new ErrorContent("Internal email server error, please check again later.", ErrorOrigin.Server);
+                Result.ErrorContent = new ErrorContent(_localizer["Email server error, please check again later."], ErrorOrigin.Server);
                 return Result;
             }
             // Check email confirmation status
             if (user.EmailConfirmed)
             {
-                Result.ErrorContent = new ErrorContent("The email has been already confirmed.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The email has been already confirmed."], ErrorOrigin.Client);
                 return Result;
             }
             // Create and store a mail confirmation token

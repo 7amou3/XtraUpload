@@ -40,7 +40,7 @@ namespace XtraUpload.Setting.Service
         {
             OperationResult result = new OperationResult();
 
-            if (request.ConfigSection is Domain.UploadOptions)
+            if (request.ConfigSection is UploadOptions)
             {
                 //await _uploadOpts.Update(s =>
                 //{
@@ -108,7 +108,7 @@ namespace XtraUpload.Setting.Service
                 result.ErrorContent = new ErrorContent("Unknown configuration section", ErrorOrigin.Client);
             }
 
-            return new OperationResult();
+            return result;
         }
 
     }

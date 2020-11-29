@@ -71,6 +71,7 @@ export class PiechartComponent extends ComponentBase implements OnInit {
     }
   }
   rangeFilter(d: Date): boolean {
+    if (!d) return;
     return d.getTime() < new Date().getTime();
   }
   convertToStr(enumVal: number): string {

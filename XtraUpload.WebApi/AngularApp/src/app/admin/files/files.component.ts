@@ -130,6 +130,7 @@ export class FilesComponent extends ComponentBase implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
   rangeFilter(d: Date): boolean {
+    if (!d) return;
     return d.getTime() < new Date().getTime();
   }
   onTableEvent(pageEvent: PageEvent) {

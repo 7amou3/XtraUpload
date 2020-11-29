@@ -1,16 +1,9 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import {
-    HttpRequest,
-    HttpHandler,
-    HttpEvent,
-    HttpInterceptor,
-    HttpEventType,
-    HttpResponse
-} from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpEventType } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ProgressNotificationService } from '../../services';
+import { ProgressNotificationService } from 'app/services';
 
 @Injectable()
 export class HttpProgressHandler implements HttpInterceptor {

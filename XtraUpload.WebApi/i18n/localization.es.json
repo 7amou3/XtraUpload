@@ -1,0 +1,23 @@
+{
+  "No user found with the provided email.": "No se encontró ningún usuario con el correo electrónico proporcionado",
+  "Your Account Has Been Suspended.": "Tu cuenta ha sido suspendida.",
+  "Email or Password does not match": "El correo electrónico o la contraseña no coinciden",
+  "Your current password is incorrect.": "Tu contraseña actual es incorrecta.",
+  "The provided token does not exist": "El token proporcionado no existe",
+  "The provided token has expired": "El token proporcionado ha caducado",
+  "The provided token has already been used or expired": "El token proporcionado ya se usó o venció",
+  "The email associated with the provided token has been already confirmed.": "El correo electrónico asociado con el token proporcionado ya se ha confirmado",
+  "No email found with the provided token.": "No se ha encontrado ningún correo electrónico con el token proporcionado",
+  "A user with this email already exist": "Ya existe un usuario con este correo electrónico",
+  "No user found with the provided id.": "No se encontró ningún usuario con el ID proporcionado",
+  "Email server error, please check again later.": "Error del servidor de correo electrónico. Vuelva a verificar más tarde",
+  "The email has been already confirmed.": "El correo electrónico ya ha sido confirmado",
+  "No folder with the provided id was found": "No se encontró ninguna carpeta con el ID proporcionado",
+  "No file with the provided id was found": "No se encontró ningún archivo con el ID proporcionado",
+  "This folder is not available for public downloads": "Esta carpeta no está disponible para descargas públicas",
+  "Moving folders to the same location is not possible!": "¡No es posible mover carpetas a la misma ubicación!",
+  "Moving a parent folder to one of its child folders is not possible": "No es posible mover una carpeta principal a una de sus carpetas secundarias",
+  "Moving files to the same location is not possible!": "¡No es posible mover archivos a la misma ubicación!",
+  "No user with the provided id was found": "No se encontró ningún usuario con el ID proporcionado",
+  "The requested language does not exist.": "El idioma solicitado no existe"
+}

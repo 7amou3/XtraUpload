@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Threading;
@@ -13,10 +14,12 @@ namespace XtraUpload.Authentication.Service
     {
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
+        readonly IJsonStringLocalizer _localizer;
 
-        public GetUserByIdQueryHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext)
+        public GetUserByIdQueryHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext, IJsonStringLocalizer localizer)
         {
             _unitOfWork = unitOfWork;
+            _localizer = localizer;
             _caller = httpContext.HttpContext.User;
         }
         public async Task<CreateUserResult> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
@@ -27,7 +30,7 @@ namespace XtraUpload.Authentication.Service
             // Check user exist
             if (user == null)
             {
-                Result.ErrorContent = new ErrorContent("No user found with the provided id.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No user found with the provided id."], ErrorOrigin.Client);
                 return Result;
             }
 

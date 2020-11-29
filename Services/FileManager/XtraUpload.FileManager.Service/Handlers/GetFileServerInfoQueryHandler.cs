@@ -1,8 +1,7 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using XtraUpload.Database.Data.Common;
@@ -18,12 +17,14 @@ namespace XtraUpload.FileManager.Service
     {
         #region Fields
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public GetFileServerInfoQueryHandler(IUnitOfWork unitOfWork)
+        public GetFileServerInfoQueryHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer)
         {
             _unitOfWork = unitOfWork;
+            _localizer = localizer;
         }
         #endregion
 
@@ -39,7 +40,7 @@ namespace XtraUpload.FileManager.Service
             }
             else
             {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No file with the provided id was found"], ErrorOrigin.Client);
             }
 
             return Result;

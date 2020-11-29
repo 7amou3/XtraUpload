@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,15 @@ namespace XtraUpload.FileManager.Service
         readonly IMediator _mediatr;
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public MoveItemsCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, IHttpContextAccessor httpContextAccessor)
+        public MoveItemsCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr,
+            IJsonStringLocalizer localizer, IHttpContextAccessor httpContextAccessor)
         {
             _mediatr = mediatr;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -44,7 +48,7 @@ namespace XtraUpload.FileManager.Service
             // Check destination folder exists
             if (destFolder == null && request.DestFolderId != "root")
             {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No folder with the provided id was found"], ErrorOrigin.Client);
                 return Result;
             }
 
@@ -53,7 +57,7 @@ namespace XtraUpload.FileManager.Service
                 // Check if user not trying to move folders to same location
                 if (request.SelectedFolders.Any(s => s.Parentid == request.DestFolderId || s.Id == request.DestFolderId))
                 {
-                    Result.ErrorContent = new ErrorContent("Moving folders to the same location is not possible!", ErrorOrigin.Client);
+                    Result.ErrorContent = new ErrorContent(_localizer["Moving folders to the same location is not possible!"], ErrorOrigin.Client);
                     return Result;
                 }
                 // Get the child folders of the currently moved folder(s)
@@ -65,7 +69,7 @@ namespace XtraUpload.FileManager.Service
                 childFolders.RemoveAt(childFolders.Count - 1);
                 if (childFolders.Any(s => s.Id == request.DestFolderId))
                 {
-                    Result.ErrorContent = new ErrorContent("Moving a parent folder to one of its child folders is not possible", ErrorOrigin.Client);
+                    Result.ErrorContent = new ErrorContent(_localizer["Moving a parent folder to one of its child folders is not possible"], ErrorOrigin.Client);
                     return Result;
                 }
 
@@ -82,7 +86,7 @@ namespace XtraUpload.FileManager.Service
                 // Check if user not trying to move files to same location
                 if (request.SelectedFiles.Any(s => s.FolderId == request.DestFolderId || (s.FolderId == null && request.DestFolderId == "root")))
                 {
-                    Result.ErrorContent = new ErrorContent("Moving files to the same location is not possible!", ErrorOrigin.Client);
+                    Result.ErrorContent = new ErrorContent(_localizer["Moving files to the same location is not possible!"], ErrorOrigin.Client);
                     return Result;
                 }
                 IEnumerable<string> filesId = request.SelectedFiles.Select(s => s.Id);

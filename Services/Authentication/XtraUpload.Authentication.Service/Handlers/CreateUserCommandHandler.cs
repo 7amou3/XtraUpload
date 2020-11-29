@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,14 +20,16 @@ namespace XtraUpload.Authentication.Service
         #region Fields
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
         readonly ILogger<CreateUserCommandHandler> _logger;
         #endregion
 
         #region Constructor
-        public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMediator mediator, ILogger<CreateUserCommandHandler> logger)
+        public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMediator mediator, IJsonStringLocalizer localizer, ILogger<CreateUserCommandHandler> logger)
         {
             _logger = logger;
             _mediator = mediator;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
         #endregion
@@ -40,7 +43,7 @@ namespace XtraUpload.Authentication.Service
             User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Email == request.User.Email);
             if (user != null)
             {
-                Result.ErrorContent = new ErrorContent("A user with this email already exist", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["A user with this email already exist"], ErrorOrigin.Client);
                 return Result;
             }
 

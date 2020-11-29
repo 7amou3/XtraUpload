@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,11 +18,13 @@ namespace XtraUpload.Authentication.Service
     {
         #region Fields
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public ValidatePwdTokenCommandHandler(IUnitOfWork unitOfWork)
+        public ValidatePwdTokenCommandHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
         #endregion
@@ -35,13 +38,13 @@ namespace XtraUpload.Authentication.Service
             // Check recovery info exists
             if (recoveryInfo == null)
             {
-                Result.ErrorContent = new ErrorContent("The provided token does not exist", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The provided token does not exist"], ErrorOrigin.Client);
                 return Result;
             }
 
             if (recoveryInfo.Status != RequestStatus.InProgress)
             {
-                Result.ErrorContent = new ErrorContent("The provided token has already been used or expired.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The provided token has already been used or expired"], ErrorOrigin.Client);
                 return Result;
             }
 
@@ -49,7 +52,7 @@ namespace XtraUpload.Authentication.Service
             User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == recoveryInfo.UserId);
             if (user == null)
             {
-                Result.ErrorContent = new ErrorContent("No user found with the provided id.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No user found with the provided id."], ErrorOrigin.Client);
                 return Result;
             }
             user.Password = Helpers.HashPassword(request.NewPassword);

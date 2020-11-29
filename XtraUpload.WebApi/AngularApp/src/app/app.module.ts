@@ -28,7 +28,8 @@ import {
   HttpProgressHandler,
   TokenInterceptor,
   GlobalErrorHandler,
-  ProgressComponent
+  ProgressComponent,
+  HeaderCultureProvider
 } from './http-interceptor';
 import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService, CustomIconService, LanguageService } from 'app/services';
 import { SpinnerComponent } from './shared';
@@ -79,6 +80,7 @@ export function loadIcons(iconService: CustomIconService) {
     { provide: HTTP_INTERCEPTORS, useClass: UrlForwarderHandler, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpProgressHandler, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: HeaderCultureProvider, multi: true},
     {
       provide: APP_INITIALIZER,
       useFactory: languageFactory,

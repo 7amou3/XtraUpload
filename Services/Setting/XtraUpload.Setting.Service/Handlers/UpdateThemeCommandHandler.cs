@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Security.Claims;
@@ -17,9 +18,11 @@ namespace XtraUpload.Setting.Service
     {
         readonly ClaimsPrincipal _caller;
         readonly IUnitOfWork _unitOfWork;
-       
-        public UpdateThemeCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        readonly IJsonStringLocalizer _localizer;
+
+        public UpdateThemeCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IJsonStringLocalizer localizer)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -32,7 +35,7 @@ namespace XtraUpload.Setting.Service
             // Check user exist
             if (user == null)
             {
-                result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
+                result.ErrorContent = new ErrorContent(_localizer["No user found with the provided email."], ErrorOrigin.Client);
                 return result;
             }
             // Update

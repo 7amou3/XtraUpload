@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Security.Claims;
@@ -18,11 +19,13 @@ namespace XtraUpload.FileManager.Service
         #region Fields
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public UpdateFileNameCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public UpdateFileNameCommandHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer, IHttpContextAccessor httpContextAccessor)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -37,7 +40,7 @@ namespace XtraUpload.FileManager.Service
             // Check if file exist
             if (file == null)
             {
-                Result.ErrorContent = new ErrorContent("No file with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No file with the provided id was found"], ErrorOrigin.Client);
                 return Result;
             }
 

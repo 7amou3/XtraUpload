@@ -1,7 +1,7 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorNotificationService, UserStorageService } from '../services';
+import { ErrorNotificationService, UserStorageService } from 'app/services';
 
 /** Intercept incomming http error responses and displays them to the user */
 @Injectable()

@@ -1,0 +1,23 @@
+﻿{
+  "No user found with the provided email.": "لم يتم العثور على البريد الإلكتروني",
+  "Your Account Has Been Suspended.": "تم تعليق حسابك.",
+  "Email or Password does not match": "البريد الإلكتروني أو كلمة المرور غير متطابقين",
+  "Your current password is incorrect.": "كلمة المرور الحالية غير صحيحة.",
+  "The provided token does not exist": "الرمز المميز المقدم غير موجود",
+  "The provided token has expired": "انتهت صلاحية الرمز المميز المقدم",
+  "The provided token has already been used or expired": "تم استخدام الرمز المميز المقدم بالفعل أو منتهي الصلاحية",
+  "The email associated with the provided token has been already confirmed.": "تم بالفعل تأكيد البريد الإلكتروني المرتبط بالرمز المميز المقدم.",
+  "No email found with the provided token.": "لم يتم العثور على بريد إلكتروني مع الرمز المميز المقدم.",
+  "A user with this email already exist": "يوجد بالفعل مستخدم بهذا البريد الإلكتروني",
+  "No user found with the provided id.": "لم يتم العثور على مستخدم بالمعرف المقدم.",
+  "Email server error, please check again later.": "خطأ في خادم البريد الإلكتروني ، يرجى التحقق مرة أخرى لاحقًا.",
+  "The email has been already confirmed.": "تم تأكيد البريد الإلكتروني بالفعل.",
+  "No folder with the provided id was found": "لم يتم العثور على مجلد بالمعرف المقدم",
+  "No file with the provided id was found": "لم يتم العثور على ملف بالمعرف المقدم",
+  "This folder is not available for public downloads": "هذا المجلد غير متاح للتنزيلات العامة",
+  "Moving folders to the same location is not possible!": "لا يمكن نقل المجلدات إلى نفس الموقع!",
+  "Moving a parent folder to one of its child folders is not possible": "لا يمكن نقل مجلد أصل إلى أحد مجلداته الفرعية",
+  "Moving files to the same location is not possible!": "نقل الملفات إلى نفس الموقع غير ممكن!",
+  "No user with the provided id was found": "لم يتم العثور على مستخدم بالمعرف المقدم",
+  "The requested language does not exist.": "اللغة المطلوبة غير موجودة."
+}

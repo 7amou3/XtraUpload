@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Threading;
@@ -18,12 +19,15 @@ namespace XtraUpload.FileManager.Service
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public GetInnerFoldersQueryHandler(IUnitOfWork unitOfWork, IMediator mediator, IHttpContextAccessor httpContextAccessor)
+        public GetInnerFoldersQueryHandler(IUnitOfWork unitOfWork, IMediator mediator,
+            IJsonStringLocalizer localizer, IHttpContextAccessor httpContextAccessor)
         {
             _mediator = mediator;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -38,13 +42,13 @@ namespace XtraUpload.FileManager.Service
             FolderItem folder = await _unitOfWork.Folders.FirstOrDefaultAsync(s => s.Id == request.ParentId);
             if (folder == null)
             {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No folder with the provided id was found"], ErrorOrigin.Client);
                 return Result;
             }
             // If anonymous user, check if folder is public
             if (userId != folder.UserId && folder.Status != ItemStatus.Visible)
             {
-                Result.ErrorContent = new ErrorContent("This folder is not available for public downloads", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["This folder is not available for public downloads"], ErrorOrigin.Client);
                 return Result;
             }
 

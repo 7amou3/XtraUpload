@@ -1,0 +1,23 @@
+{
+  "No user found with the provided email.": "Aucun utilisateur trouvé avec l'e-mail fourni.",
+  "Your Account Has Been Suspended.": "Votre compte a été suspendu.",
+  "Email or Password does not match": "L'e-mail ou le mot de passe ne correspondent pas",
+  "Your current password is incorrect.": "Votre mot de passe actuel est incorrect.",
+  "The provided token does not exist": "Le token fourni n'existe pas",
+  "The provided token has expired": "Le token fourni a expiré",
+  "The provided token has already been used or expired": "Le token fourni a déjà été utilisé ou a expiré",
+  "The email associated with the provided token has been already confirmed.": "L'e-mail associé au token fourni a déjà été confirmé.",
+  "No email found with the provided token.": "Aucun e-mail trouvé avec le jeton fourni.",
+  "A user with this email already exist": "Un utilisateur avec cet e-mail existe déjà",
+  "No user found with the provided id.": "Aucun utilisateur trouvé avec l'identifiant fourni.",
+  "Email server error, please check again later.": "Erreur du serveur de messagerie, veuillez vérifier à nouveau plus tard.",
+  "The email has been already confirmed.": "L'e-mail a déjà été confirmé.",
+  "No folder with the provided id was found": "Aucun dossier avec l'ID fourni n'a été trouvé",
+  "No file with the provided id was found": "Aucun fichier avec l'ID fourni n'a été trouvé",
+  "This folder is not available for public downloads": "Ce dossier n'est pas disponible pour les téléchargements publics",
+  "Moving folders to the same location is not possible!": "Le déplacement des dossiers vers le même emplacement n'est pas possible!",
+  "Moving a parent folder to one of its child folders is not possible": "Le déplacement d'un dossier parent vers l'un de ses dossiers enfants n'est pas possible",
+  "Moving files to the same location is not possible!": "Le déplacement des fichiers vers le même emplacement n'est pas possible!",
+  "No user with the provided id was found": "Aucun utilisateur avec l'identifiant fourni n'a été trouvé",
+  "The requested language does not exist.": "La langue demandée n'existe pas."
+}

@@ -23,7 +23,8 @@ namespace XtraUpload.Database.Data
                 new Language() { Id = _defaultLangId, Name = "English", Culture = "en", Default = true },
                 new Language() { Id = Guid.NewGuid(), Name = "Francais", Culture = "fr" },
                 new Language() { Id = Guid.NewGuid(), Name = "Español", Culture = "es" },
-                new Language() { Id = Guid.NewGuid(), Name = "العربية", Culture = "ar" }
+                new Language() { Id = Guid.NewGuid(), Name = "العربية", Culture = "ar" },
+                new Language() { Id = Guid.NewGuid(), Name = "Deutsch", Culture = "de" }
                 );
         }
     }

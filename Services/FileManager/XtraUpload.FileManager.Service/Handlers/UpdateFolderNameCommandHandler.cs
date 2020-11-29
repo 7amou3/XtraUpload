@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
@@ -19,11 +20,13 @@ namespace XtraUpload.FileManager.Service
         #region Fields
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public UpdateFolderNameCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public UpdateFolderNameCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IJsonStringLocalizer localizer)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
             _caller = httpContextAccessor.HttpContext.User;
         }
@@ -38,7 +41,7 @@ namespace XtraUpload.FileManager.Service
             // Check if folder exist
             if (folder == null)
             {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No folder with the provided id was found"], ErrorOrigin.Client);
                 return Result;
             }
 

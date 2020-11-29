@@ -33,6 +33,7 @@ export abstract class ChartBase extends ComponentBase {
     public end = new FormControl(new Date(), [Validators.required]);
     //#endregion
     rangeFilter(d: Date): boolean {
+		if (!d) return;
         return d.getTime() < new Date().getTime();
     }
     protected populateChart(data: IItemCount[]) {
