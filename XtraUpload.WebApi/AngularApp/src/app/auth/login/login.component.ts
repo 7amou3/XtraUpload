@@ -40,8 +40,8 @@ export class LoginComponent extends ComponentBase implements OnInit {
         // Reload the entire app
         window.location.href = data.role === 'Admin' ? '/administration' : '/filemanager';
       })
-      .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
-      .finally(() => this.isBusy = false);
+      .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }));
+      //.finally(() => this.isBusy = false);
   }
   onSMMessage(message: IGenericMessage) {
     this.message$.next(message);

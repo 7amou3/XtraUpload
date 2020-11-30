@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { LanguageService } from '../services/language.service'
+import { UserStorageService } from 'app/services'
 
 @Pipe({
   name: 'localDate'
 })
 export class LocalDatePipe implements PipeTransform {
-  constructor(private langService: LanguageService) {}
+  constructor(private storageService: UserStorageService) {}
 
   transform(value: any, format: string) {
     if (!value) {
@@ -16,6 +16,6 @@ export class LocalDatePipe implements PipeTransform {
       format = 'mediumDate';
     }
 
-    return formatDate(value, format, this.langService.locale);
+    return formatDate(value, format, this.storageService.userlanguage.culture);
   }
 }

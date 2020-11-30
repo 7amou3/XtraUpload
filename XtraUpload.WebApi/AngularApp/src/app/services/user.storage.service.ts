@@ -4,29 +4,21 @@ const PROFILE = 'xu-Profile';
 const APP_INFO = 'xu-AppInfo';
 const APP_LANG = 'xu-Lang';
 const STATICPAGE_LINKS = 'xu-PageLinks';
-/**
- *  Store user data to localstorage
- * */
+
 @Injectable({ providedIn: 'root' })
 export class UserStorageService {
   private _profile: IProfile;
   private _applanguages: ILanguage[];
   private _appinfo: IWebAppInfo;
   private _pagelinks: IPageHeader[];
-  constructor() { }
-
-  /** Get the profile from memory or local storage */
+  constructor() {
+    this.init();
+   }
+  
   get profile(): IProfile {
-    if (!this._profile) {
-      const profile = localStorage.getItem(PROFILE);
-      if (profile) {
-        this._profile = JSON.parse(profile);
-      }
-    }
     return this._profile;
   }
 
-  /** Save the profile to local storage */
   set profile(profile: IProfile) {
     if (!profile) return;
     window.localStorage.setItem(PROFILE, JSON.stringify(profile));
@@ -41,22 +33,11 @@ export class UserStorageService {
     return this._profile.language;
   }
   set userlanguage(language: ILanguage) {
-    // If the user is not logged in, we create a Profile placeholder
-    if (!this._profile) {
-      this._profile = {} as IProfile;
-    }
-
     this._profile.language = language;
     // save to local storages
     this.profile = this._profile;
   }
   get applanguages(): ILanguage[] {
-    if (!this._applanguages) {
-      const applangs = localStorage.getItem(APP_LANG);
-      if (applangs) {
-        this._applanguages = JSON.parse(applangs);
-      }
-    }
     return this._applanguages;
   }
   set applanguages(languages: ILanguage[]) {
@@ -65,12 +46,6 @@ export class UserStorageService {
     window.localStorage.setItem(APP_LANG, JSON.stringify(languages));
   }
   get appinfo(): IWebAppInfo {
-    if (!this._appinfo) {
-      const appinfo = localStorage.getItem(APP_INFO);
-      if (appinfo) {
-        this._appinfo = JSON.parse(appinfo);
-      }
-    }
     return this._appinfo;
   }
   set appinfo(appInfo: IWebAppInfo) {
@@ -80,12 +55,6 @@ export class UserStorageService {
   }
   
   get pagelinks(): IPageHeader[] {
-    if (!this._pagelinks) {
-      const pagelinks = localStorage.getItem(STATICPAGE_LINKS);
-      if (pagelinks) {
-        this._pagelinks = JSON.parse(pagelinks);
-      }
-    }
     return this._pagelinks;
   }
   set pagelinks(pagelinks: IPageHeader[]) {
@@ -94,10 +63,6 @@ export class UserStorageService {
     window.localStorage.setItem(STATICPAGE_LINKS, JSON.stringify(pagelinks));
   }
   updateTheme(theme: 'dark' | 'light') {
-    // If the user is not logged in we create a Profile placeholder
-    if (!this._profile) {
-      this._profile = {} as IProfile;
-    }
     this._profile.theme = theme;
     // Save to local storage
     this.profile = this._profile;
@@ -108,5 +73,15 @@ export class UserStorageService {
     window.localStorage.clear();
     // Save user preferences to local storage
     this.profile = { language: this._profile.language, theme: this._profile.theme } as IProfile;
+  }
+  private init() {
+    const initfield = (itemname: string) => {
+      const item = localStorage.getItem(itemname);
+      return JSON.parse(item);
+    }
+    this._appinfo = initfield(APP_INFO);
+    this._profile = initfield(PROFILE) ?? {};
+    this._applanguages = initfield(APP_LANG);
+    this._pagelinks = initfield(STATICPAGE_LINKS);
   }
 }
