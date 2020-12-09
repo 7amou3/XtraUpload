@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using XtraUpload.Domain;
-using Microsoft.AspNetCore.Identity;
 using XtraUpload.Database.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -80,9 +79,9 @@ namespace XtraUpload.Authentication.Host
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
-            });
-            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
-            builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            })
+            .AddRoles<Role>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
         }
 
         /// <summary>

@@ -77,7 +77,7 @@ export class AuthService {
   async confirmEmail(emailToken: string) {
     return this.http.put('setting/confirmemail/', { emailToken: emailToken }).toPromise();
   }
-  isUserAuthicated(): boolean {
+  isUserAuthenticated(): boolean {
     const user = this.userStorage.profile;
     return user != null && user.jwtToken != null;
   }

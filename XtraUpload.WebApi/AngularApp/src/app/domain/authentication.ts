@@ -51,3 +51,30 @@ export class RecoverPassword {
   newPassword: string;
   recoveryKey: string;
 }
+export interface IUserRoleClaims {
+  role: IUserRole;
+  claims: IRoleClaim[];
+}
+export interface IUserRole {
+  id: number;
+  name: string;
+  isDefault: boolean;
+}
+export interface IRoleClaim {
+  id: number;
+  roleId: string;
+  claimType: string;
+  claimValue: number;
+}
+export class IClaims {
+  groupName: string;
+  adminAreaAccess: boolean;
+  fileManagerAccess: boolean;
+  concurrentUpload: number;
+  downloadSpeed: number;
+  downloadTTW: number;
+  fileExpiration: number;
+  maxFileSize: number;
+  storageSpace: number;
+  waitTime: number;
+}

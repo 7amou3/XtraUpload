@@ -13,7 +13,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (!this.authService.isUserAuthicated()) {
+    if (!this.authService.isUserAuthenticated()) {
       // Reload the entire app
       window.location.href = '/login';
     }
@@ -25,7 +25,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
   }
 
   canLoad(route: Route): boolean {
-    return this.authService.isUserAuthicated();
+    return this.authService.isUserAuthenticated();
   }
 }
 
@@ -33,7 +33,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
 export class AuthUnGuardService implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authService.isUserAuthicated()) {
+    if (this.authService.isUserAuthenticated()) {
       this.router.navigate(['/filemanager']);
       return false;
     }
