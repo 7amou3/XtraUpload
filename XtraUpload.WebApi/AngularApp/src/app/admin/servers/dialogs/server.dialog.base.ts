@@ -42,7 +42,7 @@ export abstract class ServerDialogBase extends ComponentBase implements OnInit {
                 this.addressReachable = result?.state == 0;
                 // Check request status
                 if (result.state != 0) {
-                    this.message$.next({ errorMessage: result?.errorContent?.message });
+                    this.message$.next({ errorMessage: result?.error });
                     return;
                 }
                 this.address.setErrors(null);
@@ -53,7 +53,7 @@ export abstract class ServerDialogBase extends ComponentBase implements OnInit {
                     .then((uploadCfg: any) => {
                         // Check request status
                         if (uploadCfg.state != 0) {
-                            this.message$.next({ errorMessage: uploadCfg?.errorContent?.message });
+                            this.message$.next({ errorMessage: uploadCfg?.error });
                             return;
                         }
                         this.switchControls(true);
@@ -66,7 +66,7 @@ export abstract class ServerDialogBase extends ComponentBase implements OnInit {
                     .then((harddwareCfg: any) => {
                         // Check request status
                         if (harddwareCfg.state != 0) {
-                            this.message$.next({ errorMessage: harddwareCfg?.errorContent?.message });
+                            this.message$.next({ errorMessage: harddwareCfg?.error });
                             return;
                         }
                         this.memoryThreshold.setValue(harddwareCfg.hardwareOptions.memoryThreshold);

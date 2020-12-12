@@ -35,7 +35,7 @@ export class ForgotpwdComponent extends ComponentBase implements OnInit {
           this.resetForm(this.forgotPassFormGroup);
           this.message$.next({successMessage:  $localize`An email has been sent. Please check your inbox`});
         })
-        .catch(error => this.message$.next({errorMessage: error?.error?.errorContent?.message}))
+        .catch(error => this.message$.next({errorMessage: error?.error}))
         .finally(() => this.isBusy = false);
   }
 }

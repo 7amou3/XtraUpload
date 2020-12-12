@@ -42,7 +42,7 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
       .then(() =>
         // Reload the entire app
         window.location.href = '/filemanager')
-      .catch(error => this.loginMessage.emit({ errorMessage: error?.error?.errorContent?.message }))
+      .catch(error => this.loginMessage.emit({ errorMessage: error?.error }))
       .finally(() => this.isBusy = false)
   }
 

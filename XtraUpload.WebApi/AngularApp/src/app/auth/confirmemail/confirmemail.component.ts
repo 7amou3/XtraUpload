@@ -25,7 +25,7 @@ export class ConfirmemailComponent extends ComponentBase implements OnInit {
     .then(() => {
       this.message$.next({successMessage: $localize`Your Email has been confirmed successfully.`})
     })
-    .catch(error => this.message$.next({errorMessage: error?.error?.errorContent?.message}))
+    .catch(error => this.message$.next({errorMessage: error?.error}))
     .finally(() => this.isBusy = false);
   }
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil, finalize } from 'rxjs/operators';
 import { ComponentBase } from 'app/shared';
 import { AuthService, SeoService } from 'app/services';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
@@ -38,7 +37,7 @@ export class RecoverpwdComponent extends ComponentBase implements OnInit {
         this.recoverPassword.recoveryKey = recoveryId;
         this.tokenValid = true;
       })
-      .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .catch((error) => this.message$.next({ errorMessage: error?.error }))
       .finally(() => this.isBusy = false);
   }
   async onSubmit(recoverPassParams) {
@@ -49,7 +48,7 @@ export class RecoverpwdComponent extends ComponentBase implements OnInit {
         this.resetForm(this.recoverPassFormGroup);
         this.message$.next({ successMessage: $localize`Your password has been updated successfully, please login.` });
       })
-      .catch(error => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .catch(error => this.message$.next({ errorMessage: error?.error }))
       .finally(() => this.isBusy = false);
   }
 }

@@ -22,7 +22,7 @@ export class OverviewComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     await this.fileMngService.getAccountOverview()
       .then(data => this.accountOverview = data)
-      .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .catch((error) => this.message$.next({ errorMessage: error?.error }))
       .finally(() => this.isBusy = false);
   }
   async verifyEmail() {
@@ -31,7 +31,7 @@ export class OverviewComponent extends ComponentBase implements OnInit {
       .then(() => {
         this.message$.next({ successMessage: $localize`An email has been sent to your inbox, please check your email.` });
       })
-      .catch((error) => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .catch((error) => this.message$.next({ errorMessage: error?.error }))
       .finally(() => this.sendingEmail = false);
   }
 }

@@ -55,8 +55,8 @@ export class FileComponent extends ComponentBase implements OnInit {
               this.startCountDownTimer(file.waitTime);
             })
             .catch((err) => {
-              if (err.error?.errorContent?.message) {
-                this.message$.next({ errorMessage: err.error.errorContent.message });
+              if (err.errors) {
+                this.message$.next({ errorMessage: err.error });
               }
               throw err;
             })
@@ -126,8 +126,8 @@ export class FileComponent extends ComponentBase implements OnInit {
           this.downloadurl = data.downloadurl;
         })
         .catch((error) => {
-          if (error.error?.errorContent?.message) {
-            this.message$.next({ errorMessage: error.error.errorContent.message });
+          if (error.error) {
+            this.message$.next({ errorMessage: error.error });
           }
           else throw error;
         })

@@ -34,8 +34,8 @@ export abstract class ComponentBase implements OnDestroy {
    return new Date(subtracted);
  }
  handleError(error, snackBar: MatSnackBar) {
-  if (error?.error?.errorContent) {
-    snackBar.open('Error 400: ' + error?.error?.errorContent?.message);
+  if (error) {
+    snackBar.open('Error 400: ' + error);
   } else {
     snackBar.open(error);
   }

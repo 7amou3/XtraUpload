@@ -46,7 +46,7 @@ export class SignupComponent extends ComponentBase implements OnInit {
         this.message$.next({ successMessage: $localize`Account successfully created, please log in.` });
         this.resetForm(this.signupFormGroup);
       })
-      .catch(error => this.message$.next({ errorMessage: error?.error?.errorContent?.message }))
+      .catch(error => this.message$.next({ errorMessage: error?.error }))
       .finally(() => this.isBusy = false);
   }
 }

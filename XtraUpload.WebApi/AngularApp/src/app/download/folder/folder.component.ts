@@ -52,8 +52,8 @@ export class FolderComponent extends ComponentBase implements OnInit {
               this.folderContent$.next(items);
           })
           .catch((err) => {
-            if (err.error?.errorContent?.message) {
-              this.message$.next({errorMessage: err.error.errorContent.message});
+            if (err.error) {
+              this.message$.next({errorMessage: err.error});
             }
             else throw err;
           })

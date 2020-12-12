@@ -41,8 +41,8 @@ export class LoginComponent extends ComponentBase implements OnInit {
         window.location.href = data.role === 'Admin' ? '/administration' : '/filemanager';
       })
       .catch((error) => {
-        this.isBusy = false
-        this.message$.next({ errorMessage: error?.error?.errorContent?.message });
+        this.isBusy = false;
+        this.message$.next({ errorMessage: error?.error });
       });
       //.finally(() => this.isBusy = false);
   }
