@@ -2,46 +2,46 @@ import { Component, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { UserStorageService } from 'app/services';
 
 const TREE_DATA: IMenuNode[] = [
   {
-    name: 'Dashboard',
+    name: $localize`Dashboard`,
     iconname: 'poll',
     url: '/administration/overview'
   },
   {
-    name: 'Users',
+    name: $localize`Users`,
     iconname: 'supervisor_account',
     children: [
-      { name: 'Manage Users', url: '/administration/users' },
-      { name: 'Groups', url: '/administration/groups' }
+      { name: $localize`Manage Users`, url: '/administration/users' },
+      { name: $localize`Groups`, url: '/administration/groups' }
     ]
   },
   {
-    name: 'Files',
+    name: $localize`Files`,
     iconname: 'file_copy',
     children: [
-      { name: 'Manage Files', url: '/administration/files' },
-      { name: 'Extensions', url: '/administration/extensions' }
+      { name: $localize`Manage Files`, url: '/administration/files' },
+      { name: $localize`Extensions`, url: '/administration/extensions' }
     ]
   },
   {
-    name: 'Storage Servers',
+    name: $localize`Storage Servers`,
     iconname: 'storage',
     children: [
-      { name: 'Servers', url: '/administration/servers' },
-      { name: 'Health', url: '/administration/servershealth' }
+      { name: $localize`Servers`, url: '/administration/servers' },
+      { name: $localize`Health`, url: '/administration/servershealth' }
     ]
   },
   {
-    name: 'Settings',
+    name: $localize`Settings`,
     iconname: 'settings',
     url: '/administration/settings'
   },
   {
-    name: 'Pages',
+    name: $localize`Pages`,
     iconname: 'description',
     url: '/administration/pages'
   }
@@ -80,7 +80,7 @@ export class SidebarComponent extends ComponentBase implements OnInit {
   hasChild = (_: number, node: IFlatNode) => node.expandable;
   ngOnInit() {
     this.selectedUrl = this.router.url;
-    const appInfo = this.userstorgae.getAppInfo();
+    const appInfo = this.userstorgae.appinfo;
     if (appInfo) {
       this.softVersion = appInfo.version;
     }

@@ -4,20 +4,20 @@
     <div fxFlex.sm="70" fxFlex.md="40" fxFlex.lg="30">
       <mat-card>
         <mat-card-header>
-          <mat-card-title>LOGIN</mat-card-title>
+          <mat-card-title i18n>LOGIN</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <app-message [message$]="message$"></app-message>
           <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit(loginFormGroup.value)" class="font-14">
             <!--Email field-->
             <mat-form-field>
-              <mat-label>Email</mat-label>
+              <mat-label i18n>Email</mat-label>
               <input matInput formControlName="email" required>
               <mat-error *ngIf="email.invalid">{{getErrorMessage(email)}}</mat-error>
             </mat-form-field>
             <!--Password field-->
             <mat-form-field>
-              <mat-label>Password</mat-label>
+              <mat-label i18n>Password</mat-label>
               <input matInput [type]="hidePassword ? 'password' : 'text'"
                 formControlName="password" required>
               <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
@@ -31,11 +31,11 @@
               <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="50" fxFlex="50">
                 <mat-checkbox color="primary" checked="true" id="remember-me-checkbox"
                   formControlName="rememberMe">
-                  <label class="mat-checkbox-layout" for="remember-me-checkbox-input">Remember me</label>
+                  <label class="mat-checkbox-layout" for="remember-me-checkbox-input" i18n>Remember me</label>
                 </mat-checkbox>
               </div>
               <div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="50" class="text-right" fxFlex="50">
-                <a [routerLink]="['/forgotpassword']" class="text-muted">Forgot pwd?</a>
+                <a [routerLink]="['/forgotpassword']" class="text-muted font-12" i18n>Forgot password?</a>
               </div>
             </div>
             <!-- Login button -->
@@ -46,7 +46,7 @@
                     class="btn-block btn-lg m-t-20 m-b-20 mat-raised-button mat-primary"
                     [disabled]="!loginFormGroup.valid || isBusy" type="submit">
                     <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
-                    <span>LOGIN</span>
+                    <span i18n>LOGIN</span>
                   </button>
                 </mat-card-actions>
               </div>
@@ -55,13 +55,14 @@
           <mat-divider class="m-t-10"></mat-divider>
           <!--Login with social media-->
           <div fxLayout="row wrap" fxLayoutAlign="center">
-            <h6 class="text-muted">Or login with</h6>
+            <h6 class="text-muted" i18n>Or login with</h6>
            </div>
           <app-socialmedia (loginMessage)="onSMMessage($event)"></app-socialmedia>
           <!--Don't have account-->
           <div class="text-center p-10 m-t-10">
             <span>
-              Don't have an account? <a [routerLink]="['/signup']" class="text-info link">Create an account</a>
+              <span i18n>Don't have an account?</span>&nbsp;
+              <a [routerLink]="['/signup']" class="text-info link" i18n>Create an account</a>
             </span>
           </div>
         </mat-card-content>

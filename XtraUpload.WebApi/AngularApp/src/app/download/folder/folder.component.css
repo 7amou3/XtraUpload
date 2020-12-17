@@ -12,3 +12,8 @@
     font-size: 16px;
     margin-top: 10px;
 }
+.mat-progress-bar {
+  z-index: 9999;
+  top: 0px;
+  position: absolute;
+}

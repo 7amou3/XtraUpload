@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { IStorageServer } from 'app/domain';
+import { IStorageServer } from 'app/models';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared/components';
+import { takeUntil } from 'rxjs/operators';
 import { AddserverComponent } from './dialogs/addserver/addserver.component';
 import { DeleteserverComponent } from './dialogs/deleteserver/deleteserver.component';
 import { EditserverComponent } from './dialogs/editserver/editserver.component';
@@ -31,14 +31,8 @@ export class ServersComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getStorageServers()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (servers) => {
-          this.dataSource.data = servers;
-        }
-      );
+      .then(servers => this.dataSource.data = servers)
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -65,13 +59,13 @@ export class ServersComponent extends ComponentBase implements OnInit {
         }
         this.dataSource.data.push(result);
         this.refreshTable();
-        this.snackBar.open(`The server ${result.address} has been added successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`The server ${result.address} has been added successfully`, '', { duration: 3000 });
       });
   }
   onEdit() {
     const dialogRef = this.dialog.open(EditserverComponent, {
       width: '560px',
-      data: {selectedServer: this.selectedServer, serversList: this.dataSource.data}
+      data: { selectedServer: this.selectedServer, serversList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))
@@ -84,7 +78,7 @@ export class ServersComponent extends ComponentBase implements OnInit {
           server.address = result.address;
           server.state = result.state;
           this.refreshTable();
-          this.snackBar.open(`The server ${result.address} has been updated successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The server ${result.address} has been updated successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -103,7 +97,7 @@ export class ServersComponent extends ComponentBase implements OnInit {
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.refreshTable();
-          this.snackBar.open(`The server ${server.address} has been deleted successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The server ${server.address} has been deleted successfully`, '', { duration: 3000 });
         }
       });
   }

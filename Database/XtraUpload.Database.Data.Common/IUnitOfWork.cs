@@ -16,6 +16,7 @@ namespace XtraUpload.Database.Data.Common
         IFileExtensionRepository FileExtensions { get; }
         IPageRepository Pages { get; }
         IStorageServerRepository StorageServer { get; }
+        ILanguageRepository Languages { get; }
 
         Task<int> CompleteAsync();
         Task<T> CompleteAsync<T>(T result) where T : OperationResult;

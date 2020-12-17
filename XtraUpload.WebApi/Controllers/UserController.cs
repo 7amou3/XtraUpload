@@ -28,7 +28,7 @@ namespace XtraUpload.WebApi.Controllers
                 UserName = cmd.UserName,
                 Password = cmd.Password
             };
-            CreateUserResult result = await _mediator.Send(new CreateUserCommand(user));
+            CreateUserResult result = await _mediator.Send(new CreateUserCommand(user, cmd.Language));
 
             return HandleResult(result, _mapper.Map<UserDto>(result.User));
         }
@@ -83,7 +83,8 @@ namespace XtraUpload.WebApi.Controllers
             UserDto response = _mapper.Map<UserDto>(result.User, opts =>
             {
                 opts.AfterMap((src, dest) =>
-                { 
+                {
+                    dest.Language = _mapper.Map<LanguageDto>(result.User.Language);
                     dest.JwtToken = result.JwtToken;
                     dest.Role = result.Role.RoleClaims.Any(s => s.ClaimType == XtraUploadClaims.AdminAreaAccess.ToString()) ? "Admin" : "User";
                 });

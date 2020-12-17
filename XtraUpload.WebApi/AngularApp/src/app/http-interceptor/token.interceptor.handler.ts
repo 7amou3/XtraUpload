@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { UserStorageService } from '../services/user.storage.service';
+import { UserStorageService } from 'app/services';
 import { Observable } from 'rxjs';
 @Injectable()
 
@@ -11,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${this.storageService.getToken()}`
+        Authorization: `Bearer ${this.storageService.jwt}`
       }
     });
     return next.handle(request);

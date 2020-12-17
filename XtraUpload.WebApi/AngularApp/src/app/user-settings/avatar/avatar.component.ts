@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
-import { ComponentBase } from 'app/shared';
-import { FileManagerService, HeaderService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared/components';
+import { FileManagerService, HeaderService, UploadService } from 'app/services';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
-import { IAvatarData } from '../../domain';
+import { IAvatarData } from '../../models';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-avatar',
@@ -18,6 +18,7 @@ export class AvatarComponent extends ComponentBase implements OnInit {
   croppedImage: any = '';
   constructor(
     private fileMngService: FileManagerService,
+    private uploadService: UploadService,
     private headerService: HeaderService,
     private snackBar: MatSnackBar) {
     super();
@@ -29,9 +30,9 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     if (event.rejectedFiles.length > 0) {
       const rejected = event.rejectedFiles[0] as RejectedFile;
       if (rejected.reason === 'type') {
-        this.message$.next({ errorMessage: 'The selected file type is not allowed.' });
+        this.message$.next({ errorMessage: $localize`The selected file type is not allowed.` });
       } else {
-        this.message$.next({ errorMessage: 'You exceeded the file size limit.' });
+        this.message$.next({ errorMessage: $localize`You exceeded the file size limit.` });
       }
     }
     this.selectedImg = event.addedFiles[0];
@@ -46,38 +47,34 @@ export class AvatarComponent extends ComponentBase implements OnInit {
     // cropper ready
   }
   loadImageFailed() {
-    this.message$.next({ errorMessage: 'Error occured while loading image.' });
+    this.message$.next({ errorMessage: $localize`Error occured while loading image.` });
   }
   onDeleteImage() {
     this.selectedImg = null;
   }
-  onUpdateAvatar() {
+  async onUpdateAvatar() {
     this.isBusy = true;
     const file = this.urltoBlob(this.croppedImage, 'avatar.png', 'image/png');
-    const setting$ = this.fileMngService.getUploadSetting()
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .toPromise();
-
-    setting$.then(s => {
+    await this.fileMngService.getUploadSetting()
+    .then(async s => {
       if (!s.storageServer) {
-        this.snackBar.open('Unreachable storage servers. Please contact customer support.', '', { duration: 3000 });
+        this.isBusy = false
+        this.snackBar.open($localize`Unreachable storage servers. Please contact customer support.`, '', { duration: 3000 });
         return;
       }
        
-      this.fileMngService.startUpload(file, s, 'avatarupload', null)
-      .pipe(takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
+      this.uploadService.startUpload(file, s, 'avatarupload', null)
+      .pipe(takeUntil(this.onDestroy))
       .subscribe(result => {
         if (result.status === 'Success') {
-          this.isBusy = false;
           this.selectedImg = null;
-          this.message$.next({ successMessage: 'Your avatar has been updated successfully.' });
+          this.message$.next({ successMessage: $localize`Your avatar has been updated successfully.` });
           this.headerService.notifyAvatarChanged(result.uploadData as IAvatarData);
         }
-      });
-    });
+      }, error => this.handleError(error, this.snackBar))
+    })
+    .catch(error => this.handleError(error, this.snackBar))
+    .finally(() => this.isBusy = false);
   }
   urltoBlob(dataurl, fileName, mimeType): File {
     let arr = dataurl.split(','), bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);

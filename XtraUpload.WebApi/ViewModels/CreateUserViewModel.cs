@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using XtraUpload.Domain;
 
 namespace XtraUpload.WebApi
 {
@@ -16,5 +17,7 @@ namespace XtraUpload.WebApi
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
+
+        public Language Language { get; set; }
     }
 }

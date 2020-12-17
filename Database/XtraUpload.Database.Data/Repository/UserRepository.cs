@@ -24,6 +24,16 @@ namespace XtraUpload.Database.Data
         #region IUserRepository members
 
         /// <summary>
+        /// Gets a user associated with it's language
+        /// </summary>
+        public async Task<User> GetUser(Expression<Func<User, bool>> predicate)
+        {
+            return await _context.Users
+                              .Include(s => s.Language)
+                              .FirstOrDefaultAsync(predicate);
+        }
+
+        /// <summary>
         /// Gets the user confirmation key
         /// </summary>
         public async Task<ConfirmationKeyResult> GetConfirmationKeyInfo(string confirmationId)
@@ -37,13 +47,13 @@ namespace XtraUpload.Database.Data
         /// <summary>
         /// Gets the user's role claims
         /// </summary>
-        public async Task<RoleClaimsResult> GetUserRoleClaims(User user)
+        public async Task<RoleClaims> GetUserRoleClaims(User user)
         {
             var query =  _context.Users
                                 .Include(s => s.Role)
                                 .ThenInclude(s => s.RoleClaims)
                                 .Where(s => s.Id == user.Id)
-                                .Select(s => new RoleClaimsResult { Role = s.Role, Claims = s.Role.RoleClaims });
+                                .Select(s => new RoleClaims { Role = s.Role, Claims = s.Role.RoleClaims });
 
             return await query.SingleOrDefaultAsync();
         }

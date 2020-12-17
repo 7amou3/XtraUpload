@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
@@ -23,11 +24,14 @@ namespace XtraUpload.FileManager.Service.Handlers
         readonly IMediator _mediatr;
         readonly IUnitOfWork _unitOfWork;
         readonly ClaimsPrincipal _caller;
-        
-        public DeleteFolderCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, IHttpContextAccessor httpContextAccessor)
+        readonly IJsonStringLocalizer _localizer;
+
+        public DeleteFolderCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, 
+            IHttpContextAccessor httpContextAccessor, IJsonStringLocalizer localizer)
         {
             _mediatr = mediatr;
             _unitOfWork = unitOfWork;
+            _localizer = localizer;
             _caller = httpContextAccessor.HttpContext.User;
         }
         
@@ -41,7 +45,7 @@ namespace XtraUpload.FileManager.Service.Handlers
             // Check if file exist
             if (folder == null)
             {
-                Result.ErrorContent = new ErrorContent("No folder with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No folder with the provided id was found"], ErrorOrigin.Client);
                 return Result;
             }
 

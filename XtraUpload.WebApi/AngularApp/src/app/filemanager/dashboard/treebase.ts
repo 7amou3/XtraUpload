@@ -1,6 +1,6 @@
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import { IFolderInfo, IFlatNode, IFolderNode } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IFolderInfo, IFlatNode, IFolderNode } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { TreeHelper } from './helpers';
 
@@ -11,7 +11,7 @@ export abstract class TreeBase extends ComponentBase {
   /** a placeholder for the root folder, because the root folder is not persisted in db */
   protected readonly rootFolder: IFolderInfo = {
     id: this.ROOT_NODE_NAME,
-    name: 'My Folders',
+    name: $localize`My Folders`,
     parentid: '',
     thumbnail: '',
     createdAt: new Date(),
@@ -36,7 +36,7 @@ export abstract class TreeBase extends ComponentBase {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   protected folderTreeData: IFolderNode[] = [{
     id: this.ROOT_NODE_NAME,
-    name: 'My Folders',
+    name: $localize`My Folders`,
     children: []
   }];
   hasChild = (_: number, node: IFlatNode) => node.expandable;

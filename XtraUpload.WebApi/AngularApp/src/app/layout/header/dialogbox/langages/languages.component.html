@@ -1,0 +1,14 @@
+<h4 mat-dialog-title i18n>Choose language</h4>
+<mat-dialog-content>
+    <mat-selection-list [(ngModel)]="selectedCultures" [multiple]="false" *ngIf="languages$ | async as languages else loading">
+        <mat-list-option *ngFor="let lang of languages" [value]="lang.culture">
+            {{lang.name}}
+        </mat-list-option>
+    </mat-selection-list>
+    <ng-template #loading>
+        <span i18n>Loading...</span>
+    </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="flex-end">
+    <button mat-button color="accent" [disabled]="isBusy" (click)="onLangClick()" i18n>Save</button>
+</mat-dialog-actions>

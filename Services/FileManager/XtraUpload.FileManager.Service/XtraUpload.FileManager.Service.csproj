@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Askmethat.Aspnet.JsonLocalizer" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ICreateFolderModel, IFolderInfo } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { ICreateFolderModel, IFolderInfo } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-createfolder',

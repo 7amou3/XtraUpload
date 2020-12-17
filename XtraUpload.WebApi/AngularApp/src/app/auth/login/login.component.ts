@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService, SeoService } from 'app/services';
-import { ILoginParams, IGenericMessage } from 'app/domain';
-import { ComponentBase } from 'app/shared';
-import { takeUntil } from 'rxjs/operators';
-import { Title } from '@angular/platform-browser';
+import { ILoginParams, IGenericMessage } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +10,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Login to your account';
+  private readonly pageTitle = $localize`Login to your account`;
   loginFormGroup: FormGroup;
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required, Validators.minLength(6)]);
@@ -32,24 +30,21 @@ export class LoginComponent extends ComponentBase implements OnInit {
     });
   }
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-        this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.email.hasError('required') ? $localize`You must enter a value` :
+      this.email.hasError('email') ? $localize`Not a valid email` : '';
   }
-  onSubmit(loginParams: ILoginParams) {
+  async onSubmit(loginParams: ILoginParams) {
     this.isBusy = true;
-    this.authService.requestLogin(loginParams)
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(
-      (data) => {
+    await this.authService.requestLogin(loginParams)
+      .then((data) => {
         // Reload the entire app
-        window.location.href = data.role === 'Admin' ? '/administration' :  '/filemanager';
-      },
-      (error) => {
+        window.location.href = data.role === 'Admin' ? '/administration' : '/filemanager';
+      })
+      .catch((error) => {
         this.isBusy = false;
-        this.message$.next({errorMessage: error?.error?.errorContent?.message});
-        throw error;
-      }
-    );
+        this.message$.next({ errorMessage: error?.error });
+      });
+      //.finally(() => this.isBusy = false);
   }
   onSMMessage(message: IGenericMessage) {
     this.message$.next(message);

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IStorageServer } from 'app/domain';
+import { IStorageServer } from 'app/models';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-servershealth',
@@ -20,14 +19,8 @@ export class ServershealthComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getStorageServers()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (servers) => {
-          this.serversHealth = servers;
-        }
-      );
+      .then(servers => this.serversHealth = servers)
+      .finally(() => this.adminService.notifyBusy(false));
   }
   onServerStatus(eventOutput, server: IServerHealth) {
     server.status = eventOutput;

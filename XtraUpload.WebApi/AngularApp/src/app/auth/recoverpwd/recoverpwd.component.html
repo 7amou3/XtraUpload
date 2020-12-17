@@ -3,7 +3,7 @@
         <div fxFlex.sm="70" fxFlex.md="50" fxFlex.lg="40">
             <mat-card>
                 <mat-card-header>
-                    <mat-card-title>Enter Your New Password</mat-card-title>
+                    <mat-card-title i18n>Enter Your New Password</mat-card-title>
                 </mat-card-header>
                 <mat-divider></mat-divider>
                 <mat-card-content>
@@ -12,7 +12,7 @@
 
                         <app-message [message$]="message$"></app-message>
                         <!-- Current Password -->
-                        <p>To recover your password, enter a new one bellow:</p>
+                        <p i18n>To recover your password, enter a new one below:</p>
                         <mat-form-field>
                             <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'"
                                 formControlName="password" required>
@@ -27,12 +27,10 @@
                             <button mat-flat-button class="btn-block btn-lg mat-primary"
                                 [disabled]="!recoverPassFormGroup.valid || isBusy || !tokenValid" type="submit">
                                 <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
-                                UPDATE MY PASSWORD
+                                <span i18n>UPDATE MY PASSWORD</span>
                             </button>
                         </mat-card-actions>
-                        <p class="text-muted">
-                            After clicking the button above, your password will be updated.
-                        </p>
+                        <p class="text-muted" i18n>After clicking the button above, your password will be updated.</p>
                     </form>
                 </mat-card-content>
             </mat-card>

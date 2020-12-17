@@ -24,6 +24,8 @@ namespace XtraUpload.Domain
 
         public virtual string RoleId { get; set; }
         public virtual Role Role { get; set; }
+        public virtual Guid LanguageId { get; set; }
+        public virtual Language Language { get; set; }
         public virtual ICollection<FileItem> Files { get; set; }
         public virtual ICollection<FolderItem> Folders { get; set; }
         public virtual ICollection<ConfirmationKey> ConfirmationKeys { get; set; }

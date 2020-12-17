@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { IPage } from 'app/domain';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { IPage } from 'app/models';
 import { PageCommon } from '../page.common';
 
 @Component({
@@ -15,6 +15,7 @@ export class AddpageComponent extends PageCommon {
   constructor(
     private dialogRef: MatDialogRef<AddpageComponent>,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) private fullPageList: IPage[]
   ) {
@@ -29,20 +30,15 @@ export class AddpageComponent extends PageCommon {
     });
     this.visibleInFooter.setValue(true)
   }
-  onSubmit(formParams: IPage) {
+  async onSubmit(formParams: IPage) {
     if (this.fullPageList.filter(s => s.name === formParams.name).length > 0) {
       this.name.setErrors({ 'itemExists': true });
       return;
     }
     this.isBusy = true;
-    this.adminService.addPage(formParams)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        (newPage) => {
-          this.dialogRef.close(newPage);
-        }, (error) => this.handleError(error)
-      );
+    await this.adminService.addPage(formParams)
+      .then(newPage => this.dialogRef.close(newPage))
+      .catch(error => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
 }

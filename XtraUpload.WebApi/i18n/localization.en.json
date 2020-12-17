@@ -1,0 +1,24 @@
+{
+  "No user found with the provided email.": "No user found with the provided email.",
+  "Your Account Has Been Suspended.": "Your Account Has Been Suspended.",
+  "Email or Password does not match": "Email or Password does not match",
+  "Your current password is incorrect.": "Your current password is incorrect.",
+  "The provided token does not exist": "The provided token does not exist",
+  "The provided token has expired": "The provided token has expired",
+  "The provided token has already been used or expired": "The provided token has already been used or expired",
+  "The email associated with the provided token has been already confirmed.": "The email associated with the provided token has been already confirmed.",
+  "No email found with the provided token.": "No email found with the provided token.",
+  "A user with this email already exist": "A user with this email already exist",
+  "No user found with the provided id.": "No user found with the provided id.",
+  "Email server error, please check again later.": "Email server error, please check again later.",
+  "The email has been already confirmed.": "The email has been already confirmed.",
+  "No folder with the provided id was found": "No folder with the provided id was found",
+  "No file with the provided id was found": "No file with the provided id was found",
+  "This folder is not available for public downloads": "This folder is not available for public downloads",
+  "Moving folders to the same location is not possible!": "Moving folders to the same location is not possible!",
+  "Moving a parent folder to one of its child folders is not possible": "Moving a parent folder to one of its child folders is not possible",
+  "Moving files to the same location is not possible!": "Moving files to the same location is not possible!",
+  "No user with the provided id was found": "No user with the provided id was found",
+  "The requested language does not exist.": "The requested language does not exist."
+}
+

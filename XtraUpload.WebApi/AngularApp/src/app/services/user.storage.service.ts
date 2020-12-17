@@ -1,69 +1,87 @@
 import { Injectable } from '@angular/core';
-import { IAppInitializerConfig, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
+import { ILanguage, IPageHeader, IProfile, IWebAppInfo } from 'app/models';
 const PROFILE = 'xu-Profile';
 const APP_INFO = 'xu-AppInfo';
+const APP_LANG = 'xu-Lang';
 const STATICPAGE_LINKS = 'xu-PageLinks';
-/**
- *  Store user data to localstorage
- * */
-@Injectable()
+
+@Injectable({ providedIn: 'root' })
 export class UserStorageService {
-  constructor() { }
-  getAppInfo(): IWebAppInfo {
-    const pageSetting = localStorage.getItem(APP_INFO);
-    if (!pageSetting) {
-      return null;
-    }
-    return JSON.parse(pageSetting);
+  private _profile: IProfile;
+  private _applanguages: ILanguage[];
+  private _appinfo: IWebAppInfo;
+  private _pagelinks: IPageHeader[];
+  constructor() {
+    this.init();
+   }
+  
+  get profile(): IProfile {
+    return this._profile;
   }
-  getPageLinks(): IPageHeader[] {
-    const links = localStorage.getItem(STATICPAGE_LINKS);
-    if (!links) {
-      return null;
-    }
-    return JSON.parse(links);
-  }
-  saveAppSettings(pageSettings: IAppInitializerConfig) {
-    if (!pageSettings) return;
-    pageSettings.appInfo.version = pageSettings.version;
-    window.localStorage.removeItem(APP_INFO);
-    window.localStorage.removeItem(STATICPAGE_LINKS);
-    window.localStorage.setItem(APP_INFO, JSON.stringify(pageSettings.appInfo));
-    window.localStorage.setItem(STATICPAGE_LINKS, JSON.stringify(pageSettings.pagesHeader));
-  }
-  saveUser(profile: IProfile): IProfile {
-    if (!profile) {
-      return;
-    }
-    if ((profile.theme as unknown) === 0 || profile.theme === 'dark') {
-      profile.theme = 'dark';
-    }
-    else {
-      profile.theme = 'light';
-    }
-    window.localStorage.removeItem(PROFILE);
+
+  set profile(profile: IProfile) {
+    if (!profile) return;
     window.localStorage.setItem(PROFILE, JSON.stringify(profile));
-    return profile;
+    this._profile = profile;
   }
 
-  getProfile(): IProfile {
-    const user = localStorage.getItem(PROFILE);
-    if (!user) {
-      return null;
-    }
-    return JSON.parse(user);
+  get jwt() {
+    return this._profile?.jwtToken?.token;
   }
-
-  getToken(): string {
-    const user = this.getProfile();
-    if (!user) {
-      return null;
-    }
-    return user.jwtToken?.token;
+  
+  get userlanguage(): ILanguage {
+    return this._profile.language;
   }
-
+  set userlanguage(language: ILanguage) {
+    this._profile.language = language;
+    // save to local storages
+    this.profile = this._profile;
+  }
+  get applanguages(): ILanguage[] {
+    return this._applanguages;
+  }
+  set applanguages(languages: ILanguage[]) {
+    if (!languages) return;
+    this._applanguages = languages;
+    window.localStorage.setItem(APP_LANG, JSON.stringify(languages));
+  }
+  get appinfo(): IWebAppInfo {
+    return this._appinfo;
+  }
+  set appinfo(appInfo: IWebAppInfo) {
+    if (!appInfo) return;
+    this._appinfo = appInfo;
+    window.localStorage.setItem(APP_INFO, JSON.stringify(appInfo));
+  }
+  
+  get pagelinks(): IPageHeader[] {
+    return this._pagelinks;
+  }
+  set pagelinks(pagelinks: IPageHeader[]) {
+    if (!pagelinks) return;
+    this._pagelinks = pagelinks;
+    window.localStorage.setItem(STATICPAGE_LINKS, JSON.stringify(pagelinks));
+  }
+  updateTheme(theme: 'dark' | 'light') {
+    this._profile.theme = theme;
+    // Save to local storage
+    this.profile = this._profile;
+  }
+  /**Clear local storage but keep user preferences (ex language, theme..) */
   clearLocalStorage() {
-    window.localStorage.removeItem(PROFILE);
+    // Delete all key value pairs
     window.localStorage.clear();
+    // Save user preferences to local storage
+    this.profile = { language: this._profile.language, theme: this._profile.theme } as IProfile;
+  }
+  private init() {
+    const initfield = (itemname: string) => {
+      const item = localStorage.getItem(itemname);
+      return JSON.parse(item);
+    }
+    this._appinfo = initfield(APP_INFO);
+    this._profile = initfield(PROFILE) ?? {};
+    this._applanguages = initfield(APP_LANG);
+    this._pagelinks = initfield(STATICPAGE_LINKS);
   }
 }

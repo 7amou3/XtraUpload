@@ -7,10 +7,10 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, Observable } from 'rxjs';
-import { takeUntil, finalize, startWith, map, debounceTime, switchMap } from 'rxjs/operators';
-import { ComponentBase } from 'app/shared';
+import { takeUntil, startWith, map, debounceTime, switchMap } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { IFileInfoExtended, IPaging, IProfile, IFilteredUser, ISearchFile, IFileInfo } from 'app/domain';
+import { IFileInfoExtended, IPaging, IProfile, IFilteredUser, ISearchFile, IFileInfo } from 'app/models';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { DeleteFileComponent } from './delete-file/delete-file.component';
 
@@ -74,7 +74,7 @@ export class FilesComponent extends ComponentBase implements OnInit {
     this.filteredUsers = this.user.valueChanges
       .pipe(
         debounceTime(300),
-        switchMap(value => this.adminService.searchUser(value))
+        switchMap(async value => await this.adminService.searchUser(value))
       );
     const initPage: PageEvent = { pageIndex: this.pageIndex, pageSize: this.pageSize, length: 100 };
     this.page$.next(initPage);
@@ -82,21 +82,12 @@ export class FilesComponent extends ComponentBase implements OnInit {
 
     // get file extensions list
     this.adminService.getFileExtensions()
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(
-        extensions => {
-          this.extentionsOpts = extensions.map(s => s.name);
-        });
+      .then(extensions => this.extentionsOpts = extensions.map(s => s.name));
     // get files list
     this.adminService.notifyBusy(true);
     this.adminService.getFiles(initPage, this.filesSearchFormGroup.value)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        paging => {
-          this.PopulateTable(paging);
-        });
+      .then(paging => this.PopulateTable(paging))
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -139,6 +130,7 @@ export class FilesComponent extends ComponentBase implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
   rangeFilter(d: Date): boolean {
+    if (!d) return;
     return d.getTime() < new Date().getTime();
   }
   onTableEvent(pageEvent: PageEvent) {
@@ -146,17 +138,13 @@ export class FilesComponent extends ComponentBase implements OnInit {
     this.pageIndex = pageEvent.pageIndex;
     this.queryFiles(pageEvent, this.filesSearchFormGroup.value);
   }
-private queryFiles(pageEvent: PageEvent, search: ISearchFile) {
-  this.selection.clear();
-  this.isBusy = true;
-  this.adminService.getFiles(pageEvent, search)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(paging => {
-        this.PopulateTable(paging);
-      });
-}
+  private async queryFiles(pageEvent: PageEvent, search: ISearchFile) {
+    this.selection.clear();
+    this.isBusy = true;
+    await this.adminService.getFiles(pageEvent, search)
+      .then(paging => this.PopulateTable(paging))
+      .finally(() => this.isBusy = false);
+  }
   onSearchItemsSubmit() {
     const initPage: PageEvent = { pageIndex: this.pageIndex, pageSize: this.pageSize, length: 100 };
     this.queryFiles(initPage, this.filesSearchFormGroup.value);
@@ -180,7 +168,7 @@ private queryFiles(pageEvent: PageEvent, search: ISearchFile) {
             this.refreshTable();
           }
         });
-        this.snackBar.open(`${deletedFiles.length} file(s) has been deleted successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`${deletedFiles.length} file(s) has been deleted successfully`, '', { duration: 3000 });
       });
   }
 }

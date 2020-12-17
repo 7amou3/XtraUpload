@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,9 +15,11 @@ namespace XtraUpload.Setting.Service
     public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, OperationResult>
     {
         readonly IUnitOfWork _unitOfWork;
-        
-        public ConfirmEmailCommandHandler(IUnitOfWork unitOfWork)
+        readonly IJsonStringLocalizer _localizer;
+
+        public ConfirmEmailCommandHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
         
@@ -28,17 +31,17 @@ namespace XtraUpload.Setting.Service
 
             if (confirmationKey == null)
             {
-                Result.ErrorContent = new ErrorContent("No email found with the provided token.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No email found with the provided token."], ErrorOrigin.Client);
                 return Result;
             }
             if (confirmationKey.Key.Status != RequestStatus.InProgress)
             {
-                Result.ErrorContent = new ErrorContent("The provided token has already been used or expired", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The provided token has already been used or expired"], ErrorOrigin.Client);
                 return Result;
             }
             if (confirmationKey.User.EmailConfirmed)
             {
-                Result.ErrorContent = new ErrorContent("The email associated with the provided token has been already confirmed.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The email associated with the provided token has been already confirmed."], ErrorOrigin.Client);
                 return Result;
             }
 

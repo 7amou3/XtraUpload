@@ -17,5 +17,6 @@ namespace XtraUpload.WebApi
         public string Avatar { get; set; }
         public JwtToken JwtToken { get; set; }
         public string Role { get; set; }
+        public LanguageDto Language { get; set; }
     }
 }

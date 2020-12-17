@@ -17,7 +17,7 @@ namespace XtraUpload.GrpcServices
     /// </summary>
     public class CheckClientProxy : ICheckClientProxy, ICheckClientCommand, IDisposable
     {
-        private const int EXPIRATION = 30 * 1000; // 30s
+        private const int EXPIRATION = 60 * 1000; // 1min
         private Timer _timer;
         private OperationResult _connectivityStatus = new OperationResult();
         /// <summary>

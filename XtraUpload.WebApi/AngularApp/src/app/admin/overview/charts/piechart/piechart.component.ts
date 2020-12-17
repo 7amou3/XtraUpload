@@ -2,11 +2,12 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsTooltip, monkeyPatchChartJsLegend, BaseChartDirective } from 'ng2-charts';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
 import { Subject } from 'rxjs';
-import { IFileTypeCount } from 'app/domain';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { IFileTypeCount } from 'app/models';
+import { takeUntil } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-piechart',
@@ -22,7 +23,7 @@ export class PiechartComponent extends ComponentBase implements OnInit {
   public pieChartOptions: ChartOptions = {
     responsive: true,
   };
-  public pieChartLabels: Label[] = ['Multimedia', 'Documents', 'Archives', 'Others'];
+  public pieChartLabels: Label[] = [$localize`Multimedia`, $localize`Documents`, $localize`Archives`, $localize`Others`];
   public pieChartData: SingleDataSet = [50, 50, 50, 50];
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
@@ -31,6 +32,7 @@ export class PiechartComponent extends ComponentBase implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService
   ) {
     super();
@@ -58,38 +60,33 @@ export class PiechartComponent extends ComponentBase implements OnInit {
     }
     if (this.chart !== undefined) {
       this.chart.update();
-   }
+    }
   }
   reloadChart() {
     if (this.chart !== undefined) {
-       this.chart.chart.destroy();
-       this.chart.data = this.pieChartData;
-       this.chart.labels = this.pieChartLabels;
-       this.chart.ngOnInit();
+      this.chart.chart.destroy();
+      this.chart.data = this.pieChartData;
+      this.chart.labels = this.pieChartLabels;
+      this.chart.ngOnInit();
     }
-}
+  }
   rangeFilter(d: Date): boolean {
+    if (!d) return;
     return d.getTime() < new Date().getTime();
   }
   convertToStr(enumVal: number): string {
     switch (enumVal) {
-      case 0: return 'Others';
-      case 1: return 'Archives';
-      case 2: return 'Documents';
-      case 3: return 'Multimedia';
+      case 0: return $localize`Others`;
+      case 1: return $localize`Archives`;
+      case 2: return $localize`Documents`;
+      case 3: return $localize`Multimedia`;
     }
   }
-  onSearchItemsSubmit() {
+  async onSearchItemsSubmit() {
     this.isBusy = true;
-    this.adminService.filetypeStat({ start: this.start.value, end: this.end.value })
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        (data) => {
-          this.populatePieChart(data);
-        },
-        (error) => this.handleError(error)
-      );
+    await this.adminService.filetypeStat({ start: this.start.value, end: this.end.value })
+      .then((data) => this.populatePieChart(data))
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
 }

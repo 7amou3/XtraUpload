@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { FileManagerService, AuthService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { IAccountOverview } from 'app/domain';
+import { IAccountOverview } from 'app/models';
 
 @Component({
   selector: 'app-overview',
@@ -19,37 +18,20 @@ export class OverviewComponent extends ComponentBase implements OnInit {
     super();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.isBusy = true;
-    this.fileMngService.getAccountOverview()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        data => {
-          this.accountOverview = data;
-        },
-        (error) => {
-          throw Error(error.message);
-        }
-      );
-
+    await this.fileMngService.getAccountOverview()
+      .then(data => this.accountOverview = data)
+      .catch((error) => this.message$.next({ errorMessage: error?.error }))
+      .finally(() => this.isBusy = false);
   }
-  verifyEmail() {
+  async verifyEmail() {
     this.sendingEmail = true;
-    this.authService.requestConfirmEmail()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.sendingEmail = false))
-      .subscribe(
-        () => {
-          this.message$.next({successMessage: 'An email has been sent to your inbox, please check your email.' });
-        },
-        (error) => {
-          this.message$.next({errorMessage: error?.error?.errorContent?.message});
-          throw error;
-        }
-      );
+    await this.authService.requestConfirmEmail()
+      .then(() => {
+        this.message$.next({ successMessage: $localize`An email has been sent to your inbox, please check your email.` });
+      })
+      .catch((error) => this.message$.next({ errorMessage: error?.error }))
+      .finally(() => this.sendingEmail = false);
   }
-
 }

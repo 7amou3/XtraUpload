@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { takeUntil, merge, map, finalize } from 'rxjs/operators';
-import { ComponentBase } from 'app/shared';
+import { takeUntil, merge, map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { IUserRoleClaims, IClaims } from 'app/domain';
+import { IUserRoleClaims, IClaims } from 'app/models';
 
 @Component({
   selector: 'app-editgroup',
@@ -25,11 +26,12 @@ export class EditgroupComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<EditgroupComponent>,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public item: { selectedGroup: IUserRoleClaims, fullGroupList: IUserRoleClaims[] }
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
     this.editFormGroup = this.fb.group({
@@ -57,60 +59,55 @@ export class EditgroupComponent extends ComponentBase implements OnInit {
     this.fileManagerAccess.setValue(this.getClaim('FileManagerAccess') && true);
     // Listen for changes
     this.fileManagerAccess.valueChanges
-    .pipe(takeUntil(this.onDestroy),
-          merge(this.adminAreaAccess.valueChanges),
-          map(() => this.adminAreaAccess.value || this.fileManagerAccess.value))
-    .subscribe(state => {
-      if (state) {
-        this.storageSpace.enable({onlySelf: state});
-        this.maxFileSize.enable({onlySelf: state});
-        this.fileExpiration.enable({onlySelf: state});
-        this.concurrentUpload.enable({onlySelf: state});
-      }
-      else {
-        this.storageSpace.disable({onlySelf: state});
-        this.maxFileSize.disable({onlySelf: state});
-        this.fileExpiration.disable({onlySelf: state});
-        this.concurrentUpload.disable({onlySelf: state});
-      }
-    });
+      .pipe(takeUntil(this.onDestroy),
+        merge(this.adminAreaAccess.valueChanges),
+        map(() => this.adminAreaAccess.value || this.fileManagerAccess.value))
+      .subscribe(state => {
+        if (state) {
+          this.storageSpace.enable({ onlySelf: state });
+          this.maxFileSize.enable({ onlySelf: state });
+          this.fileExpiration.enable({ onlySelf: state });
+          this.concurrentUpload.enable({ onlySelf: state });
+        }
+        else {
+          this.storageSpace.disable({ onlySelf: state });
+          this.maxFileSize.disable({ onlySelf: state });
+          this.fileExpiration.disable({ onlySelf: state });
+          this.concurrentUpload.disable({ onlySelf: state });
+        }
+      });
     // Check if at least there is an active admin group
     this.adminAreaAccess.valueChanges
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(state => {
-      const adminGroup = this.item.fullGroupList.find(s => s.role.name !== this.item.selectedGroup.role.name 
-        && s.claims.find(x => x.claimType === 'AdminAreaAccess'));
-      if (!adminGroup && !state) {
-        this.adminAreaAccess.setErrors({'missingAdmin': true});
-      }
-      else this.adminAreaAccess.setErrors(null);
-    });
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(state => {
+        const adminGroup = this.item.fullGroupList.find(s => s.role.name !== this.item.selectedGroup.role.name
+          && s.claims.find(x => x.claimType === 'AdminAreaAccess'));
+        if (!adminGroup && !state) {
+          this.adminAreaAccess.setErrors({ 'missingAdmin': true });
+        }
+        else this.adminAreaAccess.setErrors(null);
+      });
     // Check if the group name is unique
     this.groupName.valueChanges
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(gName => {
-      // isUnique
-      const groups = this.item.fullGroupList.filter(s => s.role.id !== this.item.selectedGroup.role.id);
-      if (groups.find(s => s.role.name === gName)) {
-        this.groupName.setErrors({'isDuplicated': true});
-      }
-      else if (this.groupName.hasError('isDuplicated')) {
-        this.groupName.setErrors(null);
-      }
-    });
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(gName => {
+        // isUnique
+        const groups = this.item.fullGroupList.filter(s => s.role.id !== this.item.selectedGroup.role.id);
+        if (groups.find(s => s.role.name === gName)) {
+          this.groupName.setErrors({ 'isDuplicated': true });
+        }
+        else if (this.groupName.hasError('isDuplicated')) {
+          this.groupName.setErrors(null);
+        }
+      });
   }
-  onSubmit(groupParams: IClaims) {
+  async onSubmit(groupParams: IClaims) {
     this.isBusy = true;
     this.item.selectedGroup.role.name = groupParams.groupName;
-    this.adminService.updateGroup(this.item.selectedGroup.role, groupParams)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        (result) => {
-          this.dialogRef.close(result);
-        }, (error) => this.handleError(error)
-      );
+    await this.adminService.updateGroup(this.item.selectedGroup.role, groupParams)
+      .then((result) => this.dialogRef.close(result))
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
   getClaim(claim: string) {
     return this.item.selectedGroup.claims.find(s => s.claimType === claim)?.claimValue;

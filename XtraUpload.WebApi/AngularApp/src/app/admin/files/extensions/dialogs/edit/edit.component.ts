@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { IFileExtension, IEditExtension } from 'app/domain';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { IFileExtension, IEditExtension } from 'app/models';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit',
@@ -14,6 +14,7 @@ export class EditComponent extends ComponentBase implements OnInit {
   editFormGroup: FormGroup;
   newExt = new FormControl('', [Validators.required, Validators.pattern('^[.][a-zA-Z0-9]*$'), Validators.minLength(3)]);
   constructor(
+    private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<EditComponent>,
     private fb: FormBuilder,
     private adminService: AdminService,
@@ -26,7 +27,7 @@ export class EditComponent extends ComponentBase implements OnInit {
       newExt: this.newExt,
     });
   }
-  onSubmit(formParams: IEditExtension) {
+  async onSubmit(formParams: IEditExtension) {
     if (formParams.newExt === this.item.selectedExt.name) {
       this.newExt.setErrors({ 'isSame': true });
       return;
@@ -37,15 +38,10 @@ export class EditComponent extends ComponentBase implements OnInit {
     }
     this.isBusy = true;
     formParams.id = this.item.selectedExt.id;
-    this.adminService.updateExtension(formParams)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        () => {
-          this.dialogRef.close(formParams);
-        }, (error) => this.handleError(error)
-      );
+    await this.adminService.updateExtension(formParams)
+      .then(() => this.dialogRef.close(formParams))
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
 
 }

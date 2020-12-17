@@ -1,7 +1,7 @@
-import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorNotificationService, UserStorageService } from '../services';
+import { ErrorNotificationService, UserStorageService } from 'app/services';
 
 /** Intercept incomming http error responses and displays them to the user */
 @Injectable()
@@ -30,7 +30,7 @@ export class GlobalErrorHandler implements ErrorHandler {
           // Forbidden
           break;
             case 404:
-          message = 'The requested resource was not found: ' + error.url;
+          message = $localize`The requested resource was not found:`+ ' ' + error.url;
           break;
         // TBC..
         default :

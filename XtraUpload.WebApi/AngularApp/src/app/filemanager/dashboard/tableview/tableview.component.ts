@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IItemInfo, IFolderInfo, IItemsMenu, IFileInfo } from 'app/domain';
-import { FileManagerService } from 'app/services';
+import { IItemInfo, IFolderInfo, IItemsMenu, IFileInfo } from 'app/models';
+import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 import { FilemanagerBase } from '../filemanagerbase';
 import { isFile, rowAnimation } from '../helpers';
@@ -25,13 +25,14 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
   @ViewChild('itemstable', { static: true }) itemstable: MatTable<IItemInfo>;
   constructor(
     filemanagerService: FileManagerService,
+    uploadService: UploadService,
     public ctxMenuService: FileMngContextMenuService,
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
     breakpointObserver: BreakpointObserver,
     @Inject('API_URL') apiUrl: string) {
-    super(filemanagerService, ctxMenuService, apiUrl);
+    super(filemanagerService, uploadService, ctxMenuService, apiUrl);
     breakpointObserver.observe(['(max-width: 600px)']).pipe(takeUntil(this.onDestroy)).subscribe(result => {
       this.isMobile =  result.matches;
       this.displayedColumns = result.matches
@@ -71,16 +72,15 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
   }
 
   /** Handles the drop event */
-  protected handleDrop(dropIndex: number): void {
+  protected async handleDrop(dropIndex: number): Promise<void> {
     // get the drop folder
     const folder = this.dataSource.data[dropIndex];
     if (this.isdroppableArea(folder) === false) {
       return;
     }
-
-    this.filemanagerService.requestMoveItems(this.selections, folder.id)
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe();
+    this.filemanagerService.notifyBusy(true);
+    await this.filemanagerService.requestMoveItems(this.selections, folder.id)
+    .finally(() => this.filemanagerService.notifyBusy(false));
   }
 
   /** Invoked when item(s) has moved successfully */
@@ -92,7 +92,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
           this.dataSource.data.splice(index, 1);
         }
       });
-      this.snackBar.open(`File(s)/Folder(s) has been moved successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`File(s)/Folder(s) has been moved successfully`, '', { duration: 3000 });
       this.selections = [];
       this.refreshTable();
   }
@@ -109,7 +109,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
   /** invoked when a new sub folder has been added */
   protected handleNewSubFolder(folder: IFolderInfo): void {
     if (!folder) {
-      this.snackBar.open('Server Error, please try again.', '', { duration: 3000 });
+      this.snackBar.open($localize`Server Error, please try again.`, '', { duration: 3000 });
       return;
     }
 
@@ -119,7 +119,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       this.dataSource.data.push(folder);
       this.refreshTable();
     }
-    this.snackBar.open(`The new subfolder ${folder.name} has been added successfully`, '', { duration: 3000 });
+    this.snackBar.open($localize`The new subfolder ${folder.name} has been added successfully`, '', { duration: 3000 });
   }
 
   /** invoked when a file has been renamed */
@@ -132,7 +132,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfile.name = file.name;
       rfile.lastModified = file.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The file ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The file ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
     }
   }
 
@@ -147,7 +147,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfile.status = file.status;
       rfile.lastModified = file.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The online availability of ${rfile.name} has been changed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The online availability of ${rfile.name} has been changed successfully`, '', { duration: 3000 });
     }
   }
 
@@ -162,7 +162,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfolder.status = folder.status;
       rfolder.lastModified = folder.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The online availability of ${rfolder.name} has been changed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The online availability of ${rfolder.name} has been changed successfully`, '', { duration: 3000 });
     }
   }
   /** invoked when a folder has been renamed */
@@ -175,7 +175,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
       rfile.name = folder.name;
       rfile.lastModified = folder.lastModified;
       this.refreshTable();
-      this.snackBar.open(`The folder ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`The folder ${rfile.name} has been renamed successfully`, '', { duration: 3000 });
     }
   }
   /** invoked when a file has been deleted */
@@ -188,7 +188,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
       this.refreshTable();
-      this.snackBar.open(`File(s) has been deleted successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`File(s) has been deleted successfully`, '', { duration: 3000 });
       // Remove from selection
       const sId = this.selections.findIndex(s => s.id === file.id);
       if (index !== -1) {
@@ -207,7 +207,7 @@ export class TableviewComponent extends FilemanagerBase implements OnInit {
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
       this.refreshTable();
-      this.snackBar.open(`Folder(s) has been deleted successfully`, '', { duration: 3000 });
+      this.snackBar.open($localize`Folder(s) has been deleted successfully`, '', { duration: 3000 });
     }
     // Remove if it's content are displayed
     const folderid = this.route.snapshot.queryParamMap.get('folder') ?? 'root';

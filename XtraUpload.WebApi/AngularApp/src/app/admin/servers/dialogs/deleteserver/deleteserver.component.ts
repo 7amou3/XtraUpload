@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IStorageServer } from 'app/domain';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { IStorageServer } from 'app/models';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-deleteserver',
@@ -14,23 +14,19 @@ export class DeleteserverComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DeleteserverComponent>,
     private adminService: AdminService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public server: IStorageServer
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
   }
-  onDelete() {
+  async onDelete() {
     this.isBusy = true;
-    this.adminService.deleteServer(this.server)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
-        this.dialogRef.close(this.server);
-      }, (error) => this.handleError(error)
-    );
+    await this.adminService.deleteServer(this.server)
+      .then(() => this.dialogRef.close(this.server))
+      .catch(error => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
 }

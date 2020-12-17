@@ -26,7 +26,7 @@ namespace XtraUpload.WebApi.Controllers
             {
                 if (result.ErrorContent.ErrorType == ErrorOrigin.Client)
                 {
-                    return BadRequest(result);
+                    return BadRequest(result.ErrorContent.Message);
                 }
                 return StatusCode((int)HttpStatusCode.InternalServerError, result);
             }
@@ -40,7 +40,7 @@ namespace XtraUpload.WebApi.Controllers
             {
                 if (result.ErrorContent.ErrorType == ErrorOrigin.Client)
                 {
-                    return BadRequest(result);
+                    return BadRequest(result.ErrorContent.Message);
                 }
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }

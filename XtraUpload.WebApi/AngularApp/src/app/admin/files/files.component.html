@@ -1,5 +1,5 @@
 <div class="delete-icon">
-  <button mat-mini-fab color="warn" matTooltip="Delete" aria-label="Delete Selected Files"
+  <button mat-mini-fab color="warn" i18n-matTooltip matTooltip="Delete" aria-label="Delete Selected Files"
   [disabled]="selection.selected.length == 0"
   (click)="onDelete()">
     <mat-icon>delete</mat-icon>
@@ -15,20 +15,20 @@
 
     <form [formGroup]="filesSearchFormGroup" (ngSubmit)="onSearchItemsSubmit()">
       <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-sm="23" fxFlex="40" class="m-r-20">
-        <mat-label>Start Time</mat-label>
+        <mat-label i18n>Start Time</mat-label>
         <input matInput [matDatepicker]="startpicker" [matDatepickerFilter]="rangeFilter" formControlName="start">
         <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
         <mat-datepicker #startpicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-sm="23" fxFlex="40" class="m-r-20">
-        <mat-label>End Time</mat-label>
+        <mat-label i18n>End Time</mat-label>
         <input matInput [matDatepicker]="endpicker" [matDatepickerFilter]="rangeFilter" formControlName="end">
         <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
         <mat-datepicker #endpicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-md="23" fxFlex="40" class="m-r-20">
+        <mat-label i18n>User Name</mat-label>
         <input matInput type="text" 
-        placeholder="User Name"
         formControlName="user"
         [matAutocomplete]="autoUsers">
         <mat-autocomplete #autoUsers="matAutocomplete" [displayWith]="displayUserName">
@@ -39,8 +39,8 @@
       </mat-form-field>
       <!-- File extension -->
       <mat-form-field fxFlex.gt-lg="23" fxFlex.gt-md="23" fxFlex="40">
-        <mat-label>File Extension</mat-label>
-        <input matInput type="text" placeholder="Ex. .pdf" 
+        <mat-label i18n>File Extension</mat-label>
+        <input matInput type="text" i18n-placeholder placeholder="Ex. .pdf" 
         formControlName="fileExtension"
         [matAutocomplete]="autoExtensions">
         <mat-autocomplete autoActiveFirstOption #autoExtensions="matAutocomplete">
@@ -52,7 +52,7 @@
     
     </form>
     <mat-action-row>
-      <button mat-button color="primary" (click)="onSearchItemsSubmit()">Search</button>
+      <button mat-button color="primary" (click)="onSearchItemsSubmit()" i18n>Search</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
@@ -75,7 +75,7 @@
     </ng-container>
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> File Name </th>
+      <th mat-header-cell *matHeaderCellDef i18n>File Name</th>
       <td mat-cell *matCellDef="let element">
         <a class="text-info" href="/file?id={{element.id}}" target="_blank">{{element.name | truncate:[25]}}</a> 
         <i class="font-10">({{element.size | bytes}})</i></td>
@@ -83,26 +83,26 @@
 
     <!-- userName Column -->
     <ng-container matColumnDef="userName">
-      <th mat-header-cell *matHeaderCellDef> Owner </th>
+      <th mat-header-cell *matHeaderCellDef i18n>Owner</th>
       <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
     </ng-container>
 
     <!-- downloadCount Column -->
     <ng-container matColumnDef="downloadCount">
-      <th mat-header-cell *matHeaderCellDef> Total Downloads </th>
+      <th mat-header-cell *matHeaderCellDef i18n>Total Downloads</th>
       <td mat-cell *matCellDef="let element"> {{element.downloadCount}} </td>
     </ng-container>
 
     <!-- extension Column -->
     <ng-container matColumnDef="extension">
-      <th mat-header-cell *matHeaderCellDef> File Extension </th>
+      <th mat-header-cell *matHeaderCellDef i18n>File Extension</th>
       <td mat-cell *matCellDef="let element"> {{element.extension}} </td>
     </ng-container>
 
     <!-- createdAt Column -->
     <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef> Created At </th>
-      <td mat-cell *matCellDef="let element"> {{element.createdAt | date}} </td>
+      <th mat-header-cell *matHeaderCellDef i18n>Created At</th>
+      <td mat-cell *matCellDef="let element"> {{element.createdAt | localDate}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

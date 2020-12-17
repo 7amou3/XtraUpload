@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { IAdminOverView, IItemCount, IFileTypeCount } from 'app/domain';
+import { IAdminOverView, IItemCount, IFileTypeCount } from 'app/models';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -17,26 +17,24 @@ export class OverviewComponent extends ComponentBase implements OnInit {
   usersCount$ = new Subject<IItemCount[]>();
   fileTypesCount$ = new Subject<IFileTypeCount[]>();
   constructor(
+    private snackBar: MatSnackBar,
     private adminService: AdminService,
     @Inject('BASE_URL') baseUrl: string) {
     super();
     this.serverUrl = baseUrl;
-   }
+  }
 
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
-    this.adminService.Overview({start: this.subtractDate(14), end: new Date()})
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.adminService.notifyBusy(false)))
-    .subscribe(
-      (data) => {
+    this.adminService.Overview({ start: this.subtractDate(14), end: new Date() })
+      .then((data) => {
         this.adminOverview = data;
         this.filesCount$.next(data.filesCount);
         this.usersCount$.next(data.usersCount);
         this.fileTypesCount$.next(data.fileTypesCount);
-      },
-      (error) => this.handleError(error));
+      })
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.adminService.notifyBusy(false));
   }
 
 }

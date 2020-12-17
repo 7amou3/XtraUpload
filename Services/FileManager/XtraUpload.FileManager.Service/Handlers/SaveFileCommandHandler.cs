@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq;
 using System.Threading;
@@ -15,9 +16,11 @@ namespace XtraUpload.FileManager.Service
     public class SaveFileCommandHandler : IRequestHandler<SaveFileCommand, CreateFileResult>
     {
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
 
-        public SaveFileCommandHandler(IUnitOfWork unitOfWork)
+        public SaveFileCommandHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
 
@@ -32,7 +35,7 @@ namespace XtraUpload.FileManager.Service
             var files = await _unitOfWork.Files.GetFilesServerInfo(s => s.Id == request.File.Id);
             if (!files.Any())
             {
-                Result.ErrorContent = new ErrorContent("No file found with the provided id", ErrorOrigin.Server);
+                Result.ErrorContent = new ErrorContent(_localizer["No file with the provided id was found"], ErrorOrigin.Server);
                 return Result;
             }
             if (Result.State == OperationState.Success)

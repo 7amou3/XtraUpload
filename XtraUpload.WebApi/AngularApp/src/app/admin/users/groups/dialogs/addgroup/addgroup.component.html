@@ -1,56 +1,56 @@
-<h2 mat-dialog-title>Add new group</h2>
+<h2 mat-dialog-title i18n>Add new group</h2>
 <form [formGroup]="addFormGroup" (ngSubmit)="onSubmit(addFormGroup.value)" class="font-14">
     <mat-dialog-content>
         <mat-form-field>
-            <mat-label>Group Name</mat-label>
+            <mat-label i18n>Group Name</mat-label>
             <input type="text" matInput formControlName="groupName" required>
             <mat-error *ngIf="groupName.invalid"></mat-error>
-            <mat-error *ngIf="groupName.hasError('isDuplicated')">A group with the same name exists.</mat-error>
+            <mat-error *ngIf="groupName.hasError('isDuplicated')" i18n>A group with the same name exists.</mat-error>
         </mat-form-field>
         <div fxLayout="row wrap" class="m-t-5 m-b-5">
             <!--AdminAreaAccess-->
             <div fxFlex="50">
                 <mat-slide-toggle formControlName="adminAreaAccess">
-                    Admin Area Access
+                   <span i18n>Admin Area Access</span>
                 </mat-slide-toggle>
-                <mat-error class="font-12" *ngIf="adminAreaAccess.hasError('missingAdmin')">At least one admin group
-                    should be active</mat-error>
+                <mat-error class="font-12" *ngIf="adminAreaAccess.hasError('missingAdmin')" i18n
+                >At least one admin group should be active</mat-error>
             </div>
             <!-- fileManagerAccess -->
             <div fxFlex="50">
                 <mat-slide-toggle formControlName="fileManagerAccess">
-                    File Manager Access
+                    <span i18n>File Manager Access</span>
                 </mat-slide-toggle>
             </div>
         </div>
         <!--Speed limit-->
         <mat-form-field>
-            <mat-label>Download Speed (Kb)</mat-label>
+            <mat-label i18n>Download Speed (Kb)</mat-label>
             <input type="number" matInput formControlName="downloadSpeed" required>
             <mat-error *ngIf="downloadSpeed.invalid">{{getErrorMessage(downloadSpeed)}}</mat-error>
         </mat-form-field>
         <!--Storage space-->
         <mat-form-field>
-            <mat-label>Storage Space (Mb)</mat-label>
+            <mat-label i18n>Storage Space (Mb)</mat-label>
             <input type="number" matInput formControlName="storageSpace" required>
             <mat-error *ngIf="storageSpace.invalid">{{getErrorMessage(storageSpace)}}</mat-error>
         </mat-form-field>
         <!--maxFileSize-->
         <mat-form-field>
-            <mat-label>Max File Size (Mb)</mat-label>
+            <mat-label i18n>Max File Size (Mb)</mat-label>
             <input type="number" matInput formControlName="maxFileSize" required>
             <mat-error *ngIf="maxFileSize.invalid">{{getErrorMessage(maxFileSize)}}</mat-error>
         </mat-form-field>
         <!--fileExpiration-->
         <mat-form-field>
-            <mat-label>File Expiration (Day)</mat-label>
+            <mat-label i18n>File Expiration (Day)</mat-label>
             <input type="number" matInput formControlName="fileExpiration" required>
-            <mat-hint fxLayoutAlign="flex-end">Set to '0' to keep files forever</mat-hint>
+            <mat-hint fxLayoutAlign="flex-end" i18n>Set to '0' to keep files forever</mat-hint>
             <mat-error *ngIf="fileExpiration.invalid">{{getErrorMessage(fileExpiration)}}</mat-error>
         </mat-form-field>
         <!--concurrentUpload-->
         <mat-form-field>
-            <mat-label>Concurrent Upload</mat-label>
+            <mat-label i18n>Concurrent Upload</mat-label>
             <input type="number" matInput formControlName="concurrentUpload" required>
             <mat-error *ngIf="concurrentUpload.invalid">{{getErrorMessage(concurrentUpload)}}</mat-error>
         </mat-form-field>
@@ -58,7 +58,7 @@
             <!--waitTime-->
             <div fxFlex="45">
                 <mat-form-field>
-                    <mat-label>Wait Time (second)</mat-label>
+                    <mat-label i18n>Wait Time (second)</mat-label>
                     <input type="number" matInput formControlName="waitTime" required>
                     <mat-error *ngIf="waitTime.invalid">{{getErrorMessage(waitTime)}}</mat-error>
                 </mat-form-field>
@@ -67,7 +67,7 @@
             <div fxFlex="45">
                 <!--downloadTTW-->
                 <mat-form-field>
-                    <mat-label>Download TTW (second)</mat-label>
+                    <mat-label i18n>Download TTW (second)</mat-label>
                     <input type="number" matInput formControlName="downloadTTW" required>
                     <mat-error *ngIf="downloadTTW.invalid">{{getErrorMessage(downloadTTW)}}</mat-error>
                 </mat-form-field>
@@ -75,8 +75,8 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions fxLayoutAlign="flex-end">
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button color="accent" [disabled]="!addFormGroup.valid || isBusy" type="submit">Add
-        </button>
+        <button mat-button mat-dialog-close i18n>Cancel</button>
+        <button mat-button color="accent" [disabled]="!addFormGroup.valid || isBusy" type="submit"
+        i18n>Add</button>
     </mat-dialog-actions>
 </form>

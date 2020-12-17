@@ -11,7 +11,7 @@
       <!-- item name -->
       <div fxLayout="row wrap" class="p-l-10">
         <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
-          <p class="font-12 font-medium">Name</p>
+          <p class="font-12 font-medium" i18n>Name</p>
         </div>
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
           <p class="font-12" matTooltip="{{itemInfo.name}}">{{itemInfo.name | truncate:[25]}}</p>
@@ -20,7 +20,7 @@
       <!-- item location -->
       <div fxLayout="row wrap" class="p-l-10">
         <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
-          <p class="font-12 font-medium">Location</p>
+          <p class="font-12 font-medium" i18n>Location</p>
         </div>
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
           <p class="font-12">{{simplePath}}</p>
@@ -29,7 +29,7 @@
       <!-- Created -->
       <div fxLayout="row wrap" class="p-l-10">
         <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
-          <p class="font-12 font-medium">Created</p>
+          <p class="font-12 font-medium" i18n>Created</p>
         </div>
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
           <p class="font-12">{{itemInfo.createdAt | date}}</p>
@@ -39,7 +39,7 @@
       <!-- Modified -->
       <div fxLayout="row wrap" class="p-l-10">
         <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
-          <p class="font-12 font-medium">Modified</p>
+          <p class="font-12 font-medium" i18n>Modified</p>
         </div>
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
           <p class="font-12">{{itemInfo.lastModified | date}}</p>
@@ -49,7 +49,7 @@
       <!-- Downloads -->
       <div fxLayout="row wrap" class="p-l-10" *ngIf="isFile">
         <div  fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" >
-          <p class="font-12 font-medium">Downloads</p>
+          <p class="font-12 font-medium" i18n>Downloads</p>
         </div>
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
           <p class="font-12 p-l-10">{{itemInfo.downloadCount}}</p>
@@ -61,8 +61,8 @@
       <div fxLayout="row wrap" class="p-l-10">
         <div fxFlex.gt-lg="70" fxFlex.gt-md="70" fxFlex.gt-xs="70" fxFlex="70">
           <p class="font-12 font-medium">
-            Available Online
-            <mat-icon class="font-12" *ngIf="itemInfo.status != 0" matTooltip="This item can't be downloaded by other users.">help</mat-icon>
+            <span i18n>Available Online</span>
+            <mat-icon class="font-12" *ngIf="itemInfo.status != 0" i18n-matTooltip matTooltip="This item can't be downloaded by other users.">help</mat-icon>
           </p>
         </div>
         <div fxFlex.gt-lg="30" fxFlex.gt-md="30" fxFlex.gt-xs="30" fxFlex="30" fxLayoutAlign="center center">
@@ -73,9 +73,9 @@
       <div fxLayout="row wrap" class="p-l-10 p-r-10">
         <div fxFlex.gt-lg="100" fxFlex.gt-md="100" fxFlex.gt-xs="100" fxFlex="100">
           <mat-form-field class="example-form-field">
-            <mat-label class="font-12 font-medium">Download link</mat-label>
+            <mat-label class="font-12 font-medium" i18n>Download link</mat-label>
             <input matInput type="text" #inputdUrl [(ngModel)]="downloadUrl" class="font-12 font-medium">
-            <button mat-button matSuffix mat-icon-button aria-label="Copy to clipboard" matTooltip="Copy to clipboard"
+            <button mat-button matSuffix mat-icon-button aria-label="Copy to clipboard" i18n-matTooltip matTooltip="Copy to clipboard"
             [cdkCopyToClipboard]="downloadUrl" (click)="inputdUrl.select()">
               <mat-icon>content_paste</mat-icon>
             </button>

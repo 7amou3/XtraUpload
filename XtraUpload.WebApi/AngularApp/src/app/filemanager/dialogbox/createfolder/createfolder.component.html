@@ -1,18 +1,17 @@
-<h2 mat-dialog-title>Create Folder</h2>
+<h2 mat-dialog-title i18n>Create Folder</h2>
 <form [formGroup]="createFormGroup" (ngSubmit)="onSubmit(createFormGroup.value)">
     <mat-dialog-content>
         <mat-form-field>
-            <mat-label>Folder name</mat-label>
+            <mat-label i18n>Folder name</mat-label>
             <input matInput formControlName="folderName" required>
             <mat-error *ngIf="folderName.invalid">{{getErrorMessage(folderName)}}</mat-error>
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions fxLayoutAlign="flex-end">
-        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button mat-dialog-close i18n>Cancel</button>
         <button
             mat-button color="accent"
             [disabled]="!createFormGroup.valid" type="submit"
-            >Create
-        </button>
+            i18n>Create</button>
     </mat-dialog-actions>
 </form>

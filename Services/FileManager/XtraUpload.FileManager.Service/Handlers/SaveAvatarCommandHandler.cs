@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ namespace XtraUpload.FileManager.Service
     public class SaveAvatarCommandHandler : IRequestHandler<SaveAvatarCommand, OperationResult>
     {
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
 
-        public SaveAvatarCommandHandler(IUnitOfWork unitOfWork)
+        public SaveAvatarCommandHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer)
         {
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
 
@@ -24,7 +27,7 @@ namespace XtraUpload.FileManager.Service
             User user = await _unitOfWork.Users.FirstOrDefaultAsync(s => s.Id == request.UserId);
             if (user == null)
             {
-                Result.ErrorContent = new ErrorContent("No user with the provided id was found", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No user with the provided id was found"], ErrorOrigin.Client);
                 return Result;
             }
 

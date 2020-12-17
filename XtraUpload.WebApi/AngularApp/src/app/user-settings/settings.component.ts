@@ -4,7 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 import { SidenavService, SeoService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-settings',
@@ -14,7 +14,7 @@ import { ComponentBase } from 'app/shared';
 export class SettingsComponent extends ComponentBase implements OnInit {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
-  private readonly pageTitle = 'Settings';
+  private readonly pageTitle = $localize`Settings`;
   @ViewChild('sidenav') sidenav: MatSidenav;
   subTitle = '';
   constructor(
@@ -28,7 +28,7 @@ export class SettingsComponent extends ComponentBase implements OnInit {
     seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', () => this._mobileQueryListener);
   }
 
   ngOnInit(): void {
@@ -48,23 +48,23 @@ export class SettingsComponent extends ComponentBase implements OnInit {
         );
   }
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     super.ngOnDestroy();
   }
   setSubPageTitle(title: string) {
     switch (title) {
       case '/settings/overview':
-        this.subTitle = 'Overview';
-        break;
-      case 'AvatarComponent':
-        this.subTitle = 'Avatar';
-        break;
-      case '/settings/password':
-        this.subTitle = 'Password';
+        this.subTitle = $localize`Overview`;
         break;
       case '/settings/avatar':
-        this.subTitle = 'User Info';
+        this.subTitle = $localize`Avatar`;
         break;
+      case '/settings/password':
+        this.subTitle = $localize`Password`;
+        break;
+      /*case '/settings/userinfo':
+        this.subTitle = $localize`User Info`;
+        break;*/
       default:
         break;
     }

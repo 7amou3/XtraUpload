@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Net;
+using System.Globalization;
 
 namespace XtraUpload.Domain
 {
@@ -195,6 +196,33 @@ namespace XtraUpload.Domain
             }
             
             return ipList;
+        }
+
+        public static IList<CultureInfo> SupportedCultures
+        {
+            get 
+            {
+                return new List<CultureInfo>()
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("fr"),
+                    new CultureInfo("es"),
+                    new CultureInfo("ar"),
+                    new CultureInfo("de"),
+                    new CultureInfo("it"),
+                    new CultureInfo("nl"),
+                    new CultureInfo("no"),
+                    new CultureInfo("pl"),
+                    new CultureInfo("pt-BR"),
+                    new CultureInfo("pt"),
+                    new CultureInfo("fi"),
+                    new CultureInfo("sv"),
+                    new CultureInfo("ko"),
+                    new CultureInfo("ru"),
+                    new CultureInfo("zh"),
+                    new CultureInfo("ja"),
+                };
+            }
         }
     }
 }

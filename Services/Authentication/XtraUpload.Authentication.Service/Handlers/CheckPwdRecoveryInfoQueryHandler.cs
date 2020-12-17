@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,12 +20,14 @@ namespace XtraUpload.Authentication.Service
     {
         #region Fields
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public CheckPwdRecoveryInfoQueryHandler(IUnitOfWork unitOfWork)
+        public CheckPwdRecoveryInfoQueryHandler(IUnitOfWork unitOfWork, IJsonStringLocalizer localizer)
         {
             _unitOfWork = unitOfWork;
+            _localizer = localizer;
         }
         #endregion
 
@@ -38,18 +41,18 @@ namespace XtraUpload.Authentication.Service
             // Check recovery info exists
             if (recoveryInfo == null)
             {
-                Result.ErrorContent = new ErrorContent("The provided token does not exist", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The provided token does not exist"], ErrorOrigin.Client);
                 return Result;
             }
 
             // Generated link expires after 24h (by a background alien thread)
             if (DateTime.UtcNow > recoveryInfo.GenerateAt.AddDays(1))
             {
-                Result.ErrorContent = new ErrorContent("The provided token was expired", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The provided token has expired"], ErrorOrigin.Client);
             }
             if (recoveryInfo.Status != RequestStatus.InProgress)
             {
-                Result.ErrorContent = new ErrorContent("The provided token has already been used or expired", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["The provided token has already been used or expired"], ErrorOrigin.Client);
             }
 
             return Result;

@@ -1,11 +1,11 @@
-<h2 mat-dialog-title>Add page</h2>
+<h2 mat-dialog-title i18n>Add Page</h2>
 <form [formGroup]="pageFormGroup" (ngSubmit)="onSubmit(pageFormGroup.value)" class="font-14">
     <mat-dialog-content>
         <mat-form-field>
-            <mat-label>Page Title</mat-label>
+            <mat-label i18n>Page Title</mat-label>
             <input matInput formControlName="name" required>
             <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
-            <mat-error *ngIf="name.hasError('itemExists')">A page with the same name already exists.</mat-error>
+            <mat-error *ngIf="name.hasError('itemExists')" i18n>A page with the same name already exists.</mat-error>
         </mat-form-field>
         <simplemde formControlName="content" [options]="editorOptions"></simplemde>
     </mat-dialog-content>
@@ -14,8 +14,8 @@
             <mat-slide-toggle formControlName="visibleInFooter"></mat-slide-toggle>
             <mat-icon class="font-12 m-l-10" matTooltip="{{tooltipInfo}}">help</mat-icon>
         </div>
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button color="accent" [disabled]="!pageFormGroup.valid || isBusy" type="submit">Add Page
-        </button>
+        <button mat-button mat-dialog-close i18n>Cancel</button>
+        <button mat-button color="accent" [disabled]="!pageFormGroup.valid || isBusy" type="submit" i18n
+        >Add Page</button>
     </mat-dialog-actions>
 </form>

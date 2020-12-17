@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
-import { IFileExtension, IEditExtension } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IFileExtension, IEditExtension } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
 import { EditComponent } from './dialogs/edit/edit.component';
 import { DeleteComponent } from './dialogs/delete/delete.component';
@@ -32,14 +32,8 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
   ngOnInit(): void {
     this.adminService.notifyBusy(true);
     this.adminService.getFileExtensions()
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        (ext) => {
-          this.dataSource.data = ext.sort((a, b) => (a.id - b.id));
-        }
-      );
+      .then((ext) => this.dataSource.data = ext.sort((a, b) => (a.id - b.id)))
+      .finally(() => this.adminService.notifyBusy(false));
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -66,13 +60,13 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
         }
         this.dataSource.data.push(result);
         this.refreshTable();
-        this.snackBar.open(`The extension ${result.name} has been added successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`The extension ${result.name} has been added successfully`, '', { duration: 3000 });
       });
   }
   onEdit() {
     const dialogRef = this.dialog.open(EditComponent, {
       width: '500px',
-      data: {selectedExt: this.selectedExt, fullExtList: this.dataSource.data}
+      data: { selectedExt: this.selectedExt, fullExtList: this.dataSource.data }
     });
     dialogRef.afterClosed()
       .pipe(takeUntil(this.onDestroy))
@@ -84,7 +78,7 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
         if (ext) {
           ext.name = result.newExt;
           this.refreshTable();
-          this.snackBar.open(`The extension ${ext.name} has been renamed successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The extension ${ext.name} has been renamed successfully`, '', { duration: 3000 });
         }
       });
   }
@@ -103,7 +97,7 @@ export class ExtensionsComponent extends ComponentBase implements OnInit {
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.refreshTable();
-          this.snackBar.open(`The extension ${result.name} has been deleted successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The extension ${result.name} has been deleted successfully`, '', { duration: 3000 });
         }
       });
   }

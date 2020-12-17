@@ -1,19 +1,18 @@
-<h2 mat-dialog-title>Rename {{item.name}}</h2>
+<h2 mat-dialog-title i18n>Rename {{item.name}}</h2>
 <form [formGroup]="renameFormGroup" (ngSubmit)="onSubmit(renameFormGroup.value)">
     <mat-dialog-content>
         <mat-form-field>
-            <mat-label>New name</mat-label>
+            <mat-label i18n>New name</mat-label>
             <input matInput formControlName="newName" required>
             <mat-error *ngIf="newName.invalid">{{getErrorMessage(newName)}}</mat-error>
-            <mat-error *ngIf="newName.hasError('isSame')">new name must be different than current name.</mat-error>
+            <mat-error *ngIf="newName.hasError('isSame')" i18n>new name must be different than current name.</mat-error>
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions fxLayoutAlign="flex-end">
-        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button mat-dialog-close i18n>Cancel</button>
         <button
             mat-button color="accent"
             [disabled]="!renameFormGroup.valid" type="submit"
-            >Rename
-        </button>
+            i18n>Rename</button>
     </mat-dialog-actions>
 </form>

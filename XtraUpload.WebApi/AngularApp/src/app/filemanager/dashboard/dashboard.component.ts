@@ -3,10 +3,11 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSidenav } from '@angular/material/sidenav';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntil } from 'rxjs/operators';
 import { Subject, ReplaySubject, merge } from 'rxjs';
-import { ComponentBase } from 'app/shared';
-import { IItemInfo, IFolderInfo, itemAction, IUploadSettings} from 'app/domain';
+import { ComponentBase } from 'app/shared/components';
+import { IItemInfo, IFolderInfo, itemAction, IUploadSettings} from 'app/models';
 import { FileManagerService, UserStorageService, SeoService } from 'app/services';
 import { FileMngContextMenuService, SnavContextMenuService } from 'app/services/contextmenu';
 import { UploadBottomSheetComponent } from './upload-bottom-sheet/upload-bottom-sheet.component';
@@ -18,7 +19,7 @@ import { SidenavService } from 'app/services/sidenav.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'My Files & Folders';
+  private readonly pageTitle = $localize`My Files & Folders`;
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
   @ViewChild('sidenav') sidenav: MatSidenav;
@@ -38,6 +39,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     private snavCtxMenuService: SnavContextMenuService,
     private userstorageService: UserStorageService,
     private sidenaveService: SidenavService,
+    private snackBar: MatSnackBar,
     private bottomSheet: MatBottomSheet,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
@@ -45,17 +47,21 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', () => this._mobileQueryListener);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initView();
     this.route.queryParamMap
     .pipe(takeUntil(this.onDestroy))
-    .subscribe(params => {
-      this.getFolderContent(params.get('folder'));
+    .subscribe(async params => {
+      await this.getFolderContent(params.get('folder'));
     });
-
+    this.filemanagerService.serviceBusy$
+    .pipe(takeUntil(this.onDestroy))
+    .subscribe(isbusy => {
+      this.isBusy = isbusy;
+    });
     // Display sidenav menu on request
     merge(
       this.mainCtxMenuService.itemInfoRequested$,
@@ -68,8 +74,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     });
     // Get the upload setting
     this.filemanagerService.getUploadSetting()
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(uploadSetting => {
+    .then(uploadSetting => {
       this.uploadSetting$.next(uploadSetting);
     });
     // Subscribe to header menu click event
@@ -80,12 +85,12 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     });
   }
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     super.ngOnDestroy();
   }
 
   private initView(): void {
-    const storage = this.userstorageService.getProfile();
+    const storage = this.userstorageService.profile;
     if (!storage.itemsDisplay) {
       this.changeDisplay('list');
     }
@@ -93,25 +98,20 @@ export class DashboardComponent extends ComponentBase implements OnInit {
       this.displayMode = storage.itemsDisplay;
     }
   }
-  getFolderContent(folderId?: string): void {
+  async getFolderContent(folderId?: string): Promise<void> {
     this.isBusy = true;
-    this.filemanagerService.getFolderContent(folderId)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      data => {
-        this.folderContent$.next(data);
-      }
-    );
+    await this.filemanagerService.getFolderContent(folderId)
+    .then( data => this.folderContent$.next(data))
+    .catch(error => this.handleError(error, this.snackBar))
+    .finally(() => this.isBusy = false);
   }
 
   changeDisplay(display: 'list' | 'grid') {
-    const userStorage = this.userstorageService.getProfile();
-    userStorage.itemsDisplay = display;
+    const profile = this.userstorageService.profile;
+    profile.itemsDisplay = display;
+    this.displayMode = display;
     // update the local storage with the new data
-    this.displayMode = this.userstorageService.saveUser(userStorage).itemsDisplay;
-
+    this.userstorageService.profile = profile;
   }
 
   openUploadSheet() {

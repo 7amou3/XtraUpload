@@ -1,0 +1,63 @@
+
+<div appIsLoggedIn (LoggedIn)="onLoggedIn($event)"></div>
+
+<span *ngIf="loggedIn.isLoggedIn, else elseBlock">
+    <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5"> <img src="{{avatar}}" alt="user" class="profile-pic"> </button>    
+</span>
+<ng-template #elseBlock>
+    <button mat-button class="main-btn" routerLinkActive="active-link" [class.dark-theme]="currentTheme === 'dark'" [routerLink]="['/signup']" i18n>SIGN UP</button>
+    <button mat-button class="main-btn" routerLinkActive="active-link" [class.dark-theme]="currentTheme === 'dark'" [routerLink]="['/login']" i18n>LOG IN</button>
+    <button mat-button 
+            mat-icon-button
+            i18n-matTooltip
+            matTooltip="Select a theme"
+            [matMenuTriggerFor]="moreOptionsMenu"
+    >
+        <mat-icon style="font-size: 18px;">more_vert</mat-icon>
+    </button>
+</ng-template>
+<!--Loged In user-->
+<mat-menu #profile="matMenu">
+    <button *ngIf="loggedIn.role === 'Admin'" mat-menu-item [routerLink]="['/administration']">
+        <mat-icon>view_quilt</mat-icon>
+        <span i18n>Admin Area</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/filemanager']">
+        <mat-icon>folder_shared</mat-icon>
+        <span i18n>My Files</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/settings']">
+        <mat-icon>settings</mat-icon>
+        <span i18n>Settings</span>
+    </button>
+    <mat-divider></mat-divider>
+    <ng-container *ngTemplateOutlet="selectorTpl"></ng-container>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="onSignOut()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span i18n>Sign Out</span> 
+    </button>
+</mat-menu>
+<!--Guest-->
+<mat-menu #moreOptionsMenu="matMenu">
+    <ng-container *ngTemplateOutlet="selectorTpl"></ng-container>
+</mat-menu>
+
+<ng-template #selectorTpl>
+    <!--Translate-->
+    <button mat-menu-item (click)="openLangDialog()">
+        <mat-icon>language</mat-icon> 
+        <span>{{ currentLanguage }}</span>
+        <mat-icon class="more-lang">keyboard_arrow_down</mat-icon>
+    </button>
+    <mat-divider></mat-divider>
+    <!--Themes-->
+    <button [disabled]="currentTheme === 'light'" mat-menu-item (click)="onThemeClick('light')">
+        <mat-icon>brightness_5</mat-icon> 
+        <span i18n>Light Theme</span>
+    </button>
+    <button [disabled]="currentTheme === 'dark'" mat-menu-item (click)="onThemeClick('dark')">
+        <mat-icon>brightness_3</mat-icon>
+        <span i18n>Dark Theme</span>
+    </button>
+</ng-template>

@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Subject, Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FileManagerService } from 'app/services';
-import { IItemInfo, IFileInfo, IFolderInfo } from 'app/domain';
+import { IItemInfo, IFileInfo, IFolderInfo } from 'app/models';
 import { isFile } from '../../helpers';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-iteminfo',
@@ -20,6 +21,7 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
   isFile: boolean;
   downloadUrl: string;
   constructor(
+    private snackBar: MatSnackBar,
     private fileMngService: FileManagerService) {
     super();
   }
@@ -46,14 +48,16 @@ export class IteminfoComponent extends ComponentBase implements OnInit {
         }
       );
   }
-  onAvailableItemChange(event: MatSlideToggleChange) {
-    let serviceCall$: Observable<IItemInfo> = this.fileMngService.updateFolderAvailability({ itemId: this.itemInfo.id, available: event.checked });
+  async onAvailableItemChange(event: MatSlideToggleChange) {
+    let serviceCall: Promise<IFileInfo | IFolderInfo>;
     if (isFile(this.itemInfo)) {
-      serviceCall$ = this.fileMngService.updateFileAvailability({ itemId: this.itemInfo.id, available: event.checked });
+      serviceCall = this.fileMngService.updateFileAvailability({ itemId: this.itemInfo.id, available: event.checked });
     }
-
-    serviceCall$
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(/*Item info will be pulled from itemInfo$ input*/);
+    else {
+      serviceCall = this.fileMngService.updateFolderAvailability({ itemId: this.itemInfo.id, available: event.checked });
+    }
+    
+    await serviceCall.then(/*Item info will be pulled from itemInfo$ input*/)
+    .catch(error => this.handleError(error, this.snackBar));
   }
 }

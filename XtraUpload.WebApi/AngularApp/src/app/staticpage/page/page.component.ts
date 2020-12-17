@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { StaticPageService, SeoService } from 'app/services';
 import { Router, ActivatedRoute } from '@angular/router';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { IPage } from 'app/domain';
+import { takeUntil } from 'rxjs/operators';
+import { IPage } from 'app/models';
 
 @Component({
   selector: 'app-page',
@@ -23,18 +23,14 @@ export class PageComponent extends ComponentBase implements OnInit {
     this.isBusy = true;
     this.route.paramMap
     .pipe(takeUntil(this.onDestroy))
-    .subscribe(r => {
-       this.pageService.getPage(r.get('url'))
-       .pipe(
-         takeUntil(this.onDestroy),
-         finalize(() => this.isBusy = false))
-       .subscribe(page => {
-         this.seoService.setPageTitle(page.name);
-         this.page = page;
-       },
-       () => {
-        this.router.navigate(['/']);
-       });
+    .subscribe(async r => {
+       await this.pageService.getPage(r.get('url'))
+       .then(page => {
+        this.seoService.setPageTitle(page.name);
+        this.page = page;
+       })
+       .catch(() => this.router.navigate(['/404']))
+       .finally(() => this.isBusy = false);
     });
   }
 

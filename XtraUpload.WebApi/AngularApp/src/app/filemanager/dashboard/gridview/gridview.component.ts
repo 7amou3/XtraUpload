@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { IItemInfo, IFolderInfo, IFileInfo } from 'app/domain';
+import { IItemInfo, IFolderInfo, IFileInfo } from 'app/models';
 import { FilemanagerBase } from '../filemanagerbase';
-import { FileManagerService } from 'app/services';
+import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 import { rowAnimation } from '../helpers';
 
@@ -19,9 +19,10 @@ export class GridviewComponent extends FilemanagerBase implements OnInit {
   itemsContent: IItemInfo[] = [];
   constructor(
     filemanagerService: FileManagerService,
+    uploadService: UploadService,
     public ctxMenuService: FileMngContextMenuService,
     @Inject('API_URL') apiUrl: string) {
-    super(filemanagerService, ctxMenuService, apiUrl);
+    super(filemanagerService, uploadService, ctxMenuService, apiUrl);
   }
 
   ngOnInit(): void {

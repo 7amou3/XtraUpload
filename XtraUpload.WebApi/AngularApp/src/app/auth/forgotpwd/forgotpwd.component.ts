@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from '../../shared';
+import { ComponentBase } from 'app/shared/components';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthService, SeoService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-forgotpwd',
   templateUrl: './forgotpwd.component.html'
 })
 export class ForgotpwdComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Forgot Password';
+  private readonly pageTitle =  $localize`Forgot Password`;
   forgotPassFormGroup: FormGroup;
   email = new FormControl('', [Validators.required, Validators.email]);
   constructor(
@@ -26,23 +25,17 @@ export class ForgotpwdComponent extends ComponentBase implements OnInit {
     });
   }
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-        this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.email.hasError('required') ?  $localize`You must enter a value` :
+        this.email.hasError('email') ?  $localize`Not a valid email` : '';
   }
-  onSubmit(lostPwdParams) {
+  async onSubmit(lostPwdParams) {
     this.isBusy = true;
-    this.authService.resetPassword(lostPwdParams)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-      .subscribe(
-        () => {
+    await this.authService.resetPassword(lostPwdParams)
+      .then(() => {
           this.resetForm(this.forgotPassFormGroup);
-          this.message$.next({successMessage: 'An email has been sent. Please check your inbox'});
-        },
-        (error) => {
-          this.message$.next({errorMessage: error?.error?.errorContent?.message});
-        }
-      );
+          this.message$.next({successMessage:  $localize`An email has been sent. Please check your inbox`});
+        })
+        .catch(error => this.message$.next({errorMessage: error?.error}))
+        .finally(() => this.isBusy = false);
   }
 }

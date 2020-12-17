@@ -1,0 +1,23 @@
+{
+  "No user found with the provided email.": "Kein Benutzer mit der angegebenen E-Mail gefunden.",
+  "Your Account Has Been Suspended.": "Ihr Konto wurde gesperrt.",
+  "Email or Password does not match": "E-Mail oder Passwort stimmen nicht überein",
+  "Your current password is incorrect.": "Ihr aktuelles Passwort ist falsch.",
+  "The provided token does not exist": "Das bereitgestellte Token existiert nicht",
+  "The provided token has expired": "Der bereitgestellte Token ist abgelaufen",
+  "The provided token has already been used or expired": "Das bereitgestellte Token wurde bereits verwendet oder ist abgelaufen.",
+  "The email associated with the provided token has been already confirmed.": "Die mit dem bereitgestellten Token verknüpfte E-Mail wurde bereits bestätigt.",
+  "No email found with the provided token.": "Keine E-Mail mit dem bereitgestellten Token gefunden.",
+  "A user with this email already exist": "Ein Benutzer mit dieser E-Mail existiert bereits",
+  "No user found with the provided id.": "Kein Benutzer mit der angegebenen ID gefunden.",
+  "Email server error, please check again later.": "E-Mail-Server-Fehler, bitte später noch einmal überprüfen.",
+  "The email has been already confirmed.": "Die E-Mail wurde bereits bestätigt.",
+  "No folder with the provided id was found": "Es wurde kein Ordner mit der angegebenen ID gefunden.",
+  "No file with the provided id was found": "Es wurde keine Datei mit der angegebenen ID gefunden.",
+  "This folder is not available for public downloads": "Dieser Ordner steht nicht für öffentliche Downloads zur Verfügung.",
+  "Moving folders to the same location is not possible!": "Das Verschieben von Ordnern an denselben Speicherort ist nicht möglich!",
+  "Moving a parent folder to one of its child folders is not possible": "Das Verschieben eines übergeordneten Ordners in einen seiner untergeordneten Ordner ist nicht möglich.",
+  "Moving files to the same location is not possible!": "Das Verschieben von Dateien an denselben Speicherort ist nicht möglich!",
+  "No user with the provided id was found": "Es wurde kein Benutzer mit der angegebenen ID gefunden.",
+  "The requested language does not exist.": "Die angeforderte Sprache existiert nicht."
+}

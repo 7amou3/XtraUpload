@@ -25,7 +25,7 @@
                 <div fxFlex="100" id="{{links[0].fragment}}">
                     <mat-card>
                         <mat-list>
-                            <div mat-subheader class="bg-info text-white">Page Settings</div>
+                            <div mat-subheader class="bg-info text-white" i18n>Page Settings</div>
                         </mat-list>
                         <mat-divider></mat-divider>
                         <mat-card-content>
@@ -33,19 +33,19 @@
                                 class="font-14">
                                 <!--Page Title-->
                                 <mat-form-field>
-                                    <mat-label>Website Name</mat-label>
+                                    <mat-label i18n>Website Name</mat-label>
                                     <input matInput type="text" formControlName="title" required>
                                     <mat-error *ngIf="title.invalid">{{getErrorMessage(title)}}</mat-error>
                                 </mat-form-field>
                                 <!--Page Description-->
                                 <mat-form-field>
-                                    <mat-label>Website Meta Description</mat-label>
+                                    <mat-label i18n>Website Meta Description</mat-label>
                                     <input matInput type="text" formControlName="description" required>
                                     <mat-error *ngIf="description.invalid">{{getErrorMessage(description)}}</mat-error>
                                 </mat-form-field>
                                 <!--Page keywords-->
                                 <mat-form-field>
-                                    <mat-label>Website Meta Keywords</mat-label>
+                                    <mat-label i18n>Website Meta Keywords</mat-label>
                                     <input matInput type="text" formControlName="keywords" required>
                                     <mat-error *ngIf="keywords.invalid">{{getErrorMessage(keywords)}}</mat-error>
                                 </mat-form-field>
@@ -54,7 +54,7 @@
                                     <button mat-raised-button
                                         [disabled]="!pageSettingFormGroup.valid || hdBusy" type="submit">
                                         <mat-progress-bar mode="indeterminate" *ngIf="appSettingBusy"></mat-progress-bar>
-                                        Save changes
+                                        <span i18n>Save changes</span>
                                     </button>
                                 </mat-card-actions>
             
@@ -67,38 +67,38 @@
                 <div fxFlex="100" id="{{links[1].fragment}}">
                     <mat-card>
                         <mat-list>
-                            <div mat-subheader class="bg-info text-white">Jwt Settings</div>
+                            <div mat-subheader class="bg-info text-white" i18n>Jwt Settings</div>
                         </mat-list>
                         <mat-divider></mat-divider>
                         <mat-card-content>
                             <form [formGroup]="jwtFormGroup" (ngSubmit)="onJwtSubmit(jwtFormGroup.value)" class="font-14">
                                 <!--Issuer-->
                                 <mat-form-field>
-                                    <mat-label>Issuer</mat-label>
+                                    <mat-label i18n>Issuer</mat-label>
                                     <input matInput type="text" formControlName="issuer" required>
-                                    <mat-hint>Identifies the principal that issued the JWT</mat-hint>
+                                    <mat-hint i18n>Identifies the principal that issued the JWT</mat-hint>
                                     <mat-error *ngIf="issuer.invalid">{{getErrorMessage(issuer)}}</mat-error>
                                 </mat-form-field>
                                 <!--Audience-->
                                 <mat-form-field>
-                                    <mat-label>Audience</mat-label>
+                                    <mat-label i18n>Audience</mat-label>
                                     <input matInput type="url" formControlName="audience" required>
-                                    <mat-hint>Identifies the recipients that the JWT is intended for</mat-hint>
+                                    <mat-hint i18n>Identifies the recipients that the JWT is intended for</mat-hint>
                                     <mat-error *ngIf="audience.invalid">{{getErrorMessage(audience)}}</mat-error>
                                 </mat-form-field>
                                 <!--Token validity-->
                                 <mat-form-field>
-                                    <mat-label>Token Validity</mat-label>
+                                    <mat-label i18n>Token Validity</mat-label>
                                     <input matInput type="number" formControlName="validFor" required>
-                                    <mat-hint>The duration that the token will be valid for (day)</mat-hint>
+                                    <mat-hint i18n>The duration that the token will be valid for (day)</mat-hint>
                                     <mat-error *ngIf="validFor.invalid">{{getErrorMessage(validFor)}}</mat-error>
                                 </mat-form-field>
                                 <!-- Secret key -->
                                 <mat-form-field>
-                                    <mat-label>Secret Key</mat-label>
+                                    <mat-label i18n>Secret Key</mat-label>
                                     <input matInput [type]="hideSecretKey ? 'password' : 'text'" formControlName="secretKey"
                                         required>
-                                    <mat-hint>A secret key to signing token key</mat-hint>
+                                    <mat-hint i18n>A secret key to signing token key</mat-hint>
                                     <mat-hint align="end" fxLayoutAlign="flex-end">{{secretKey.value.length}} / 32</mat-hint>
                                     <button type="button" mat-icon-button matSuffix (click)="hideSecretKey = !hideSecretKey"
                                         [attr.aria-label]="'Hide secret key'" [attr.aria-pressed]="hideSecretKey">
@@ -111,7 +111,7 @@
                                     <button mat-raised-button
                                         [disabled]="!jwtFormGroup.valid || jwtBusy" type="submit">
                                         <mat-progress-bar mode="indeterminate" *ngIf="jwtBusy"></mat-progress-bar>
-                                        Save changes
+                                        <span i18n>Save changes</span>
                                     </button>
                                 </mat-card-actions>
                             </form>
@@ -122,7 +122,7 @@
                 <div fxFlex="100" id="{{links[2].fragment}}">
                     <mat-card>
                         <mat-list>
-                            <div mat-subheader class="bg-info text-white">Social Auth</div>
+                            <div mat-subheader class="bg-info text-white" i18n>Social Auth</div>
                         </mat-list>
                         <mat-divider></mat-divider>
                         <mat-card-content>
@@ -130,13 +130,13 @@
                                 class="font-14">
                                 <!--facebookAppId-->
                                 <mat-form-field>
-                                    <mat-label>Facebook App Id</mat-label>
+                                    <mat-label i18n>Facebook App Id</mat-label>
                                     <input matInput type="text" formControlName="facebookAppId" required>
                                     <mat-error *ngIf="facebookAppId.invalid">{{getErrorMessage(facebookAppId)}}</mat-error>
                                 </mat-form-field>
                                 <!--StorageThreshold-->
                                 <mat-form-field>
-                                    <mat-label>Google Client Id</mat-label>
+                                    <mat-label i18n>Google Client Id</mat-label>
                                     <input matInput type="text" formControlName="googleClientId" required>
                                     <mat-error *ngIf="googleClientId.invalid">{{getErrorMessage(googleClientId)}}</mat-error>
                                 </mat-form-field>
@@ -145,7 +145,7 @@
                                     <button mat-raised-button
                                         [disabled]="!socialAuthFormGroup.valid || socialAuthBusy" type="submit">
                                         <mat-progress-bar mode="indeterminate" *ngIf="hdBusy"></mat-progress-bar>
-                                        Save changes
+                                        <span i18n>Save changes</span>
                                     </button>
                                 </mat-card-actions>
                             </form>
@@ -156,32 +156,32 @@
                 <div fxFlex="100" id="{{links[3].fragment}}">
                     <mat-card>
                         <mat-list>
-                            <div mat-subheader class="bg-info text-white">Email Settings</div>
+                            <div mat-subheader class="bg-info text-white" i18n>Email Settings</div>
                         </mat-list>
                         <mat-divider></mat-divider>
                         <mat-card-content>
                             <form [formGroup]="emailFormGroup" (ngSubmit)="onEmailSubmit(emailFormGroup.value)" class="font-14">
                                 <!--SMTP Server-->
                                 <mat-form-field>
-                                    <mat-label>SMTP Server</mat-label>
+                                    <mat-label i18n>SMTP Server</mat-label>
                                     <input matInput type="url" formControlName="server" required>
                                     <mat-error *ngIf="server.invalid">{{getErrorMessage(server)}}</mat-error>
                                 </mat-form-field>
                                 <!--SMTP Port-->
                                 <mat-form-field>
-                                    <mat-label>SMTP Port</mat-label>
+                                    <mat-label i18n>SMTP Port</mat-label>
                                     <input matInput type="number" formControlName="port" required>
                                     <mat-error *ngIf="port.invalid">{{getErrorMessage(port)}}</mat-error>
                                 </mat-form-field>
                                 <!--Username-->
                                 <mat-form-field>
-                                    <mat-label>SMTP Username</mat-label>
+                                    <mat-label i18n>SMTP Username</mat-label>
                                     <input matInput type="text" formControlName="username" required>
                                     <mat-error *ngIf="username.invalid">{{getErrorMessage(username)}}</mat-error>
                                 </mat-form-field>
                                 <!--Password-->
                                 <mat-form-field>
-                                    <mat-label>SMTP Password</mat-label>
+                                    <mat-label i18n>SMTP Password</mat-label>
                                     <input matInput [type]="hidepassword ? 'password' : 'text'" formControlName="password" required>
                                     <button type="button" mat-icon-button matSuffix (click)="hidepassword = !hidepassword"
                                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidepassword">
@@ -191,19 +191,19 @@
                                 </mat-form-field>
                                 <!--Sender-->
                                 <mat-form-field>
-                                    <mat-label>Sender Name</mat-label>
+                                    <mat-label i18n>Sender Name</mat-label>
                                     <input matInput type="text" formControlName="senderName" required>
                                     <mat-error *ngIf="senderName.invalid">{{getErrorMessage(senderName)}}</mat-error>
                                 </mat-form-field>
                                 <!--Sender Admin Email -->
                                 <mat-form-field>
-                                    <mat-label>Admin Email</mat-label>
+                                    <mat-label i18n>Admin Email</mat-label>
                                     <input matInput type="email" formControlName="adminEmail" required>
                                     <mat-error *ngIf="adminEmail.invalid">{{getErrorMessage(adminEmail)}}</mat-error>
                                 </mat-form-field>
                                 <!--Sender Support Email -->
                                 <mat-form-field>
-                                    <mat-label>Support Email</mat-label>
+                                    <mat-label i18n>Support Email</mat-label>
                                     <input matInput type="email" formControlName="supportEmail" required>
                                     <mat-error *ngIf="supportEmail.invalid">{{getErrorMessage(supportEmail)}}</mat-error>
                                 </mat-form-field>
@@ -212,7 +212,7 @@
                                     <button mat-raised-button
                                         [disabled]="!emailFormGroup.valid || emailBusy" type="submit">
                                         <mat-progress-bar mode="indeterminate" *ngIf="emailBusy"></mat-progress-bar>
-                                        Save changes
+                                        <span i18n>Save changes</span>
                                     </button>
                                 </mat-card-actions>
                             </form>
@@ -223,7 +223,7 @@
                 <div fxFlex="100" id="{{links[4].fragment}}">
                     <mat-card>
                         <mat-list>
-                            <div mat-subheader class="bg-info text-white">Hardware Options</div>
+                            <div mat-subheader class="bg-info text-white" i18n>Hardware Options</div>
                         </mat-list>
                         <mat-divider></mat-divider>
                         <mat-card-content>
@@ -231,15 +231,15 @@
                                 class="font-14">
                                 <!--MemoryThreshold-->
                                 <mat-form-field>
-                                    <mat-label>Memory Threshold (Gb)</mat-label>
+                                    <mat-label i18n>Memory Threshold (Gb)</mat-label>
                                     <input matInput type="number" formControlName="memoryThreshold" required>
-                                    <mat-hint>The maximum RAM memory that could be allocated by XtraUpload</mat-hint>
+                                    <mat-hint i18n>The maximum RAM memory that could be allocated by XtraUpload</mat-hint>
                                     <mat-error *ngIf="memoryThreshold.invalid">{{getErrorMessage(memoryThreshold)}}</mat-error>
                                 </mat-form-field>
                                 <!--StorageThreshold-->
                                 <mat-form-field>
-                                    <mat-label>Storage Threshold (Gb)</mat-label>
-                                    <mat-hint>The maximum disk space that could be allocated by XtraUpload</mat-hint>
+                                    <mat-label i18n>Storage Threshold (Gb)</mat-label>
+                                    <mat-hint i18n>The maximum disk space that could be allocated by XtraUpload</mat-hint>
                                     <input matInput type="number" formControlName="storageThreshold" required>
                                     <mat-error *ngIf="storageThreshold.invalid">{{getErrorMessage(storageThreshold)}}</mat-error>
                                 </mat-form-field>
@@ -248,7 +248,7 @@
                                     <button mat-raised-button
                                         [disabled]="!hdOptsFormGroup.valid || hdBusy" type="submit">
                                         <mat-progress-bar mode="indeterminate" *ngIf="hdBusy"></mat-progress-bar>
-                                        Save changes
+                                        <span i18n>Save changes</span>
                                     </button>
                                 </mat-card-actions>
                             </form>

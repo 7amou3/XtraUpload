@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FileManagerService, SeoService } from 'app/services';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
 import { takeUntil } from 'rxjs/operators';
-import { IFlatNode } from 'app/domain';
+import { IFlatNode } from 'app/models';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -23,7 +23,7 @@ export class SidebarComponent extends TreeBase implements OnInit {
     super();
    }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.route.queryParamMap
     .pipe(takeUntil(this.onDestroy))
     .subscribe(
@@ -33,11 +33,9 @@ export class SidebarComponent extends TreeBase implements OnInit {
         this.selectedFolderId = subfolderId ?? folderId;
       }
     );
-    this.filemanagerService.getFolderTreeById(this.folderId)
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(
-      folders => {
-        this.seoService.setPageTitle('Download ' + folders[folders.length - 1].name);
+    await this.filemanagerService.getFolderTreeById(this.folderId)
+    .then(folders => {
+        this.seoService.setPageTitle($localize`Download`+ ' ' + folders[folders.length - 1].name);
         const rootFolder = {
           id: this.folderId,
           name: folders[folders.length - 1].name,

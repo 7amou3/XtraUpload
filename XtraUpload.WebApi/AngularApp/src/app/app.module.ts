@@ -8,31 +8,26 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
-import { IsLoggedInDirective } from './shared/loggedin.directive';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Angulartics2Module } from 'angulartics2';
 import { AppComponent } from './app.component';
-import { FooterModule } from './shared';
-import { FullComponent, HeaderComponent, PageNotFoundComponent } from './layouts';
+import { SharedModule } from './shared/shared.module';
+import { ContainerComponent, HeaderComponent, LanguagesComponent } from './layout';
 
 import {
   UrlForwarderHandler,
   HttpProgressHandler,
   TokenInterceptor,
   GlobalErrorHandler,
-  ProgressComponent
+  ProgressComponent,
+  HeaderCultureProvider
 } from './http-interceptor';
-import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService, CustomIconService } from 'app/services';
-import { SpinnerComponent } from './shared';
-import { PipeModule } from './shared/pipe-modules';
+import { UserStorageService, AuthService, SettingsService, HeaderService, SidenavService, CustomIconService, LanguageService } from 'app/services';
+
+export function languageFactory(lang: LanguageService) {
+  return () => lang.init();
+}
 export function webSettingFactory(settings: SettingsService) {
-  return () => settings.appInitializerConfig().toPromise();
+  return () => settings.appInitializerConfig();
 }
 export function loadIcons(iconService: CustomIconService) {
   return () => iconService.init();
@@ -40,30 +35,20 @@ export function loadIcons(iconService: CustomIconService) {
 @NgModule({
   declarations: [
     AppComponent,
-    SpinnerComponent,
-    HeaderComponent,
-    FullComponent,
     ProgressComponent,
-    PageNotFoundComponent,
-    IsLoggedInDirective
+    ContainerComponent,
+    HeaderComponent,
+    LanguagesComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     FlexLayoutModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatDividerModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSnackBarModule,
     HttpClientModule,
     RouterModule.forRoot(AppRoutes, { scrollPositionRestoration: 'enabled', relativeLinkResolution: 'legacy' }),
     Angulartics2Module.forRoot(),
-    PipeModule,
-    FooterModule
+    SharedModule
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -71,6 +56,13 @@ export function loadIcons(iconService: CustomIconService) {
     { provide: HTTP_INTERCEPTORS, useClass: UrlForwarderHandler, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpProgressHandler, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: HeaderCultureProvider, multi: true},
+    {
+      provide: APP_INITIALIZER,
+      useFactory: languageFactory,
+      deps: [LanguageService],
+      multi: true
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: webSettingFactory,
@@ -88,7 +80,8 @@ export function loadIcons(iconService: CustomIconService) {
     SettingsService,
     HeaderService,
     SidenavService,
-    CustomIconService
+    CustomIconService,
+    LanguageService
   ],
   bootstrap: [AppComponent]
 })

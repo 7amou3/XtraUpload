@@ -1,7 +1,7 @@
 <div fxLayout="row wrap" fxLayoutAlign="center">
     <div fxFlex.md="60" fxFlex.lg="50" fxFlex="100">
         <mat-card>
-            <div mat-subheader class="bg-info text-white">Change Your Avatar</div>
+            <div mat-subheader class="bg-info text-white" i18n>Change Your Avatar</div>
             <mat-divider></mat-divider>
             <mat-card-content>
                 <app-message [message$]="message$"></app-message>
@@ -14,15 +14,14 @@
                 (change)="onSelect($event)">
                     <ngx-dropzone-label>
                     <mat-icon class="icon-add-files">add</mat-icon>
-                    <p class="text-muted font-12">
-                        Max Image Size: 2 Mb
-                    </p>
+                    <p class="text-muted font-12" i18n>Max Image Size: 2 Mb</p>
                     </ngx-dropzone-label>
                 </ngx-dropzone>
                 <button type="button"
                 [class.drop-visibility]="!selectedImg"
                 (click)="onDeleteImage()"
-                mat-mini-fab color="warn" 
+                mat-mini-fab color="warn"
+                i18n-matTooltip
                 matTooltip="Delete"
                 aria-label="Delete Selected Image"
                 class="delete-img">
@@ -46,7 +45,7 @@
                     (click)="onUpdateAvatar()"
                         type="submit">
                     <mat-progress-bar mode="indeterminate" *ngIf="isBusy"></mat-progress-bar>
-                        Update Avatar</button>
+                        <span i18n>Update Avatar</span></button>
                 </mat-card-actions>
             </mat-card-content>
         </mat-card>

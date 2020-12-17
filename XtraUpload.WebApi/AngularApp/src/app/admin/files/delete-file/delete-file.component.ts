@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { IFileInfo } from 'app/domain';
-import { ComponentBase } from 'app/shared';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { IFileInfo } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-delete-file',
@@ -12,25 +12,21 @@ import { takeUntil, finalize } from 'rxjs/operators';
 export class DeleteFileComponent extends ComponentBase implements OnInit {
 
   constructor(
+    private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<DeleteFileComponent>,
     private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public files: IFileInfo[]
   ) {
     super();
-   }
+  }
   ngOnInit(): void {
   }
-  onDelete() {
+  async onDelete() {
     this.isBusy = true;
-    this.adminService.deleteFiles(this.files)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      (result) => {
-        this.dialogRef.close(result);
-      }, (error) => this.handleError(error)
-    );
+    await this.adminService.deleteFiles(this.files)
+      .then((result) => this.dialogRef.close(result))
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
 
 }

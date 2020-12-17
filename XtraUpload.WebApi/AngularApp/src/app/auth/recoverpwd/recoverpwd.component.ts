@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AuthService, SeoService } from 'app/services';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { RecoverPassword } from 'app/domain';
+import { RecoverPassword } from 'app/models';
 
 @Component({
   selector: 'app-recoverpwd',
   templateUrl: './recoverpwd.component.html'
 })
 export class RecoverpwdComponent extends ComponentBase implements OnInit {
-  private readonly pageTitle = 'Recover Password';
+  private readonly pageTitle = $localize`Recover Password`;
   private recoverPassword = new RecoverPassword();
   recoverPassFormGroup: FormGroup;
   password = new FormControl('', [Validators.required, Validators.minLength(6)]);
@@ -25,41 +24,31 @@ export class RecoverpwdComponent extends ComponentBase implements OnInit {
   ) {
     super();
     seoService.setPageTitle(this.pageTitle);
-   }
+  }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     const recoveryId = this.route.snapshot.params['recoveryId'];
     this.recoverPassFormGroup = this.fb.group({
       password: this.password
     });
     this.isBusy = true;
-    this.authService.recoverPassInfo(recoveryId)
-    .pipe(takeUntil(this.onDestroy), finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
+    await this.authService.recoverPassInfo(recoveryId)
+      .then(() => {
         this.recoverPassword.recoveryKey = recoveryId;
         this.tokenValid = true;
-      },
-      (error) => {
-        this.message$.next({errorMessage: error?.error?.errorContent?.message});
-      }
-    );
+      })
+      .catch((error) => this.message$.next({ errorMessage: error?.error }))
+      .finally(() => this.isBusy = false);
   }
-  onSubmit(recoverPassParams) {
+  async onSubmit(recoverPassParams) {
     this.isBusy = true;
     this.recoverPassword.newPassword = recoverPassParams.password;
-    this.authService.updatePassword(this.recoverPassword)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
+    await this.authService.updatePassword(this.recoverPassword)
+      .then(() => {
         this.resetForm(this.recoverPassFormGroup);
-        this.message$.next({successMessage: 'Your password has been updated successfully, please login.'});
-      },
-      error => {
-        this.message$.next({errorMessage: error?.error?.errorContent?.message});
-      }
-    );
+        this.message$.next({ successMessage: $localize`Your password has been updated successfully, please login.` });
+      })
+      .catch(error => this.message$.next({ errorMessage: error?.error }))
+      .finally(() => this.isBusy = false);
   }
 }

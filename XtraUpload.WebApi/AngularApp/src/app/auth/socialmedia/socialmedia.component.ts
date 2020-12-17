@@ -1,10 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AuthService } from 'app/services';
-import { ComponentBase } from 'app/shared';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { AuthService, UserStorageService } from 'app/services';
+import { ComponentBase } from 'app/shared/components';
 import { SocialUser } from 'angularx-social-login';
 import { SocialAuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
-import { IGenericMessage } from 'app/domain';
+import { IExtendedSocialUser, IGenericMessage } from 'app/models';
 
 @Component({
   selector: 'app-socialmedia',
@@ -15,41 +14,36 @@ export class SocialmediaComponent extends ComponentBase implements OnInit {
   @Output() loginMessage = new EventEmitter<IGenericMessage>();
   constructor(
     private localAuth: AuthService,
-    private socialAuth: SocialAuthService
-    ) {
+    private socialAuth: SocialAuthService,
+    private userStorage: UserStorageService
+  ) {
     super();
   }
 
   signInWithGoogle(): void {
     this.socialAuth
-    .signIn(GoogleLoginProvider.PROVIDER_ID)
-    .then(user => this.process(user));
+      .signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then(async user => await this.process(user));
   }
 
   ngOnInit(): void {
   }
   signInWithFB(): void {
     this.socialAuth
-    .signIn(FacebookLoginProvider.PROVIDER_ID)
-    .then(user => this.process(user));
+      .signIn(FacebookLoginProvider.PROVIDER_ID)
+      .then(async user => await this.process(user));
   }
 
-  process(user: SocialUser) {
+  async process(user: SocialUser) {
     this.isBusy = true;
-    this.localAuth.socialmediaAuth(user)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
+    let exUser: IExtendedSocialUser = Object.create(user);
+    exUser.language = this.userStorage.userlanguage.culture;
+    await this.localAuth.socialmediaAuth(exUser)
+      .then(() =>
         // Reload the entire app
-        window.location.href = '/filemanager';
-      },
-      error => {
-        this.loginMessage.emit({errorMessage: error?.error?.errorContent?.message});
-        throw error;
-      }
-    );
+        window.location.href = '/filemanager')
+      .catch(error => this.loginMessage.emit({ errorMessage: error?.error }))
+      .finally(() => this.isBusy = false)
   }
 
 }

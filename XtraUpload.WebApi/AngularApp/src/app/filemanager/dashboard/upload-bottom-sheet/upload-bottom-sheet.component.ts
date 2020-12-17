@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { FileManagerService } from 'app/services';
+import { FileManagerService, UploadService } from 'app/services';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { UploadStatus, IUploadSettings, IFileInfo } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { UploadStatus, IUploadSettings, IFileInfo } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
 import { forEachPromise } from '../helpers';
@@ -21,28 +21,22 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
   uploadSetting$ = new BehaviorSubject<IUploadSettings>(null);
   constructor(
     private fileMngService: FileManagerService,
+    private uploadService: UploadService,
     private route: ActivatedRoute,
     private bottomSheetRef: MatBottomSheetRef<UploadBottomSheetComponent>) {
     super();
   }
-  ngOnInit() {
+  async ngOnInit() {
     this.isBusy = true;
-    this.fileMngService.getUploadSetting()
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(setting => {
-      this.uploadSetting$.next(setting);
-    },
-      (error) => {
-        this.uploadSetting$.next(null);
-        throw error;
-    });
+    await this.fileMngService.getUploadSetting()
+      .then(setting => this.uploadSetting$.next(setting))
+      .catch(() => this.uploadSetting$.next(null))
+      .finally(() => this.isBusy = false);
     this.fileMngService.storageQuotaReached$
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe(storageLimitReached => {
-      this.storageLimitReached = storageLimitReached;
-    });
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(storageLimitReached => {
+        this.storageLimitReached = storageLimitReached;
+      });
   }
 
   onCloseUploadSheet(event: MouseEvent): void {
@@ -53,17 +47,17 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
   onSelect(event: NgxDropzoneChangeEvent): void {
     if (event.rejectedFiles.length > 0) {
       const rejected = event.rejectedFiles[0] as RejectedFile;
-        if (rejected.reason === 'type') {
-          throw Error ('The selected file type is not allowed.');
-        } else {
-          throw Error ('You exceeded the file size limit.');
-        }
+      if (rejected.reason === 'type') {
+        throw Error($localize`The selected file type is not allowed.`);
+      } else {
+        throw Error($localize`You exceeded the file size limit.`);
+      }
     }
     // Accepted files
     event.addedFiles.forEach((upload: File) => {
       if (this.files.find(s => s.name === upload.name)) {
         // file already exist
-        throw Error(`File ${upload.name} already exist`);
+        throw Error($localize`File ${upload.name} already exist`);
       }
       const upstatus = new UploadStatus();
       upstatus.filename = upload.name;
@@ -80,7 +74,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
       for (let i = 0; i < amount; i++) {
         this.files.splice(this.files.length - 1, 1);
       }
-      throw Error(`Max conccurent upload exceeded, you can upload up to ${this.uploadSetting$.getValue().concurrentUpload} files at a time.`);
+      throw Error($localize`Max conccurent upload exceeded, you can upload up to ${this.uploadSetting$.getValue().concurrentUpload} files at a time.`);
     }
   }
 
@@ -95,19 +89,17 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
     if (!currentFolderId) {
       currentFolderId = 'root';
     }
-    // Sequentialy process uploads
-    forEachPromise(this.files.filter(s => s.file != null), this.uploadPromise, new UploadContext(this.fileMngService, this.files, this.uploadSetting$.getValue(), this.onDestroy, currentFolderId))
-    .then(() => {});
+    forEachPromise(this.files.filter(s => s.file != null), this.processUpload, new UploadContext(this.uploadService, this.files, this.uploadSetting$.getValue(), this.onDestroy, currentFolderId));
   }
-  uploadPromise(upload: FileUpload, context: UploadContext) {
-    return new Promise((resolve, reject) => {
-      context.fileManagerService.startUpload(upload.file, context.uploadSettings, 'fileupload', context.currentFolderId)
+
+  private async processUpload(upload: FileUpload, context: UploadContext) {
+    return new Promise(async (resolve, reject) => {
+      context.uploadService.startUpload(upload.file, context.uploadSettings, 'fileupload', context.currentFolderId)
         .pipe(takeUntil(context.onDestroy))
-        .subscribe(data => {
+        .subscribe((data => {
           const file = context.files.find(s => s.name === data.filename);
-          if (!file) {
+          if (!file)
             reject();
-          }
           file.uploadStatus$.next(data);
           if (data.status === 'Success') {
             file.downloadUrl = 'file?id=' + (data.uploadData as IFileInfo).id;
@@ -115,10 +107,7 @@ export class UploadBottomSheetComponent extends ComponentBase implements OnInit 
             file.file = null;
             resolve();
           }
-        },
-        error => {
-          reject();
-        });
+        }), error => reject());
     })
   }
 }
@@ -131,18 +120,18 @@ export class FileUpload {
 }
 export class UploadContext {
 
-  constructor( fileManagerService: FileManagerService, 
+  constructor(uploadService: UploadService,
     files: FileUpload[],
     uploadSettings: IUploadSettings,
     onDestroy: Subject<void>,
     currentFolderId: string) {
-      this.fileManagerService = fileManagerService;
-      this.files = files;
-      this.uploadSettings = uploadSettings;
-      this.onDestroy = onDestroy;
-      this.currentFolderId = currentFolderId;
+    this.uploadService = uploadService;
+    this.files = files;
+    this.uploadSettings = uploadSettings;
+    this.onDestroy = onDestroy;
+    this.currentFolderId = currentFolderId;
   }
-  fileManagerService: FileManagerService;
+  uploadService: UploadService;
   uploadSettings: IUploadSettings;
   files: FileUpload[];
   onDestroy: Subject<void>;

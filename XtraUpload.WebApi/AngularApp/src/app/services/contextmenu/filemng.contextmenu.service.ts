@@ -3,23 +3,23 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { isFile } from '../../filemanager/dashboard/helpers';
-import { IItemsMenu, itemAction, IItemInfo } from 'app/domain';
+import { IItemsMenu, itemAction, IItemInfo } from 'app/models';
 import { ContextMenuBase } from './contextmenu.base';
 import { FileManagerService } from 'app/services';
 
 const itemsMenu: IItemsMenu[] = [
-    { description: 'Move Selected', icon: 'open_with', action: itemAction.move },
-    { description: 'Delete', icon: 'delete', class: 'text-danger', action: itemAction.delete }
+    { description: $localize`Move Selected`, icon: 'open_with', action: itemAction.move },
+    { description: $localize`Delete`, icon: 'delete', class: 'text-danger', action: itemAction.delete }
 ];
 const fileMenu: IItemsMenu[] = [
-    { description: 'Info', icon: 'info', action: itemAction.info },
-    { description: 'Rename', icon: 'edit', action: itemAction.rename },
-    { description: 'Download', icon: 'get_app', action: itemAction.download },
+    { description: $localize`Info`, icon: 'info', action: itemAction.info },
+    { description: $localize`Rename`, icon: 'edit', action: itemAction.rename },
+    { description: $localize`Download`, icon: 'get_app', action: itemAction.download },
     ...itemsMenu
 ];
 const folderMenu: IItemsMenu[] = [
-    { description: 'Open', icon: 'subdirectory_arrow_right', action: itemAction.openFolder },
-    { description: 'New Folder', icon: 'create_new_folder', action: itemAction.create },
+    { description: $localize`Open`, icon: 'subdirectory_arrow_right', action: itemAction.openFolder },
+    { description: $localize`New Folder`, icon: 'create_new_folder', action: itemAction.create },
     ...fileMenu
 ];
 

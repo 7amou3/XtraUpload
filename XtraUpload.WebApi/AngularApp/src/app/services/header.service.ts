@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IAvatarData } from '../domain';
+import { IAvatarData } from '../models';
 
 @Injectable()
 export class HeaderService {

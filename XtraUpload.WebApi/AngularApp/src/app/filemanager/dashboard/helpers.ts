@@ -1,4 +1,4 @@
-import { IItemInfo, IFileInfo, IFolderNode, IFlatNode } from '../../domain';
+import { IItemInfo, IFileInfo, IFolderNode, IFlatNode } from '../../models';
 import { trigger, animate, transition, style } from '@angular/animations';
 import { FlatTreeControl } from '@angular/cdk/tree';
 

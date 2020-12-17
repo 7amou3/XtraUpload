@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserStorageService } from './user.storage.service';
 import { Title, Meta } from '@angular/platform-browser';
-import { IWebAppInfo } from 'app/domain';
+import { IWebAppInfo } from 'app/models';
 
 @Injectable({providedIn: 'root'})
 export class SeoService {
@@ -10,7 +10,7 @@ export class SeoService {
         private meta: Meta,
         private userStorage: UserStorageService) {}
     setPageTitle(title: string) {
-        const pageSetting = this.userStorage.getAppInfo();
+        const pageSetting = this.userStorage.appinfo;
         if (pageSetting) {
             title += ' - ' + pageSetting.title;
         }

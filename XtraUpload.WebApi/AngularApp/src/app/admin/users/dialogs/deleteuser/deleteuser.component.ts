@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { finalize, takeUntil } from 'rxjs/operators';
-import { IProfile } from 'app/domain';
+import { IProfile } from 'app/models';
 
 @Component({
   selector: 'app-deleteuser',
@@ -14,24 +14,19 @@ export class DeleteuserComponent extends ComponentBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DeleteuserComponent>,
     private adminService: AdminService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public users: IProfile[]
   ) {
     super();
-   }
+  }
 
   ngOnInit(): void {
   }
-  onDelete() {
+  async onDelete() {
     this.isBusy = true;
     this.adminService.deleteUsers(this.users.map(s => s.id))
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
-        this.dialogRef.close(this.users);
-      }, (error) => this.handleError(error)
-    );
+      .then(() => this.dialogRef.close(this.users))
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
-
 }

@@ -7,6 +7,7 @@ using XtraUpload.Database.Data.Common;
 using XtraUpload.Domain;
 using XtraUpload.Email.Service.Common;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Askmethat.Aspnet.JsonLocalizer.Localizer;
 
 namespace XtraUpload.Authentication.Service
 {
@@ -15,12 +16,14 @@ namespace XtraUpload.Authentication.Service
         #region Fields
         readonly IMediator _mediatr;
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
         #endregion
 
         #region Constructor
-        public ResetPasswordCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr)
+        public ResetPasswordCommandHandler(IUnitOfWork unitOfWork, IMediator mediatr, IJsonStringLocalizer localizer)
         {
             _mediatr = mediatr;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
         #endregion
@@ -35,14 +38,14 @@ namespace XtraUpload.Authentication.Service
             // Check the user exist
             if (user == null)
             {
-                Result.ErrorContent = new ErrorContent("No user found with the provided email.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["No user found with the provided email."], ErrorOrigin.Client);
                 return Result;
             }
             // Check email service is up
             HealthCheckResult health = await _mediatr.Send(new EmailHealthCheckQuery());
             if (health.Status != HealthStatus.Healthy)
             {
-                Result.ErrorContent = new ErrorContent("Internal email server error, please check again later.", ErrorOrigin.Server);
+                Result.ErrorContent = new ErrorContent(_localizer["Email server error, please check again later."], ErrorOrigin.Server);
                 return Result;
             }
             // Generate a password reset candidate

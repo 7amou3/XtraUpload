@@ -1,7 +1,6 @@
 import { Directive, OnInit } from '@angular/core';
-
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive()
@@ -26,8 +25,8 @@ export abstract class PageCommon extends ComponentBase implements OnInit{
       this.visibleInFooter.valueChanges.pipe(takeUntil(this.onDestroy)).subscribe((visible: boolean) => {
         
         this.tooltipInfo = visible 
-                            ? 'A link to this page will be visible in the main footer.' 
-                            : 'The link of this page will not be visible in the main footer';
+                            ? $localize`A link to this page will be visible in the main footer.`
+                            : $localize`The link of this page will not be visible in the main footer`;
       });
       this.Init();
   }

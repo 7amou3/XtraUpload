@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IItemInfo, ISetPasswordItemModel } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IItemInfo, ISetPasswordItemModel } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-password',

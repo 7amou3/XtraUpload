@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
-import { IChangePassword } from 'app/domain';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ComponentBase } from 'app/shared/components';
+import { IChangePassword } from 'app/models';
 import { SettingsService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
-
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
@@ -27,24 +25,18 @@ export class ChangePasswordComponent extends ComponentBase implements OnInit {
       newPassword: this.newPassword
     });
   }
-  onSubmit(changePassParams: IChangePassword) {
+  async onSubmit(changePassParams: IChangePassword) {
     if (changePassParams.newPassword === changePassParams.oldPassword) {
-      this.message$.next({errorMessage: 'The new password must differ from current password.'});
+      this.message$.next({errorMessage: $localize`The new password must differ from current password.`});
       return;
     }
     this.isBusy = true;
-    this.settingsService.changePassword(changePassParams)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(
-        () => {
-          this.resetForm(this.changePassFormGroup);
-          this.message$.next({successMessage: 'your password has been successfully changed.'});
-        },
-        (error) => {
-          this.message$.next({errorMessage: error?.error?.errorContent?.message});
-          throw error;
-        });
+    await this.settingsService.changePassword(changePassParams)
+    .then(() => {
+      this.resetForm(this.changePassFormGroup);
+      this.message$.next({successMessage: $localize`Your password has been successfully changed.`});
+    })
+    .catch(error => this.message$.next({errorMessage: error?.error}))
+    .finally(() => this.isBusy = false);
   }
 }

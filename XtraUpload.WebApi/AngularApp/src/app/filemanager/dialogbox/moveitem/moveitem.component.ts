@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileManagerService } from 'app/services';
-import { IItemInfo, IFolderNode } from 'app/domain';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { IItemInfo, IFolderNode } from 'app/models';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-moveitem',
@@ -12,17 +13,17 @@ import { TreeBase } from 'app/filemanager/dashboard/treebase';
 })
 export class MoveItemComponent extends TreeBase implements OnInit {
   constructor(
+    private snackBar: MatSnackBar,
     private filemanagerService: FileManagerService,
     private dialogRef: MatDialogRef<MoveItemComponent>,
     @Inject(MAT_DIALOG_DATA) private items: IItemInfo[]) {
       super();
      }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.filemanagerService.getAllFolders()
     .pipe(takeUntil(this.onDestroy))
-    .subscribe(
-      folders => {
+    .subscribe(folders => {
         // build the folders tree
         this.folders = [this.rootFolder, ...folders ?? []];
         this.buildFolderTree(this.folders);
@@ -34,17 +35,13 @@ export class MoveItemComponent extends TreeBase implements OnInit {
   onItemClick(node: IFolderNode) {
     this.selectedFolderId = node.id;
   }
-  onMove() {
+  async onMove() {
     this.isBusy = true;
-    this.filemanagerService.requestMoveItems(this.items, this.selectedFolderId)
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      () => {
+    await this.filemanagerService.requestMoveItems(this.items, this.selectedFolderId)
+    .then(() => {
         this.dialogRef.close();
-      },
-      error => this.handleError(error)
-    );
+    })
+    .catch(error => this.handleError(error, this.snackBar))
+    .finally(() => this.isBusy = false);
   }
 }

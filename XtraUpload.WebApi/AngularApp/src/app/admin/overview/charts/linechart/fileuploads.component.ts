@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { takeUntil, finalize } from 'rxjs/operators';
-import { IItemCount } from 'app/domain';
-import { FormBuilder} from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { IItemCount } from 'app/models';
+import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ChartBase } from './chart.base';
 
@@ -14,21 +15,22 @@ import { ChartBase } from './chart.base';
 export class FileuploadsComponent extends ChartBase implements OnInit {
   @Input() filesCount$ = new Subject<IItemCount[]>();
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private adminService: AdminService) {
     super();
-   }
+  }
 
   ngOnInit(): void {
-    this.lineChartData[0].label = 'Uploads';
-    this.chartTitle = 'File uploads per day';
+    this.lineChartData[0].label = $localize`Uploads`;
+    this.chartTitle = $localize`File uploads per day`;
     this.itemsSearchFormGroup = this.fb.group({
       start: this.start,
       end: this.end
     });
 
     this.filesCount$
-    .pipe(takeUntil(this.onDestroy))
+      .pipe(takeUntil(this.onDestroy))
       .subscribe(
         data => {
           this.populateChart(data);
@@ -39,17 +41,11 @@ export class FileuploadsComponent extends ChartBase implements OnInit {
     this.queryUploadStats();
   }
 
-  private queryUploadStats() {
+  private async queryUploadStats() {
     this.isBusy = true;
-    this.adminService.uploadStats({start: this.start.value, end: this.end.value})
-    .pipe(
-      takeUntil(this.onDestroy),
-      finalize(() => this.isBusy = false))
-    .subscribe(
-      (data) => {
-        this.populateChart(data);
-      },
-      (error) => this.handleError(error)
-    );
+    await this.adminService.uploadStats({ start: this.start.value, end: this.end.value })
+      .then((data) => this.populateChart(data))
+      .catch((error) => this.handleError(error, this.snackBar))
+      .finally(() => this.isBusy = false);
   }
 }

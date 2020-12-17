@@ -4,7 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { Router, NavigationEnd } from '@angular/router';
 import { takeUntil, finalize, delay, filter } from 'rxjs/operators';
 import { AdminService, SidenavService, SeoService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +15,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
   @ViewChild('snav') sidenav: MatSidenav;
-  private readonly pageTitle = 'Administration';
+  private readonly pageTitle = $localize`Administration`;
   subTitle = '';
   constructor(
     changeDetectorRef: ChangeDetectorRef,
@@ -29,7 +29,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     seoService.setPageTitle(this.pageTitle);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', () => this._mobileQueryListener);
   }
 
   ngOnInit(): void {
@@ -57,31 +57,31 @@ export class DashboardComponent extends ComponentBase implements OnInit {
         );
   }
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     super.ngOnDestroy();
   }
   setSubPageTitle(title: string) {
     switch (title) {
       case '/administration/overview':
-        this.subTitle = 'Dashboard'; break;
+        this.subTitle = $localize`Dashboard`; break;
       case '/administration/files':
-        this.subTitle = 'Files'; break;
+        this.subTitle = $localize`Files`; break;
       case '/administration/extensions':
-        this.subTitle = 'Extensions'; break;
+        this.subTitle = $localize`Extensions`; break;
       case '/administration/users':
-        this.subTitle = 'Users'; break;
+        this.subTitle = $localize`Users`; break;
       case '/administration/groups':
-        this.subTitle = `Users' group`; break;
+        this.subTitle = $localize`Users' group`; break;
       case '/administration/settings':
-        this.subTitle = 'Settings'; break;
+        this.subTitle = $localize`Settings`; break;
       case '/administration/pages':
-        this.subTitle = 'Pages'; break;
+        this.subTitle = $localize`Pages`; break;
       case '/administration/servers':
-          this.subTitle = 'Manage Servers'; break;
+          this.subTitle = $localize`Manage Servers`; break;
       case '/administration/servershealth':
-        this.subTitle = 'Servers Health'; break;
+        this.subTitle = $localize`Servers Health`; break;
       default:
-        this.subTitle = 'Dashboard'; break;
+        this.subTitle = $localize`Dashboard`; break;
     }
   }
 

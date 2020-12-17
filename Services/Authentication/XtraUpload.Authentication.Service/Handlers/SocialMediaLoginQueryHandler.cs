@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +16,12 @@ namespace XtraUpload.Authentication.Service
     {
         readonly IMediator _mediator;
         readonly IUnitOfWork _unitOfWork;
+        readonly IJsonStringLocalizer _localizer;
 
-        public SocialMediaLoginQueryHandler(IUnitOfWork unitOfWork, IMediator mediator)
+        public SocialMediaLoginQueryHandler(IUnitOfWork unitOfWork, IMediator mediator, IJsonStringLocalizer localizer)
         {
             _mediator = mediator;
+            _localizer = localizer;
             _unitOfWork = unitOfWork;
         }
 
@@ -26,7 +29,7 @@ namespace XtraUpload.Authentication.Service
         {
             XuIdentityResult Result = new XuIdentityResult();
 
-            User userInfo = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            User userInfo = await _unitOfWork.Users.GetUser(u => u.Email == request.Email);
 
             // If user does not exist
             if (userInfo == null)
@@ -40,7 +43,7 @@ namespace XtraUpload.Authentication.Service
                     SocialMediaId = request.Id,
                     Password = Helpers.GenerateUniqueId(),
                     Provider = (AuthProvider)Enum.Parse(typeof(AuthProvider), request.Provider),
-                }));
+                }, request.Language));
 
                 if (userResult.State != OperationState.Success)
                 {
@@ -53,11 +56,12 @@ namespace XtraUpload.Authentication.Service
             // Check user is not suspended
             if (userInfo.AccountSuspended)
             {
-                Result.ErrorContent = new ErrorContent("Your Account Has Been Suspended.", ErrorOrigin.Client);
+                Result.ErrorContent = new ErrorContent(_localizer["Your Account Has Been Suspended."], ErrorOrigin.Client);
                 return Result;
             }
+            RoleClaims claimsResult = await _unitOfWork.Users.GetUserRoleClaims(userInfo);
 
-            return await _mediator.Send(new GetLogedInUserClaimsQuery(userInfo, false));
+            return await _mediator.Send(new GetLogedInUserClaimsQuery(userInfo, claimsResult, false));
         }
     }
 }

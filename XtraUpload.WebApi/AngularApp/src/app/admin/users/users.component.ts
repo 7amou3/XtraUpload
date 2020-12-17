@@ -7,10 +7,10 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, Observable } from 'rxjs';
-import { takeUntil, finalize, debounceTime, switchMap } from 'rxjs/operators';
-import { ComponentBase } from 'app/shared';
+import { takeUntil, debounceTime, switchMap } from 'rxjs/operators';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { IPaging, IProfile, IFilteredUser, ISearchFile, IUserRoleClaims, IEditProfile, IProfileClaim } from 'app/domain';
+import { IPaging, IProfile, IFilteredUser, ISearchFile, IUserRoleClaims, IProfileClaim } from 'app/models';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { DeleteuserComponent } from './dialogs/deleteuser/deleteuser.component';
 import { EdituserComponent } from './dialogs/edituser/edituser.component';
@@ -59,7 +59,6 @@ export class UserListComponent extends ComponentBase implements OnInit {
   dataSource = new MatTableDataSource<IProfileClaim>();
 
   ngOnInit(): void {
-
     this.usersSearchFormGroup = this.fb.group({
       start: this.start,
       end: this.end,
@@ -69,7 +68,7 @@ export class UserListComponent extends ComponentBase implements OnInit {
     this.filteredUsers = this.user.valueChanges
       .pipe(
         debounceTime(300),
-        switchMap(value => this.adminService.searchUser(value))
+        switchMap(async value => await this.adminService.searchUser(value))
       );
     const initPage: PageEvent = { pageIndex: this.pageIndex, pageSize: this.pageSize, length: 100 };
     this.page$.next(initPage);
@@ -78,19 +77,11 @@ export class UserListComponent extends ComponentBase implements OnInit {
     // get users list
     this.adminService.notifyBusy(true);
     this.adminService.getUsers(initPage, this.usersSearchFormGroup.value)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.adminService.notifyBusy(false)))
-      .subscribe(
-        paging => {
-          this.PopulateTable(paging);
-        });
+      .then(paging => this.PopulateTable(paging))
+      .finally(() => this.adminService.notifyBusy(false));
     // Get groups
     this.adminService.getUsersGroups()
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(groups => {
-        this.groups = groups;
-      });
+      .then(groups => this.groups = groups);
   }
   /** every crud operation on table should call this method */
   private refreshTable() {
@@ -130,6 +121,7 @@ export class UserListComponent extends ComponentBase implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
   rangeFilter(d: Date): boolean {
+    if(!d) return;
     return d.getTime() < new Date().getTime();
   }
   onTableEvent(pageEvent: PageEvent) {
@@ -137,16 +129,12 @@ export class UserListComponent extends ComponentBase implements OnInit {
     this.pageIndex = pageEvent.pageIndex;
     this.queryUsers(pageEvent, this.usersSearchFormGroup.value);
   }
-  private queryUsers(pageEvent: PageEvent, search: ISearchFile) {
+  private async queryUsers(pageEvent: PageEvent, search: ISearchFile) {
     this.selection.clear();
     this.isBusy = true;
-    this.adminService.getUsers(pageEvent, search)
-      .pipe(
-        takeUntil(this.onDestroy),
-        finalize(() => this.isBusy = false))
-      .subscribe(paging => {
-        this.PopulateTable(paging);
-      });
+    await this.adminService.getUsers(pageEvent, search)
+      .then(paging => this.PopulateTable(paging))
+      .finally(() => this.isBusy = false);
   }
   onSearchItemsSubmit() {
     const initPage: PageEvent = { pageIndex: this.pageIndex, pageSize: this.pageSize, length: 100 };
@@ -159,12 +147,12 @@ export class UserListComponent extends ComponentBase implements OnInit {
     });
 
     dialogRef.afterClosed()
-    .pipe(takeUntil(this.onDestroy))
-    .subscribe( (editedProfile) => {
-      if (!editedProfile) {
-        return;
-      }
-      const row = this.dataSource.data.find(s => s.id === editedProfile.id);
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((editedProfile) => {
+        if (!editedProfile) {
+          return;
+        }
+        const row = this.dataSource.data.find(s => s.id === editedProfile.id);
         if (row) {
           row.roleName = editedProfile.selectedGroup.role.name;
           row.userName = editedProfile.userName;
@@ -172,9 +160,9 @@ export class UserListComponent extends ComponentBase implements OnInit {
           row.emailConfirmed = editedProfile.emailConfirmed;
           row.email = editedProfile.email;
           this.refreshTable();
-          this.snackBar.open(`The user ${editedProfile.userName} has been updated successfully`, '', { duration: 3000 });
+          this.snackBar.open($localize`The user ${editedProfile.userName} has been updated successfully`, '', { duration: 3000 });
         }
-    });
+      });
   }
   onUserDelete(items: IProfile[]) {
     const dialogRef = this.dialog.open(DeleteuserComponent, {
@@ -195,7 +183,7 @@ export class UserListComponent extends ComponentBase implements OnInit {
           }
         });
         this.refreshTable();
-        this.snackBar.open(`${profiles.length} User(s) has been deleted successfully`, '', { duration: 3000 });
+        this.snackBar.open($localize`${profiles.length} User(s) has been deleted successfully`, '', { duration: 3000 });
       });
   }
 }

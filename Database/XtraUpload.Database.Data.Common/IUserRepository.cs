@@ -12,6 +12,11 @@ namespace XtraUpload.Database.Data.Common
     public interface IUserRepository : IRepository<User>
     {
         /// <summary>
+        /// Gets a user associated with it's language
+        /// </summary>
+        Task<User> GetUser(Expression<Func<User, bool>> predicate);
+
+        /// <summary>
         /// Gets the user confirmation key
         /// </summary>
         Task<ConfirmationKeyResult> GetConfirmationKeyInfo(string confirmationId);
@@ -19,7 +24,7 @@ namespace XtraUpload.Database.Data.Common
         /// <summary>
         /// Get the user role claims
         /// </summary>
-        Task<RoleClaimsResult> GetUserRoleClaims(User user);
+        Task<RoleClaims> GetUserRoleClaims(User user);
 
         /// <summary>
         /// Get all role claims pair
