@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { IAdminOverView, IItemCount, IFileTypeCount } from 'app/domain';
+import { IAdminOverView, IItemCount, IFileTypeCount } from 'app/models';
 import { Subject } from 'rxjs';
 
 @Component({

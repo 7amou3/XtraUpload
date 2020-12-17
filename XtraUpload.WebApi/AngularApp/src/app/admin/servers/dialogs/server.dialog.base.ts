@@ -1,9 +1,9 @@
 
 import { Directive, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { serverState } from 'app/domain';
+import { serverState } from 'app/models';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive()

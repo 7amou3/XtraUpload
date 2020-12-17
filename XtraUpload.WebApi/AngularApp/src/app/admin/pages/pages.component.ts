@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { IPage } from 'app/domain';
+import { IPage } from 'app/models';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { EditpageComponent } from './dialogs/editpage/editpage.component';
 import { AddpageComponent } from './dialogs/addpage/addpage.component';

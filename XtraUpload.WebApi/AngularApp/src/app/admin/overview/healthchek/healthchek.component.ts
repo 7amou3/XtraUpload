@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ICheckResource, IHealthCheck } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { ICheckResource, IHealthCheck } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';

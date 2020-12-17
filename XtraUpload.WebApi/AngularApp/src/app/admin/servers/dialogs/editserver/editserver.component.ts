@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IHardwareOptions, IStorageServer, IUploadOptions } from 'app/domain';
+import { IHardwareOptions, IStorageServer, IUploadOptions } from 'app/models';
 import { AdminService } from 'app/services';
 import { ServerDialogBase } from '../server.dialog.base';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { IItemInfo, IFolderInfo, IFileInfo } from 'app/domain';
+import { IItemInfo, IFolderInfo, IFileInfo } from 'app/models';
 import { FilemanagerBase } from '../filemanagerbase';
 import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from '../../shared';
+import { ComponentBase } from 'app/shared/components';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthService, SeoService } from 'app/services';
 

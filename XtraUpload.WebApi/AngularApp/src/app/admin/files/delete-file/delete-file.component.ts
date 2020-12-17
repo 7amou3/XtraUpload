@@ -2,8 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { IFileInfo } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IFileInfo } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-delete-file',

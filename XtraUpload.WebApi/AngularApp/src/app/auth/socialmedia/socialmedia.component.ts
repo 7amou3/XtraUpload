@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService, UserStorageService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { SocialUser } from 'angularx-social-login';
 import { SocialAuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
-import { IExtendedSocialUser, IGenericMessage } from 'app/domain';
+import { IExtendedSocialUser, IGenericMessage } from 'app/models';
 
 @Component({
   selector: 'app-socialmedia',

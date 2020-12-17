@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { loadTranslations } from '@angular/localize';
 import { getTranslations, getBrowserLang } from '@locl/core';
 import { DOCUMENT, registerLocaleData } from '@angular/common';
-import { ILanguage } from 'app/domain';
+import { ILanguage } from 'app/models';
 import { tap } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
 @Injectable()

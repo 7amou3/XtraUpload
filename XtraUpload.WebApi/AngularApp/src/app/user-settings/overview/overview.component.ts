@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { FileManagerService, AuthService } from 'app/services';
-import { IAccountOverview } from 'app/domain';
+import { IAccountOverview } from 'app/models';
 
 @Component({
   selector: 'app-overview',

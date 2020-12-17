@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import * as tus from 'tus-js-client';
 import { UserStorageService } from './user.storage.service';
-import { UploadStatus, IFileInfo,  IUploadSettings } from '../domain';
+import { UploadStatus, IFileInfo,  IUploadSettings } from '../models';
 import { HttpResponse } from 'tus-js-client';
 
 @Injectable()

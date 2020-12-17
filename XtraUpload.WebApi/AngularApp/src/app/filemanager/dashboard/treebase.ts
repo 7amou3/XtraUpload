@@ -1,6 +1,6 @@
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import { IFolderInfo, IFlatNode, IFolderNode } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IFolderInfo, IFlatNode, IFolderNode } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { TreeHelper } from './helpers';
 

@@ -1,5 +1,5 @@
 import { Directive, Output, EventEmitter, OnInit } from '@angular/core';
-import { UserStorageService } from '../services/user.storage.service';
+import { UserStorageService } from 'app/services/user.storage.service';
 
 @Directive({
   selector: '[appIsLoggedIn]'

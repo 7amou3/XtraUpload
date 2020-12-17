@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { itemAction, IFlatNode, } from 'app/domain';
+import { itemAction, IFlatNode, } from 'app/models';
 import { ContextMenuBase } from './contextmenu.base';
 import { FileManagerService } from 'app/services';
 

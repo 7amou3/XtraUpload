@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IGenericMessage } from 'app/domain';
+import { IGenericMessage } from 'app/models';
 import { trigger, transition, style, sequence, animate } from '@angular/animations';
 
 export const msgAnimation =

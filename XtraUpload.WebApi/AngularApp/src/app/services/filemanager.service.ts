@@ -7,7 +7,7 @@ import {
   IFolderModel, IItemInfo, IFolderInfo,
   IFileInfo, MovedItemsModel, ICreateFolderModel, IRenameItemModel, IDownload, IUploadSettings,
   IAccountOverview, IBulkDelete
-} from '../domain';
+} from '../models';
 import { isFile } from 'app/filemanager/dashboard/helpers';
 
 @Injectable()

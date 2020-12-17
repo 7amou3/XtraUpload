@@ -4,9 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FileManagerService } from 'app/services';
-import { IItemInfo, IFileInfo, IFolderInfo } from 'app/domain';
+import { IItemInfo, IFileInfo, IFolderInfo } from 'app/models';
 import { isFile } from '../../helpers';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-iteminfo',

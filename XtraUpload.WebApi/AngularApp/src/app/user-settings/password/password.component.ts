@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
-import { IChangePassword } from 'app/domain';
+import { ComponentBase } from 'app/shared/components';
+import { IChangePassword } from 'app/models';
 import { SettingsService } from 'app/services';
 @Component({
   selector: 'app-password',

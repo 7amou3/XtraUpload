@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IItemInfo, IRenameItemModel } from 'app/domain';
+import { IItemInfo, IRenameItemModel } from 'app/models';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-renameitem',

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { FileManagerService, HeaderService, UploadService } from 'app/services';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
-import { IAvatarData } from '../../domain';
+import { IAvatarData } from '../../models';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil } from 'rxjs/operators';
 

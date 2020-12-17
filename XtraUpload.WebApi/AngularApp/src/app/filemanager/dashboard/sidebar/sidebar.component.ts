@@ -1,6 +1,6 @@
 import {Component, Output, EventEmitter, OnInit, Input} from '@angular/core';
-import { IFolderInfo, IUploadSettings } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IFolderInfo, IUploadSettings } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { FileManagerService, UserStorageService, AuthService, UploadService } from 'app/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

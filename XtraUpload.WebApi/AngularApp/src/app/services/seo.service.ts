@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserStorageService } from './user.storage.service';
 import { Title, Meta } from '@angular/platform-browser';
-import { IWebAppInfo } from 'app/domain';
+import { IWebAppInfo } from 'app/models';
 
 @Injectable({providedIn: 'root'})
 export class SeoService {

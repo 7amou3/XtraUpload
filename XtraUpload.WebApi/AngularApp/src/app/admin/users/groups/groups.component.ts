@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IUserRoleClaims, IRoleClaim } from 'app/domain';
+import { IUserRoleClaims, IRoleClaim } from 'app/models';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { takeUntil } from 'rxjs/operators';
 import { AddgroupComponent } from './dialogs/addgroup/addgroup.component';
 import { DeletegroupComponent } from './dialogs/deletegroup/deletegroup.component';

@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { FullComponent } from './layouts/full/full.component';
-import { PageNotFoundComponent } from './layouts/page-not-found/page-not-found.component';
+import { ContainerComponent } from './layout/container/container.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 export const AppRoutes: Routes = [
   {
     path: '',
-    component: FullComponent,
+    component: ContainerComponent,
     children: [
       {
         path: '',

@@ -3,9 +3,9 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { takeUntil, merge, map } from 'rxjs/operators';
-import { IClaims, IUserRoleClaims } from 'app/domain';
+import { IClaims, IUserRoleClaims } from 'app/models';
 
 @Component({
   selector: 'app-addgroup',

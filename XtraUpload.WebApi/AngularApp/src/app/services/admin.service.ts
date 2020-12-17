@@ -6,7 +6,7 @@ import {
     IAdminOverView, IDateRange, IItemCount, IFileTypeCount,
     IHealthCheck, IPaging, IFileExtension, IFilteredUser, ISearchFile, IEditExtension, IFileInfo,
     IUserRole, IUserRoleClaims, IClaims, IFileInfoExtended, IEditProfile, IProfileClaim, IEmailSettings, IPage, IStorageServer, IUploadOptions, IHardwareOptions, IAddStorageServer, IUpdateStorageServer
-} from 'app/domain';
+} from 'app/models';
 
 @Injectable()
 export class AdminService {

@@ -4,7 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { Router, NavigationEnd } from '@angular/router';
 import { takeUntil, finalize, delay, filter } from 'rxjs/operators';
 import { AdminService, SidenavService, SeoService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-dashboard',

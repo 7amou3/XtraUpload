@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChartBase } from './chart.base';
 import { FormBuilder } from '@angular/forms';
 import { AdminService } from 'app/services';
-import { IItemCount } from 'app/domain';
+import { IItemCount } from 'app/models';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

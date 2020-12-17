@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IStorageServer } from 'app/domain';
+import { IStorageServer } from 'app/models';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-servershealth',

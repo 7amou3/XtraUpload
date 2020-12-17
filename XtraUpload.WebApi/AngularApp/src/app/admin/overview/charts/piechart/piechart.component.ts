@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsTooltip, monkeyPatchChartJsLegend, BaseChartDirective } from 'ng2-charts';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
 import { Subject } from 'rxjs';
-import { IFileTypeCount } from 'app/domain';
+import { IFileTypeCount } from 'app/models';
 import { takeUntil } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

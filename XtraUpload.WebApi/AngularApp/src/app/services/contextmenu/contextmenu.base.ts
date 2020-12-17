@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { takeUntil } from 'rxjs/operators';
 import { RenameItemComponent, DeleteItemComponent, PasswordComponent, CreatefolderComponent,
     MoveItemComponent } from 'app/filemanager/dialogbox';
 import { itemAction, IItemsMenu, IItemInfo, IRenameItemModel, ISetPasswordItemModel, ICreateFolderModel,
-    IFolderInfo } from 'app/domain';
+    IFolderInfo } from 'app/models';
 import { FileManagerService } from 'app/services';
 import { isFile } from 'app/filemanager/dashboard/helpers';
 

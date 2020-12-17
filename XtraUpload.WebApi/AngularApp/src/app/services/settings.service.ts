@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IAppInitializerConfig, IChangePassword } from 'app/domain';
+import { IAppInitializerConfig, IChangePassword } from 'app/models';
 import { map } from 'rxjs/operators';
 import { UserStorageService } from './user.storage.service';
 import { SeoService } from './seo.service';

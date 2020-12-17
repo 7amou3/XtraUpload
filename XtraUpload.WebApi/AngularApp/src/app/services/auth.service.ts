@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
-import { IProfile, ILoginParams, ISignupParams, RecoverPassword, IExtendedSocialUser } from 'app/domain';
+import { IProfile, ILoginParams, ISignupParams, RecoverPassword, IExtendedSocialUser } from 'app/models';
 import { UserStorageService } from './user.storage.service';
 
 @Injectable()

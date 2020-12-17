@@ -2,8 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { ComponentBase } from 'app/shared';
-import { IPage } from 'app/domain';
+import { ComponentBase } from 'app/shared/components';
+import { IPage } from 'app/models';
 
 @Component({
   selector: 'app-deletepage',

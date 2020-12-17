@@ -8,9 +8,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil, startWith, map, debounceTime, switchMap } from 'rxjs/operators';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { AdminService } from 'app/services';
-import { IFileInfoExtended, IPaging, IProfile, IFilteredUser, ISearchFile, IFileInfo } from 'app/domain';
+import { IFileInfoExtended, IPaging, IProfile, IFilteredUser, ISearchFile, IFileInfo } from 'app/models';
 import { rowAnimation } from 'app/filemanager/dashboard/helpers';
 import { DeleteFileComponent } from './delete-file/delete-file.component';
 

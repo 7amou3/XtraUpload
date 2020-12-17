@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IItemInfo, IFolderInfo, IItemsMenu, IFileInfo } from 'app/domain';
+import { IItemInfo, IFolderInfo, IItemsMenu, IFileInfo } from 'app/models';
 import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 import { FilemanagerBase } from '../filemanagerbase';

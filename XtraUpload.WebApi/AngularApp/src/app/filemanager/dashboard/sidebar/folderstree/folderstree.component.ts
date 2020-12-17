@@ -5,7 +5,7 @@ import { merge } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FileManagerService } from 'app/services';
 import { SnavContextMenuService } from 'app/services/contextmenu';
-import { IFolderInfo, IFolderNode, IFlatNode, itemAction } from 'app/domain';
+import { IFolderInfo, IFolderNode, IFlatNode, itemAction } from 'app/models';
 import { TreeHelper } from '../../helpers';
 import { TreeBase } from '../../treebase';
 

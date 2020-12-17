@@ -4,7 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 import { SidenavService, SeoService } from 'app/services';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-settings',

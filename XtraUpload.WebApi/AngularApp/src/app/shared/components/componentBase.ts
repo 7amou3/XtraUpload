@@ -2,7 +2,7 @@ import { OnDestroy, Directive } from '@angular/core';
 import { FormControl, FormGroup, } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
-import { IGenericMessage } from 'app/domain';
+import { IGenericMessage } from 'app/models';
 
 @Directive()
 export abstract class ComponentBase implements OnDestroy {

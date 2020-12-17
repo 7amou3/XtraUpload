@@ -2,8 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AdminService } from 'app/services';
-import { IFileExtension, IEditExtension } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IFileExtension, IEditExtension } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

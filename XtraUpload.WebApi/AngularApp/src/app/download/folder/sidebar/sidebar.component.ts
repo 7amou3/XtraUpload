@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FileManagerService, SeoService } from 'app/services';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
 import { takeUntil } from 'rxjs/operators';
-import { IFlatNode } from 'app/domain';
+import { IFlatNode } from 'app/models';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

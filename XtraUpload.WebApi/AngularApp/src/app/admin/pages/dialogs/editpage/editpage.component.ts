@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { IPage } from 'app/domain';
+import { IPage } from 'app/models';
 import { PageCommon } from '../page.common';
 
 @Component({

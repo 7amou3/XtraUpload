@@ -1,7 +1,7 @@
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
-import { IItemCount } from 'app/domain';
+import { IItemCount } from 'app/models';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 
 export abstract class ChartBase extends ComponentBase {

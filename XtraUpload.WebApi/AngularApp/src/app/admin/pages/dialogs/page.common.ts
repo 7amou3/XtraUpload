@@ -1,7 +1,6 @@
 import { Directive, OnInit } from '@angular/core';
-
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive()
@@ -32,5 +31,5 @@ export abstract class PageCommon extends ComponentBase implements OnInit{
       this.Init();
   }
   /** Invoked when component is ready */
-  protected abstract async Init();
+  protected abstract Init();
 }

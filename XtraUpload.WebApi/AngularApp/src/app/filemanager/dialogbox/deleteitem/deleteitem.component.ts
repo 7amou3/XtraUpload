@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IItemInfo, IBulkDelete } from 'app/domain';
+import { IItemInfo, IBulkDelete } from 'app/models';
 import { isFile } from '../../dashboard/helpers';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { FileManagerService } from 'app/services';
 
 @Component({

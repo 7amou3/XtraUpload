@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService, SeoService } from 'app/services';
-import { ILoginParams, IGenericMessage } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { ILoginParams, IGenericMessage } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 
 @Component({
   selector: 'app-login',

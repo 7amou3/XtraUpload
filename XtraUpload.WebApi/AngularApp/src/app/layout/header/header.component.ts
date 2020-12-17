@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService, UserStorageService, SettingsService, HeaderService } from 'app/services';
-import { ComponentBase, ILoggedin } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
+import { ILoggedin } from 'app/shared/helpers';
 import { takeUntil } from 'rxjs/operators';
 import { LanguagesComponent } from './dialogbox/langages/languages.component';
 

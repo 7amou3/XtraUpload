@@ -1,17 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, } from '@angular/router';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { UserStorageService } from 'app/services';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { SidenavService } from 'app/services/sidenav.service';
 @Component({
   selector: 'app-full-layout',
-  templateUrl: 'full.component.html',
-  styleUrls: ['full.component.css']
+  templateUrl: 'container.component.html',
+  styleUrls: ['container.component.css']
 })
 
-export class FullComponent extends ComponentBase implements OnInit {
+export class ContainerComponent extends ComponentBase implements OnInit {
   mobileQuery: MediaQueryList;
   currentTheme: 'dark' | 'light';
   constructor(

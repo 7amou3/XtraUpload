@@ -1,12 +1,11 @@
 // Variables
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+@import '~@angular/material/theming';
 
 $bodyfont: 'Poppins', sans-serif;
 $headingfont: 'Poppins', sans-serif;
 
-@import '~@angular/material/theming';
-
-// Default Theme
+// Light Theme
 $primary: mat-palette($mat-blue, 600);
 $accent: mat-palette($mat-indigo, 500);
 $warn: mat-palette($mat-pink, 500);
@@ -28,13 +27,13 @@ $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 .dark-theme {
   @include angular-material-theme($dark-theme);
 }
-@include mat-core();
 
 $custom-typography: mat-typography-config(
   $font-family: 'Poppins, sans-serif'
 );
 
 // Override the typography in the core CSS.
+// Make sure to include this only once!
 @include mat-core($custom-typography);
 
 /*Theme Colors*/

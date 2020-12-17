@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FilemanagerBase } from 'app/filemanager/dashboard/filemanagerbase';
-import { IFileInfo, IFolderInfo, IItemsMenu, IItemInfo } from 'app/domain';
+import { IFileInfo, IFolderInfo, IItemsMenu, IItemInfo } from 'app/models';
 import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 import { ActivatedRoute, Router } from '@angular/router';

@@ -3,15 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StaticPageRoutes } from './staticpage.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { FooterModule } from 'app/shared/footer/footer.module';
-import { StaticPageService } from '../services';
+import { SharedModule } from 'app/shared/shared.module';
+import { StaticPageService } from 'app/services';
 import { PageComponent } from './page/page.component';
 import { MarkdownModule } from 'ngx-markdown';
-import { PipeModule } from 'app/shared/pipe-modules';
 
 @NgModule({
   declarations: [
@@ -19,15 +14,10 @@ import { PipeModule } from 'app/shared/pipe-modules';
   ],
   imports: [
     CommonModule,
-    FooterModule,
+    SharedModule,
     RouterModule.forChild(StaticPageRoutes),
     MarkdownModule.forRoot(),
-    FlexLayoutModule,
-    MatIconModule,
-    MatCardModule,
-    MatDividerModule,
-    MatProgressBarModule,
-    PipeModule
+    FlexLayoutModule
   ],
   providers: [
     StaticPageService,

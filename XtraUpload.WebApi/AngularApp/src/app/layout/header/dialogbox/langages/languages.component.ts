@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ILanguage } from 'app/domain';
+import { ILanguage } from 'app/models';
 import { LanguageService, UserStorageService } from 'app/services';
-import { ComponentBase, ILoggedin } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
+import { ILoggedin } from 'app/shared/helpers';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({

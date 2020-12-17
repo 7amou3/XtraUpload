@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
-import { IItemCount } from 'app/domain';
+import { IItemCount } from 'app/models';
 import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ChartBase } from './chart.base';

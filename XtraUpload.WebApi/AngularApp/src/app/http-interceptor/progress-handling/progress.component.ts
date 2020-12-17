@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from '../../shared';
+import { ComponentBase } from 'app/shared/components';
 import { Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { ProgressNotificationService, IProgressInfo } from '../../services/progress.notification.service';

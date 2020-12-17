@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileManagerService } from 'app/services';
-import { IItemInfo, IFolderNode } from 'app/domain';
+import { IItemInfo, IFolderNode } from 'app/models';
 import { TreeBase } from 'app/filemanager/dashboard/treebase';
 import { takeUntil } from 'rxjs/operators';
 

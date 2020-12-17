@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { StaticPageService, SeoService } from 'app/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { IPage } from 'app/domain';
+import { IPage } from 'app/models';
 
 @Component({
   selector: 'app-page',

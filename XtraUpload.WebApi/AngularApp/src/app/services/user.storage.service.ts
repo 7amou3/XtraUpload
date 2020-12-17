@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ILanguage, IPageHeader, IProfile, IWebAppInfo } from 'app/domain';
+import { ILanguage, IPageHeader, IProfile, IWebAppInfo } from 'app/models';
 const PROFILE = 'xu-Profile';
 const APP_INFO = 'xu-AppInfo';
 const APP_LANG = 'xu-Lang';

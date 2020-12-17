@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ComponentBase } from 'app/shared';
-import { ISignupParams } from 'app/domain';
+import { ComponentBase } from 'app/shared/components';
+import { ISignupParams } from 'app/models';
 import { AuthService, SeoService, UserStorageService } from 'app/services';
 
 @Component({

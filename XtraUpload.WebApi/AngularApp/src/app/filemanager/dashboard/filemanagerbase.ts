@@ -4,8 +4,8 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { isFile } from './helpers';
-import { IItemInfo, itemAction, IFolderInfo, IFileInfo } from 'app/domain';
-import { ComponentBase } from 'app/shared';
+import { IItemInfo, itemAction, IFolderInfo, IFileInfo } from 'app/models';
+import { ComponentBase } from 'app/shared/components';
 import { FileManagerService, UploadService } from 'app/services';
 import { FileMngContextMenuService } from 'app/services/contextmenu';
 

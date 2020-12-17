@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ComponentBase } from 'app/shared';
+import { ComponentBase } from 'app/shared/components';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from 'app/services';
-import { IProfile } from 'app/domain';
+import { IProfile } from 'app/models';
 
 @Component({
   selector: 'app-deleteuser',

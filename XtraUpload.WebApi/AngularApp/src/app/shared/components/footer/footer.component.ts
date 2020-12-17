@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IPageHeader } from 'app/domain';
+import { IPageHeader } from 'app/models';
 import { UserStorageService } from 'app/services';
 
 @Component({
